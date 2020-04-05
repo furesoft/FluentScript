@@ -15,6 +15,8 @@ namespace Terminal
             i.Settings.EnablePrinting = true;
             i.Settings.EnableFluentMode = true;
             i.Settings.EnableFunctionCallCallBacks = true;
+            i.Context.Plugins.RegisterAllCustom();
+            i.Context.Plugins.RegisterCustomByType(typeof(TransactionPlugin));
 
             while (true)
             {
