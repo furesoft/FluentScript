@@ -9,26 +9,27 @@ using ComLib.Lang.AST;
 using ComLib.Lang.Types;
 using ComLib.Lang.Parsing;
 using ComLib.Lang.Helpers;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
-    // Exec plugin allows launching/execution of external programs.
-    // lowercase and uppercase days are supported:
-    // 1. Monday - Sunday
-    // 2. monday - sunday
-    // 3. today, tomorrow, yesterday
-    
-    var day = Monday;
-    var date = tomorrow at 3:30 pm;
-    
-    if tommorrow is Saturday then
-	    print Thank god it's Friday
-    </doc:example>
-    ***************************************************************************/
+	<doc:example>
+	// Exec plugin allows launching/execution of external programs.
+	// lowercase and uppercase days are supported:
+	// 1. Monday - Sunday
+	// 2. monday - sunday
+	// 3. today, tomorrow, yesterday
+
+	var day = Monday;
+	var date = tomorrow at 3:30 pm;
+
+	if tommorrow is Saturday then
+		print Thank god it's Friday
+	</doc:example>
+	***************************************************************************/
+
     /// <summary>
     /// Combinator for handling days of the week.
     /// </summary>
@@ -39,12 +40,10 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public string Name = string.Empty;
 
-
         /// <summary>
         /// Metadata about the custom function.
         /// </summary>
         protected FunctionMetaData _funcMeta;
-
 
         /// <summary>
         /// Initialize
@@ -56,8 +55,7 @@ namespace ComLib.Lang.Plugins
             this.IsStatement = true;
             this.IsEndOfStatementRequired = true;
             this.IsAutoMatched = true;
-        }  
-
+        }
 
         /// <summary>
         /// Parses the day expression.

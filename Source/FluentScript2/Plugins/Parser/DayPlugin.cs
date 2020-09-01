@@ -8,26 +8,26 @@ using ComLib.Lang.Core;
 using ComLib.Lang.AST;
 using ComLib.Lang.Parsing;
 using ComLib.Lang.Types;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
-    // Day plugin allows days of the week to be used as words. 
-    // lowercase and uppercase days are supported:
-    // 1. Monday - Sunday
-    // 2. monday - sunday
-    // 3. today, tomorrow, yesterday
-    
-    var day = Monday;
-    var date = tomorrow at 3:30 pm;
-    
-    if tommorrow is Saturday then
-	    print Thank god it's Friday
-    </doc:example>
-    ***************************************************************************/
+	<doc:example>
+	// Day plugin allows days of the week to be used as words.
+	// lowercase and uppercase days are supported:
+	// 1. Monday - Sunday
+	// 2. monday - sunday
+	// 3. today, tomorrow, yesterday
+
+	var day = Monday;
+	var date = tomorrow at 3:30 pm;
+
+	if tommorrow is Saturday then
+		print Thank god it's Friday
+	</doc:example>
+	***************************************************************************/
 
     /// <summary>
     /// Combinator for handling days of the week.
@@ -37,24 +37,22 @@ namespace ComLib.Lang.Plugins
         private static Dictionary<string, DayOfWeek> _days;
         private static Dictionary<string, Func<DateTime>> _dayAliases;
 
-
         static DayPlugin()
         {
-            _days = new Dictionary<string, DayOfWeek>();            
-            _days["monday"]     = DayOfWeek.Monday;
-            _days["tuesday"]    = DayOfWeek.Tuesday;
-            _days["wednesday"]  = DayOfWeek.Wednesday;
-            _days["thursday"]   = DayOfWeek.Thursday;
-            _days["friday"]     = DayOfWeek.Friday;
-            _days["saturday"]   = DayOfWeek.Saturday;
-            _days["sunday"]     = DayOfWeek.Sunday;
+            _days = new Dictionary<string, DayOfWeek>();
+            _days["monday"] = DayOfWeek.Monday;
+            _days["tuesday"] = DayOfWeek.Tuesday;
+            _days["wednesday"] = DayOfWeek.Wednesday;
+            _days["thursday"] = DayOfWeek.Thursday;
+            _days["friday"] = DayOfWeek.Friday;
+            _days["saturday"] = DayOfWeek.Saturday;
+            _days["sunday"] = DayOfWeek.Sunday;
 
             _dayAliases = new Dictionary<string, Func<DateTime>>();
-            _dayAliases["today"]     = () => DateTime.Now;
+            _dayAliases["today"] = () => DateTime.Now;
             _dayAliases["yesterday"] = () => DateTime.Now.AddDays(-1);
             _dayAliases["tomorrow"] = () => DateTime.Now.AddDays(1);
         }
-
 
         /// <summary>
         /// Initialize
@@ -62,7 +60,7 @@ namespace ComLib.Lang.Plugins
         public DayPlugin()
         {
             this.StartTokens = new string[]
-            { 
+            {
                 "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday",
                 "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",
 
@@ -70,7 +68,6 @@ namespace ComLib.Lang.Plugins
                 "Today", "Tomorrow", "Yesterday"
             };
         }
-
 
         /// <summary>
         /// The grammer for the function declaration
@@ -82,7 +79,6 @@ namespace ComLib.Lang.Plugins
                 return "( ( today | tomorrow | yesterday ) | ( monday | tuesday | wednesday ... ) ) ( at <time> )?";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -99,7 +95,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// Whether or not this parser can handle the supplied token.
         /// </summary>
@@ -114,7 +109,6 @@ namespace ComLib.Lang.Plugins
 
             return false;
         }
-
 
         /// <summary>
         /// Parses the day expression.

@@ -18,7 +18,6 @@ namespace ComLib.Lang.Runtime
     {
         public static Context Ctx;
 
-
         /// <summary>
         /// Evalulates a math expression of 2 numbers.
         /// </summary>
@@ -54,7 +53,6 @@ namespace ComLib.Lang.Runtime
             }
             return new LNumber(result);
         }
-
 
         /// <summary>
         /// Evaluates a math expression of 2 units.
@@ -99,7 +97,6 @@ namespace ComLib.Lang.Runtime
             return lclass;
         }
 
-
         /// <summary>
         /// Evaluates a math expression of 2 time spans.
         /// </summary>
@@ -127,7 +124,6 @@ namespace ComLib.Lang.Runtime
             return new LTime(result);
         }
 
-
         /// <summary>
         /// Evaluates a math expression of 2 time spans.
         /// </summary>
@@ -146,7 +142,6 @@ namespace ComLib.Lang.Runtime
             var result = left - right;
             return new LTime(result);
         }
-
 
         /// <summary>
         /// Increments the number supplied.
@@ -185,7 +180,6 @@ namespace ComLib.Lang.Runtime
             return new LNumber(val);
         }
 
-
         /// <summary>
         /// Compares null values.
         /// </summary>
@@ -196,15 +190,13 @@ namespace ComLib.Lang.Runtime
         public static LBool CompareNull(object left, object right, Operator op)
         {
             var result = false;
-            if (left == LObjects.Null && right == LObjects.Null) 
+            if (left == LObjects.Null && right == LObjects.Null)
                 result = op == Operator.EqualEqual;
-            else 
+            else
                 result = op == Operator.NotEqual;
 
             return new LBool(result);
         }
-
-
 
         /// <summary>
         /// Evaluates a math expression of 2 time spans.
@@ -219,15 +211,14 @@ namespace ComLib.Lang.Runtime
             var left = lhs.Value;
             var right = rhs.Value;
             var result = false;
-            if (op == Operator.LessThan)            result = left < right;
-            else if (op == Operator.LessThanEqual)  result = left <= right;
-            else if (op == Operator.MoreThan)       result = left > right;
-            else if (op == Operator.MoreThanEqual)  result = left >= right;
-            else if (op == Operator.EqualEqual)     result = left == right;
-            else if (op == Operator.NotEqual)       result = left != right;
+            if (op == Operator.LessThan) result = left < right;
+            else if (op == Operator.LessThanEqual) result = left <= right;
+            else if (op == Operator.MoreThan) result = left > right;
+            else if (op == Operator.MoreThanEqual) result = left >= right;
+            else if (op == Operator.EqualEqual) result = left == right;
+            else if (op == Operator.NotEqual) result = left != right;
             return new LBool(result);
         }
-
 
         /// <summary>
         /// Visita a compare expression with the values evaluated.
@@ -282,7 +273,6 @@ namespace ComLib.Lang.Runtime
             return result;
         }
 
-
         /// <summary>
         /// Evaluates a math expression of 2 time spans.
         /// </summary>
@@ -296,15 +286,14 @@ namespace ComLib.Lang.Runtime
             var left = Convert.ToInt32(lhs.Value);
             var right = Convert.ToInt32(rhs.Value);
             var result = false;
-            if (op == Operator.LessThan)        result = left < right;
-            else if (op == Operator.LessThanEqual)   result = left <= right;
-            else if (op == Operator.MoreThan)        result = left > right;
-            else if (op == Operator.MoreThanEqual)   result = left >= right;
-            else if (op == Operator.EqualEqual)      result = left == right;
-            else if (op == Operator.NotEqual)        result = left != right;
+            if (op == Operator.LessThan) result = left < right;
+            else if (op == Operator.LessThanEqual) result = left <= right;
+            else if (op == Operator.MoreThan) result = left > right;
+            else if (op == Operator.MoreThanEqual) result = left >= right;
+            else if (op == Operator.EqualEqual) result = left == right;
+            else if (op == Operator.NotEqual) result = left != right;
             return new LBool(result);
         }
-
 
         /// <summary>
         /// Evaluates a math expression of 2 time spans.
@@ -338,7 +327,6 @@ namespace ComLib.Lang.Runtime
             return new LBool(result);
         }
 
-
         /// <summary>
         /// Evaluates a math expression of 2 time spans.
         /// </summary>
@@ -352,15 +340,14 @@ namespace ComLib.Lang.Runtime
             var left = lhs.Value;
             var right = rhs.Value;
             var result = false;
-            if (op == Operator.LessThan)             result = left < right;
-            else if (op == Operator.LessThanEqual)   result = left <= right;
-            else if (op == Operator.MoreThan)        result = left > right;
-            else if (op == Operator.MoreThanEqual)   result = left >= right;
-            else if (op == Operator.EqualEqual)      result = left == right;
-            else if (op == Operator.NotEqual)        result = left != right;
+            if (op == Operator.LessThan) result = left < right;
+            else if (op == Operator.LessThanEqual) result = left <= right;
+            else if (op == Operator.MoreThan) result = left > right;
+            else if (op == Operator.MoreThanEqual) result = left >= right;
+            else if (op == Operator.EqualEqual) result = left == right;
+            else if (op == Operator.NotEqual) result = left != right;
             return new LBool(result);
         }
-
 
         /// <summary>
         /// Evaluates a math expression of 2 time spans.
@@ -375,7 +362,7 @@ namespace ComLib.Lang.Runtime
             var today = DateTime.Today;
             var targetDate = DateTime.Today;
             TimeSpan expectedDiff = TimeSpan.MinValue;
-            if(lhSide.Type == LTypes.Date)
+            if (lhSide.Type == LTypes.Date)
             {
                 targetDate = ((LDate)lhSide).Value;
                 expectedDiff = ((LTime)rhSide).Value;
@@ -398,15 +385,14 @@ namespace ComLib.Lang.Runtime
             // var diffHours = diff.Hours*-1;
 
             var result = false;
-            if (op == Operator.LessThan)            result = diffDays <  expectedDiff.Days;
-            else if (op == Operator.LessThanEqual)  result = diffDays <= expectedDiff.Days;
-            else if (op == Operator.MoreThan)       result = diffDays >  expectedDiff.Days;
-            else if (op == Operator.MoreThanEqual)  result = diffDays >= expectedDiff.Days;
-            else if (op == Operator.EqualEqual)     result = diffDays == expectedDiff.Days;
-            else if (op == Operator.NotEqual)       result = diffDays != expectedDiff.Days;
+            if (op == Operator.LessThan) result = diffDays < expectedDiff.Days;
+            else if (op == Operator.LessThanEqual) result = diffDays <= expectedDiff.Days;
+            else if (op == Operator.MoreThan) result = diffDays > expectedDiff.Days;
+            else if (op == Operator.MoreThanEqual) result = diffDays >= expectedDiff.Days;
+            else if (op == Operator.EqualEqual) result = diffDays == expectedDiff.Days;
+            else if (op == Operator.NotEqual) result = diffDays != expectedDiff.Days;
             return new LBool(result);
         }
-
 
         /// <summary>
         /// Evaluates a math expression of 2 time spans.
@@ -421,15 +407,14 @@ namespace ComLib.Lang.Runtime
             var left = lhs.Value;
             var right = rhs.Value;
             var result = false;
-            if (op == Operator.LessThan)             result = left < right;
-            else if (op == Operator.LessThanEqual)   result = left <= right;
-            else if (op == Operator.MoreThan)        result = left > right;
-            else if (op == Operator.MoreThanEqual)   result = left >= right;
-            else if (op == Operator.EqualEqual)      result = left == right;
-            else if (op == Operator.NotEqual)        result = left != right;
+            if (op == Operator.LessThan) result = left < right;
+            else if (op == Operator.LessThanEqual) result = left <= right;
+            else if (op == Operator.MoreThan) result = left > right;
+            else if (op == Operator.MoreThanEqual) result = left >= right;
+            else if (op == Operator.EqualEqual) result = left == right;
+            else if (op == Operator.NotEqual) result = left != right;
             return new LBool(result);
         }
-
 
         /// <summary>
         /// Evaluates a math expression of 2 time spans.
@@ -442,17 +427,15 @@ namespace ComLib.Lang.Runtime
         public static LBool CompareUnits(AstNode node, LUnit lhs, LUnit rhs, Operator op)
         {
             var result = false;
-            if (op == Operator.LessThan)             result = lhs.BaseValue < rhs.BaseValue;
-            else if (op == Operator.LessThanEqual)   result = lhs.BaseValue <= rhs.BaseValue;
-            else if (op == Operator.MoreThan)        result = lhs.BaseValue > rhs.BaseValue;
-            else if (op == Operator.MoreThanEqual)   result = lhs.BaseValue >= rhs.BaseValue;
-            else if (op == Operator.EqualEqual)      result = lhs.BaseValue == rhs.BaseValue;
-            else if (op == Operator.NotEqual)        result = lhs.BaseValue != rhs.BaseValue;
+            if (op == Operator.LessThan) result = lhs.BaseValue < rhs.BaseValue;
+            else if (op == Operator.LessThanEqual) result = lhs.BaseValue <= rhs.BaseValue;
+            else if (op == Operator.MoreThan) result = lhs.BaseValue > rhs.BaseValue;
+            else if (op == Operator.MoreThanEqual) result = lhs.BaseValue >= rhs.BaseValue;
+            else if (op == Operator.EqualEqual) result = lhs.BaseValue == rhs.BaseValue;
+            else if (op == Operator.NotEqual) result = lhs.BaseValue != rhs.BaseValue;
             return new LBool(result);
         }
 
-
-        
         /// <summary>
         /// Evaluates a math expression of 2 time spans.
         /// </summary>
@@ -468,7 +451,6 @@ namespace ComLib.Lang.Runtime
             var res = CompareNumbers(node, left, right, op);
             return res;
         }
-
 
         public static LString IncrementString(UnaryExpr expr, LString sourceVal, IAstVisitor visitor)
         {
@@ -493,14 +475,13 @@ namespace ComLib.Lang.Runtime
             return sourceVal;
         }
 
-
         public static LNumber IncrementNumber(UnaryExpr expr, LNumber val, IAstVisitor visitor)
         {
             var inc = expr.Increment == 0 ? 1 : expr.Increment;
             if (expr.Expression != null)
             {
                 var incval = expr.Expression.Evaluate(visitor);
-                // TODO: Check if null and throw langexception?
+
                 inc = ((LNumber)incval).Value;
             }
 
@@ -511,7 +492,6 @@ namespace ComLib.Lang.Runtime
             expr.Ctx.Memory.SetValue(expr.Name, val);
             return val;
         }
-
 
         public static object HandleLogicalNot(UnaryExpr expr, IAstVisitor visitor)
         {
@@ -532,23 +512,21 @@ namespace ComLib.Lang.Runtime
             return new LBool(retVal);
         }
 
-
         public static object Negate(NegateExpr expr, IAstVisitor visitor)
         {
             var result = expr.Expression.Visit(visitor) as LObject;
             if (result == null)
                 throw ExceptionHelper.BuildRunTimeException(expr, "Null value encountered");
-            
+
             // Negate number.
-            if(result.Type == LTypes.Number)
+            if (result.Type == LTypes.Number)
             {
-                var retVal = ((LNumber) result).Value;
-                retVal = retVal*-1;
+                var retVal = ((LNumber)result).Value;
+                retVal = retVal * -1;
                 return new LNumber(retVal);
             }
             throw ExceptionHelper.BuildRunTimeException(expr, "Can only convert a number to a negative value");
         }
-
 
         /// <summary>
         /// Evaluate the result of indexing an object e.g. users[0] or users["admins"]
@@ -570,7 +548,7 @@ namespace ComLib.Lang.Runtime
 
                 // TODO: Make this generic.
                 var length = Convert.ToInt32(methods.ExecuteMethod(target, "length", null));
-                if(ndx >= length)
+                if (ndx >= length)
                     throw ExceptionHelper.BuildRunTimeException(node, "Index out of bounds : '" + ndx + "'");
 
                 result = methods.GetByNumericIndex(target, (int)ndx);
@@ -586,13 +564,12 @@ namespace ComLib.Lang.Runtime
                 result = methods.GetByStringMember(target, memberName);
             }
             // Conver to lang type.
-            if(result != LObjects.Null && !(result is LObject))
+            if (result != LObjects.Null && !(result is LObject))
             {
                 result = LangTypeHelper.ConvertToLangValue(result);
             }
             return (LObject)result;
         }
-
 
         /// <summary>
         /// Check if the expression is true.
@@ -604,7 +581,7 @@ namespace ComLib.Lang.Runtime
             if (result == null || result == LObjects.Null) return false;
             if (result.Type == LTypes.Number)
             {
-                var num = (LNumber) result;
+                var num = (LNumber)result;
                 return num.Value > 0;
             }
             if (result.Type == LTypes.String)
@@ -614,12 +591,12 @@ namespace ComLib.Lang.Runtime
             }
             if (result.Type == LTypes.Bool)
             {
-                var bl = (LBool) result;
+                var bl = (LBool)result;
                 return bl.Value;
             }
-            if ( result.Type == LTypes.Date)
+            if (result.Type == LTypes.Date)
             {
-                var dt = (LDate) result;
+                var dt = (LDate)result;
                 return dt.Value != DateTime.MinValue && dt.Value != DateTime.MaxValue;
             }
             return true;

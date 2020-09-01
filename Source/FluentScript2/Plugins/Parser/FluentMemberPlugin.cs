@@ -9,40 +9,40 @@ using ComLib.Lang.Core;
 using ComLib.Lang.AST;
 using ComLib.Lang.Helpers;
 using ComLib.Lang.Parsing;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Fluent Member plugin allows properties and methods to be accessed without "."
-   
+
     // Supported ways of calling methods:
-    // 1. class     property    
-    // 2. class     method      
+    // 1. class     property
+    // 2. class     method
     // 3. instance  property
-    // 4. instance  method 
-    // 5. prop      class       
-    // 6. prop      instance    
-    // 7. method    class       
+    // 4. instance  method
+    // 5. prop      class
+    // 6. prop      instance
+    // 7. method    class
     // 8. method    instance
-    
+
     // NOTE: In the above list "class" designates access to class level/static members
-     
-    
+
     // FLUENT CALLS
     // Example 1 : method instance
-    activate user 'kreddy'   
-     
+    activate user 'kreddy'
+
     // Example 2 : method class arg
     delete file c:\temp.txt
-    
+
     // Example 3 : class method arg
     file exists c:\temp.txt
-    
+
     </doc:example>
     ***************************************************************************/
+
     /// <summary>
     /// Represents one of the parts of a fluent function/method call.
     /// </summary>
@@ -53,38 +53,31 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         None,
 
-
         /// <summary>
         /// Class name
         /// </summary>
         Class,
-
 
         /// <summary>
         /// Instance of a class ( variable )
         /// </summary>
         Instance,
 
-
         /// <summary>
         /// Property
         /// </summary>
         Prop,
-
 
         /// <summary>
         /// Method name
         /// </summary>
         Method,
 
-
         /// <summary>
         /// Parameter list
         /// </summary>
         Params
     }
-
-
 
     /// <summary>
     /// Combinator for handles method/function calls in a more fluent way.
@@ -93,12 +86,12 @@ namespace ComLib.Lang.Plugins
     {
         private static string[] _tokens = new string[] { "$IdToken" };
         private static Dictionary<string, List<List<FluentPart>>> _matches = new Dictionary<string, List<List<FluentPart>>>();
+
         private readonly IDictionary<Token, bool> ExpFluentFuncExpEnd = new Dictionary<Token, bool>()
         {
             { Tokens.Comma, true },
             { Tokens.Semicolon, true }
         };
-        
 
         /// <summary>
         /// Set up the possible combinations of fluent method calls.
@@ -123,14 +116,12 @@ namespace ComLib.Lang.Plugins
             _matches["instance"].Add(new List<FluentPart>() { FluentPart.Instance, FluentPart.Method });
         }
 
-
         /// <summary>
         /// Initialize.
         /// </summary>
-        public FluentMemberPlugin() : this( false)
+        public FluentMemberPlugin() : this(false)
         {
         }
-
 
         /// <summary>
         /// Initialize.
@@ -142,7 +133,6 @@ namespace ComLib.Lang.Plugins
             this.StartTokens = _tokens;
             this.IsAssignmentSupported = true;
         }
-
 
         /// <summary>
         /// This can not handle all idtoken based expressions.
@@ -183,21 +173,21 @@ namespace ComLib.Lang.Plugins
             return true;
         }
 
-
         /* ****************************************************************************************
          * The following syntax can be supported via this Fluent expression combinator
-         * 
-         * 1. activate user.         
+         *
+         * 1. activate user.
          * 2. move file "c:\temp.txt".
          * 3. file "c:\temp.txt" exists.
          * 3. run program "msbuild.exe", solution: 'comlib.sln', mode: "debug", style: "rebuild all".
-         * 
+         *
          * 1. <method> <class> .
          * 2. <method> <class> <arg1> <arg2> .
          * 3. <class>  <arg1>  <method> .
          * 3. <method> <class> <arg1>, <arg1_name> : <arg1_value>, <arg2_name> : <arg2_value> .
-         * 
+         *
         ***************************************************************************************** */
+
         /// <summary>
         /// Parses the fluent expression.
         /// </summary>
@@ -216,7 +206,7 @@ namespace ComLib.Lang.Plugins
                 matchResult = Match("instance", FluentPart.Instance);
                 mexp = matchResult.Item2;
             }
-            // 2. Check if class 
+            // 2. Check if class
             else if (helper.IsClass(token.Token))
             {
                 matchResult = Match("class", FluentPart.Class);
@@ -227,41 +217,40 @@ namespace ComLib.Lang.Plugins
             {
                 matchResult = Match("method", FluentPart.Method);
                 mexp = matchResult.Item2;
-                if(mexp == null)
+                if (mexp == null)
                 {
                     matchResult = Match("prop", FluentPart.Prop);
                     mexp = matchResult.Item2;
                 }
             }
-            if (mexp != null )
+            if (mexp != null)
             {
                 // TODO: Performance improvement.
                 var memExp = mexp as MemberAccessExpr;
                 if (helper.IsClassMethod(matchResult.Item1, memExp.MemberName) || helper.IsInstanceMethod(matchResult.Item1, memExp.MemberName))
                 {
-                    mexp = ParseParams(mexp);    
-                }                
+                    mexp = ParseParams(mexp);
+                }
             }
             return mexp;
         }
 
-
-        private Tuple<Type, Expr>  Match(string groupName, FluentPart part)
+        private Tuple<Type, Expr> Match(string groupName, FluentPart part)
         {
-            var group = _matches[groupName];            
+            var group = _matches[groupName];
             var ctx = _parser.Context;
             var helper = new FluentPluginHelper(ctx);
             Expr expr = null;
             Type type = null;
 
-            // 1. Go through all the matches in group. e.g. "class" 
+            // 1. Go through all the matches in group. e.g. "class"
             // Note: This is at most 4 possible groups ( class, instance, property, method )
             for (int ndx = 0; ndx < group.Count; ndx++)
             {
                 var match = group[ndx];
                 Token klass = null, instance = null, method = null, prop = null;
                 var token = _tokenIt.NextToken.Token;
-            
+
                 // 2. Go through all the matches in each group
                 // Note: There are at most 4 matches.
                 int lastTokenPeek = 0;
@@ -294,7 +283,6 @@ namespace ComLib.Lang.Plugins
             return new Tuple<Type, Expr>(type, expr);
         }
 
-
         private Tuple<bool, Expr> IsMatch(FluentPluginHelper helper, Type type, Token klass, Token instance, Token prop, Token method)
         {
             var memberName = string.Empty;
@@ -317,7 +305,7 @@ namespace ComLib.Lang.Plugins
             {
                 rootVar = type.Name;
                 if (helper.IsClassMethod(type, method.Text))
-                {   
+                {
                     memberName = method.Text;
                     match = true;
                 }
@@ -352,12 +340,10 @@ namespace ComLib.Lang.Plugins
             return new Tuple<bool, Expr>(memberName != null, memExp);
         }
 
-
         private Expr ParseParams(Expr exp)
         {
             return _parser.ParseFuncExpression(exp, null);
         }
-
 
         private bool IsEnd(Token token = null, bool peek = false, int peekLevel = 1)
         {
@@ -368,8 +354,6 @@ namespace ComLib.Lang.Plugins
             return false;
         }
     }
-
-
 
     /// <summary>
     /// Helper class for the fluent plugin
@@ -386,7 +370,6 @@ namespace ComLib.Lang.Plugins
         {
             _ctx = ctx;
         }
-
 
         /// <summary>
         /// Get the type based on either class name or instance variable.
@@ -406,7 +389,7 @@ namespace ComLib.Lang.Plugins
 
                 // Case 2: Class name is "File" but used as "file" in script, in a case insensitive way.
                 // This is ok, as long as there is NOT another instance variable with the same name.
-                else if(!_ctx.Symbols.Contains(klass.Text))
+                else if (!_ctx.Symbols.Contains(klass.Text))
                 {
                     var name = Char.ToUpper(klass.Text[0]) + klass.Text.Substring(1);
                     if (_ctx.Types.Contains(name))
@@ -416,12 +399,11 @@ namespace ComLib.Lang.Plugins
             if (instance != null)
             {
                 var sym = _ctx.Symbols.GetSymbol(instance.Text);
-                if( sym != null ) 
+                if (sym != null)
                     type = _ctx.Types.Get(sym.DataTypeName);
             }
             return type;
         }
-
 
         /// <summary>
         /// Returns whether or not the token represents a reference to a Class
@@ -440,7 +422,6 @@ namespace ComLib.Lang.Plugins
             return false;
         }
 
-
         /// <summary>
         /// Returns whether or not the token represents a reference to a class instance
         /// </summary>
@@ -453,7 +434,6 @@ namespace ComLib.Lang.Plugins
             if (_ctx.Types.Contains(sym.DataTypeName)) return true;
             return false;
         }
-
 
         /// <summary>
         /// Returns whether or not the token represents an argument.
@@ -468,7 +448,6 @@ namespace ComLib.Lang.Plugins
             return false;
         }
 
-
         /// <summary>
         /// Whether or not the member name supplied is an class property of the type
         /// </summary>
@@ -479,7 +458,6 @@ namespace ComLib.Lang.Plugins
         {
             return IsMember(type, propName, true, MemberTypes.Property);
         }
-
 
         /// <summary>
         /// Whether or not the member name supplied is an instance property of the type
@@ -492,7 +470,6 @@ namespace ComLib.Lang.Plugins
             return IsMember(type, propName, false, MemberTypes.Property);
         }
 
-
         /// <summary>
         /// Whether or not the member name supplied is an class method of the type
         /// </summary>
@@ -504,7 +481,6 @@ namespace ComLib.Lang.Plugins
             return IsMember(type, memberName, true, MemberTypes.Method);
         }
 
-
         /// <summary>
         /// Whether or not the member name supplied is an instance method of the type
         /// </summary>
@@ -515,7 +491,6 @@ namespace ComLib.Lang.Plugins
         {
             return IsMember(type, memberName, false, MemberTypes.Method);
         }
-
 
         /// <summary>
         /// Whether or not the member supplied exists on the type.

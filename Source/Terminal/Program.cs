@@ -5,9 +5,9 @@ using System;
 
 namespace Terminal
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             var i = new Interpreter();
             i.InitPlugins();
@@ -17,6 +17,7 @@ namespace Terminal
             i.Settings.EnableFunctionCallCallBacks = true;
             i.Context.Plugins.RegisterAllCustom();
             i.Context.Plugins.RegisterCustomByType(typeof(TransactionPlugin));
+            i.Context.Plugins.RegisterCustomByType(typeof(ActorPlugin));
 
             while (true)
             {
@@ -27,7 +28,6 @@ namespace Terminal
                 if (!i.Result.Success)
                     Console.WriteLine(i.Result);
             }
-
         }
     }
 }

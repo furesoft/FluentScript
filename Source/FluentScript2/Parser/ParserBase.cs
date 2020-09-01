@@ -8,6 +8,7 @@ using ComLib.Lang.Core;
 using ComLib.Lang.AST;
 using ComLib.Lang.Helpers;
 using ComLib.Lang.Plugins;
+
 // </lang:using>
 
 namespace ComLib.Lang.Parsing
@@ -18,90 +19,78 @@ namespace ComLib.Lang.Parsing
     public class ParserBase : ILangParser
     {
         #region Protected members
+
         /// <summary>
         /// Scope of the script
         /// </summary>
         protected Memory _memory = null;
-
 
         /// <summary>
         /// Context information about the script.
         /// </summary>
         protected Context _context = null;
 
-
         /// <summary>
         /// Lexer to parse tokens.
         /// </summary>
         protected Lexer _lexer = null;
-
 
         /// <summary>
         /// The script as text.
         /// </summary>
         protected string _script;
 
-
         /// <summary>
         /// The path to the script if script was provided as a file path instead of text
         /// </summary>
         protected string _scriptPath;
 
-
         /// <summary>
         /// The parsed statements from interpreting the tokens.
         /// </summary>
-        protected List<Expr> _statements; 
-
+        protected List<Expr> _statements;
 
         /// <summary>
         /// The state of the parser .. used in certain cases.
         /// </summary>
         protected ParserState _state;
 
-
         /// <summary>
         /// Settings of the lanaguage interpreter.
         /// </summary>
         protected LangSettings _settings;
-
 
         /// <summary>
         /// Token iterator.
         /// </summary>
         protected TokenIterator _tokenIt;
 
-
         /// <summary>
         /// List of the last doc tags.
         /// </summary>
         protected List<Token> _comments;
-        
-        
+
         /// <summary>
         /// Whether or not there are function summary doc tags in the stack.
         /// </summary>
         protected bool _hasSummaryComments = false;
-        
-        
+
         /// <summary>
         /// The last summary doc tag token.
         /// </summary>
         protected TokenData _lastCommentToken;
-
 
         /// <summary>
         /// Collection of errors from parsing.
         /// </summary>
         protected List<LangException> _parseErrors;
 
-
         /// <summary>
         /// Get the list of parsed statements.
         /// </summary>
         internal List<Expr> Statements { get { return _statements; } }
-        #endregion
 
+        #endregion Protected members
 
         /// <summary>
         /// Initialize
@@ -111,22 +100,20 @@ namespace ComLib.Lang.Parsing
             _context = context;
             _parseErrors = new List<LangException>();
             _lexer = new Lexer("");
-            _lexer.SetContext(_context); 
+            _lexer.SetContext(_context);
         }
 
-
         #region Public properties
+
         /// <summary>
         /// Get the scope
         /// </summary>
         public Memory Scope { get { return _memory; } }
 
-
         /// <summary>
         /// Get/Set the context of the script.
         /// </summary>
         public Context Context { get { return _context; } set { _context = value; _memory = _context.Memory; } }
-
 
         /// <summary>
         /// Name of the current script being parsed.
@@ -134,42 +121,35 @@ namespace ComLib.Lang.Parsing
         /// </summary>
         public string ScriptName { get; set; }
 
-
         /// <summary>
         /// Get the lexer.
         /// </summary>
         public Lexer Lexer { get { return _lexer; } }
-
 
         /// <summary>
         /// Settings
         /// </summary>
         public LangSettings Settings { get { return _settings; } set { _settings = value; } }
 
-
         /// <summary>
         /// The token iterator.
         /// </summary>
         public TokenIterator TokenIt { get { return _tokenIt; } }
-
 
         /// <summary>
         /// Get the parser state.
         /// </summary>
         public ParserState State { get { return _state; } }
 
-
         /// <summary>
         /// The path to the script
         /// </summary>
         public string ScriptPath { get { return _scriptPath; } }
 
-
-        
-        #endregion
-
+        #endregion Public properties
 
         #region Public methods
+
         /// <summary>
         /// Intializ with script and optional memory object for reruns.
         /// </summary>
@@ -183,12 +163,11 @@ namespace ComLib.Lang.Parsing
             _memory = _memory == null ? new Memory() : memory;
             _lexer.Init(script);
             _parseErrors.Clear();
-            _state = new ParserState(); 
-           
+            _state = new ParserState();
+
             if (_comments != null) _comments.Clear();
             else _comments = new List<Token>();
         }
-
 
         /// <summary>
         /// Collects an unexpected token error and advances to next token.
@@ -207,7 +186,6 @@ namespace ComLib.Lang.Parsing
             _tokenIt.Advance();
         }
 
-
         /// <summary>
         /// Collects an unexpected token error and advances to next token.
         /// </summary>
@@ -216,10 +194,11 @@ namespace ComLib.Lang.Parsing
             var ex = new LangException("Parse", error, this._scriptPath, token.Line, token.LineCharPos);
             this._parseErrors.Add(ex);
         }
-        #endregion
 
+        #endregion Public methods
 
         #region Helpers
+
         /// <summary>
         /// Convert the script into a series of tokens.
         /// </summary>
@@ -227,8 +206,7 @@ namespace ComLib.Lang.Parsing
         {
             _lexer.IntepolatedStartChar = _settings.InterpolatedStartChar;
             _tokenIt.Init((llk) => _lexer.GetTokenBatch(llk), 12, null);
-        }        
-
+        }
 
         /// <summary>
         /// End of statement script.
@@ -243,7 +221,6 @@ namespace ComLib.Lang.Parsing
             return false;
         }
 
-
         /// <summary>
         /// Whether at end of statement.
         /// </summary>
@@ -253,7 +230,6 @@ namespace ComLib.Lang.Parsing
             return (_tokenIt.NextToken.Token == endOfStatementToken);
         }
 
-
         /// <summary>
         /// Whether at end of script
         /// </summary>
@@ -262,7 +238,6 @@ namespace ComLib.Lang.Parsing
         {
             return _tokenIt.NextToken.Token == Tokens.EndToken;
         }
-
 
         /// <summary>
         /// Parses a sequence of names/identifiers.
@@ -284,7 +259,7 @@ namespace ComLib.Lang.Parsing
                 var name = _tokenIt.ExpectId(true);
                 names.Add(name);
 
-                // Case 3: only 1 argument. 
+                // Case 3: only 1 argument.
                 if (IsEndOfStatementOrEndOfScript(Tokens.RightParenthesis))
                     break;
 
@@ -296,10 +271,11 @@ namespace ComLib.Lang.Parsing
             }
             return names;
         }
-        #endregion
 
+        #endregion Helpers
 
         #region Comment Handling
+
         /// <summary>
         /// Handles a comment token.
         /// </summary>
@@ -315,7 +291,7 @@ namespace ComLib.Lang.Parsing
                 _hasSummaryComments = true;
                 _lastCommentToken = tokenData;
             }
-            // Case 2: 
+            // Case 2:
             else if (text.Contains("@scriptmeta-end") || text.Contains(" @scriptmeta-end"))
             {
                 this.ClearCommentHandling();
@@ -326,7 +302,6 @@ namespace ComLib.Lang.Parsing
             // Finally advance the token.
             _tokenIt.Advance();
         }
-
 
         /// <summary>
         /// Applies the last doc tags to the function statement.
@@ -346,7 +321,7 @@ namespace ComLib.Lang.Parsing
             var func = ((FunctionDeclareExpr)stmt).Function;
             var tags = DocHelper.ParseDocTags(_comments);
             func.Meta.Doc = tags.Item1;
-            
+
             // Associate all the argument specifications to the function metadata
             foreach (var arg in tags.Item1.Args)
             {
@@ -378,7 +353,6 @@ namespace ComLib.Lang.Parsing
             this.ClearCommentHandling();
         }
 
-
         private void ClearCommentHandling()
         {
             // Clear the comment state.
@@ -386,10 +360,11 @@ namespace ComLib.Lang.Parsing
             _hasSummaryComments = false;
             _lastCommentToken = null;
         }
-        #endregion
 
+        #endregion Comment Handling
 
         #region Token methods
+
         /// <summary>
         /// Match the current token to the token supplied.
         /// </summary>
@@ -400,7 +375,6 @@ namespace ComLib.Lang.Parsing
             _tokenIt.Advance(count, passNewLine);
         }
 
-
         /// <summary>
         /// Match the current token to the token supplied.
         /// </summary>
@@ -409,7 +383,6 @@ namespace ComLib.Lang.Parsing
         {
             _tokenIt.Expect(token);
         }
-
 
         /// <summary>
         /// Match the current token to the token supplied.
@@ -422,7 +395,6 @@ namespace ComLib.Lang.Parsing
             _tokenIt.ExpectMany(token1, token2, token3);
         }
 
-
         /// <summary>
         /// Peek at the token ahead of the current token
         /// </summary>
@@ -432,6 +404,7 @@ namespace ComLib.Lang.Parsing
         {
             return _tokenIt.Peek(1, passNewLine);
         }
-        #endregion
+
+        #endregion Token methods
     }
 }

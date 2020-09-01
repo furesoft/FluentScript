@@ -2,6 +2,7 @@
 using ComLib.Lang.Core;
 using ComLib.Lang.Helpers;
 using ComLib.Lang.Parsing;
+using ComLib.Lang.Plugins;
 using ComLib.Lang.Types;
 using System.Transactions;
 
@@ -21,6 +22,7 @@ namespace Terminal
             return null;
         }
     }
+
     public class TransactionStatement : BlockExpr
     {
         public override object Evaluate(IAstVisitor visitor)
@@ -29,7 +31,6 @@ namespace Terminal
             try
             {
                 var result = this.ExecuteBlock(visitor);
-
 
                 return result;
             }
@@ -53,10 +54,10 @@ namespace Terminal
         public override Expr Parse()
         {
             var stmt = new RollBackStatement();
-            // transaction {  } 
+            // transaction {  }
             //_tokenIt.Expect(Transaction);
             var id = _tokenIt.ExpectIdText("rollback");
-            
+
             return stmt;
         }
     }
@@ -68,10 +69,8 @@ namespace Terminal
         /// </summary>
         public TransactionPlugin()
         {
-            
             this.ConfigureAsSystemStatement(true, true, "transaction");
         }
-         
 
         /// <summary>
         /// The grammer for the function declaration
@@ -80,7 +79,6 @@ namespace Terminal
         {
             get { return "transaction <statementblock>"; }
         }
-
 
         /// <summary>
         /// Examples
@@ -105,7 +103,7 @@ namespace Terminal
         public override Expr Parse()
         {
             var stmt = new TransactionStatement();
-            // transaction {  } 
+            // transaction {  }
             //_tokenIt.Expect(Transaction);
             var id = _tokenIt.ExpectIdText("transaction");
             ParseBlock(stmt);
