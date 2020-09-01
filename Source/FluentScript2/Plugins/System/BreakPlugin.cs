@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
-using ComLib.Lang.Core;
+﻿// <lang:using>
 using ComLib.Lang.AST;
-using ComLib.Lang.Types;
+using ComLib.Lang.Core;
 using ComLib.Lang.Parsing;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Return plugin provides return values
-    
+
     return false;
     </doc:example>
     ***************************************************************************/
@@ -34,7 +28,6 @@ namespace ComLib.Lang.Plugins
             this.ConfigureAsSystemStatement(false, true, "break");
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -42,7 +35,6 @@ namespace ComLib.Lang.Plugins
         {
             get { return "break <statementterminator>"; }
         }
-
 
         /// <summary>
         /// Examples
@@ -58,7 +50,6 @@ namespace ComLib.Lang.Plugins
                 };
             }
         }
-
 
         /// <summary>
         /// break;

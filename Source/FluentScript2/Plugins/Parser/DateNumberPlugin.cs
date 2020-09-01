@@ -1,28 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Helpers;
 using ComLib.Lang.Parsing;
+using System;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
-    // Date number plugin allow you to specify dates in the form of numbers as 
+    <doc:example>
+    // Date number plugin allow you to specify dates in the form of numbers as
     // samples below.
     // The separator between months/days/years can be "/", "-", "\"
-    
+
     var date1 = 1/27/1978;
     var date2 = 4-20-1979 at 4:30pm;
     var date3 = 6\10\2012 at 7:45am;
-    
+
     </doc:example>
     ***************************************************************************/
 
@@ -43,16 +39,15 @@ namespace ComLib.Lang.Plugins
             _canHandleToken = true;
         }
 
-
         /// <summary>
         /// Whether or not this uri plugin can handle the current token.
         /// </summary>
         /// <param name="current"></param>
         /// <returns></returns>
-        public override bool  CanHandle(Token current)
-        {            
+        public override bool CanHandle(Token current)
+        {
             _endPos = -1;
-            
+
             var next = "";
             var pos = _lexer.State.Pos;
 
@@ -61,7 +56,7 @@ namespace ComLib.Lang.Plugins
                 return false;
 
             char n = _lexer.State.Text[pos];
-            
+
             // Check that the next char is date part separator as in 3/10/2012 or 3-10-2012
             if (n != '-' && n != '/' && n != '\\')
                 return false;
@@ -71,7 +66,7 @@ namespace ComLib.Lang.Plugins
                 n = _lexer.State.Text[pos];
                 if (Char.IsDigit(n))
                 {
-                    next += n;                    
+                    next += n;
                 }
                 else if (n == '-' || n == '/' || n == '\\')
                 {
@@ -80,7 +75,7 @@ namespace ComLib.Lang.Plugins
                 else
                     break;
 
-                pos++;                
+                pos++;
             }
 
             // No need to try parse the text if next lenght is < 5
@@ -96,7 +91,6 @@ namespace ComLib.Lang.Plugins
             return false;
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -104,7 +98,6 @@ namespace ComLib.Lang.Plugins
         {
             get { return "<number> ( '/' | '-' | '\' ) <number> ( '/' | '-' | '\' ) <number>"; }
         }
-
 
         /// <summary>
         /// Examples
@@ -121,7 +114,6 @@ namespace ComLib.Lang.Plugins
                 };
             }
         }
-
 
         /// <summary>
         /// run step 123.

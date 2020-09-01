@@ -1,39 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Parsing;
+using System;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Supports representing data in a table/csv like format
     // 1. The top most row must the the header names without spaces
     // 2. The header names must be separated by "|"
     // 3. The columns in the data rows must be separated by either "|" or ","
-    
-    set books1 = [  
+
+    set books1 = [
                      name	      |	 pages   |  artist
                      'batman'     |	 110     |  'john'
                      'xmen'       |	 120     |  'lee'
                      'daredevil'  |	 140     |  'maleev'
                  ];
-     
-     
-     set books2 = [  
+
+     set books2 = [
                      name	      |	 pages   |  artist
                      'batman'     ,	 110     ,  'john'
                      'xmen'       ,	 120     ,  'lee'
                      'daredevil'  ,	 140     ,  'maleev'
                   ];
- 
+
     </doc:example>
     ***************************************************************************/
 
@@ -41,9 +38,8 @@ namespace ComLib.Lang.Plugins
     /// Combinator for handling swapping of variable values. swap a and b.
     /// </summary>
     public class RecordsPlugin : ExprPlugin
-    {        
+    {
         private Dictionary<Token, bool> _endTokens;
-
 
         /// <summary>
         /// Intialize.
@@ -58,7 +54,6 @@ namespace ComLib.Lang.Plugins
             this.StartTokens = new string[] { "[" };
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -69,7 +64,6 @@ namespace ComLib.Lang.Plugins
                 return "'[' <id> ( '|' <id> )* <newline> ( <expression> ( ( ',' | '|' ) <expression> )* <newline> )* ']'";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -85,7 +79,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// Whether or not this plugin is applicable for the token.
         /// </summary>
@@ -99,12 +92,11 @@ namespace ComLib.Lang.Plugins
             // Start of csv like table is :
             // [ name |
             var next2 = _tokenIt.Peek(2).Token;
-            if (next2 == Tokens.Pipe )
+            if (next2 == Tokens.Pipe)
                 return true;
 
             return false;
         }
-
 
         /// <summary>
         /// run step 123.
@@ -113,13 +105,13 @@ namespace ComLib.Lang.Plugins
         public override Expr Parse()
         {
             /*
-            [ 	
+            [
 				name	 |	 pages	 | author
 				'c#'	 |	 150	 | 'microsoft'
 				'ruby'	 | 	 140	 | 'matz'
 				'fluent' | 	 100	 | 'codehelix'
 			];
-             * [ 	
+             * [
 				name	 |	 pages	 | author
 				'c#'	 ,	 150	 , 'microsoft'
 				'ruby'	 , 	 140	 , 'matz'
@@ -144,7 +136,7 @@ namespace ComLib.Lang.Plugins
                 {
                     _tokenIt.Advance(1, false);
                 }
-                else if(_tokenIt.NextToken.Token != Tokens.NewLine)
+                else if (_tokenIt.NextToken.Token != Tokens.NewLine)
                     throw _tokenIt.BuildSyntaxExpectedException("| or new line");
 
                 token = _tokenIt.NextToken.Token;
@@ -201,8 +193,8 @@ namespace ComLib.Lang.Plugins
                 {
                     throw _tokenIt.BuildSyntaxExpectedException("| or new line");
                 }
-                token = _tokenIt.NextToken.Token;                
-            }            
+                token = _tokenIt.NextToken.Token;
+            }
             _tokenIt.Expect(Tokens.RightBracket);
 
             // Now finally build array of maps.

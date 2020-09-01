@@ -1,9 +1,8 @@
-﻿using System;
+﻿using ComLib.Lang.Helpers;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using ComLib.Lang.Helpers;
-
 
 namespace ComLib.Lang.Types
 {
@@ -20,40 +19,39 @@ namespace ComLib.Lang.Types
             DataType = LTypes.Array;
 
             // Create the methods associated with this type.
-            AddMethod("concat", 		"Concat", 		typeof(LArray),		"Joins two or more arrays, and returns a copy of the joined arrays" );
-            AddMethod("indexOf", 		"IndexOf", 		typeof(double),		"Search the array for an element and returns it's position" );
-            AddMethod("join", 			"Join", 		typeof(LArray),		"Joins all elements of an array into a string" );
-            AddMethod("lastIndexOf", 	"LastIndexOf",	typeof(double),		"Search the array for an element, starting at the end, and returns it's position" );
-            AddMethod("pop", 			"Pop", 			typeof(object),		"Removes the last element of an array, and returns that element" );
-            AddMethod("push", 			"Push", 		typeof(double),		"Adds new elements to the end of an array, and returns the new length" );
-            AddMethod("reverse", 		"Reverse", 		typeof(LArray),		"Reverses the order of the elements in an array" );
-            AddMethod("shift", 		    "Shift", 		typeof(object),		"Removes the first element of an array, and returns that element" );
-            AddMethod("slice", 		    "Slice", 		typeof(LArray),		"Selects a part of an array, and returns the new array" );
-            AddMethod("sort", 			"Sort", 		typeof(LArray),		"Sorts the elements of an array" );
-            AddMethod("splice", 		"Splice", 		typeof(LArray),		"Adds/Removes elements from an array" );
-            AddMethod("toString", 		"ToString", 	typeof(string),		"Converts an array to a string, and returns the result" );
-            AddMethod("unshift", 		"Unshift", 		typeof(double),		"Adds new elements to the beginning of an array, and returns the new length" );
-            AddMethod("valueOf", 		"ValueOf", 		typeof(object),		"Returns the primitive value of an array" );
-            AddProperty(true, true,     "length",       "Length",           typeof(double),     "Sets or returns the number of elements in an array");
+            AddMethod("concat", "Concat", typeof(LArray), "Joins two or more arrays, and returns a copy of the joined arrays");
+            AddMethod("indexOf", "IndexOf", typeof(double), "Search the array for an element and returns it's position");
+            AddMethod("join", "Join", typeof(LArray), "Joins all elements of an array into a string");
+            AddMethod("lastIndexOf", "LastIndexOf", typeof(double), "Search the array for an element, starting at the end, and returns it's position");
+            AddMethod("pop", "Pop", typeof(object), "Removes the last element of an array, and returns that element");
+            AddMethod("push", "Push", typeof(double), "Adds new elements to the end of an array, and returns the new length");
+            AddMethod("reverse", "Reverse", typeof(LArray), "Reverses the order of the elements in an array");
+            AddMethod("shift", "Shift", typeof(object), "Removes the first element of an array, and returns that element");
+            AddMethod("slice", "Slice", typeof(LArray), "Selects a part of an array, and returns the new array");
+            AddMethod("sort", "Sort", typeof(LArray), "Sorts the elements of an array");
+            AddMethod("splice", "Splice", typeof(LArray), "Adds/Removes elements from an array");
+            AddMethod("toString", "ToString", typeof(string), "Converts an array to a string, and returns the result");
+            AddMethod("unshift", "Unshift", typeof(double), "Adds new elements to the beginning of an array, and returns the new length");
+            AddMethod("valueOf", "ValueOf", typeof(object), "Returns the primitive value of an array");
+            AddProperty(true, true, "length", "Length", typeof(double), "Sets or returns the number of elements in an array");
 
             // Associate the arguments for each declared function.
             //          Method name,    Param name,    Type,     Required   Alias,  Default,    Example         Description
-            AddArg("concat", 		"items",       "list",     true,      "",     null,       "'abc', 'def'", "The arrays to be joined");
-            AddArg("indexOf", 		"item",        "object",   true,      "",     null,       "abc",          "The item to search for");
-            AddArg("indexOf",       "start",        "int",      false,     "",     0,          "0 | 5",        "Where to start the search. Negative values will start at the given position counting from the end, and search to the end");
-            AddArg("join",          "separator",    "string",   false,     "",     ",",        "abc",          "The separator to be used. If omitted, the elements are separated with a comma");
-            AddArg("lastIndexOf",   "item",         "object",   true,      "",     null,       "abc",          "The item to search for");
-            AddArg("lastIndexOf", 	"start",       "int",      false,     "",     0,          "0 | 4",        "Where to start the search. Negative values will start at the given position counting from the end, and search to the beginning");
-            AddArg("push",          "items",        "params",     true,      "",     null,       "abc",          "The items(s) to add to the array");
-            AddArg("slice",         "start",        "int",      true,      "",     null,       "0",            "An integer that specifies where to start the selection (The first element has an index of 0). Use negative numbers to select from the end of an array");
-            AddArg("slice",         "end",          "int",      false,     "",     null,       "1",            "An integer that specifies where to end the selection. If omitted, all elements from the start position and to the end of the array will be selected. Use negative numbers to select from the end of an array");
-            AddArg("sort",          "sortfunction", "function", false,     "",     "",         "",             "The function that defines the sort order");
-            AddArg("splice",        "index",        "int",      true,      "",     null,       "1",            "An integer that specifies at what position to add/remove items, Use negative values to specify the position from the end of the array");
-            AddArg("splice",        "howmany",      "int",      true,      "",     null,       "2",            "The number of items to be removed. If set to 0, no items will be removed");
-            AddArg("splice",        "params",        "list",     false,     "",     null,       "2,3,4",        "The new item(s) to be added to the array");            
-            AddArg("unshift", 		"items",        "list",     true,      "",     null,       "'abc', 'def'", "The item(s) to add to the beginning of the array");
+            AddArg("concat", "items", "list", true, "", null, "'abc', 'def'", "The arrays to be joined");
+            AddArg("indexOf", "item", "object", true, "", null, "abc", "The item to search for");
+            AddArg("indexOf", "start", "int", false, "", 0, "0 | 5", "Where to start the search. Negative values will start at the given position counting from the end, and search to the end");
+            AddArg("join", "separator", "string", false, "", ",", "abc", "The separator to be used. If omitted, the elements are separated with a comma");
+            AddArg("lastIndexOf", "item", "object", true, "", null, "abc", "The item to search for");
+            AddArg("lastIndexOf", "start", "int", false, "", 0, "0 | 4", "Where to start the search. Negative values will start at the given position counting from the end, and search to the beginning");
+            AddArg("push", "items", "params", true, "", null, "abc", "The items(s) to add to the array");
+            AddArg("slice", "start", "int", true, "", null, "0", "An integer that specifies where to start the selection (The first element has an index of 0). Use negative numbers to select from the end of an array");
+            AddArg("slice", "end", "int", false, "", null, "1", "An integer that specifies where to end the selection. If omitted, all elements from the start position and to the end of the array will be selected. Use negative numbers to select from the end of an array");
+            AddArg("sort", "sortfunction", "function", false, "", "", "", "The function that defines the sort order");
+            AddArg("splice", "index", "int", true, "", null, "1", "An integer that specifies at what position to add/remove items, Use negative values to specify the position from the end of the array");
+            AddArg("splice", "howmany", "int", true, "", null, "2", "The number of items to be removed. If set to 0, no items will be removed");
+            AddArg("splice", "params", "list", false, "", null, "2,3,4", "The new item(s) to be added to the array");
+            AddArg("unshift", "items", "list", true, "", null, "'abc', 'def'", "The item(s) to add to the beginning of the array");
         }
-
 
         /// <summary>
         /// Get / set value by index.
@@ -70,7 +68,6 @@ namespace ComLib.Lang.Types
             if (index < 0 || index >= list.Count) throw new IndexOutOfRangeException("Index : " + index);
             return list[index];
         }
-
 
         /// <summary>
         /// Get / set value by index.
@@ -89,8 +86,8 @@ namespace ComLib.Lang.Types
             list[index] = val;
         }
 
-
         #region Javascript API methods
+
         /// <summary>
         /// Lenght of the array.
         /// </summary>
@@ -100,7 +97,6 @@ namespace ComLib.Lang.Types
             var list = target.GetValue() as IList;
             return list.Count;
         }
-
 
         /// <summary>
         /// Joins two or more arrays, and returns a copy of the joined arrays
@@ -113,7 +109,7 @@ namespace ComLib.Lang.Types
             if (arrays == null || arrays.Length == 0) return target;
 
             var list = target.GetValue() as IList;
-            
+
             var copy = new List<object>();
             AddRange(copy, list);
             for (var ndx = 0; ndx < arrays.Length; ndx++)
@@ -125,7 +121,6 @@ namespace ComLib.Lang.Types
             return new LArray(copy);
         }
 
-
         /// <summary>
         /// Joins two or more arrays, and returns a copy of the joined arrays
         /// </summary>
@@ -136,10 +131,10 @@ namespace ComLib.Lang.Types
         public int IndexOf(LObject target, object item, int start)
         {
             var list = target.GetValue() as IList;
-            
+
             var foundPos = -1;
             var total = list.Count;
-            for(var ndx = start; ndx < total; ndx++)
+            for (var ndx = start; ndx < total; ndx++)
             {
                 var itemAt = list[ndx] as LObject;
                 if (itemAt != null && itemAt.GetValue() == item)
@@ -150,7 +145,6 @@ namespace ComLib.Lang.Types
             }
             return foundPos;
         }
-
 
         /// <summary>
         /// Joins all elements of an array into a string
@@ -181,7 +175,6 @@ namespace ComLib.Lang.Types
             return result;
         }
 
-
         /// <summary>
         /// Joins two or more arrays, and returns a copy of the joined arrays
         /// </summary>
@@ -195,7 +188,7 @@ namespace ComLib.Lang.Types
 
             var foundPos = -1;
             var total = list.Count;
-            for(var ndx = start; ndx < total; ndx++)
+            for (var ndx = start; ndx < total; ndx++)
             {
                 var itemAt = list[ndx] as LObject;
                 if (itemAt != null && itemAt.GetValue() == item)
@@ -205,7 +198,6 @@ namespace ComLib.Lang.Types
             }
             return foundPos;
         }
-
 
         /// <summary>
         /// Removes the last element of an array, and returns that element
@@ -220,7 +212,6 @@ namespace ComLib.Lang.Types
             list.RemoveAt(index);
             return toRemove;
         }
-
 
         /// <summary>
         /// Adds new elements to the end of an array, and returns the new length
@@ -239,10 +230,10 @@ namespace ComLib.Lang.Types
 
             foreach (object elem in elements)
             {
-                if(list.GetType().IsGenericType)
+                if (list.GetType().IsGenericType)
                 {
                     var gt = list.GetType().GetGenericArguments()[0];
-                    if(gt != null && gt.FullName.StartsWith("ComLib.Lang"))
+                    if (gt != null && gt.FullName.StartsWith("ComLib.Lang"))
                     {
                         var langVal = LangTypeHelper.ConvertToLangValue(elem);
                         list.Add(langVal);
@@ -257,12 +248,10 @@ namespace ComLib.Lang.Types
                     var langType = LangTypeHelper.ConvertToLangValue(elem);
                     list.Add(langType);
                 }
-                
             }
 
             return list.Count;
         }
-
 
         /// <summary>
         /// Reverses the order of the elements in an array
@@ -290,7 +279,6 @@ namespace ComLib.Lang.Types
             return target;
         }
 
-
         /// <summary>
         /// Removes the first element of an array, and returns that element
         /// </summary>
@@ -304,7 +292,6 @@ namespace ComLib.Lang.Types
             list.RemoveAt(0);
             return item;
         }
-
 
         /// <summary>
         /// Selects a part of an array, and returns the new array
@@ -323,7 +310,6 @@ namespace ComLib.Lang.Types
                 items.Add(list[ndx]);
             return new LArray(items);
         }
-
 
         /// <summary>
         /// Adds/Removes elements from an array
@@ -346,7 +332,7 @@ namespace ComLib.Lang.Types
                 }
                 RemoveRange(list, index, howmany);
             }
-            if (elements != null && elements.Length > 0 )
+            if (elements != null && elements.Length > 0)
             {
                 var lastIndex = index;
                 for (var ndx = 0; ndx < elements.Length; ndx++)
@@ -358,7 +344,6 @@ namespace ComLib.Lang.Types
             }
             return new LArray(removed);
         }
-        
 
         /// <summary>
         /// Adds new elements to the beginning of an array, and returns the new length
@@ -378,11 +363,11 @@ namespace ComLib.Lang.Types
             }
             return list.Count;
         }
-        #endregion
 
-
+        #endregion Javascript API methods
 
         #region Helpers
+
         /// <summary>
         /// Adds all the items from the send array into the first array(target)
         /// </summary>
@@ -398,7 +383,6 @@ namespace ComLib.Lang.Types
 
             return target;
         }
-
 
         /// <summary>
         /// Removes items from the array starting at the position supplied and removes the number of items supplied
@@ -420,6 +404,7 @@ namespace ComLib.Lang.Types
 
             return target;
         }
-        #endregion
+
+        #endregion Helpers
     }
 }

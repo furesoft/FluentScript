@@ -1,29 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Core;
 using ComLib.Lang.Helpers;
 using ComLib.Lang.Parsing;
-// </lang:using>
+using System;
+using System.Collections.Generic;
 
+// </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Allows represnting file extension with out having to surround them in quotes
-    // e.g. such as .doc, or *.doc 
-    
+    // e.g. such as .doc, or *.doc
+
     // Format: "*" "." <extension_name>
     // NOTE: The "*" is optional.
-    
+
     some_file_operation( 'c:\\app\\src\\', .pdb )
     some_file_operation( 'c:\\app\\src\\', *.dll )
     some_file_operation( 'c:\\app\\src\\', .svn )
     some_file_operation( 'c:\\app\\src\\', .exe )
-    
+
     </doc:example>
     ***************************************************************************/
 
@@ -35,26 +33,24 @@ namespace ComLib.Lang.Plugins
         private string[] _extensions = null;
         private IDictionary<string, string> _extLookup;
 
-
         /// <summary>
         /// Initialize
         /// </summary>
         public FileExtPlugin()
         {
             _tokens = new string[] { "*", "." };
-            _extensions = new string[] 
+            _extensions = new string[]
             {
-	            "xml",  "js",   "dll",  "exe",
-	            "doc",  "ppt",  "xls",
-	            "txt",  "log",
+                "xml",  "js",   "dll",  "exe",
+                "doc",  "ppt",  "xls",
+                "txt",  "log",
                 "svn", "cvs",
-	            "cs",  "java",  "fs",  "aspx",  "ascx",  "rb",  "py",
-	            "mp3",  "mp4",  "avi"
+                "cs",  "java",  "fs",  "aspx",  "ascx",  "rb",  "py",
+                "mp3",  "mp4",  "avi"
             };
             _extLookup = new Dictionary<string, string>();
             _extLookup = LangHelper.ToDictionary(_extensions);
         }
-
 
         /// <summary>
         /// The grammer for the function declaration
@@ -66,7 +62,6 @@ namespace ComLib.Lang.Plugins
                 return "'*'? '.' <word> ";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -84,7 +79,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// Whether or not this uri plugin can handle the current token.
         /// </summary>
@@ -95,12 +89,12 @@ namespace ComLib.Lang.Plugins
             var next = _lexer.Scanner.PeekChar();
             var curr = _lexer.State.CurrentChar;
             var last = ' ';
-            if(_lexer.State.Pos - 2 >= 0)
+            if (_lexer.State.Pos - 2 >= 0)
                 last = _lexer.State.Text[_lexer.State.Pos - 2];
 
             // [ ident.xml, 9.doc ]
             if (Char.IsLetterOrDigit(last)) return false;
-            if (last == ')' || last == ']' ) return false;
+            if (last == ')' || last == ']') return false;
             if (token.Text == "." && !Char.IsLetter(curr)) return false;
 
             // *.
@@ -120,7 +114,6 @@ namespace ComLib.Lang.Plugins
             }
             return false;
         }
-
 
         /// <summary>
         /// run step 123.

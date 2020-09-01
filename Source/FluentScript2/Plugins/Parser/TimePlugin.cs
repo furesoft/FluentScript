@@ -1,25 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Helpers;
 using ComLib.Lang.Parsing;
 using ComLib.Lang.Types;
+using System;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Time plugin provides a convenient way to represent time in fluent syntax.
-    
+
     var t = 12:30 pm;
-    
+
     if t is 12:30 pm then
 	    print it's time to go to lunch!
     </doc:example>
@@ -44,7 +42,6 @@ namespace ComLib.Lang.Plugins
             _aliases["Midnight"] = new TimeSpan(0, 0, 0);
         }
 
-
         /// <summary>
         /// Initialize
         /// </summary>
@@ -52,7 +49,6 @@ namespace ComLib.Lang.Plugins
         {
             this.StartTokens = new string[] { "$NumberToken", "Noon", "noon", "midnight", "Midnight" };
         }
-
 
         /// <summary>
         /// The grammer for the function declaration
@@ -64,7 +60,6 @@ namespace ComLib.Lang.Plugins
                 return "( ( noon | Noon | midnight | Midnight ) | ( <number> ( ':' <number> ){1,2} ( am | pm ) ) ";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -83,7 +78,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// Whether or not this parser can handle the supplied token.
         /// </summary>
@@ -98,12 +92,11 @@ namespace ComLib.Lang.Plugins
             if (!(token.Type == TokenTypes.LiteralNumber)) return false;
 
             var next = _tokenIt.Peek().Token;
-            if ( next != Tokens.Colon && !( next.Text == "am" || next.Text == "pm" )) 
+            if (next != Tokens.Colon && !(next.Text == "am" || next.Text == "pm"))
                 return false;
 
             return true;
         }
-
 
         /// <summary>
         /// Parses the time expression.
@@ -119,7 +112,6 @@ namespace ComLib.Lang.Plugins
             return Exprs.Const(new LTime(time), startToken);
         }
 
-    
         /// <summary>
         /// Parses the time in format 12[:minutes:seconds] am|pm.
         /// </summary>
@@ -134,7 +126,7 @@ namespace ComLib.Lang.Plugins
             double hours = DateTime.Now.Hour;
 
             var tokenIt = parser.TokenIt;
-            if(advance) tokenIt.Advance();
+            if (advance) tokenIt.Advance();
 
             if (expectAt)
             {
@@ -162,14 +154,14 @@ namespace ComLib.Lang.Plugins
                 tokenIt.Advance();
                 return _aliases[tokenText];
             }
-                        
+
             // 3. Hour part
             hours = tokenIt.ExpectNumber(true);
-            
+
             // 4. Time specified without colon: e.g. 1030 pm ?
             var next = tokenIt.NextToken.Token.Text;
             if ((next == "am" || next == "pm") && tokenText.Length > 2)
-            {                
+            {
                 var time = hours;
                 // 130 - 930    am|pm
                 if (time < 1000)
@@ -177,13 +169,12 @@ namespace ComLib.Lang.Plugins
                     hours = Convert.ToDouble(tokenText[0].ToString());
                     minutes = Convert.ToDouble(tokenText.Substring(1));
                 }
-                // 1030 - 1230  am|pm                
+                // 1030 - 1230  am|pm
                 else
                 {
                     hours = Convert.ToDouble(tokenText.Substring(0, 2));
                     minutes = Convert.ToDouble(tokenText.Substring(2));
                 }
-
             }
             // 5. Time specified with ":" 10:30 pm
             else if (next == ":")
@@ -213,13 +204,12 @@ namespace ComLib.Lang.Plugins
         }
     }
 
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Time plugin provides a convenient way to represent time in fluent syntax.
-    
+
     var t = 12:30 pm;
-    
+
     if t is 12:30 pm then
 	    print it's time to go to lunch!
     </doc:example>
@@ -246,7 +236,6 @@ namespace ComLib.Lang.Plugins
             _aliases["Midnight"] = new TimeSpan(0, 0, 0);
         }
 
-
         /// <summary>
         /// Initialize
         /// </summary>
@@ -254,7 +243,6 @@ namespace ComLib.Lang.Plugins
         {
             _tokens = new string[] { "$NumberToken", "Noon", "noon", "midnight", "Midnight" };
         }
-
 
         /// <summary>
         /// The grammer for the function declaration
@@ -266,7 +254,6 @@ namespace ComLib.Lang.Plugins
                 return "( ( noon | Noon | midnight | Midnight ) | ( <number> ( ':' <number> ){1,2} ( am | pm ) ) ";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -284,7 +271,6 @@ namespace ComLib.Lang.Plugins
                 };
             }
         }
-
 
         /// <summary>
         /// Whether or not this uri plugin can handle the current token.
@@ -305,14 +291,14 @@ namespace ComLib.Lang.Plugins
             // Check 1: Make sure it's a number.
             if (current.Kind != TokenKind.LiteralNumber)
                 return false;
-            
+
             var nextToken = _lexer.PeekToken();
             var nextTokenText = nextToken.Token.Text.ToLower();
 
             // Check 2: End token?
             if (nextToken.Token == ComLib.Lang.Core.Tokens.EndToken)
                 return false;
-                        
+
             // Check 3: Time format is 9:30 am or 930 am
             // So if next token is not ':' then it has to be "am" or "pm"
             if (nextTokenText != ComLib.Lang.Core.Tokens.Colon.Text
@@ -355,7 +341,6 @@ namespace ComLib.Lang.Plugins
             return true;
         }
 
-
         /// <summary>
         /// run step 123.
         /// </summary>
@@ -384,7 +369,6 @@ namespace ComLib.Lang.Plugins
             _lexer.ParsedTokens.Add(t);
             return new Token[] { timeToken };
         }
-
 
         private TimeSpan CloneTime(TimeSpan t)
         {

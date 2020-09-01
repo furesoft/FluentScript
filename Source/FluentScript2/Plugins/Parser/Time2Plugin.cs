@@ -1,24 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
-using ComLib.Lang.Core;
-using ComLib.Lang.AST;
-using ComLib.Lang.Helpers;
-using ComLib.Lang.Parsing;
+﻿// <lang:using>
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Time plugin provides a convenient way to represent time in fluent syntax.
-    
+
     var t = 12:30 pm;
-    
+
     if t is 12:30 pm then
 	    print it's time to go to lunch!
     </doc:example>
@@ -45,7 +35,6 @@ namespace ComLib.Lang.Plugins
             _aliases["Midnight"] = new TimeSpan(0, 0, 0);
         }
 
-
         /// <summary>
         /// Initialize
         /// </summary>
@@ -53,7 +42,6 @@ namespace ComLib.Lang.Plugins
         {
            _tokens = new string[] { "$NumberToken", "Noon", "noon", "midnight", "Midnight" };
         }
-
 
         /// <summary>
         /// The grammer for the function declaration
@@ -65,7 +53,6 @@ namespace ComLib.Lang.Plugins
                 return "( ( noon | Noon | midnight | Midnight ) | ( <number> ( ':' <number> ){1,2} ( am | pm ) ) ";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -83,7 +70,6 @@ namespace ComLib.Lang.Plugins
                 };
             }
         }
-
 
         /// <summary>
         /// Whether or not this uri plugin can handle the current token.
@@ -131,7 +117,7 @@ namespace ComLib.Lang.Plugins
             // Note: the longest time string can only be 9 chars e.g. :30:45 am
             text = current.Text + text.Substring(0, ndxAmOrPm + 2);
             var result = DateTimeTypeHelper.ParseTime(text);
-            
+
             // Was not a valid time string. maybe some other plguin can handle it.
             if(!result.Item2)
                 return false;
@@ -140,7 +126,6 @@ namespace ComLib.Lang.Plugins
             _time = result.Item1;
             return true;
         }
-
 
         /// <summary>
         /// run step 123.
@@ -170,7 +155,6 @@ namespace ComLib.Lang.Plugins
             _lexer.ParsedTokens.Add(t);
             return new Token[] { timeToken };
         }
-
 
         private TimeSpan CloneTime(TimeSpan t)
         {

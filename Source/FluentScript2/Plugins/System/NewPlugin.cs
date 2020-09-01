@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
-using ComLib.Lang.Core;
+﻿// <lang:using>
 using ComLib.Lang.AST;
+using ComLib.Lang.Core;
 using ComLib.Lang.Parsing;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Enables the use of new to create instances of objects.
-    
+
     post = new BlogPost()
     </doc:example>
     ***************************************************************************/
@@ -34,7 +29,6 @@ namespace ComLib.Lang.Plugins
             this.Precedence = 100;
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -42,7 +36,6 @@ namespace ComLib.Lang.Plugins
         {
             get { return "new <expression>"; }
         }
-
 
         /// <summary>
         /// Examples
@@ -58,7 +51,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// throw error;
         /// </summary>
@@ -68,7 +60,7 @@ namespace ComLib.Lang.Plugins
             // Validate
             _tokenIt.Expect(Tokens.New);
             var typeName = _tokenIt.ExpectId();
-            
+
             // Keep parsing to capture full name.
             // e.g new App.Core.User()
             while (_tokenIt.NextToken.Token == Tokens.Dot)

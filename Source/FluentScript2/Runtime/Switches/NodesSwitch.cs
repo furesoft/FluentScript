@@ -1,6 +1,5 @@
-﻿
+﻿using ComLib.Lang.AST;
 using System.IO;
-using ComLib.Lang.AST;
 
 namespace ComLib.Lang.Runtime.Switches
 {
@@ -9,13 +8,11 @@ namespace ComLib.Lang.Runtime.Switches
         private string _filepath;
         private string _outpath;
 
-
         public NodesSwitch(string filepath, string outpath)
         {
             _filepath = filepath;
             _outpath = outpath;
         }
-
 
         /// <summary>
         /// Prints tokens to file supplied, if file is not supplied, prints to console.

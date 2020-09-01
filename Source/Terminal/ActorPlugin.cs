@@ -1,10 +1,5 @@
 ﻿using ComLib.Lang.AST;
-using ComLib.Lang.Core;
-using ComLib.Lang.Helpers;
 using ComLib.Lang.Parsing;
-using ComLib.Lang.Plugins;
-using ComLib.Lang.Types;
-using System.Transactions;
 
 namespace Terminal
 {

@@ -1,8 +1,5 @@
-﻿
+﻿using ComLib.Lang.Core;
 using System.Collections.Generic;
-
-using ComLib.Lang.Core;
-
 
 namespace ComLib.Lang.Types
 {
@@ -14,32 +11,27 @@ namespace ComLib.Lang.Types
         /// <summary>
         /// Map of conversions from one basic type to another basic type.
         /// </summary>
-        protected  IDictionary<int, int> _basicConversions = new Dictionary<int,int>();
-
+        protected IDictionary<int, int> _basicConversions = new Dictionary<int, int>();
 
         /// <summary>
         /// Get the type name of this type.
         /// </summary>
         public string Name;
 
-
         /// <summary>
-        /// Gets the full typename 
+        /// Gets the full typename
         /// </summary>
         public string FullName;
-
 
         /// <summary>
         /// Whether or not this is a system level datatype.
         /// </summary>
         public bool IsSystemType;
 
-
         /// <summary>
         /// The value of the type. a numeric value for basic types.
         /// </summary>
         public int TypeVal;
-
 
         /// <summary>
         /// Whether or not this is a primitive type ( eg.. number, bool, string, date, time ).
@@ -52,7 +44,6 @@ namespace ComLib.Lang.Types
                 && this.TypeVal <= TypeConstants.Time;
         }
 
-
         /// <summary>
         /// Whether or not this is a basic type e.g. bool, date.
         /// </summary>
@@ -61,10 +52,9 @@ namespace ComLib.Lang.Types
         {
             if (this.TypeVal == TypeConstants.Null) return true;
             if (this.TypeVal == TypeConstants.Table) return true;
-            return this.TypeVal >= TypeConstants.Bool 
+            return this.TypeVal >= TypeConstants.Bool
                 && this.TypeVal <= TypeConstants.Map;
         }
-
 
         ///// <summary>
         ///// Setup the conversion matrix from type to another.
@@ -72,7 +62,6 @@ namespace ComLib.Lang.Types
         //public virtual void SetupConversionMatrix()
         //{
         //}
-
 
         ///// <summary>
         ///// Adds a conversion flag that indicates if converting from this type to the supplied type is possible
@@ -84,7 +73,6 @@ namespace ComLib.Lang.Types
         //{
         //    this._basicConversions[typeVal] = mode;
         //}
-
 
         ///// <summary>
         ///// Sets up the matrix of possible conversions to all basic datatypes to the mode supplied.

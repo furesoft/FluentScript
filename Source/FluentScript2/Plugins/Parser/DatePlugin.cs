@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Parsing;
 using ComLib.Lang.Types;
+using System;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
     <doc:example>
     // Date plugin allows date expressions in a friendly format like January 1 2001;
     // Following formats are supported.
-    
+
     var date = January 1st 2012;
     var date = Jan
     date = jan 10
@@ -30,12 +28,13 @@ namespace ComLib.Lang.Plugins
     date = January 10, 2012
     date = January 10th
     date = January 10th, 2012
-    date = January 10th 2012 at 9:20 am; 
-    
+    date = January 10th 2012 at 9:20 am;
+
     if today is before December 25th 2011 then
 	    print Still have time to buy gifts
     </doc:example>
     ***************************************************************************/
+
     // <fs:plugin-autogenerate>
     /// <summary>
     /// Combinator for handling dates.
@@ -48,33 +47,31 @@ namespace ComLib.Lang.Plugins
         public DatePlugin()
         {
             this.StartTokens = new string[]
-            { 
-                "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec",             
-                "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", 
-            
-                "january",  "february", "march",    "april",    
-                "may",      "june",     "july",     "august",   
+            {
+                "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec",
+                "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+
+                "january",  "february", "march",    "april",
+                "may",      "june",     "july",     "august",
                 "september","october",  "november", "december",
-                "January",  "February", "March",    "April",    
-                "May",      "June",     "July",     "August",   
+                "January",  "February", "March",    "April",
+                "May",      "June",     "July",     "August",
                 "September","October",  "November", "December",
 
                 "$DateToken"
             };
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
         public override string Grammer
         {
-            get 
-            { 
-                return "@month( jan | January ) @day<number>{1,2} ( st | nd | rd | th )? ( ','? @year( <number>{4} ) )?  ( at <time>)?"; 
+            get
+            {
+                return "@month( jan | January ) @day<number>{1,2} ( st | nd | rd | th )? ( ','? @year( <number>{4} ) )?  ( at <time>)?";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -101,10 +98,10 @@ namespace ComLib.Lang.Plugins
                 };
             }
         }
+
         // </fs:plugin-autogenerate>
 
         private static Dictionary<string, int> _months;
-
 
         static DatePlugin()
         {
@@ -135,7 +132,6 @@ namespace ComLib.Lang.Plugins
             _months["december"] = 12;
         }
 
-
         /// <summary>
         /// Whether or not this parser can handle the supplied token.
         /// </summary>
@@ -146,14 +142,13 @@ namespace ComLib.Lang.Plugins
             var n1 = _tokenIt.Peek();
             var isLiteralDate = token.Kind == TokenKind.LiteralDate;
 
-            if ( isLiteralDate && n1.Token.Text != "at")
+            if (isLiteralDate && n1.Token.Text != "at")
                 return false;
 
             // 1. 1st token is definitely month name in long or short form. "oct" or "october".
             var monthNameOrAbbr = token.Text.ToLower();
-            return _months.ContainsKey(monthNameOrAbbr); 
+            return _months.ContainsKey(monthNameOrAbbr);
         }
-
 
         /// <summary>
         /// Parses the date expression.
@@ -176,7 +171,6 @@ namespace ComLib.Lang.Plugins
             var exp = Exprs.Const(new LDate(date), startToken);
             return exp;
         }
-
 
         /// <summary>
         /// Parses a date.
@@ -238,7 +232,7 @@ namespace ComLib.Lang.Plugins
             n = tokenIt.Peek();
             if (n.Token.Text == "at")
                 time = TimeExprPlugin.ParseTime(parser, true, true);
-            else            
+            else
                 tokenIt.Advance();
 
             var date = new DateTime(year, month, (int)day, time.Hours, time.Minutes, time.Seconds);

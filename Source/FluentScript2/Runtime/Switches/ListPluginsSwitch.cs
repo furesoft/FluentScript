@@ -1,8 +1,5 @@
-﻿
-
-using System;
+﻿using ComLib.Lang.Helpers;
 using System.Globalization;
-using ComLib.Lang.Helpers;
 
 namespace ComLib.Lang.Runtime.Switches
 {
@@ -11,7 +8,6 @@ namespace ComLib.Lang.Runtime.Switches
     /// </summary>
     public class ListPluginsSwitch : Switch
     {
-
         /// <summary>
         /// Prints all the meta plugins loaded.
         /// </summary>

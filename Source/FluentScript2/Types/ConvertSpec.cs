@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ComLib.Lang.Types
 {
@@ -34,54 +32,45 @@ namespace ComLib.Lang.Types
             AllowedVals = allowedVals;
         }
 
-
         /// <summary>
         /// Source type. e.g. "string"
         /// </summary>
         public string SourceType { get; set; }
-
 
         /// <summary>
         /// Destination type e.g. "bool"
         /// </summary>
         public string DestType { get; set; }
 
-
         /// <summary>
         /// Whether or not a change can take place.
         /// </summary>
         public bool CanChange { get; set; }
-
 
         /// <summary>
         /// Whether or not the change is case sensitive
         /// </summary>
         public bool IsCaseSensitive { get; set; }
 
-
         /// <summary>
         /// The conversion mode from "direct", "regex", "handler", "list"
         /// </summary>
         public int ConvertMode { get; set; }
-
 
         /// <summary>
         /// The regex pattern to use for conversion checking.
         /// </summary>
         public string RegexPattern { get; set; }
 
-
         /// <summary>
         /// The list of allowed source values
         /// </summary>
         public List<string> AllowedVals { get; set; }
 
-
         /// <summary>
         /// A method handler for more complex conversions.
         /// </summary>
         public Func<ConvertSpec, object, object> Handler { get; set; }
-
 
         /// <summary>
         /// Lookup key

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace ComLib.Lang.Templating
@@ -12,17 +11,20 @@ namespace ComLib.Lang.Templating
     public class TemplateEngineDefault : ITemplateEngine
     {
         #region Members
+
         // Parsing.
         private List<CodeBlock> _buffer;
+
         private string _script;
         private int _lineNum;
         private int _currentLineStartPos;
         private int _posInLine;
         private int _scriptLength;
         private int _pos;
-        
+
         // Constants
         private char ESCAPE = '%';
+
         private char TEMPLATE_START = '<';
         private char TEMPLATE_END = '>';
         private char CODE_START = '%';
@@ -32,22 +34,24 @@ namespace ComLib.Lang.Templating
         private char COMMENT_START = '#';
         private char COMMENT_END = '%';
         private string NEW_LINE = "\"\\r\\n\"";
-        private string BUFFER_NAME    = "buffer";
+        private string BUFFER_NAME = "buffer";
 
         // State
         private string _lastText = string.Empty;
-        private State _lastState = State.Html;    
+
+        private State _lastState = State.Html;
 
         // Error handling and tracking.
         private List<string> _errors;
-        #endregion
 
+        #endregion Members
 
         #region Support Classes
+
         /// <summary>
         /// State of parsing.
         /// </summary>
-        enum State
+        private enum State
         {
             Html,
             Expression,
@@ -55,24 +59,21 @@ namespace ComLib.Lang.Templating
             Comment
         }
 
-
         /// <summary>
         /// Codeblock
         /// </summary>
-        class CodeBlock
+        private class CodeBlock
         {
             /// <summary>
             /// What type of text html, expression, codeblock, comment etc.
             /// </summary>
             public State TextType;
 
-
             /// <summary>
             /// Content of the codeblock.
             /// </summary>
             public string Content;
 
-            
             /// <summary>
             /// Initialize.
             /// </summary>
@@ -84,9 +85,8 @@ namespace ComLib.Lang.Templating
                 Content = content;
             }
         }
-        #endregion
 
-
+        #endregion Support Classes
 
         /// <summary>
         /// Initialize
@@ -97,7 +97,6 @@ namespace ComLib.Lang.Templating
             Init(script);
         }
 
-
         /// <summary>
         /// Initialize
         /// </summary>
@@ -105,9 +104,8 @@ namespace ComLib.Lang.Templating
         public void Init(string script)
         {
             _script = script;
-            Reset();            
+            Reset();
         }
-
 
         /// <summary>
         /// Render using rules similar to Razor.
@@ -119,8 +117,6 @@ namespace ComLib.Lang.Templating
             Init(script);
             return Render();
         }
-
-
 
         /// <summary>
         /// Render using rules similar to Razor.
@@ -137,8 +133,6 @@ namespace ComLib.Lang.Templating
             var output = BuildFinalText();
             return output;
         }
-
-
 
         private void Interpret()
         {
@@ -184,19 +178,18 @@ namespace ComLib.Lang.Templating
             }
         }
 
-
         /// <summary>
         /// Handles reading of %-  comments and setting the current state.
         /// </summary>
         private void HandleHtml()
         {
             string text = ReadHtml(false, 0);
-            
+
             // prevent excessive newlines \r\n
-            // such as 
+            // such as
             //  <div>
             //      <% if (...) { %>
-            //      <ul>            
+            //      <ul>
             int lastCodeIndex = _buffer.Count - 1;
             if (lastCodeIndex >= 1)
             {
@@ -226,7 +219,6 @@ namespace ComLib.Lang.Templating
             _lastState = State.Html;
         }
 
-
         /// <summary>
         /// Handles reading of %-  comments and setting the current state.
         /// </summary>
@@ -240,7 +232,6 @@ namespace ComLib.Lang.Templating
             _lastState = State.Comment;
         }
 
-
         /// <summary>
         /// Handles reading of % %>
         /// </summary>
@@ -253,7 +244,6 @@ namespace ComLib.Lang.Templating
             _buffer.Add(new CodeBlock(State.CodeBlock, code));
             _lastState = State.CodeBlock;
         }
-
 
         /// <summary>
         /// Handles the expression.
@@ -271,7 +261,6 @@ namespace ComLib.Lang.Templating
             _lastState = State.Expression;
         }
 
-
         /// <summary>
         /// Reads until char supplied is found.
         /// </summary>
@@ -279,7 +268,7 @@ namespace ComLib.Lang.Templating
         private string ReadUntil(char expected1, char expected2, bool advanceFirst = true, int advanceCount = 1, bool readToEndOfExpected = true, bool excludeBeginningSpace = true)
         {
             // starting at @ so move 1 char forward
-            if(advanceFirst) _pos += advanceCount;
+            if (advanceFirst) _pos += advanceCount;
 
             string text = "";
 
@@ -317,7 +306,6 @@ namespace ComLib.Lang.Templating
             return text;
         }
 
-        
         /// <summary>
         /// Reads a code block
         /// </summary>
@@ -374,7 +362,6 @@ namespace ComLib.Lang.Templating
             return text;
         }
 
-
         /// <summary>
         /// Reads until char supplied is found.
         /// </summary>
@@ -383,7 +370,7 @@ namespace ComLib.Lang.Templating
         {
             // starting at @ so move 1 char forward
             if (advanceFirst) _pos += advanceCount;
-                        
+
             string text = "";
             while (_pos < _scriptLength)
             {
@@ -425,7 +412,6 @@ namespace ComLib.Lang.Templating
             }
             return text;
         }
-
 
         private string ReadCodeString(bool advanceAfterEndQuote = false)
         {
@@ -469,7 +455,6 @@ namespace ComLib.Lang.Templating
             return text;
         }
 
-
         private string ReadHtmlComment()
         {
             _pos += 4;
@@ -502,8 +487,8 @@ namespace ComLib.Lang.Templating
             return text;
         }
 
-
         #region Helper methods
+
         private void OuputBuffer()
         {
             if (_lastText == NEW_LINE)
@@ -515,7 +500,6 @@ namespace ComLib.Lang.Templating
             _lastText = string.Empty;
         }
 
-
         private void RegisterNewLine()
         {
             _lineNum++;
@@ -523,10 +507,9 @@ namespace ComLib.Lang.Templating
             _posInLine = 0;
         }
 
-
         private void Reset()
         {
-            // Initialize            
+            // Initialize
             _buffer = new List<CodeBlock>();
             _errors = new List<string>();
             _lineNum = 1;
@@ -537,7 +520,6 @@ namespace ComLib.Lang.Templating
             _lastText = string.Empty;
         }
 
-
         private string BuildFinalText()
         {
             if (!string.IsNullOrEmpty(_lastText))
@@ -547,7 +529,7 @@ namespace ComLib.Lang.Templating
             allText.Append("var " + BUFFER_NAME + " = \"\";" + Environment.NewLine);
             allText.Append(_buffer[0].Content + Environment.NewLine);
 
-            for(int ndx = 1; ndx < _buffer.Count; ndx++)
+            for (int ndx = 1; ndx < _buffer.Count; ndx++)
             {
                 CodeBlock blockC = _buffer[ndx];
                 string text = blockC.Content;
@@ -558,6 +540,7 @@ namespace ComLib.Lang.Templating
             var finaltext = allText.ToString();
             return finaltext;
         }
-        #endregion
+
+        #endregion Helper methods
     }
 }

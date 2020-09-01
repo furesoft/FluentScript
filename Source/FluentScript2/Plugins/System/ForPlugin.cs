@@ -1,24 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Collections;
-
-
-// <lang:using>
-using ComLib.Lang.Core;
+﻿// <lang:using>
 using ComLib.Lang.AST;
-using ComLib.Lang.Types;
+using ComLib.Lang.Core;
 using ComLib.Lang.Parsing;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Return plugin provides return values
-    
+
     return false;
     </doc:example>
     ***************************************************************************/
@@ -36,7 +28,6 @@ namespace ComLib.Lang.Plugins
             this.ConfigureAsSystemStatement(true, false, "for");
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -44,7 +35,6 @@ namespace ComLib.Lang.Plugins
         {
             get { return "for '(' ( ( <id> in <expression> ) | ( <id> '=' <expression> ';' <id> <op> <expression> ';' <id> <op> <expression>? ) ) ')' <statementblock>"; }
         }
-
 
         /// <summary>
         /// Examples
@@ -62,7 +52,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// Parses either the for or for x in statements.
         /// </summary>
@@ -75,7 +64,6 @@ namespace ComLib.Lang.Plugins
 
             return ParseForLoop();
         }
-
 
         private Expr ParseForLoop()
         {
@@ -90,8 +78,6 @@ namespace ComLib.Lang.Plugins
             ParseBlock(stmt);
             return stmt;
         }
-
-
 
         /// <summary>
         /// return value;

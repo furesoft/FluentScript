@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
-using ComLib.Lang.AST;
+﻿using ComLib.Lang.AST;
 using ComLib.Lang.Core;
 using ComLib.Lang.Parsing;
 using ComLib.Lang.Types;
+using System;
+using System.Collections.Generic;
 
 namespace ComLib.Lang.Runtime.Bindings
 {
@@ -15,50 +14,46 @@ namespace ComLib.Lang.Runtime.Bindings
     {
         private MetaCompilerData _data;
 
-
-	    public MetaCompiler()
-	    {
-		    this.Namespace = "sys.compiler";
-		    this.SupportsFunctions = true;
-	        this.NamingConvention = "pascal";
-		    this.ExportedFunctions = new List<string>()
-		    {
-			    "toConstantDate",
-			    "toConstantTime",
-			    "toConstantDay",
+        public MetaCompiler()
+        {
+            this.Namespace = "sys.compiler";
+            this.SupportsFunctions = true;
+            this.NamingConvention = "pascal";
+            this.ExportedFunctions = new List<string>()
+            {
+                "toConstantDate",
+                "toConstantTime",
+                "toConstantDay",
                 "toListCheck",
                 "toRelativeDate",
                 "toDaysAway",
                 "toTable"
-		    };
+            };
             _data = new MetaCompilerData();
             _data.Init();
-	    }
-
+        }
 
         /// <summary>
         /// The parsing/execution context.
         /// </summary>
         public Context Ctx;
 
-		
-	    /// <summary>Converts the parameters to a constant date expression </summary>
-	    /// <param name="expr">The function call expressions</param>
-	    public object ToConstantDate(BindingCallExpr expr)
-	    {
+        /// <summary>Converts the parameters to a constant date expression </summary>
+        /// <param name="expr">The function call expressions</param>
+        public object ToConstantDate(BindingCallExpr expr)
+        {
             var month = Convert.ToInt32(expr.ParamList[0]);
             var day = Convert.ToInt32(expr.ParamList[1]);
             var year = Convert.ToInt32(expr.ParamList[2]);
             var time = (string)expr.ParamList[3];
             var token = expr.ParamList[4] as TokenData;
             return Exprs.Date(month, day, year, time, token);
-	    }
-	
-	
-	    /// <summary>Converts the parameters to a constant date time token </summary>
-	    /// <param name="expr">The function call expressions</param>
+        }
+
+        /// <summary>Converts the parameters to a constant date time token </summary>
+        /// <param name="expr">The function call expressions</param>
         public object ToConstantDateTimeToken(BindingCallExpr expr)
-	    {
+        {
             var date = expr.ParamList[0] as TokenData;
             var time = expr.ParamList[1] as TokenData;
 
@@ -69,20 +64,18 @@ namespace ComLib.Lang.Runtime.Bindings
             var token = date.Token.Clone();
             token.SetTextAndValue(text, datetime);
             return token;
-	    }
-	
-	
-	    /// <summary>Converts the parameters to a constant day expression </summary>
-	    /// <param name="expr">The function call expressions</param>
+        }
+
+        /// <summary>Converts the parameters to a constant day expression </summary>
+        /// <param name="expr">The function call expressions</param>
         public object ToRelativeDay(BindingCallExpr expr)
-	    {
+        {
             var day = Convert.ToInt32(expr.ParamList[0]);
             var time = (string)expr.ParamList[1];
             var token = expr.ParamList[2] as TokenData;
             var dayName = _data.LookupDayName(day);
             return Exprs.Day(dayName, time, token);
-	    }
-
+        }
 
         /// <summary>Converts the parameters to a constant day expression </summary>
         /// <param name="expr">The function call expressions</param>
@@ -95,17 +88,15 @@ namespace ComLib.Lang.Runtime.Bindings
             return Exprs.DateRelative(relativeDay, dayOfWeek, month, token);
         }
 
-
         /// <summary>Converts the parameters to a constant day expression </summary>
         /// <param name="expr">The function call expressions</param>
         public object ToDuration(BindingCallExpr expr)
         {
             var duration = (string)(expr.ParamList[0]);
-            var type = (string) expr.ParamList[1];
+            var type = (string)expr.ParamList[1];
             var token = expr.ParamList[2] as TokenData;
             return Exprs.Duration(duration, type, token);
         }
-
 
         /// <summary>
         /// Creates a constant string
@@ -119,7 +110,6 @@ namespace ComLib.Lang.Runtime.Bindings
             return Exprs.ListCheck(name, token);
         }
 
-
         public object ToEnumerableLoop(BindingCallExpr expr)
         {
             var token = expr.ParamList[2] as TokenData;
@@ -132,12 +122,11 @@ namespace ComLib.Lang.Runtime.Bindings
             return loopexpr;
         }
 
-
         public object ToTable(BindingCallExpr expr)
         {
             var fields = expr.ParamList[0] as List<object>;
             var fieldNames = new List<string>();
-            foreach(var obj in fields)
+            foreach (var obj in fields)
             {
                 fieldNames.Add(Convert.ToString(obj));
             }
@@ -145,7 +134,6 @@ namespace ComLib.Lang.Runtime.Bindings
             var exp = Exprs.Table(fieldNames, start);
             return exp;
         }
-
 
         /// <summary>
         /// Creates a constant string
@@ -158,7 +146,6 @@ namespace ComLib.Lang.Runtime.Bindings
             var token = expr.ParamList[1] as TokenData;
             return Exprs.Const(new LString(text.Token.Text), token);
         }
-
 
         /// <summary>
         /// Creates a constant number

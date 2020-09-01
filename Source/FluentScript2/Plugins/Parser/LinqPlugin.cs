@@ -1,32 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Helpers;
-using ComLib.Lang.Types;
 using ComLib.Lang.Parsing;
+using ComLib.Lang.Types;
+using System;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Linq plugin is a Light-weight and partial version of Linq style queries and comprehensions
     // NOTE: This has limited functionality as of this release.
-    var books = [ 
+    var books = [
 				    { name: 'book 1', pages: 200, author: 'homey' },
 				    { name: 'book 2', pages: 120, author: 'kdog' },
 				    { name: 'book 3', pages: 140, author: 'homeslice' }
 			    ];
-     
+
     // Case 1: start with source <books> and system auto creates variable <book>
     var favorites = books where book.pages < 150 and book.author == 'kdog';
-    
+
     // Case 2: using from <variable> in <source>
     var favorities = from book in books where book.pages < 150 and book.author == 'kdog';
     </doc:example>
@@ -36,14 +34,12 @@ namespace ComLib.Lang.Plugins
     /// Combinator for handling comparisons.
     /// </summary>
     public class LinqPlugin : ExprPlugin
-    {        
+    {
         private static IDictionary<Token, bool> _terminators;
-
 
         private string _variableName;
         private Expr _source;
         private Expr _filter;
-
 
         static LinqPlugin()
         {
@@ -55,7 +51,6 @@ namespace ComLib.Lang.Plugins
             _terminators[Tokens.RightParenthesis] = true;
         }
 
-
         /// <summary>
         /// Initialize
         /// </summary>
@@ -65,7 +60,6 @@ namespace ComLib.Lang.Plugins
             this.Precedence = 1;
             this.IsContextFree = false;
         }
-
 
         /// <summary>
         /// The grammer for the function declaration
@@ -78,7 +72,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// Examples
         /// </summary>
@@ -88,12 +81,11 @@ namespace ComLib.Lang.Plugins
             {
                 return new string[]
                 {
-                    "books where book.pages < 150 and book.author == 'kdog'",    
+                    "books where book.pages < 150 and book.author == 'kdog'",
                     "from book in books where book.pages < 150 and book.author == 'kdog'"
                 };
             }
         }
-
 
         /// <summary>
         /// Whether or not this parser can handle the supplied token.
@@ -110,16 +102,15 @@ namespace ComLib.Lang.Plugins
 
             if (string.Compare(token.Text, "select", StringComparison.InvariantCultureIgnoreCase) == 0)
             {
-                if (next.Token.Kind == TokenKind.Symbol) 
+                if (next.Token.Kind == TokenKind.Symbol)
                     return false;
                 return true;
             }
-            if (string.Compare(token.Text, "from", StringComparison.InvariantCultureIgnoreCase) == 0) return true;            
+            if (string.Compare(token.Text, "from", StringComparison.InvariantCultureIgnoreCase) == 0) return true;
             if (string.Compare(next.Token.Text, "where", StringComparison.InvariantCultureIgnoreCase) == 0) return true;
 
             return false;
         }
-
 
         /// <summary>
         /// Handles sql like selections/comprehensions
@@ -139,16 +130,15 @@ namespace ComLib.Lang.Plugins
 
             if (_tokenIt.NextToken.Token.Text == "order")
                 throw new NotSupportedException("order by not yet supported in Linq plugin for expressions");
-            
+
             return new LinqExpr(_variableName, _source, _filter, null);
         }
-
 
         private void ParseFrom()
         {
             var token = _tokenIt.NextToken.Token;
-            
-            // 1. "from book in books where"            
+
+            // 1. "from book in books where"
             if (string.Compare(token.Text, "from", StringComparison.InvariantCultureIgnoreCase) == 0)
             {
                 _tokenIt.Advance();
@@ -170,15 +160,12 @@ namespace ComLib.Lang.Plugins
             _variableName = _variableName.Substring(0, _variableName.Length - 1);
         }
 
-
         private void ParseWhere()
         {
             _tokenIt.ExpectIdText("where");
             _filter = _parser.ParseExpression(_terminators, enablePlugins: true, passNewLine: false);
         }
     }
-
-
 
     /// <summary>
     /// Expression to represent a Linq like query.
@@ -190,7 +177,6 @@ namespace ComLib.Lang.Plugins
         private Expr _filter = null;
         private List<Expr> _sorts = null;
 
-
         /// <summary>
         /// Initialize
         /// </summary>
@@ -198,7 +184,6 @@ namespace ComLib.Lang.Plugins
         {
             this.Nodetype = "FSExtLinq";
         }
-
 
         /// <summary>
         /// Initialize using values.
@@ -216,7 +201,6 @@ namespace ComLib.Lang.Plugins
             _filter = filter;
         }
 
-
         /// <summary>
         /// Whether or not this is of the node type supplied.
         /// </summary>
@@ -229,7 +213,6 @@ namespace ComLib.Lang.Plugins
             return base.IsNodeType(nodeType);
         }
 
-
         /// <summary>
         /// Evaluate the linq expression.
         /// </summary>
@@ -237,9 +220,9 @@ namespace ComLib.Lang.Plugins
         public override object DoEvaluate(IAstVisitor visitor)
         {
             var sourceObj = _source.Evaluate(visitor) as LObject;
-            
+
             // Check 1: null ?
-            if (sourceObj == null) 
+            if (sourceObj == null)
                 throw BuildRunTimeException("Can not query the source list: it is null");
 
             // 1. get the name for debugging reasons.

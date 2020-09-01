@@ -1,52 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
-using ComLib.Lang.Core;
+﻿// <lang:using>
 using ComLib.Lang.AST;
+using ComLib.Lang.Core;
 using ComLib.Lang.Parsing;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Run plugin provides alternate way to call a function for fluid syntax.
-    // Notes: 
+    // Notes:
     // 1. The keyword "function" can be aliased with the word "step"
     // 2. The name of a function can be in quotes with spaces.
-    
+
     // This is a function with 0 parameters so parentheses are not required
     step Cleanup
     {
         // do something here.
     }
-     
-    
+
     // This is a function with string for name and 0 parameters so parentheses are not required
     step 'Clean up'
     {
         // do something here.
     }
-    
+
     // Example 1: Call function normally
     Cleanup();
-    
+
     // Example 2: Call function using Run keyword
     run Cleanup();
-    
+
     // Example 3: Call function using run without parenthesis for function name.
     run Cleanup;
-    
-    // Example 4: Call function with spaces in name using run with quotes for function name.    
+
+    // Example 4: Call function with spaces in name using run with quotes for function name.
     run 'Clean up';
-    
+
     // Example 5: Call function with spaces using run and keyword.
     run step 'Clean up';
-    
+
     </doc:example>
     ***************************************************************************/
 
@@ -64,9 +58,7 @@ namespace ComLib.Lang.Plugins
             this.IsAutoMatched = true;
             this.StartTokens = new string[] { "run", "Run" };
             this.IsEndOfStatementRequired = true;
-
         }
-
 
         /// <summary>
         /// The grammer for the function declaration
@@ -78,7 +70,6 @@ namespace ComLib.Lang.Plugins
                 return "run function? ( <id> | <stringliteral> ) <paramlist>";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -98,7 +89,6 @@ namespace ComLib.Lang.Plugins
                 };
             }
         }
-
 
         /// <summary>
         /// run step 123.
@@ -145,7 +135,7 @@ namespace ComLib.Lang.Plugins
             }
 
             // Case 3: run step cleanup('c:\tempdir') on <functioncall>
-            if(next.Token == Tokens.LeftParenthesis || next.Token == Tokens.Dot )
+            if (next.Token == Tokens.LeftParenthesis || next.Token == Tokens.Dot)
             {
                 var funcExp = _parser.ParseIdExpression(name, null, false);
 
@@ -170,11 +160,10 @@ namespace ComLib.Lang.Plugins
             //throw this.TokenIt.BuildSyntaxUnexpectedTokenException();
         }
 
-
         private RunExpr ParseRunExpr(TokenData startToken)
         {
             // Move past "on"
-            _tokenIt.Advance(1);            
+            _tokenIt.Advance(1);
             var exp = _parser.ParseIdExpression(string.Empty, null, false);
             var runexp = Exprs.Run(string.Empty, exp, startToken) as RunExpr;
             return runexp;

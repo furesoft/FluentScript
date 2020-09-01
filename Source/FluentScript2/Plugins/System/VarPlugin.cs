@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
-using ComLib.Lang.Types;
 using ComLib.Lang.Parsing;
-using ComLib.Lang.Helpers;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
@@ -26,7 +24,6 @@ namespace ComLib.Lang.Plugins
             this.Precedence = 1000;
         }
 
-
         /// <summary>
         /// Whether or not this can handle the current token.
         /// </summary>
@@ -41,7 +38,6 @@ namespace ComLib.Lang.Plugins
             return false;
         }
 
-
         /// <summary>
         /// Parses a assignment statement with declaration.
         /// </summary>
@@ -52,9 +48,8 @@ namespace ComLib.Lang.Plugins
             return ParseAssignment(expectVar, true, null);
         }
 
-
         /// <summary>
-        /// Parses an assignment statement. 
+        /// Parses an assignment statement.
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
@@ -62,7 +57,6 @@ namespace ComLib.Lang.Plugins
         {
             return ParseAssignment(false, false, context as Expr);
         }
-
 
         /// <summary>
         /// 1. var name;
@@ -110,7 +104,7 @@ namespace ComLib.Lang.Plugins
                 varExp = ParseVariable();
                 valueExp = null;
                 assignToken = _tokenIt.NextToken;
-            
+
                 // , or expression?
                 if (_tokenIt.NextToken.Token == Tokens.Assignment)
                 {
@@ -127,7 +121,6 @@ namespace ComLib.Lang.Plugins
             return Exprs.AssignMulti(expectVar, declarations, initiatorToken);
         }
 
-
         private VariableExpr ParseVariable()
         {
             var nameToken = _tokenIt.NextToken;
@@ -135,13 +128,11 @@ namespace ComLib.Lang.Plugins
             return Exprs.Ident(name, nameToken) as VariableExpr;
         }
 
-        
         private void AddAssignment(bool expectVar, Expr varExp, Expr valExp, List<AssignExpr> declarations, TokenData token)
         {
             var a = (AssignExpr)Exprs.Assign(expectVar, varExp, valExp, token);
             declarations.Add(a);
         }
-
 
         /// <summary>
         /// Called by the framework after the parse method is called

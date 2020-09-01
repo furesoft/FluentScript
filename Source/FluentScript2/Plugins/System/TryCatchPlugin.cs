@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
-using ComLib.Lang.Types;
-using ComLib.Lang.Helpers;
 using ComLib.Lang.Parsing;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Return plugin provides return values
-    
+
     return false;
     </doc:example>
     ***************************************************************************/
@@ -35,7 +30,6 @@ namespace ComLib.Lang.Plugins
             this.ConfigureAsSystemStatement(true, false, "try");
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -43,7 +37,6 @@ namespace ComLib.Lang.Plugins
         {
             get { return "try <statementblock> catch '(' <id> ')' <statementblock>"; }
         }
-
 
         /// <summary>
         /// Examples
@@ -59,12 +52,11 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// try/catch.
         /// </summary>
         /// <returns></returns>
-        public override Expr  Parse()
+        public override Expr Parse()
         {
             var stmt = new TryCatchExpr();
             var statements = new List<Expr>();

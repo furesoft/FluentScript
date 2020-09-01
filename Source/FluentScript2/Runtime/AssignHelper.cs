@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
-using ComLib.Lang.Types;
 using ComLib.Lang.Parsing;
+using ComLib.Lang.Types;
+using System;
+
 // </lang:using>
 
 namespace ComLib.Lang.Runtime
@@ -37,7 +36,7 @@ namespace ComLib.Lang.Runtime
             else
             {
                 var result = valExp.Evaluate(visitor);
-                
+
                 // Check for type: e.g. LFunction ? when using Lambda?
                 if (result != null && result != LObjects.Null)
                 {
@@ -57,7 +56,6 @@ namespace ComLib.Lang.Runtime
             ctx.Limits.CheckScopeCount(varExp);
             ctx.Limits.CheckScopeStringLength(varExp);
         }
-
 
         /// <summary>
         /// Sets a value on a member of a basic type.
@@ -93,16 +91,15 @@ namespace ComLib.Lang.Runtime
                 }
             }
             // Case 2: Set member on custom c# class
-            else if(memAccess.DataType != null)
+            else if (memAccess.DataType != null)
             {
-                if(memAccess.Property != null)
+                if (memAccess.Property != null)
                 {
                     var prop = memAccess.Property;
                     prop.SetValue(memAccess.Instance, val.GetValue(), null);
                 }
             }
         }
-
 
         /// <summary>
         /// Sets a value on a member of a basic type.
@@ -127,20 +124,20 @@ namespace ComLib.Lang.Runtime
             // 4. Get the target of the index access and the name / number to set.
             var target = indexExp.Instance;
             var memberNameOrIndex = indexExp.MemberName;
-            
+
             // Get methods associated with type.
             var methods = ctx.Methods.Get(target.Type);
-            
+
             // Case 1: users[0] = 'kishore'
-            if(target.Type == LTypes.Array || target.Type.TypeVal == TypeConstants.Table)
+            if (target.Type == LTypes.Array || target.Type.TypeVal == TypeConstants.Table)
             {
-                var index = Convert.ToInt32(((LNumber) memberNameOrIndex).Value);
+                var index = Convert.ToInt32(((LNumber)memberNameOrIndex).Value);
                 methods.SetByNumericIndex(target, index, val);
             }
             // Case 2: users['total'] = 20
             else if (target.Type == LTypes.Map)
             {
-                var name = ((LString) memberNameOrIndex).Value;
+                var name = ((LString)memberNameOrIndex).Value;
                 methods.SetByStringMember(target, name, val);
             }
         }

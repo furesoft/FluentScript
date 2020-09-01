@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
-using ComLib.Lang.Core;
+﻿// <lang:using>
 using ComLib.Lang.AST;
+using ComLib.Lang.Core;
 using ComLib.Lang.Helpers;
-using ComLib.Lang.Types;
 using ComLib.Lang.Parsing;
+using ComLib.Lang.Types;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Type of plugins gets the type of an expression.
-    
+
     function inc(a) { return a + 1; }
-    
+
     dataType = typeof 'fluentscript'    // 'string'
     dataType = typeof 12                // 'number'
     dataType = typeof 12.34             // 'number'
@@ -28,10 +23,10 @@ namespace ComLib.Lang.Plugins
     dataType = typeof new Date()        // 'datetime'
     dataType = typeof 3pm               // 'time'
     dataType = typeof [0, 1, 2]         // 'object:list'
-    dataType = typeof { name: 'john' }  // 'object:map'   
+    dataType = typeof { name: 'john' }  // 'object:map'
     dataType = typeof new User('john')  // 'object:ComLib.Lang.Tests.Common.User'
     dataType = typeof inc               // 'function:inc'
-    
+
     </doc:example>
     ***************************************************************************/
 
@@ -50,7 +45,6 @@ namespace ComLib.Lang.Plugins
             this.StartTokens = new string[] { "typeof" };
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -61,7 +55,6 @@ namespace ComLib.Lang.Plugins
                 return "typeof <expression>";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -79,13 +72,12 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// run step 123.
         /// </summary>
         /// <returns></returns>
         public override Expr Parse()
-        {                        
+        {
             // The expression to round.
             _tokenIt.Advance(1, false);
             var exp = _parser.ParseExpression(null, false, true, true, false);
@@ -100,15 +92,13 @@ namespace ComLib.Lang.Plugins
         }
     }
 
-
-
     /// <summary>
     /// Variable expression data
     /// </summary>
     public class TypeOfExpr : Expr
     {
         private Expr _exp;
-        
+
         /// <summary>
         /// Initialize.
         /// </summary>
@@ -117,7 +107,6 @@ namespace ComLib.Lang.Plugins
         {
             _exp = exp;
         }
-
 
         /// <summary>
         /// Evaluate
@@ -135,7 +124,7 @@ namespace ComLib.Lang.Plugins
             }
             var obj = _exp.Evaluate(visitor);
             ExceptionHelper.NotNull(this, obj, "typeof");
-            var lobj = (LObject) obj;
+            var lobj = (LObject)obj;
             var typename = lobj.Type.Name;
 
             if (lobj.Type == LTypes.Array || lobj.Type == LTypes.Map)

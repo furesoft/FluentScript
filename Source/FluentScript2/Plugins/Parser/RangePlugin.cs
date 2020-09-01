@@ -1,24 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
-using ComLib.Lang.Helpers;
-using ComLib.Lang.Types;
 using ComLib.Lang.Parsing;
+using ComLib.Lang.Types;
+using System;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example> 
+    <doc:example>
     // Range plugin is used to represent a range e.g. 1..10
     </doc:example>
     ***************************************************************************/
+
     /// <summary>
     /// Combinator for handling comparisons.
     /// </summary>
@@ -31,7 +28,6 @@ namespace ComLib.Lang.Plugins
         {
             this.StartTokens = new string[] { "$NumberToken" };
         }
-
 
         /// <summary>
         /// Whether or not this parser can handle the supplied token.
@@ -47,7 +43,6 @@ namespace ComLib.Lang.Plugins
             return true;
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -55,7 +50,6 @@ namespace ComLib.Lang.Plugins
         {
             get { return "<number>..<number>"; }
         }
-
 
         /// <summary>
         /// Examples
@@ -70,7 +64,6 @@ namespace ComLib.Lang.Plugins
                 };
             }
         }
-
 
         /// <summary>
         /// run step 123.
@@ -91,7 +84,6 @@ namespace ComLib.Lang.Plugins
         }
     }
 
-
     public class LRange : LObject
     {
         /// <summary>
@@ -105,18 +97,15 @@ namespace ComLib.Lang.Plugins
             this.Type = new LRangeType();
         }
 
-
         /// <summary>
         /// Min
         /// </summary>
         public double Min { get; set; }
 
-
         /// <summary>
         /// Max
         /// </summary>
         public double Max { get; set; }
-
 
         /// <summary>
         /// Gets the value of this object.
@@ -127,7 +116,6 @@ namespace ComLib.Lang.Plugins
             return null;
         }
 
-
         /// <summary>
         /// Clones this value.
         /// </summary>
@@ -137,8 +125,6 @@ namespace ComLib.Lang.Plugins
             return new LRange(this.Min, this.Max);
         }
     }
-
-
 
     public class LRangeType : LObjectType
     {

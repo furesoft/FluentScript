@@ -1,36 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Helpers;
 using ComLib.Lang.Parsing;
 using ComLib.Lang.Parsing.MetaPlugins;
 using ComLib.Lang.Types;
+using System;
+using System.Collections.Generic;
 
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
-    // Uri plugin allows you urls and file paths without surrounding them in 
+    <doc:example>
+    // Uri plugin allows you urls and file paths without surrounding them in
     // quotes as long as there are no spaces. These are interpreted as strings.
-    
+
     var url1 = www.yahoo.com;
     var url2 = http://www.google.com;
     var url3 = http://www.yahoo.com?user=kishore%20&id=123;
     var file1 = c:\users\kishore\settings.ini;
     var file2 = c:/data/blogposts.xml;
     var printer = \\printnetwork1\printer1
-    
+
     // Since this file has a space in it... you have to surround in quotes.
     var file3 = 'c:/data/blog posts.xml';
-    
+
     </doc:example>
     ***************************************************************************/
 
@@ -41,7 +38,6 @@ namespace ComLib.Lang.Plugins
     {
         //private string[] _requiredFieldsForExpr;
         //private string[] _requiredFieldsForTokens;
-
 
         /// <summary>
         /// Initialize
@@ -55,7 +51,6 @@ namespace ComLib.Lang.Plugins
             //this._requiredFieldsForExpr = new string[] { "grammar_parse", "start_tokens", "parse" };
             //this._requiredFieldsForTokens = new string[] { "tokens" };
         }
-
 
         /// <summary>
         /// run step 123.
@@ -83,7 +78,6 @@ namespace ComLib.Lang.Plugins
         }
     }
 
-
     public class PluginExpr : BlockExpr
     {
         public PluginExpr()
@@ -91,12 +85,10 @@ namespace ComLib.Lang.Plugins
             this.IsImmediatelyExecutable = true;
         }
 
-
         /// <summary>
         /// Name of the plugin.
         /// </summary>
         public string Name;
-
 
         public override object DoEvaluate(IAstVisitor visitor)
         {
@@ -105,13 +97,12 @@ namespace ComLib.Lang.Plugins
             return LObjects.Null;
         }
 
-
         private void SetupPlugin()
         {
             // 1. Create the meta plugin
             var plugin = new CompilerPlugin();
             plugin.Name = this.Name;
-            
+
             // 2. Load default properties such as desc, company, etc.
             this.LoadDefaultProperties(plugin);
 
@@ -119,16 +110,16 @@ namespace ComLib.Lang.Plugins
             this.LoadExamples(plugin);
 
             // 4. token replacements ? or expression plugin?
-            if(plugin.PluginType == "expr")
+            if (plugin.PluginType == "expr")
             {
                 plugin.TokenMap1 = this.GetTokenMap("tokenmap1");
                 plugin.TokenMap2 = this.GetTokenMap("tokenmap2");
-                this.LoadStartTokensAsMap(plugin);                
+                this.LoadStartTokensAsMap(plugin);
             }
-            else if(plugin.PluginType == "token")
+            else if (plugin.PluginType == "token")
             {
                 this.LoadStartTokensAsList(plugin);
-                this.LoadTokenReplacements(plugin);                
+                this.LoadTokenReplacements(plugin);
             }
             else if (plugin.PluginType == "lexer")
             {
@@ -136,14 +127,13 @@ namespace ComLib.Lang.Plugins
             }
 
             // 5. Load the grammar and build functions.
-            this.LoadGrammar(plugin);                
+            this.LoadGrammar(plugin);
             if (this.Ctx.Memory.Contains("build"))
                 plugin.BuildExpr = this.GetFunc("build");
-            
+
             // 5. Finally register the plugin.
             this.Ctx.PluginsMeta.Register(plugin);
         }
-
 
         private void LoadDefaultProperties(CompilerPlugin plugin)
         {
@@ -169,7 +159,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         private void LoadExamples(CompilerPlugin plugin)
         {
             // 3. Examples
@@ -186,7 +175,6 @@ namespace ComLib.Lang.Plugins
                 plugin.Examples = examples.ToArray();
             }
         }
-
 
         private void LoadStartTokensAsMap(CompilerPlugin plugin)
         {
@@ -228,7 +216,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         private void LoadStartTokensAsList(CompilerPlugin plugin)
         {
             if (!this.Ctx.Memory.Contains("start_tokens"))
@@ -247,18 +234,17 @@ namespace ComLib.Lang.Plugins
                     tokens.Add(val.Value);
                 }
             }
-            if(tokens != null && tokens.Count > 0)
+            if (tokens != null && tokens.Count > 0)
                 plugin.StartTokens = tokens.ToArray();
         }
-
 
         private void LoadGrammar(CompilerPlugin plugin)
         {
             // 6. Parse the grammar
             plugin.Grammar = this.GetOrDefaultString("grammar_parse", "");
 
-            var parser = new GrammerParser();            
-                
+            var parser = new GrammerParser();
+
             // 7. Parse grammar match ( if present )
             plugin.GrammarMatch = this.GetOrDefaultString("grammar_match", "");
             if (!string.IsNullOrEmpty(plugin.GrammarMatch))
@@ -266,14 +252,13 @@ namespace ComLib.Lang.Plugins
                 plugin.Matches = parser.Parse(plugin.GrammarMatch);
                 plugin.TotalRequiredMatches = parser.TotalRequired(plugin.Matches);
             }
-            
+
             // 7a. check for empty
             if (!string.IsNullOrEmpty(plugin.Grammar))
             {
-                plugin.MatchesForParse = parser.Parse(plugin.Grammar);                
-            }            
+                plugin.MatchesForParse = parser.Parse(plugin.Grammar);
+            }
         }
-
 
         private void LoadTokenReplacements(CompilerPlugin plugin)
         {
@@ -300,18 +285,16 @@ namespace ComLib.Lang.Plugins
             plugin.TokenReplacements = replacements;
         }
 
-
         private void PrintFieldValues()
         {
             var names = this.SymScope.GetSymbolNames();
-            for(var ndx = 0; ndx < names.Count; ndx++)
+            for (var ndx = 0; ndx < names.Count; ndx++)
             {
                 var name = names[ndx];
                 var obj = this.Ctx.Memory.Get<object>(name);
                 Console.WriteLine(name + ":" + ((LObject)obj).GetValue().ToString());
             }
         }
-
 
         private string GetOrDefaultString(string key, string defaultVal)
         {
@@ -322,7 +305,6 @@ namespace ComLib.Lang.Plugins
             return val.Value;
         }
 
-
         private Expr GetFunc(string key)
         {
             if (!this.Ctx.Memory.Contains(key))
@@ -332,7 +314,6 @@ namespace ComLib.Lang.Plugins
             return ((LFunction)val).Value as Expr;
         }
 
-
         private bool GetOrDefaultBool(string key, bool defaultVal)
         {
             if (!this.Ctx.Memory.Contains(key))
@@ -341,7 +322,6 @@ namespace ComLib.Lang.Plugins
             var val = this.Ctx.Memory.Get<object>(key) as LBool;
             return val.Value;
         }
-
 
         private IDictionary<string, object> GetTokenMap(string key)
         {

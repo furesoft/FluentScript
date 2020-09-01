@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Collections;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
-using ComLib.Lang.Types;
-using ComLib.Lang.Helpers;
 using ComLib.Lang.Parsing;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
@@ -28,7 +22,6 @@ namespace ComLib.Lang.Plugins
             this.ConfigureAsSystemStatement(true, false, "if");
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -36,7 +29,6 @@ namespace ComLib.Lang.Plugins
         {
             get { return "if ( ( <expression> then <statementblock> ) | ( '(' <expression> ')' <statementblock> ) )"; }
         }
-
 
         /// <summary>
         /// Examples
@@ -54,13 +46,12 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// return value;
         /// </summary>
         /// <returns></returns>
         public override Expr Parse()
-        {            
+        {
             var stmt = new IfExpr();
             var statements = new List<Expr>();
 
@@ -78,7 +69,7 @@ namespace ComLib.Lang.Plugins
                 _tokenIt.Advance();
                 _tokenIt.AdvancePastNewLines();
 
-                // What's after else? 
+                // What's after else?
                 // 1. "if"      = else if statement
                 // 2. "{"       = multi  line else
                 // 3. "nothing" = single line else
@@ -93,7 +84,7 @@ namespace ComLib.Lang.Plugins
                     var elseStmt = new BlockExpr();
                     ParseBlock(elseStmt);
                     _parser.SetupContext(elseStmt, token);
-                    stmt.Else = elseStmt;                    
+                    stmt.Else = elseStmt;
                 }
             }
             return stmt;

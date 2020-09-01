@@ -1,7 +1,6 @@
-﻿
-using System.IO;
+﻿using ComLib.Lang.Core;
 using System.Collections.Generic;
-using ComLib.Lang.Core;
+using System.IO;
 
 namespace ComLib.Lang.Runtime.Switches
 {
@@ -12,7 +11,6 @@ namespace ComLib.Lang.Runtime.Switches
         private bool _excludeNewLines;
         private bool _conciseMode;
 
-
         public TokensSwitch(string filepath, string outpath)
         {
             _filepath = filepath;
@@ -20,7 +18,6 @@ namespace ComLib.Lang.Runtime.Switches
             _excludeNewLines = true;
             _conciseMode = true;
         }
-
 
         /// <summary>
         /// Prints tokens to file supplied, if file is not supplied, prints to console.
@@ -43,7 +40,7 @@ namespace ComLib.Lang.Runtime.Switches
                         // Create only if needed.
                         if (_paddings == null)
                             _paddings = new Dictionary<int, string>();
-                        
+
                         var text = tokendata.Line.ToString() + " - " + tokendata.LineCharPos.ToString();
                         var lineinfo = this.Pad(text, 8);
                         var tokenText = tokendata.Token.Text;
@@ -59,7 +56,6 @@ namespace ComLib.Lang.Runtime.Switches
             return null;
         }
 
-
         private string Pad(string text, int max)
         {
             if (text.Length == max) return text;
@@ -73,7 +69,7 @@ namespace ComLib.Lang.Runtime.Switches
             var count = diff;
             while (count > 0)
             {
-                padding +=  ' ';
+                padding += ' ';
                 count--;
             }
             if (_paddings != null)
@@ -82,8 +78,6 @@ namespace ComLib.Lang.Runtime.Switches
             return text + padding;
         }
 
-
         private static Dictionary<int, string> _paddings;
-
     }
 }

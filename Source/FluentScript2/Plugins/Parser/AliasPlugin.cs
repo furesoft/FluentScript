@@ -1,33 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Helpers;
+using ComLib.Lang.Parsing;
 using ComLib.Lang.Parsing.MetaPlugins;
 using ComLib.Lang.Types;
-using ComLib.Lang.Parsing;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Alias plugin allows setting up alias of words to other words/tokens in a script
-    
+
     alias def to function
     alias set to var
-    
+
     // After the alias configured
     set result1 = 1
     var result2 = 2
-    
+
     </doc:example>
     ***************************************************************************/
+
     // <fs:plugin-autogenerate>
     /// <summary>
     /// Combinator for handling days of the week.
@@ -40,11 +38,10 @@ namespace ComLib.Lang.Plugins
         public AliasPlugin()
         {
             this.StartTokens = new string[] { "alias" };
-            this.IsStatement = true; 
+            this.IsStatement = true;
             this.IsEndOfStatementRequired = true;
             this.IsAutoMatched = true;
         }
-
 
         /// <summary>
         /// The grammer for the function declaration
@@ -56,7 +53,6 @@ namespace ComLib.Lang.Plugins
                 return "alias <ident> to <ident>";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -72,8 +68,8 @@ namespace ComLib.Lang.Plugins
                 };
             }
         }
-        // </fs:plugin-autogenerate>
 
+        // </fs:plugin-autogenerate>
 
         /// <summary>
         /// Parses the alias statement.
@@ -90,11 +86,10 @@ namespace ComLib.Lang.Plugins
                 actual = Tokens.AllTokens[actualName];
             else
                 actual = TokenBuilder.ToIdentifier(actualName);
-            
+
             var stmt = new AliasStmt() { Alias = aliasName, Actual = actual };
             return stmt;
         }
-
 
         /// <summary>
         /// After parsing is complete, register the alias.
@@ -115,8 +110,6 @@ namespace ComLib.Lang.Plugins
         }
     }
 
-
-
     /// <summary>
     /// Statement that assigns one token as an alias to another.
     /// </summary>
@@ -129,19 +122,16 @@ namespace ComLib.Lang.Plugins
         {
             IsImmediatelyExecutable = true;
         }
-        
 
         /// <summary>
         /// The alias to setup
         /// </summary>
         public string Alias { get; set; }
 
-
         /// <summary>
         /// The mapping of the alias.
         /// </summary>
         public Token Actual { get; set; }
-
 
         /// <summary>
         /// Executes the statement.

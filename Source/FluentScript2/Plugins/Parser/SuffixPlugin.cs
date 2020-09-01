@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Parsing;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Suffix plugin enables the use of functions as postfix operators on constants.
-    
+
     // create hours with timespan object using number of hours supplied
     function hours( num )
     {
@@ -30,7 +27,7 @@ namespace ComLib.Lang.Plugins
 
     // timespan objects can be added together
     var time = 3 hours + 20 minutes;
-     
+
     </doc:example>
     ***************************************************************************/
 
@@ -47,7 +44,6 @@ namespace ComLib.Lang.Plugins
             this.StartTokens = new string[] { "$Suffix" };
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -58,7 +54,6 @@ namespace ComLib.Lang.Plugins
                 return "<literal> <identifier>";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -75,7 +70,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// Whether or not this plugin can handle current token(s).
         /// </summary>
@@ -89,14 +83,13 @@ namespace ComLib.Lang.Plugins
             return false;
         }
 
-
         /// <summary>
         /// Sorts expression
         /// </summary>
         /// <returns></returns>
         public override Expr Parse(object context)
         {
-            var constExp = context as ConstantExpr;            
+            var constExp = context as ConstantExpr;
             var c = _tokenIt.NextToken;
             var t = _tokenIt.Advance();
             _parser.SetupContext(constExp, c);

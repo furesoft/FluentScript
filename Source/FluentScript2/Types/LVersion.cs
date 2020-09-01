@@ -1,6 +1,5 @@
 ﻿using System;
 
-
 namespace ComLib.Lang.Types
 {
     /// <summary>
@@ -20,30 +19,25 @@ namespace ComLib.Lang.Types
             this.Revision = v.Revision;
         }
 
-
         /// <summary>
         /// The First unit of the version.
         /// </summary>
         public int Major { get; set; }
-
 
         /// <summary>
         /// The second unit of the version.
         /// </summary>
         public int Minor { get; set; }
 
-
         /// <summary>
         /// The third unit of the version.
         /// </summary>
         public int Build { get; set; }
 
-
         /// <summary>
         /// The fourth unit of the version.
         /// </summary>
         public int Revision { get; set; }
-        
 
         /// <summary>
         /// text based representation of the version.
@@ -60,7 +54,6 @@ namespace ComLib.Lang.Types
                 return text + "." + this.Revision.ToString();
             }
         }
-
 
         /// <summary>
         /// Get the text based version.

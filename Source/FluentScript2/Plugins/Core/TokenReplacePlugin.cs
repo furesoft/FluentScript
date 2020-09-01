@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Parsing;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-    
     /// <summary>
     /// Plugin for replacing tokens.
     /// </summary>
@@ -21,33 +16,27 @@ namespace ComLib.Lang.Plugins
         private bool _matched;
         private int _matchedAdvanceCount;
 
-
         /// <summary>
         /// The maximum number of tokens that can be looked ahead for potential replacements.
         /// </summary>
         protected int _maxLookAhead = 5;
 
-        
         /// <summary>
         /// List of replacement word to their values.
         /// </summary>
         protected string[,] _replacements;
-
 
         /// <summary>
         /// A map of the replacement words to their value.
         /// </summary>
         protected Dictionary<string, string> _replaceMap;
 
-
         /// <summary>
         /// Replacement map for single words.
         /// </summary>
         protected Dictionary<string, string> _replaceMapSingleWord;
 
-
         private const string Partial_Replacement = "partial replacement";
-        
 
         /// <summary>
         /// Initialize
@@ -57,7 +46,6 @@ namespace ComLib.Lang.Plugins
             _replaceMap = new Dictionary<string, string>();
             _replaceMapSingleWord = new Dictionary<string, string>();
         }
-
 
         /// <summary>
         /// Initialize multi-token replacements.
@@ -70,18 +58,17 @@ namespace ComLib.Lang.Plugins
             _maxLookAhead = maxTokenLookAhead;
             for (int ndx = 0; ndx < replacements.GetLength(0); ndx++)
             {
-                var tokenToReplace = (string) replacements.GetValue(ndx, 0);
-                var replaceVal = (string) replacements.GetValue(ndx, 1);
+                var tokenToReplace = (string)replacements.GetValue(ndx, 0);
+                var replaceVal = (string)replacements.GetValue(ndx, 1);
                 this.SetupReplacement(tokenToReplace, replaceVal);
             }
         }
-
 
         public void SetupReplacement(string tokenToReplace, string replaceVal)
         {
             var hasSpace = tokenToReplace.Contains(" ");
             var mapHasToken = _replaceMap.ContainsKey(tokenToReplace);
-                
+
             // Single word replacements "before" = "<"
             if (!hasSpace)
             {
@@ -94,7 +81,7 @@ namespace ComLib.Lang.Plugins
             string multiTokenWord = tokens[0];
             _replaceMap[multiTokenWord] = Partial_Replacement;
 
-            for(int ndx2 = 1; ndx2 < tokens.Length; ndx2++)
+            for (int ndx2 = 1; ndx2 < tokens.Length; ndx2++)
             {
                 multiTokenWord += " " + tokens[ndx2];
                 bool isLastToken = ndx2 == tokens.Length - 1;
@@ -107,11 +94,10 @@ namespace ComLib.Lang.Plugins
                     _replaceMap[multiTokenWord] = Partial_Replacement;
                     _replaceMap[multiTokenWord + "END"] = replaceVal;
                 }
-                if ( isLastToken)
+                if (isLastToken)
                     _replaceMap[multiTokenWord] = replaceVal;
             }
         }
-
 
         /// <summary>
         /// Whether or not this can handle the token.
@@ -123,43 +109,42 @@ namespace ComLib.Lang.Plugins
             return CanHandle(current, true);
         }
 
-
         /// <summary>
         /// Whether or not this can handle the token.
         /// </summary>
         /// <param name="token"></param>
-        /// <param name="isCurrent">Whether or the token supplied is the current token. 
+        /// <param name="isCurrent">Whether or the token supplied is the current token.
         /// if false.. it's assumed to be the next token( 1 token ahead ).</param>
         /// <returns></returns>
         public override bool CanHandle(Token token, bool isCurrent)
         {
             var t = token;
-            _matchedAdvanceCount = isCurrent ? 1 : 2;            
+            _matchedAdvanceCount = isCurrent ? 1 : 2;
             int advanceCount = isCurrent ? 1 : 2;
             string multiTokenWord = t.Text;
             _replacementToken = null;
 
             // Case 1: Check if single word replacement.
-            if(IsSingleWordMatch(multiTokenWord))
+            if (IsSingleWordMatch(multiTokenWord))
             {
-                 _matched = true;
-                 _replacementToken = _replaceMapSingleWord[multiTokenWord];
-                 
-                // e.g. 
-                // Code: book.author is 'maleev'                
+                _matched = true;
+                _replacementToken = _replaceMapSingleWord[multiTokenWord];
 
-                // Case 1: _tokenIt.NextToken = is    
+                // e.g.
+                // Code: book.author is 'maleev'
+
+                // Case 1: _tokenIt.NextToken = is
                 // token : is
                 // result: Do not advance ( direct replacement )
-               
+
                 // Case 2: _tokenIt.NextToken = author
                 // token : is ( ahead )
                 // result: Advance only 1 token.
-                 if (!isCurrent)
-                     _matchedAdvanceCount = 1;   
+                if (!isCurrent)
+                    _matchedAdvanceCount = 1;
                 return true;
             }
-                    
+
             // Case 2: Multi token replacement check:
             // Keep looking up to max look ahead times.
             while (advanceCount <= _maxLookAhead && !_tokenIt.IsEnded)
@@ -184,19 +169,17 @@ namespace ComLib.Lang.Plugins
                         _matched = true;
                         _matchedAdvanceCount = advanceCount;
                         break;
-                    }                    
+                    }
                 }
 
                 var tok = _tokenIt.Peek(advanceCount);
                 t = tok.Token;
                 advanceCount++;
-                multiTokenWord += " " + t.Text;                                
+                multiTokenWord += " " + t.Text;
             }
             return _matched;
         }
 
-
-        
         /// <summary>
         /// run step 123.
         /// </summary>
@@ -205,7 +188,6 @@ namespace ComLib.Lang.Plugins
         {
             return Parse(false, 0);
         }
-
 
         /// <summary>
         /// Parse by optionally moving the token iterator forward first.
@@ -227,7 +209,6 @@ namespace ComLib.Lang.Plugins
             return token;
         }
 
-
         /// <summary>
         /// run step 123.
         /// </summary>
@@ -238,16 +219,15 @@ namespace ComLib.Lang.Plugins
             return token;
         }
 
-
         private bool IsSingleWordMatch(string multiTokenWord)
         {
             if (!_replaceMapSingleWord.ContainsKey(multiTokenWord)) return false;
-            
+
             var token = _tokenIt.Peek();
             string combined = multiTokenWord + " " + token.Token.Text;
 
             // The next word combined with the current word could also be a token replacement.
-            // e.g. is 3 
+            // e.g. is 3
             // so if the combined word "is 3" is not in the replace map, then the current "is"
             // is a single word replacement.
             if (!_replaceMap.ContainsKey(combined))

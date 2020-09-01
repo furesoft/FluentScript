@@ -1,28 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
-using ComLib.Lang.Core;
+﻿// <lang:using>
 using ComLib.Lang.AST;
-using ComLib.Lang.Types;
+using ComLib.Lang.Core;
 using ComLib.Lang.Parsing;
+using ComLib.Lang.Types;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Terminates a program abruptly with a message.
-    
+
     fail 'settings file not found, exiting application'
-    
+
     fail "file : #{path} not found, exiting application"
-    
+
     fail 0
-    
+
     </doc:example>
     ***************************************************************************/
 
@@ -42,7 +37,6 @@ namespace ComLib.Lang.Plugins
             this.IsEndOfStatementRequired = true;
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -50,7 +44,6 @@ namespace ComLib.Lang.Plugins
         {
             get { return "fail <expression> <statementterminator>"; }
         }
-
 
         /// <summary>
         /// Examples
@@ -67,7 +60,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// throw error;
         /// </summary>
@@ -79,8 +71,6 @@ namespace ComLib.Lang.Plugins
             return new FailExpr() { Exp = exp };
         }
     }
-
-
 
     /// <summary>
     /// For loop Expression data
@@ -94,12 +84,10 @@ namespace ComLib.Lang.Plugins
         {
         }
 
-
         /// <summary>
         /// Name for the error in the catch clause.
         /// </summary>
         public Expr Exp;
-
 
         /// <summary>
         /// Execute

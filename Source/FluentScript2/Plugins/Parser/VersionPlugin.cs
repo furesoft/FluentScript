@@ -1,33 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Helpers;
 using ComLib.Lang.Parsing;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Version plugin enables representation of versions using format 1.2.3.4.
     // This is particularily useful for when fluentscript is used for build automation.
     // e.g. 0.9.8.7
-    
+
     version  = 0.9.8.7
     version2 = 0.9.8
-    
+
     print( version.Major )
     print( version.Minor )
     print( version.Revision )
     print( version.Build )
-    
+
     </doc:example>
     ***************************************************************************/
 
@@ -37,6 +32,7 @@ namespace ComLib.Lang.Plugins
     public class VersionPlugin : LexPlugin
     {
         private const string _versionRegex = "^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}(\\.[0-9]{1,4})?";
+
         private static IDictionary<char, bool> _numbers = new Dictionary<char, bool>()
         {
             { '0', true},
@@ -49,7 +45,7 @@ namespace ComLib.Lang.Plugins
             { '7', true},
             { '8', true},
             { '9', true},
-            { '.', true}             
+            { '.', true}
         };
 
         /// <summary>
@@ -59,7 +55,6 @@ namespace ComLib.Lang.Plugins
         {
             _tokens = new string[] { "$NumberToken" };
         }
-
 
         /// <summary>
         /// The grammer for the function declaration
@@ -72,7 +67,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// Examples
         /// </summary>
@@ -84,11 +78,10 @@ namespace ComLib.Lang.Plugins
                 {
                     "0.9.8.7",
                     "2.9.3.355",
-                    "1.2.8"                    
+                    "1.2.8"
                 };
             }
         }
-
 
         /// <summary>
         /// Whether or not this uri plugin can handle the current token.
@@ -110,14 +103,13 @@ namespace ComLib.Lang.Plugins
             return false;
         }
 
-
         /// <summary>
         /// run step 123.
         /// </summary>
         /// <returns></returns>
         public override Token[] Parse()
         {
-            // http https ftp ftps www 
+            // http https ftp ftps www
             var takeoverToken = _lexer.LastTokenData;
             var line = _lexer.State.Line;
             var pos = _lexer.State.LineCharPosition;

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using ComLib.Lang.Core;
+﻿using System.Collections.Generic;
 
 namespace ComLib.Lang.Runtime.Switches
 {
@@ -9,12 +6,10 @@ namespace ComLib.Lang.Runtime.Switches
     {
         private List<string> _files;
 
-
         public ExecuteFilesSwitch(List<string> files)
         {
             _files = files;
         }
-
 
         /// <summary>
         /// Prints tokens to file supplied, if file is not supplied, prints to console.

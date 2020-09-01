@@ -1,6 +1,4 @@
-﻿
-
-namespace ComLib.Lang.Types
+﻿namespace ComLib.Lang.Types
 {
     /// <summary>
     /// Holder for "singleton" like object such as empty string, null.
@@ -11,7 +9,6 @@ namespace ComLib.Lang.Types
         /// Empty object
         /// </summary>
         public static LNull Null = new LNull(null);
-
 
         /// <summary>
         /// Empty string.

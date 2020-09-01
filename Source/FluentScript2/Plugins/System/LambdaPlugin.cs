@@ -1,14 +1,8 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
-using ComLib.Lang.Core;
+﻿// <lang:using>
 using ComLib.Lang.AST;
-using ComLib.Lang.Types;
+using ComLib.Lang.Core;
 using ComLib.Lang.Parsing;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
@@ -27,7 +21,6 @@ namespace ComLib.Lang.Plugins
             this.ConfigureAsSystemStatement(true, false, "function");
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -35,7 +28,6 @@ namespace ComLib.Lang.Plugins
         {
             get { return "function ( <id> | <stringliteral> ) ( ',' ( <id> | <stringliteral> ) )* <statementblock>"; }
         }
-
 
         /// <summary>
         /// Examples
@@ -51,7 +43,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         public override bool CanHandle(Token current)
         {
             if (current != Tokens.Function) return false;
@@ -60,7 +51,6 @@ namespace ComLib.Lang.Plugins
                 return true;
             return false;
         }
-
 
         /// <summary>
         /// return value;
@@ -83,7 +73,6 @@ namespace ComLib.Lang.Plugins
             return lambdaExp;
         }
 
-
         /// <summary>
         /// Parses a block by first pushing symbol scope and then popping after completion.
         /// </summary>
@@ -105,7 +94,6 @@ namespace ComLib.Lang.Plugins
             // 4. Pop the symbols scope.
             this.Ctx.Symbols.Pop();
         }
-
 
         /// <summary>
         /// Called by the framework after the parse method is called

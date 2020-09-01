@@ -1,30 +1,31 @@
-﻿using System;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
-using ComLib.Lang.Types;
 using ComLib.Lang.Parsing;
+using ComLib.Lang.Types;
+using System;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
-    // Named index plugin allows numeric access to array items using non-0 based index 
-    // and in a fluent approach. 
-    
+    <doc:example>
+    // Named index plugin allows numeric access to array items using non-0 based index
+    // and in a fluent approach.
+
     var items = [1, 2, 3, 4, 5]
     var result = 2nd item
-    
+
     // Note in the example above 3 things:
     // 1. "2nd" represents the index to access. this is equivalent to items[1]
     // 2. if variable is "items"( plural ), you can type "item"( singular )
     // 3. This is always 1 based. e.g. 3rd item == items[2]
-    
+
     </doc:example>
     ***************************************************************************/
+
     /// <summary>
     /// Combinator for handling comparisons.
     /// </summary>
@@ -38,7 +39,6 @@ namespace ComLib.Lang.Plugins
             this.IsAutoMatched = true;
             this.StartTokens = new string[] { "$NumberToken" };
         }
-
 
         /// <summary>
         /// Whether or not this parser can handle the supplied token.
@@ -63,7 +63,6 @@ namespace ComLib.Lang.Plugins
             return false;
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -71,7 +70,6 @@ namespace ComLib.Lang.Plugins
         {
             get { return "<number> ( 'st' | 'nd' | 'rd' | 'th' ) <ident>"; }
         }
-
 
         /// <summary>
         /// Examples
@@ -90,7 +88,6 @@ namespace ComLib.Lang.Plugins
                 };
             }
         }
-
 
         /// <summary>
         /// run step 123.
@@ -113,7 +110,6 @@ namespace ComLib.Lang.Plugins
             _tokenIt.Advance();
 
             return Exprs.Index(identExpr, indexExpr, false, startToken);
-
         }
     }
 }

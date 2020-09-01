@@ -1,38 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
-using ComLib.Lang.Types;
 using ComLib.Lang.Parsing;
+using ComLib.Lang.Types;
+using System;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Const caps plugin allows the creation of constants using capital letters
     // Constants are defined if all the letters are uppercase
-    
+
     // Example 1
     MIN_SIZE = 10
     MAX_SIZE = 20
-    
+
     // Example 2 : Multiple declarations with different constants.
     FIXED = true, DUE_DATE = "2012-5-10"
-    
+
     // Example 3 : Using constants with other plugins ( Date, DateNumber )
     STARTS = 3/10/2012
     ENDS   = June 10th 2012
-    
+
     // KNOWN ISSUE: Constants should be limited to numbers, bool, strings,
     // but right now there is a bug where a constant can be assigned a date.
     </doc:example>
     ***************************************************************************/
+
     // <fs:plugin-autogenerate>
     /// <summary>
     /// Combinator for handling days of the week.
@@ -51,7 +50,6 @@ namespace ComLib.Lang.Plugins
             this.Precedence = 1;
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -62,7 +60,6 @@ namespace ComLib.Lang.Plugins
                 return "<IDENT> = <expression>";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -78,8 +75,8 @@ namespace ComLib.Lang.Plugins
                 };
             }
         }
-        // </fs:plugin-autogenerate>
 
+        // </fs:plugin-autogenerate>
 
         /// <summary>
         /// Whether or not this parser can handle the supplied token.
@@ -90,8 +87,6 @@ namespace ComLib.Lang.Plugins
         {
             return IsConstMatch(token, 1);
         }
-
-
 
         private bool IsConstMatch(Token token, int peekLevel)
         {
@@ -105,7 +100,6 @@ namespace ComLib.Lang.Plugins
 
             return true;
         }
-
 
         /// <summary>
         /// Parses the day expression.
@@ -122,7 +116,7 @@ namespace ComLib.Lang.Plugins
                 _tokenIt.Expect(Tokens.Assignment);
                 var exp = _parser.ParseExpression(Terminators.ExpVarDeclarationEnd);
 
-                // Make sure it doesn't exist.                
+                // Make sure it doesn't exist.
                 EnsureConstant(constName, exp);
 
                 // Store assignment
@@ -143,14 +137,13 @@ namespace ComLib.Lang.Plugins
             return new ConstStmt(pairs);
         }
 
-
         /// <summary>
         /// Called by the framework after the parse method is called
         /// </summary>
         /// <param name="node">The node returned by this implementations Parse method</param>
         public override void OnParseComplete(AstNode node)
         {
-            var constStmt = node as ConstStmt;            
+            var constStmt = node as ConstStmt;
             foreach (var pair in constStmt.Assignments)
             {
                 var exp = pair.Value;
@@ -163,7 +156,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         private void EnsureConstant(string constName, Expr exp)
         {
             var ctx = _parser.Context;
@@ -172,13 +164,12 @@ namespace ComLib.Lang.Plugins
             if (exp.IsNodeType(NodeTypes.SysNew))
             {
                 var nexp = exp as NewExpr;
-                if(nexp.TypeName != "Date" && nexp.TypeName != "Time" )
+                if (nexp.TypeName != "Date" && nexp.TypeName != "Time")
                     throw _tokenIt.BuildSyntaxException("Const : " + constName + " must have a const value");
             }
             //else if (!(exp.IsNodeType(NodeTypes.SysConstant)))
-            //    throw _tokenIt.BuildSyntaxException("Const : " + constName + " must have a const value");                
+            //    throw _tokenIt.BuildSyntaxException("Const : " + constName + " must have a const value");
         }
-
 
         private void EnsureAdditionalConst()
         {
@@ -193,8 +184,6 @@ namespace ComLib.Lang.Plugins
                 _tokenIt.BuildSyntaxExpectedException("constant");
         }
     }
-
-
 
     /// <summary>
     /// A constant assignment
@@ -215,14 +204,13 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public List<KeyValuePair<string, Expr>> Assignments;
 
-
         /// <summary>
         /// Execute by storing the constant value in memory.
         /// </summary>
         public override object DoEvaluate(IAstVisitor visitor)
         {
             foreach (var pair in Assignments)
-            {                
+            {
                 object val = pair.Value.Evaluate(visitor);
                 this.Ctx.Memory.SetValue(pair.Key, val);
             }

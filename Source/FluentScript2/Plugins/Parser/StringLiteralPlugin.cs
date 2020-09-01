@@ -1,30 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-
-// <lang:using>
-using ComLib.Lang.Core;
+﻿// <lang:using>
 using ComLib.Lang.AST;
-using ComLib.Lang.Helpers;
+using ComLib.Lang.Core;
 using ComLib.Lang.Parsing;
 using ComLib.Lang.Types;
-// </lang:using>
 
+// </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Allows using ruby-style string literals such as :user01 where :user01 equals 'user01'
-    
+
     name = :user01
     lang = :fluentscript
-    
+
     if( :batman == 'batman' ) print( "works" );
-    
+
     </doc:example>
     ***************************************************************************/
 
@@ -43,7 +35,6 @@ namespace ComLib.Lang.Plugins
             this.StartTokens = new string[] { ":" };
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -54,7 +45,6 @@ namespace ComLib.Lang.Plugins
                 return ":username";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -71,7 +61,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// Whether or not this parser can handle the supplied token.
         /// </summary>
@@ -80,11 +69,10 @@ namespace ComLib.Lang.Plugins
         public override bool CanHandle(Token token)
         {
             var next = _tokenIt.Peek();
-            if (next.Token.Kind == TokenKind.Ident) 
+            if (next.Token.Kind == TokenKind.Ident)
                 return true;
             return false;
         }
-
 
         /// <summary>
         /// Parses the day expression.

@@ -1,32 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
-using ComLib.Lang.Parsing;
+using System;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	    
+    <doc:example>
     // Compare plugin allows word aliases for the comparison operators. See list below
-    // 
+    //
     // ALIAS:                FOR:
-    // "less than",          "<" 
-    // "before",             "<" 
-    // "below",              "<" 
-    // "is below",           "<" 
+    // "less than",          "<"
+    // "before",             "<"
+    // "below",              "<"
+    // "is below",           "<"
     // "is before",          "<"
-    // "more than",          ">" 
-    // "after",              ">" 
-    // "above",              ">" 
-    // "is after",           ">" 
-    // "is above",           ">" 
+    // "more than",          ">"
+    // "after",              ">"
+    // "above",              ">"
+    // "is after",           ">"
+    // "is above",           ">"
     // "less than equal",    "<="
     // "less than equal to", "<="
     // "more than equal",    ">="
@@ -40,25 +34,25 @@ namespace ComLib.Lang.Plugins
     // "not equal",          "!="
     // "not equal to",       "!="
     // "is not",             "!="
-    // "is not equal to",    "!=" 
-    
+    // "is not equal to",    "!="
+
     // Example 1: Using <
     if a less than b then
-    if a before b    then 
+    if a before b    then
     if a below  b    then
     if a is before b then
     if a is below b  then
-    
+
     // Example 2: Using <=
     if less than equal then
     if less than equal to then
-    
+
     // Example 2: Using >
     if a more than b then
-    if a after b     then 
+    if a after b     then
     if a above b     then
     if a is after b  then
-    if a is above b  then    
+    if a is above b  then
     </doc:example>
     ***************************************************************************/
 
@@ -72,9 +66,8 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public DateTimeCombinerPlugin()
         {
-            this._tokens = new string[] { "$DateToken" };            
+            this._tokens = new string[] { "$DateToken" };
         }
-
 
         /// <summary>
         /// Whether or not this can handle the token supplied.
@@ -85,7 +78,7 @@ namespace ComLib.Lang.Plugins
         public override bool CanHandle(Token token, bool isCurrent)
         {
             var n1 = _tokenIt.Peek(1);
-            if (n1.Token.Text != "at") 
+            if (n1.Token.Text != "at")
                 return false;
 
             var n2 = _tokenIt.Peek(2);
@@ -94,7 +87,6 @@ namespace ComLib.Lang.Plugins
 
             return false;
         }
-
 
         /// <summary>
         /// Parses the tokens.
@@ -106,11 +98,11 @@ namespace ComLib.Lang.Plugins
         {
             // 1. Get the date
             var dateToken = _tokenIt.NextToken;
-            
+
             // 2. Expect "at"
             _tokenIt.Advance();
             _tokenIt.ExpectIdText("at");
-            
+
             // 3. Get the time
             var timeToken = _tokenIt.NextToken;
 

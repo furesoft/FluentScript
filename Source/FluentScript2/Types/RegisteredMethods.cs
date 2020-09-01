@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using System.Collections.Generic;
 
 namespace ComLib.Lang.Types
 {
-
     /// <summary>
     /// Support the mapping of methods to dataypes.
     /// </summary>
     public class RegisteredMethods
-    {        
+    {
         private IDictionary<LType, ITypeMethods> _typeToMethods = new Dictionary<LType, ITypeMethods>();
-
 
         /// <summary>
         /// Register methods on a specific type.
@@ -24,7 +18,6 @@ namespace ComLib.Lang.Types
         {
             _typeToMethods[type] = methods;
         }
-
 
         /// <summary>
         /// Registers methods on a specific type if no existing methods implementation are already
@@ -41,7 +34,6 @@ namespace ComLib.Lang.Types
             }
         }
 
-
         /// <summary>
         /// Whether or not there are methods for the supplied type.
         /// </summary>
@@ -50,7 +42,6 @@ namespace ComLib.Lang.Types
         {
             return _typeToMethods.ContainsKey(type);
         }
-
 
         /// <summary>
         /// Get the methods implementation for the supplied type.

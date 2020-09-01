@@ -1,35 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Helpers;
 using ComLib.Lang.Parsing;
 using ComLib.Lang.Types;
+using System;
 
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Round plugin provides functions to round, round up or round down numbers.
-    
+
     var a = 2.3;
-    
+
     // Rounds the number using standing round technique of .4
     var b = round 2.3;
-    
+
     // Gets rounded up to 3
-    var c = round up 2.3; 
-    
+    var c = round up 2.3;
+
     // Gets rounded down to 2
     var d = round down 2.3;
-    
+
     </doc:example>
     ***************************************************************************/
 
@@ -48,19 +44,16 @@ namespace ComLib.Lang.Plugins
             /// </summary>
             Round,
 
-
             /// <summary>
             /// Rounds up to the nearest integer ( ceil )
             /// </summary>
             RoundUp,
 
-            
             /// <summary>
             /// Rounds down to the nearest integer ( floor )
             /// </summary>
             RoundDown
         }
-
 
         /// <summary>
         /// Intialize.
@@ -72,7 +65,6 @@ namespace ComLib.Lang.Plugins
             this.StartTokens = new string[] { "Round", "round" };
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -83,7 +75,6 @@ namespace ComLib.Lang.Plugins
                 return "round ( up | down )? <expression>";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -101,16 +92,15 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// run step 123.
         /// </summary>
         /// <returns></returns>
         public override Expr Parse()
-        {            
+        {
             RoundMode mode = RoundMode.Round;
             Token t = _tokenIt.Peek().Token;
-            if (string.Compare(t.Text, "up", StringComparison.InvariantCultureIgnoreCase) == 0) 
+            if (string.Compare(t.Text, "up", StringComparison.InvariantCultureIgnoreCase) == 0)
             {
                 mode = RoundMode.RoundUp;
                 _tokenIt.Advance();
@@ -128,13 +118,11 @@ namespace ComLib.Lang.Plugins
         }
     }
 
-
     /// <summary>
     /// Variable expression data
     /// </summary>
     public class RoundExpr : Expr
     {
-
         private RoundPlugin.RoundMode _mode;
         private Expr _exp;
 
@@ -149,7 +137,6 @@ namespace ComLib.Lang.Plugins
             _exp = exp;
         }
 
-
         /// <summary>
         /// Evaluate
         /// </summary>
@@ -159,7 +146,7 @@ namespace ComLib.Lang.Plugins
             var result = _exp.Evaluate(visitor);
             ExceptionHelper.NotNullType(this, result, "rounding", LTypes.Number);
 
-            var val = ((LNumber) result).Value;
+            var val = ((LNumber)result).Value;
             if (_mode == RoundPlugin.RoundMode.Round)
             {
                 var d = Convert.ToDouble(val + .5);

@@ -1,6 +1,4 @@
-﻿using System;
-
-using ComLib.Lang.Core;
+﻿using ComLib.Lang.Core;
 
 namespace ComLib.Lang.Types
 {
@@ -14,14 +12,12 @@ namespace ComLib.Lang.Types
         /// </summary>
         LType DataType { get; }
 
-
         /// <summary>
         /// Determines whether or not this type can be created ( via constructor ) from the args supplied.
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
         bool CanCreateFromArgs(object[] args);
-
 
         /// <summary>
         /// Creates an instance of the type associated with theses methods from the arguments supplied. Repesents a constructor call
@@ -30,12 +26,10 @@ namespace ComLib.Lang.Types
         /// <returns></returns>
         LObject CreateFromArgs(object[] args);
 
-
         /// <summary>
         /// Callback for when these methods are registered with the system.
         /// </summary>
         void OnRegistered();
-
 
         /// <summary>
         /// Whether or not the associted obj of this methods class has the supplied member.
@@ -45,7 +39,6 @@ namespace ComLib.Lang.Types
         /// <returns></returns>
         bool HasMember(LObject obj, string memberName);
 
-
         /// <summary>
         /// Whether or not the associted obj of this methods class has the supplied method.
         /// </summary>
@@ -53,7 +46,6 @@ namespace ComLib.Lang.Types
         /// <param name="methodName">The name of the method to check for.</param>
         /// <returns></returns>
         bool HasMethod(LObject obj, string methodName);
-
 
         /// <summary>
         /// Whether or not the associted obj of this methods class has the supplied property.
@@ -63,7 +55,6 @@ namespace ComLib.Lang.Types
         /// <returns></returns>
         bool HasProperty(LObject obj, string propertyName);
 
- 
         /// <summary>
         /// Validates the method call.
         /// </summary>
@@ -73,7 +64,6 @@ namespace ComLib.Lang.Types
         /// <returns></returns>
         BoolMsgObj ValidateCall(LObject obj, string methodName, object[] parameters);
 
-
         /// <summary>
         /// Gets the property value for the specified propertyname.
         /// </summary>
@@ -81,7 +71,6 @@ namespace ComLib.Lang.Types
         /// <param name="propName">The name of the property</param>
         /// <returns></returns>
         object GetProperty(LObject obj, string propName);
-
 
         /// <summary>
         /// Sets the property value for the specified propertyname.
@@ -92,7 +81,6 @@ namespace ComLib.Lang.Types
         /// <returns></returns>
         void SetProperty(LObject obj, string propName, object val);
 
-        
         /// <summary>
         /// Executes the method supplied on the the obj.
         /// </summary>
@@ -102,7 +90,6 @@ namespace ComLib.Lang.Types
         /// <returns></returns>
         object ExecuteMethod(LObject obj, string methodName, object[] parameters);
 
-        
         /// <summary>
         /// Set a value by the index.
         /// </summary>
@@ -110,15 +97,13 @@ namespace ComLib.Lang.Types
         /// <param name="ndx"></param>
         object GetByNumericIndex(LObject obj, int index);
 
-
         /// <summary>
         /// Set a value by the index.
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="member"></param>
         object GetByStringMember(LObject obj, string member);
-        
-        
+
         /// <summary>
         /// Set a value by the index.
         /// </summary>
@@ -126,7 +111,6 @@ namespace ComLib.Lang.Types
         /// <param name="index">The index position to set the value</param>
         /// <param name="val">The value to set at the index</param>
         void SetByNumericIndex(LObject obj, int index, LObject val);
-
 
         /// <summary>
         /// Set a value by the index.

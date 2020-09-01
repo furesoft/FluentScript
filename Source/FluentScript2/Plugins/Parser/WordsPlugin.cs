@@ -1,30 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Parsing;
 using ComLib.Lang.Types;
+using System;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Words plugin enables the registration of custom text/words into the language
-    // which are then immediately available for use. 
+    // which are then immediately available for use.
     // They are basically an alternative to not having to surround text in double quotes
-    // Only 
+    // Only
     @words( nasdaq, fluent script )
     @words  IBM, MSFT, APPL
-    
+
     if ( "fluent script" == fluent script ) then
         print( "works" )
-    
+
     </doc:example>
     ***************************************************************************/
 
@@ -43,7 +41,6 @@ namespace ComLib.Lang.Plugins
             this.IsEndOfStatementRequired = true;
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -54,7 +51,6 @@ namespace ComLib.Lang.Plugins
                 return "@ words '(' <id>* ( ',' <id>* )* ')'";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -71,7 +67,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// Whether or not this can handle the token supplied.
         /// </summary>
@@ -86,7 +81,6 @@ namespace ComLib.Lang.Plugins
             return false;
         }
 
-
         /// <summary>
         /// @addwords( nasdaq, fluent script )
         /// </summary>
@@ -95,7 +89,7 @@ namespace ComLib.Lang.Plugins
         {
             _tokenIt.Advance(2, false);
             var hasParens = _tokenIt.NextToken.Token == Tokens.LeftParenthesis;
-            if(hasParens)
+            if (hasParens)
                 _tokenIt.Expect(Tokens.LeftParenthesis);
             var words = new List<string>();
 
@@ -117,21 +111,20 @@ namespace ComLib.Lang.Plugins
                 if (token.Token == Tokens.Comma)
                     token = _tokenIt.Advance(1, false);
             }
-            if(hasParens)
+            if (hasParens)
                 _tokenIt.Expect(Tokens.RightParenthesis);
-            
+
             return new Expr();
         }
-
 
         private string GetNextWord(bool hasParens)
         {
             var ahead = _tokenIt.Peek(1, false);
             var current = _tokenIt.NextToken;
             string word = current.Token.Text;
-            
+
             // Build up the word until , is hit.
-            while (ahead.Token != Tokens.Comma && ahead.Token != Tokens.RightParenthesis 
+            while (ahead.Token != Tokens.Comma && ahead.Token != Tokens.RightParenthesis
                 && ahead.Token != Tokens.EndToken)
             {
                 // Stop at new line if no parenthesis
@@ -143,10 +136,8 @@ namespace ComLib.Lang.Plugins
                 ahead = _tokenIt.Peek(1, false);
             }
             return word;
-        }        
+        }
     }
-
-
 
     /// <summary>
     /// Combinator for handling swapping of variable values. swap a and b.
@@ -158,7 +149,6 @@ namespace ComLib.Lang.Plugins
         private string _word;
         private List<string> _possibleWords;
 
-
         /// <summary>
         /// Intialize.
         /// </summary>
@@ -168,7 +158,6 @@ namespace ComLib.Lang.Plugins
             _possibleWords = new List<string>();
             Precedence = 1;
         }
-
 
         /// <summary>
         /// Whether or not this can handle the token supplied.
@@ -186,7 +175,7 @@ namespace ComLib.Lang.Plugins
             bool isWordReplacement = false;
 
             // Just 1 word check.
-            if( ahead.Token.Kind != TokenKind.Ident || ahead.Token == Tokens.EndToken)
+            if (ahead.Token.Kind != TokenKind.Ident || ahead.Token == Tokens.EndToken)
             {
                 isWordReplacement = words.ContainsKey(current.Text);
                 _word = current.Text;
@@ -217,7 +206,6 @@ namespace ComLib.Lang.Plugins
             return found;
         }
 
-
         /// <summary>
         /// @addwords( nasdaq, fluent script )
         /// </summary>
@@ -225,7 +213,7 @@ namespace ComLib.Lang.Plugins
         public override Expr Parse()
         {
             var startToken = _tokenIt.NextToken;
-            if(_idCount > 0)
+            if (_idCount > 0)
                 _tokenIt.Advance(_idCount);
 
             // Finally move past this plugin.

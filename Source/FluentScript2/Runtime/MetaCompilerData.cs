@@ -29,18 +29,17 @@ namespace ComLib.Lang.Runtime
             _daysByNum[Convert.ToInt32(DayOfWeek.Saturday)] = DayOfWeek.Saturday;
             _daysByNum[Convert.ToInt32(DayOfWeek.Sunday)] = DayOfWeek.Sunday;
 
-            _daysToName[Convert.ToInt32(DayOfWeek.Monday)]    = "Monday";
-            _daysToName[Convert.ToInt32(DayOfWeek.Tuesday)]   = "Tuesday";
+            _daysToName[Convert.ToInt32(DayOfWeek.Monday)] = "Monday";
+            _daysToName[Convert.ToInt32(DayOfWeek.Tuesday)] = "Tuesday";
             _daysToName[Convert.ToInt32(DayOfWeek.Wednesday)] = "Wednesday";
-            _daysToName[Convert.ToInt32(DayOfWeek.Thursday)]  = "Thursday";
-            _daysToName[Convert.ToInt32(DayOfWeek.Friday)]    = "Friday";
-            _daysToName[Convert.ToInt32(DayOfWeek.Saturday)]  = "Saturday";
-            _daysToName[Convert.ToInt32(DayOfWeek.Sunday)]    = "Sunday";
+            _daysToName[Convert.ToInt32(DayOfWeek.Thursday)] = "Thursday";
+            _daysToName[Convert.ToInt32(DayOfWeek.Friday)] = "Friday";
+            _daysToName[Convert.ToInt32(DayOfWeek.Saturday)] = "Saturday";
+            _daysToName[Convert.ToInt32(DayOfWeek.Sunday)] = "Sunday";
             _daysToName[7] = "today";
             _daysToName[8] = "yesterday";
             _daysToName[9] = "tomorrow";
         }
-
 
         /// <summary>
         /// Lookup the day of the week.
@@ -52,7 +51,6 @@ namespace ComLib.Lang.Runtime
             return _daysByNum[day];
         }
 
-
         /// <summary>
         /// Lookup the day of the week.
         /// </summary>
@@ -60,7 +58,7 @@ namespace ComLib.Lang.Runtime
         /// <returns></returns>
         public string LookupDayName(int day)
         {
-            if(_daysToName.ContainsKey(day))
+            if (_daysToName.ContainsKey(day))
                 return _daysToName[day];
             return string.Empty;
         }

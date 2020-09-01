@@ -1,26 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Helpers;
 using ComLib.Lang.Parsing;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Allows using # for single line comments instead of //
-    
-    #  Single line comment 
-    
+
+    #  Single line comment
+
     // Also single line comment
-    
+
     </doc:example>
     ***************************************************************************/
 
@@ -38,7 +32,6 @@ namespace ComLib.Lang.Plugins
             _canHandleToken = true;
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -49,7 +42,6 @@ namespace ComLib.Lang.Plugins
                 return "# . <newline>";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -66,14 +58,13 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// run step 123.
         /// </summary>
         /// <returns></returns>
         public override Token[] Parse()
         {
-            // http https ftp ftps www 
+            // http https ftp ftps www
             var takeoverToken = _lexer.LastTokenData;
             var line = _lexer.State.Line;
             var pos = _lexer.State.LineCharPosition;

@@ -1,28 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
-using ComLib.Lang.Core;
+﻿// <lang:using>
 using ComLib.Lang.AST;
 using ComLib.Lang.Parsing;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Swap plugin provides 1 line statement to swap variables.
-    
+
     var a = 1, b = 2;
-    
+
     // Swap values in 1 statement.
     // Instead of needing a third variable.
     swap a with b;
-    
-    
+
     </doc:example>
     ***************************************************************************/
 
@@ -42,7 +35,6 @@ namespace ComLib.Lang.Plugins
             this.StartTokens = new string[] { "swap", "Swap" };
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -53,7 +45,6 @@ namespace ComLib.Lang.Plugins
                 return "swap <id> with <id> <statementtermninator>";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -69,7 +60,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// run step 123.
         /// </summary>
@@ -83,7 +73,6 @@ namespace ComLib.Lang.Plugins
             return new SwapExpr(name1, name2);
         }
     }
-
 
     /// <summary>
     /// Variable expression data
@@ -103,7 +92,6 @@ namespace ComLib.Lang.Plugins
             _name1 = name1;
             _name2 = name2;
         }
-
 
         /// <summary>
         /// Evaluate

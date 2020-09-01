@@ -1,30 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Types;
+using System;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Exec plugin allows launching/execution of external programs.
     // lowercase and uppercase days are supported:
     // 1. Monday - Sunday
     // 2. monday - sunday
     // 3. today, tomorrow, yesterday
-    
+
     var day = Monday;
     var date = tomorrow at 3:30 pm;
-    
+
     if tommorrow is Saturday then
 	    print Thank god it's Friday
     </doc:example>
     ***************************************************************************/
+
     /// <summary>
     /// Combinator for handling days of the week.
     /// </summary>
@@ -33,16 +34,15 @@ namespace ComLib.Lang.Plugins
         /// <summary>
         /// Initialize
         /// </summary>
-        public ExecPlugin() 
+        public ExecPlugin()
         {
             this.Init("exec");
             _funcMeta = new FunctionMetaData("exec", null);
-            _funcMeta.AddArg("program",    "string",  true,  "",   string.Empty, @"c:\tools\nunit\nunit.exe", "program to launch");
+            _funcMeta.AddArg("program", "string", true, "", string.Empty, @"c:\tools\nunit\nunit.exe", "program to launch");
             _funcMeta.AddArg("workingdir", "string", false, "in", string.Empty, @"c:\tools\nunit\", "working directory to launch in");
-            _funcMeta.AddArg("args",       "list",   false, "",   string.Empty, "", "arguments to the program");
-            _funcMeta.AddArg("failOnError","bool",   false, "", false, "", "arguments to the program");
+            _funcMeta.AddArg("args", "list", false, "", string.Empty, "", "arguments to the program");
+            _funcMeta.AddArg("failOnError", "bool", false, "", false, "", "arguments to the program");
         }
-
 
         /// <summary>
         /// The grammer for the function declaration
@@ -54,7 +54,6 @@ namespace ComLib.Lang.Plugins
                 return "'exec' <function_params>";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -70,8 +69,7 @@ namespace ComLib.Lang.Plugins
                     "exec msbuildhome\\msbuild.exe in: 'c:\\myapp\\build' [ 'arg-a', 'arg-b', 'arg-c' ]"
                 };
             }
-        }       
-
+        }
 
         /// <summary>
         /// Parses the day expression.
@@ -89,8 +87,6 @@ namespace ComLib.Lang.Plugins
         }
     }
 
-
-
     /// <summary>
     /// Variable expression data
     /// </summary>
@@ -105,7 +101,6 @@ namespace ComLib.Lang.Plugins
             this.Init(meta);
         }
 
-
         /// <summary>
         /// Initailizes with function metadata.
         /// </summary>
@@ -116,7 +111,6 @@ namespace ComLib.Lang.Plugins
             ParamList = new List<object>();
             ParamListExpressions = new List<Expr>();
         }
-
 
         /// <summary>
         /// Evaluate
@@ -156,7 +150,7 @@ namespace ComLib.Lang.Plugins
                 p.StartInfo.Arguments = stringArgs;
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.CreateNoWindow = true;
-                p.StartInfo.WorkingDirectory = workingDir;                
+                p.StartInfo.WorkingDirectory = workingDir;
                 p.Start();
                 // TODO: Set up options on this plugin to configure wait time ( indefinite | milliseconds )
                 p.WaitForExit();
@@ -166,7 +160,7 @@ namespace ComLib.Lang.Plugins
             {
                 exitcode = 1;
                 if (failOnError)
-                { 
+                {
                     var error = string.Format("An error occurred executing external application '{0}', in '{1}', with '{2}'.\r\n"
                               + "message: {3}", exePath, workingDir, args, ex.Message);
                     throw new LangFailException(error, this.Ref.ScriptName, this.Ref.Line);

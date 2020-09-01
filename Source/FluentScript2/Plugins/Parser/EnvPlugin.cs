@@ -1,34 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Parsing;
 using ComLib.Lang.Types;
+using System;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Env plugin allows direct access to environment variables via the "env" object.
-    
+
     // Example 1: Access to user variables only via the ".user" property of env.
     result = env.user.path;
-    
+
     // Example 2: Access to system variables via the ".sys" property of env.
     result = env.sys.path;
-    
+
     // Example 3: Access to environment variable without specifying sys or user.
     result = env.path;
     result = env.SystemRoot;
     </doc:example>
     ***************************************************************************/
-    
+
     /// <summary>
     /// Token specifically for referencing environment variables.
     /// </summary>
@@ -47,15 +44,13 @@ namespace ComLib.Lang.Plugins
             if (!string.IsNullOrEmpty(scope))
                 this._text = "env." + scope + "." + name;
             else
-                this._text = "env." + name;            
+                this._text = "env." + name;
         }
-
 
         /// <summary>
         /// Either sys or user
         /// </summary>
         public string Scope;
-
 
         /// <summary>
         /// The variable name.
@@ -63,13 +58,11 @@ namespace ComLib.Lang.Plugins
         public string VarName;
     }
 
-
-
     /// <summary>
     /// Plugin allows emails without quotes such as john.doe@company.com
     /// </summary>
     public class EnvLexPlugin : LexPlugin
-    {        
+    {
         /// <summary>
         /// Initialize
         /// </summary>
@@ -77,7 +70,6 @@ namespace ComLib.Lang.Plugins
         {
             _tokens = new string[] { "env" };
         }
-
 
         /// <summary>
         /// The grammer for the function declaration
@@ -89,7 +81,6 @@ namespace ComLib.Lang.Plugins
                 return "env '.' ( ( sys | user ) '.' )? <ident>";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -108,7 +99,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// Whether or not this uri plugin can handle the current token.
         /// </summary>
@@ -116,11 +106,10 @@ namespace ComLib.Lang.Plugins
         /// <returns></returns>
         public override bool CanHandle(Token current)
         {
-            if( _lexer.State.CurrentChar == '.')
+            if (_lexer.State.CurrentChar == '.')
                 return true;
             return false;
         }
-
 
         /// <summary>
         /// run step 123.
@@ -166,7 +155,6 @@ namespace ComLib.Lang.Plugins
         }
     }
 
-
     /// <summary>
     /// Combinator for getting environment variables in format $env.name $env.user.name $env.sys.name.
     /// </summary>
@@ -182,7 +170,6 @@ namespace ComLib.Lang.Plugins
             this.StartTokens = new string[] { "$EnvToken" };
         }
 
-
         /// <summary>
         /// Parses the day expression.
         /// Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
@@ -197,7 +184,6 @@ namespace ComLib.Lang.Plugins
         }
     }
 
-
     /// <summary>
     /// Variable expression data
     /// </summary>
@@ -205,7 +191,6 @@ namespace ComLib.Lang.Plugins
     {
         private string _scope;
         private string _varName;
-
 
         /// <summary>
         /// Initialize.
@@ -218,7 +203,6 @@ namespace ComLib.Lang.Plugins
             _varName = varName;
         }
 
-
         /// <summary>
         /// Evaluate
         /// </summary>
@@ -227,7 +211,7 @@ namespace ComLib.Lang.Plugins
         {
             var val = "";
             // Case 1: $env.sys.systemroot
-            // Case 2: $env.user.systemroot            
+            // Case 2: $env.user.systemroot
             if (string.IsNullOrEmpty(_scope))
             {
                 val = System.Environment.GetEnvironmentVariable(_varName);

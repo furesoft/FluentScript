@@ -1,7 +1,4 @@
-﻿
-using System;
-using System.IO;
-using ComLib.Lang.Core;
+﻿using System;
 
 namespace ComLib.Lang.Runtime.Switches
 {
@@ -9,12 +6,10 @@ namespace ComLib.Lang.Runtime.Switches
     {
         private string _filepath;
 
-
         public InteractiveSwitch(string filepath)
         {
             _filepath = filepath;
         }
-
 
         /// <summary>
         /// Prints tokens to file supplied, if file is not supplied, prints to console.

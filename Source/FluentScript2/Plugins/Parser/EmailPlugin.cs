@@ -1,20 +1,18 @@
-﻿
-using System.Text.RegularExpressions;
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Core;
 using ComLib.Lang.Helpers;
 using ComLib.Lang.Parsing;
+using System.Text.RegularExpressions;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Email plugin enables recognition of emails as strings without using quotes,
     // such as john.doe@company.com
-    
+
     email1 = john.doe@company.com
     email2 = batman2012@gotham.com
     email3 = super.man_1@metropolis.com
@@ -28,7 +26,6 @@ namespace ComLib.Lang.Plugins
     {
         private const string _emailRegex = "^([0-9a-zA-Z]+[-._+&])*[0-9a-zA-Z]+@([-0-9a-zA-Z]+[.])+[a-zA-Z]{2,6}$";
 
-
         /// <summary>
         /// Initialize
         /// </summary>
@@ -36,7 +33,6 @@ namespace ComLib.Lang.Plugins
         {
             _tokens = new string[] { "$IdToken" };
         }
-
 
         /// <summary>
         /// The grammer for the function declaration
@@ -48,7 +44,6 @@ namespace ComLib.Lang.Plugins
                 return "not available";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -65,7 +60,6 @@ namespace ComLib.Lang.Plugins
                 };
             }
         }
-
 
         /// <summary>
         /// Whether or not this uri plugin can handle the current token.
@@ -85,14 +79,13 @@ namespace ComLib.Lang.Plugins
             return false;
         }
 
-
         /// <summary>
         /// run step 123.
         /// </summary>
         /// <returns></returns>
         public override Token[] Parse()
         {
-            // http https ftp ftps www 
+            // http https ftp ftps www
             var takeoverToken = _lexer.LastTokenData;
             var line = _lexer.State.Line;
             var pos = _lexer.State.LineCharPosition;

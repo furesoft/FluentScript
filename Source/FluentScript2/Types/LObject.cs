@@ -1,8 +1,4 @@
-﻿
-using System.Collections.Generic;
-
-using ComLib.Lang.Core;
-
+﻿using ComLib.Lang.Core;
 
 namespace ComLib.Lang.Types
 {
@@ -16,7 +12,6 @@ namespace ComLib.Lang.Types
         /// </summary>
         public LType Type;
 
-
         /// <summary>
         /// Gets the value of this object.
         /// </summary>
@@ -25,7 +20,6 @@ namespace ComLib.Lang.Types
         {
             return null;
         }
-
 
         /// <summary>
         /// Clones this value.
@@ -36,8 +30,6 @@ namespace ComLib.Lang.Types
             return this;
         }
     }
-
-
 
     /// <summary>
     /// LObjectType class that all types extend from.
@@ -55,7 +47,6 @@ namespace ComLib.Lang.Types
             this.IsSystemType = true;
         }
 
-
         ///// <summary>
         ///// Sets up the matrix of possible conversions from one type to another type.
         ///// </summary>
@@ -71,5 +62,4 @@ namespace ComLib.Lang.Types
         //    this.AddConversionTo(TypeConstants.Time,      TypeConversionMode.NotSupported);
         //}
     }
-
 }

@@ -1,19 +1,17 @@
-﻿
-// <lang:using>
+﻿// <lang:using>
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Step plugin allows the word "step" to be used instead of "function" when declaring functions.
-        
-    step add( a, b ) 
-    { 
+
+    step add( a, b )
+    {
         return a + b
     }
-    
+
     </doc:example>
     ***************************************************************************/
 
@@ -25,7 +23,7 @@ namespace ComLib.Lang.Plugins
         /// <summary>
         /// Initialize
         /// </summary>
-        public StepPlugin() : base("step", ComLib.Lang.Core.Tokens.Function )
+        public StepPlugin() : base("step", ComLib.Lang.Core.Tokens.Function)
         {
         }
     }

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Parsing;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
@@ -24,7 +19,6 @@ namespace ComLib.Lang.Plugins
             _canHandleToken = true;
         }
 
-
         /// <summary>
         /// run step 123.
         /// </summary>
@@ -33,7 +27,6 @@ namespace ComLib.Lang.Plugins
         {
             return ParseLine(false);
         }
-
 
         /// <summary>
         /// Parse the entire line.
@@ -45,7 +38,7 @@ namespace ComLib.Lang.Plugins
             // print no quotes needed!
             var takeoverToken = _lexer.LastTokenData;
             int line = _lexer.State.Line;
-            int pos  = _lexer.State.LineCharPosition;
+            int pos = _lexer.State.LineCharPosition;
 
             // This stops on the last char before the newline.
             // So move forward one.

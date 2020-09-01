@@ -1,13 +1,12 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Collections;
+﻿using ComLib.Lang.AST;
 using ComLib.Lang.Core;
-using ComLib.Lang.Types;
-using ComLib.Lang.AST;
 using ComLib.Lang.Helpers;
 using ComLib.Lang.Parsing;
 using ComLib.Lang.Runtime.Bindings;
+using ComLib.Lang.Types;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace ComLib.Lang.Runtime
 {
@@ -38,18 +37,15 @@ namespace ComLib.Lang.Runtime
             _daysInMonth[12] = 31;
         }
 
-
         /// <summary>
         /// The execution context.
         /// </summary>
         public Context Ctx { get; set; }
 
-
         /// <summary>
         /// The execution settings.
         /// </summary>
         public ExecutionSettings Settings { get; set; }
-
 
         /// <summary>
         /// Visit all the expressions.
@@ -66,7 +62,6 @@ namespace ComLib.Lang.Runtime
             return result;
         }
 
-
         /// <summary>
         /// Visit the statement
         /// </summary>
@@ -76,8 +71,8 @@ namespace ComLib.Lang.Runtime
             return exp.Evaluate(this);
         }
 
-
         #region Statements
+
         /// <summary>
         /// Assign a value to an expression.
         /// </summary>
@@ -96,7 +91,7 @@ namespace ComLib.Lang.Runtime
             {
                 AssignHelper.SetVariableValue(ctx, this, node, isDeclaration, varExpr, valueExpr);
             }
-            // CASE 2: Assign member.    
+            // CASE 2: Assign member.
             //      e.g. dictionary       :  user.name = 'kishore'
             //      e.g. property on class:  user.age  = 20
             else if (varExpr.IsNodeType(NodeTypes.SysMemberAccess))
@@ -111,7 +106,6 @@ namespace ComLib.Lang.Runtime
             return LObjects.Null;
         }
 
-
         /// <summary>
         /// Executes multiple assignments.
         /// </summary>
@@ -125,20 +119,18 @@ namespace ComLib.Lang.Runtime
             return LObjects.Null;
         }
 
-
         /// <summary>
         /// Execute the break.
         /// </summary>
-        public object VisitBreak(BreakExpr expr)             
+        public object VisitBreak(BreakExpr expr)
         {
             var loop = expr.FindParent<ILoop>();
-            if (loop == null) 
+            if (loop == null)
                 throw new LangException("syntax error", "unable to break, loop not found", string.Empty, 0);
 
             loop.DoBreakLoop = true;
             return LObjects.Null;
         }
-
 
         /// <summary>
         /// Execute the continue.
@@ -152,22 +144,20 @@ namespace ComLib.Lang.Runtime
             return LObjects.Null;
         }
 
-
         /// <summary>
         /// Execute the continue.
         /// </summary>
-        public object VisitDate(DateExpr expr )
+        public object VisitDate(DateExpr expr)
         {
             var year = expr.Year == -1 ? DateTime.Now.Year : expr.Year;
             var date = new DateTime(year, expr.Month, expr.Day);
-            if(expr.Time != "0")
+            if (expr.Time != "0")
             {
                 var t = TimeSpan.Parse(expr.Time);
                 date = date.AddMilliseconds(t.TotalMilliseconds);
             }
             return new LDate(date);
         }
-
 
         public object VisitDateRelative(DateRelativeExpr expr)
         {
@@ -176,7 +166,7 @@ namespace ComLib.Lang.Runtime
             var dayofWeek = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), expr.DayOfTheWeek.ToString());
 
             var date = new DateTime(year, month, 1);
-            
+
             var DaysInWeek = 7;
 
             // move to holiday day of week
@@ -188,9 +178,9 @@ namespace ComLib.Lang.Runtime
             }
 
             var relDay = expr.RelativeDay.ToLower();
-                
+
             // Case 1: "last" <day> of <month>
-            if( relDay == "last")
+            if (relDay == "last")
             {
                 // 1. Add 2 weeks at least
                 date = date.AddDays(14);
@@ -204,14 +194,14 @@ namespace ComLib.Lang.Runtime
                     {
                         date = date.AddDays(7);
                     }
-                    else if(date.Day + 7 <= totalDaysInMonth)
+                    else if (date.Day + 7 <= totalDaysInMonth)
                     {
                         date = date.AddDays(7);
                     }
                     i++;
                 }
             }
-            // Case 2: 
+            // Case 2:
             else
             {
                 var weekCount = 0;
@@ -225,16 +215,15 @@ namespace ComLib.Lang.Runtime
                 {
                     date = date.AddDays((weekCount - 1) * DaysInWeek);
                 }
-                // Case 2b: ( 1st | 2nd | 3rd| 4th ) of month 
+                // Case 2b: ( 1st | 2nd | 3rd| 4th ) of month
                 else
                 {
                     weekCount = Convert.ToInt32(expr.RelativeDay);
                     date = date.AddDays((weekCount - 1) * DaysInWeek);
                 }
-            }            
+            }
             return new LDate(date);
         }
-
 
         /// <summary>
         /// Execute the continue.
@@ -249,22 +238,22 @@ namespace ComLib.Lang.Runtime
             var dayName = expr.Name.ToLower();
 
             // 1. Determine date/day
-            if      (dayName == "today")     date = DateTime.Today;
+            if (dayName == "today") date = DateTime.Today;
             else if (dayName == "yesterday") date = DateTime.Today.AddDays(-1);
-            else if (dayName == "tomorrow")  date = DateTime.Today.AddDays(1);
-            else if (dayName == "monday")    { isDayOfWeek = true; dayOfweek = DayOfWeek.Monday;   }
-            else if (dayName == "tuesday")   { isDayOfWeek = true; dayOfweek = DayOfWeek.Tuesday;   }
-            else if (dayName == "wednesday") { isDayOfWeek = true; dayOfweek = DayOfWeek.Wednesday; }  
-            else if (dayName == "thursday")  { isDayOfWeek = true; dayOfweek = DayOfWeek.Thursday;  }  
-            else if (dayName == "friday")    { isDayOfWeek = true; dayOfweek = DayOfWeek.Friday;    } 
-            else if (dayName == "saturday")  { isDayOfWeek = true; dayOfweek = DayOfWeek.Saturday;  }
-            else if (dayName == "sunday")    { isDayOfWeek = true; dayOfweek = DayOfWeek.Sunday;    }
+            else if (dayName == "tomorrow") date = DateTime.Today.AddDays(1);
+            else if (dayName == "monday") { isDayOfWeek = true; dayOfweek = DayOfWeek.Monday; }
+            else if (dayName == "tuesday") { isDayOfWeek = true; dayOfweek = DayOfWeek.Tuesday; }
+            else if (dayName == "wednesday") { isDayOfWeek = true; dayOfweek = DayOfWeek.Wednesday; }
+            else if (dayName == "thursday") { isDayOfWeek = true; dayOfweek = DayOfWeek.Thursday; }
+            else if (dayName == "friday") { isDayOfWeek = true; dayOfweek = DayOfWeek.Friday; }
+            else if (dayName == "saturday") { isDayOfWeek = true; dayOfweek = DayOfWeek.Saturday; }
+            else if (dayName == "sunday") { isDayOfWeek = true; dayOfweek = DayOfWeek.Sunday; }
 
             // Case 1 -
             if (isDayOfWeek)
             {
                 // Case 1a: day of week only
-                if(!isTimeSpecified) 
+                if (!isTimeSpecified)
                     return new LDayOfWeek(dayOfweek);
 
                 // Case 1b: day of week ( with time )
@@ -273,11 +262,11 @@ namespace ComLib.Lang.Runtime
                 while (today.DayOfWeek != dayOfweek && count < 8)
                 {
                     today = today.AddDays(1);
-                }                
+                }
             }
-            
+
             // 3. Finally - add the time to the day.
-            if(expr.Time != "0")
+            if (expr.Time != "0")
             {
                 var t = TimeSpan.Parse(expr.Time);
                 date = date.AddMilliseconds(t.TotalMilliseconds);
@@ -285,7 +274,6 @@ namespace ComLib.Lang.Runtime
             var result = new LDate(date);
             return result;
         }
-
 
         /// <summary>
         /// Executes the days away expresssion to get a date x days away.
@@ -298,14 +286,14 @@ namespace ComLib.Lang.Runtime
             var num = 0.0;
 
             // Case 1: daysAhead days away
-            if(this.Ctx.Symbols.Contains(name))
+            if (this.Ctx.Symbols.Contains(name))
             {
                 var variable = this.Ctx.Memory.Get<object>(name) as LObject;
-                if(variable.Type != LTypes.Number)
+                if (variable.Type != LTypes.Number)
                 {
                     throw new LangException("TypeError", "Days away must of type of number", expr.Ref.ScriptName, expr.Ref.Line, expr.Ref.CharPos);
                 }
-                num = ((LNumber) variable).Value;
+                num = ((LNumber)variable).Value;
             }
 
             // Case 2: 3 days away
@@ -313,7 +301,7 @@ namespace ComLib.Lang.Runtime
             {
                 num = Convert.ToInt32(name);
             }
-            
+
             // Now convert to relative "days away".
             TimeSpan duration = TimeSpan.MinValue;
             var mode = expr.Mode.ToLower();
@@ -324,18 +312,17 @@ namespace ComLib.Lang.Runtime
             if (mode == "hours")
             {
                 duration = new TimeSpan(0, Convert.ToInt32(num), 0, 0);
-            } 
+            }
             if (mode == "minutes")
             {
                 duration = new TimeSpan(0, 0, Convert.ToInt32(num), 0);
-            } 
+            }
             if (mode == "seconds")
             {
                 duration = new TimeSpan(0, 0, 0, Convert.ToInt32(num));
             }
             return new LTime(duration);
         }
-
 
         /// <summary>
         /// Execute the continue.
@@ -344,7 +331,6 @@ namespace ComLib.Lang.Runtime
         {
             return LObjects.Null;
         }
-
 
         /// <summary>
         /// Execute
@@ -357,7 +343,6 @@ namespace ComLib.Lang.Runtime
             object returnVal = LObjects.Null;
             if (execIf)
             {
-                
                 if (expr.Statements != null && expr.Statements.Count > 0)
                 {
                     foreach (var stmt in expr.Statements)
@@ -374,7 +359,6 @@ namespace ComLib.Lang.Runtime
             return returnVal;
         }
 
-
         /// <summary>
         /// Execute each expression.
         /// </summary>
@@ -386,9 +370,9 @@ namespace ComLib.Lang.Runtime
             expr.DoContinueLoop = false;
 
             // for(user in users)
-            // Push scope for var name 
+            // Push scope for var name
             var source = expr.SourceExpr.Evaluate(this) as LObject;
-            
+
             // Check : 1. null object?
             if (source == LObjects.Null)
                 return LObjects.Null;
@@ -396,8 +380,8 @@ namespace ComLib.Lang.Runtime
             IEnumerator enumerator = null;
             if (source.Type == LTypes.Array) enumerator = ((IList)source.GetValue()).GetEnumerator();
             else if (source.Type == LTypes.Map) enumerator = ((IDictionary)source.GetValue()).GetEnumerator();
-            else if (source.Type == LTypes.Table) 
-                enumerator = ((IList) source.GetValue()).GetEnumerator();
+            else if (source.Type == LTypes.Table)
+                enumerator = ((IList)source.GetValue()).GetEnumerator();
             expr.DoContinueRunning = enumerator.MoveNext();
 
             while (expr.DoContinueRunning)
@@ -437,7 +421,6 @@ namespace ComLib.Lang.Runtime
             return LObjects.Null;
         }
 
-
         public object VisitLambda(LambdaExpr expr)
         {
             var funcType = new LFunctionType();
@@ -447,7 +430,6 @@ namespace ComLib.Lang.Runtime
             func.Type = funcType;
             return func;
         }
-
 
         /// <summary>
         /// Convert the presense / count of the enumerable expression(list/map) into bool true/false.
@@ -467,7 +449,7 @@ namespace ComLib.Lang.Runtime
             {
                 count = ((LArray)varExp).Value.Count;
             }
-            // 2 Table Map type 
+            // 2 Table Map type
             else if (varExp.Type == LTypes.Map)
             {
                 count = ((LMap)varExp).Value.Count;
@@ -475,13 +457,12 @@ namespace ComLib.Lang.Runtime
             // 3. Table type
             else if (varExp.Type == LTypes.Table)
             {
-                count = ((LTable) varExp).Value.Count;
+                count = ((LTable)varExp).Value.Count;
             }
             // 3. Other type : keep count as 0 so we return false;
             var result = count > 0 ? new LBool(true) : new LBool(false);
             return result;
         }
-
 
         /// <summary>
         /// Execute the statement.
@@ -499,7 +480,6 @@ namespace ComLib.Lang.Runtime
             return LObjects.Null;
         }
 
-
         /// <summary>
         /// Execute
         /// </summary>
@@ -516,7 +496,6 @@ namespace ComLib.Lang.Runtime
             throw new LangException("TypeError", message, expr.Ref.ScriptName, expr.Ref.Line);
         }
 
-
         /// <summary>
         /// Execute
         /// </summary>
@@ -531,7 +510,7 @@ namespace ComLib.Lang.Runtime
                 this.Ctx.Memory.Pop();
                 tryScopePopped = true;
             }
-            // Force the langlimit excpetion to propegate 
+            // Force the langlimit excpetion to propegate
             // do not allow to flow through to the catch all "Exception ex".
             catch (LangLimitException)
             {
@@ -568,7 +547,6 @@ namespace ComLib.Lang.Runtime
             }
             return LObjects.Null;
         }
-
 
         /// <summary>
         /// Execute
@@ -609,11 +587,10 @@ namespace ComLib.Lang.Runtime
                     break;
 
                 result = expr.Condition.Evaluate(this) as LObject;
-                expr.DoContinueRunning = EvalHelper.IsTrue(result); 
+                expr.DoContinueRunning = EvalHelper.IsTrue(result);
             }
             return LObjects.Null;
         }
-
 
         /// <summary>
         /// Execute each expression.
@@ -657,14 +634,15 @@ namespace ComLib.Lang.Runtime
 
                 expr.Increment.Evaluate(this);
                 result = expr.Condition.Evaluate(this) as LObject;
-                expr.DoContinueRunning = EvalHelper.IsTrue(result); 
+                expr.DoContinueRunning = EvalHelper.IsTrue(result);
             }
             return LObjects.Null;
         }
-        #endregion
-        
+
+        #endregion Statements
 
         #region Expressions
+
         /// <summary>
         /// Visit the anyof expression.
         /// </summary>
@@ -682,18 +660,17 @@ namespace ComLib.Lang.Runtime
             ParamHelper.ResolveNonNamedParameters(expr.ParamListExpressions, expr.ParamList, this);
 
             foreach (var rvalue in expr.ParamList)
-	        {
-	            var rightResult = rvalue as LObject;
-	            var compareResult = EvalHelper.Compare(expr, Operator.EqualEqual, leftResult, rightResult) as LObject;
+            {
+                var rightResult = rvalue as LObject;
+                var compareResult = EvalHelper.Compare(expr, Operator.EqualEqual, leftResult, rightResult) as LObject;
                 if (compareResult != null && compareResult.Type == LTypes.Bool && ((LBool)compareResult).Value == true)
-		        {
-			        result = true;
-			        break;
-		        }
-	        }
-	        return new LBool( result );
+                {
+                    result = true;
+                    break;
+                }
+            }
+            return new LBool(result);
         }
-
 
         /// <summary>
         /// Evaluates an array type declaration.
@@ -718,12 +695,11 @@ namespace ComLib.Lang.Runtime
             return new LArray(new List<object>());
         }
 
-
         public object VisitRun(RunExpr expr)
         {
             // 1. visit the function call
             var result = expr.FuncCallExpr.Visit(this);
-            
+
             // Case 1. Call something after?
             if (expr.FuncCallOnAfterExpr != null && expr.Mode == "after")
             {
@@ -734,15 +710,13 @@ namespace ComLib.Lang.Runtime
             {
                 var funcCallExpr = expr.FuncCallOnAfterExpr as FunctionCallExpr;
                 funcCallExpr.RetainEvaluatedParams = true;
-                if(funcCallExpr.ParamList == null)
+                if (funcCallExpr.ParamList == null)
                     funcCallExpr.ParamList = new List<object>();
                 funcCallExpr.ParamList.Add(result);
                 funcCallExpr.Visit(this);
             }
             return result;
         }
-
-
 
         /// <summary>
         /// Evaluates a table declaration.
@@ -755,10 +729,9 @@ namespace ComLib.Lang.Runtime
             table.Fields = expr.Fields;
             return table;
         }
-        
-        
+
         /// <summary>
-        /// Evaluate * / + - % 
+        /// Evaluate * / + - %
         /// </summary>
         /// <returns></returns>
         public object VisitBinary(BinaryExpr expr)
@@ -767,8 +740,8 @@ namespace ComLib.Lang.Runtime
             object result = 0;
             var node = expr;
             var op = expr.Op;
-            var left = (LObject) expr.Left.Evaluate(this);
-            var right = (LObject) expr.Right.Evaluate(this);
+            var left = (LObject)expr.Left.Evaluate(this);
+            var right = (LObject)expr.Right.Evaluate(this);
 
             // Case 1: Both numbers
             if (IsTypeMatch(LTypes.Number, left, right))
@@ -846,7 +819,6 @@ namespace ComLib.Lang.Runtime
             return result;
         }
 
-
         /// <summary>
         /// Executes a call to a language binding class.
         /// </summary>
@@ -858,7 +830,7 @@ namespace ComLib.Lang.Runtime
 
             // 1. Resolve the parameters.
             ParamHelper.ResolveParametersToHostLangValues(expr.ParamListExpressions, expr.ParamList, this);
-            
+
             // 2. Push call into stack
             expr.Ctx.State.Stack.Push(expr.FullName, null);
 
@@ -872,7 +844,6 @@ namespace ComLib.Lang.Runtime
             expr.Ctx.State.Stack.Pop();
             return result;
         }
-
 
         /// <summary>
         /// Executes the block with callback/template methods.
@@ -894,7 +865,6 @@ namespace ComLib.Lang.Runtime
             return result;
         }
 
-
         /// <summary>
         /// Evaluate > >= != == less less than
         /// </summary>
@@ -906,18 +876,17 @@ namespace ComLib.Lang.Runtime
 
             // TODO: This should be here ( find a better solution )
             //  e.g. allow expression to support comparable ??
-            if(expr.Right.Nodetype == NodeTypes.SysAnyOf)
+            if (expr.Right.Nodetype == NodeTypes.SysAnyOf)
             {
-                var anyOf = ((AnyOfExpr) expr.Right);
+                var anyOf = ((AnyOfExpr)expr.Right);
                 anyOf.CompareExpr = expr.Left;
                 return this.VisitAnyOf(anyOf);
             }
 
-            var left = (LObject) expr.Left.Evaluate(this);
-            var right = (LObject) expr.Right.Evaluate(this);
+            var left = (LObject)expr.Left.Evaluate(this);
+            var right = (LObject)expr.Right.Evaluate(this);
             return EvalHelper.Compare(node, op, left, right);
         }
-
 
         /// <summary>
         /// Evaluate > >= != == less less than
@@ -949,7 +918,6 @@ namespace ComLib.Lang.Runtime
             return new LBool(result);
         }
 
-
         /// <summary>
         /// Evaluate a constant.
         /// </summary>
@@ -970,7 +938,6 @@ namespace ComLib.Lang.Runtime
             return ltype;
         }
 
-
         /// <summary>
         /// Evaluate
         /// </summary>
@@ -987,11 +954,9 @@ namespace ComLib.Lang.Runtime
             // Case 2: check function now.
             if (expr.SymScope.IsFunction(name))
             {
-
             }
             throw ExceptionHelper.BuildRunTimeException(expr, "variable : " + name + " does not exist");
         }
-
 
         // index here
 
@@ -1014,7 +979,6 @@ namespace ComLib.Lang.Runtime
             return map;
         }
 
-
         /// <summary>
         /// Either external function or member name.
         /// </summary>
@@ -1028,7 +992,6 @@ namespace ComLib.Lang.Runtime
 
             if (memberAccess.MemberMissing)
                 throw expr.BuildRunTimeException("Member : " + expr.MemberName + " does not exist");
-
 
             // NOTES:
             // 1. If property on a built in type && not assignment then just return the value of the property
@@ -1051,7 +1014,6 @@ namespace ComLib.Lang.Runtime
             return memberAccess;
         }
 
-
         /// <summary>
         /// Evaluate
         /// </summary>
@@ -1061,7 +1023,6 @@ namespace ComLib.Lang.Runtime
             var result = expr.Value == null ? null : expr.Value.Evaluate(this);
             return result;
         }
-
 
         /// <summary>
         /// Creates new instance of the type.
@@ -1099,7 +1060,6 @@ namespace ComLib.Lang.Runtime
             return obj;
         }
 
-
         /// <summary>
         /// Evaluate object[index]
         /// </summary>
@@ -1115,8 +1075,8 @@ namespace ComLib.Lang.Runtime
 
             var lobj = (LObject)listObject;
 
-            // CASE 1. Access 
-            //      e.g. Array: users[0] 
+            // CASE 1. Access
+            //      e.g. Array: users[0]
             //      e.g. Map:   users['total']
             if (!expr.IsAssignment)
             {
@@ -1133,7 +1093,6 @@ namespace ComLib.Lang.Runtime
             indexAccess.MemberName = (LObject)ndxVal;
             return indexAccess;
         }
-
 
         /// <summary>
         /// Evaluates the expression by appending all the sub-expressions.
@@ -1159,7 +1118,6 @@ namespace ComLib.Lang.Runtime
             return new LString(total);
         }
 
-
         /// <summary>
         /// Evaluate
         /// </summary>
@@ -1168,7 +1126,6 @@ namespace ComLib.Lang.Runtime
         {
             return EvalHelper.Negate(expr, this);
         }
-
 
         /// <summary>
         /// Evaluate
@@ -1182,7 +1139,7 @@ namespace ComLib.Lang.Runtime
 
             var valobj = (LObject)expr.Ctx.Memory.Get<object>(expr.Name);
 
-            // Double ? 
+            // Double ?
             if (valobj.Type == LTypes.Number)
                 return ComLib.Lang.Runtime.EvalHelper.IncrementNumber(expr, (LNumber)valobj, this);
 
@@ -1193,7 +1150,6 @@ namespace ComLib.Lang.Runtime
             throw new LangException("Syntax Error", "Unexpected operation", expr.Ref.ScriptName, expr.Ref.Line, expr.Ref.CharPos);
         }
 
-
         /// <summary>
         /// Evauate and run the function
         /// </summary>
@@ -1202,7 +1158,7 @@ namespace ComLib.Lang.Runtime
         {
             object result = null;
 
-            // CASE 1: Exp is variable -> internal/external script. "getuser()".            
+            // CASE 1: Exp is variable -> internal/external script. "getuser()".
             if (expr.NameExp.IsNodeType(NodeTypes.SysVariable))
             {
                 return FunctionHelper.CallFunction(this.Ctx, expr, null, true, this);
@@ -1246,7 +1202,6 @@ namespace ComLib.Lang.Runtime
             return result;
         }
 
-
         /// <summary>
         /// Visit the parameter expr.
         /// </summary>
@@ -1256,8 +1211,6 @@ namespace ComLib.Lang.Runtime
         {
             return LObjects.Null;
         }
-
-
 
         public object VisitFunction(FunctionExpr expr)
         {
@@ -1281,22 +1234,20 @@ namespace ComLib.Lang.Runtime
             return LObjects.Null;
         }
 
-
         public void VisitBlockEnter(Expr expr)
         {
             this.Ctx.Memory.Push();
         }
 
-
         public void VisitBlockExit(Expr expr)
         {
             this.Ctx.Memory.Pop();
         }
-        #endregion
 
+        #endregion Expressions
 
         /// <summary>
-        /// Is match with the type supplied and the 
+        /// Is match with the type supplied and the
         /// </summary>
         /// <param name="type"></param>
         /// <param name="obj1"></param>
@@ -1308,7 +1259,6 @@ namespace ComLib.Lang.Runtime
                 return true;
             return false;
         }
-
 
         private bool IsMemberCall(MemberAccess maccess)
         {
@@ -1338,7 +1288,6 @@ namespace ComLib.Lang.Runtime
 
             PushParametersInScope(expr);
         }
-
 
         private void PushParametersInScope(FunctionExpr expr)
         {

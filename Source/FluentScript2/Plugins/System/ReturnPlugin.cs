@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
-using ComLib.Lang.Core;
+﻿// <lang:using>
 using ComLib.Lang.AST;
-using ComLib.Lang.Helpers;
-using ComLib.Lang.Types;
+using ComLib.Lang.Core;
 using ComLib.Lang.Parsing;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Return plugin provides return values
-    
+
     return false;
     </doc:example>
     ***************************************************************************/
@@ -35,7 +28,6 @@ namespace ComLib.Lang.Plugins
             this.ConfigureAsSystemExpression(false, true, "return");
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -43,7 +35,6 @@ namespace ComLib.Lang.Plugins
         {
             get { return "return <expression> <statementterminator>"; }
         }
-
 
         /// <summary>
         /// Examples
@@ -62,12 +53,11 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// return value;
         /// </summary>
         /// <returns></returns>
-        public override Expr  Parse()
+        public override Expr Parse()
         {
             var stmt = new ReturnExpr();
             _tokenIt.Expect(Tokens.Return);

@@ -1,25 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Reflection;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
-using ComLib.Lang.Types;
 using ComLib.Lang.Parsing;
+using ComLib.Lang.Types;
+using System.IO;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Use plugin allows the reuse of other script files and/or system namespaces
-    
-    
+
     </doc:example>
     ***************************************************************************/
 
@@ -36,7 +30,6 @@ namespace ComLib.Lang.Plugins
             _tokens = new string[] { "use" };
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -44,7 +37,6 @@ namespace ComLib.Lang.Plugins
         {
             get { return "use ( filepath | relative_file_path | environment_var_file_path | sys_namespace )"; }
         }
-
 
         /// <summary>
         /// Examples
@@ -64,7 +56,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// Parse the use statement.
         /// </summary>
@@ -74,12 +65,9 @@ namespace ComLib.Lang.Plugins
             var token = _lexer.ReadLine(false);
             var source = token.Text.ToLower();
 
-            
             return null;
         }
     }
-
-
 
     /// <summary>
     /// Use plugin.
@@ -94,7 +82,6 @@ namespace ComLib.Lang.Plugins
             this.StartTokens = new string[] { "use" };
         }
 
-
         /// <summary>
         /// Grammer for the plugin.
         /// </summary>
@@ -102,7 +89,6 @@ namespace ComLib.Lang.Plugins
         {
             get { return "use ( filepath | relative_file_path | environment_var_file_path | sys_namespace )"; }
         }
-
 
         /// <summary>
         /// Examples
@@ -122,7 +108,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// Parses the using statement.
         /// </summary>
@@ -132,7 +117,6 @@ namespace ComLib.Lang.Plugins
             return null;
         }
     }
-
 
     /// <summary>
     /// Class to execute a using statement.
@@ -147,12 +131,10 @@ namespace ComLib.Lang.Plugins
             IsImmediatelyExecutable = true;
         }
 
-
         /// <summary>
         /// The source path/namespace to use.
         /// </summary>
         public string Source { get; set; }
-
 
         /// <summary>
         /// Executes the using.
@@ -164,7 +146,7 @@ namespace ComLib.Lang.Plugins
             // Case 1: System namespace
             if (source.StartsWith("sys"))
             {
-                // TODO: Register the types found in the sys.namespace.            
+                // TODO: Register the types found in the sys.namespace.
             }
             // Case 2: Relative file path
             else if (source.StartsWith(".."))
@@ -195,6 +177,6 @@ namespace ComLib.Lang.Plugins
             Parser parser = null;
             parser.Statements.AddRange(scriptParser.Statements);
             return LObjects.Null;
-        }        
+        }
     }
 }

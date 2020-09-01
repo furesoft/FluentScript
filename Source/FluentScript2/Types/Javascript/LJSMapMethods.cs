@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
-
 
 namespace ComLib.Lang.Types
 {
@@ -17,10 +15,9 @@ namespace ComLib.Lang.Types
         public LJSMapMethods()
         {
             DataType = LTypes.Map;
-            AddProperty(true, true,     "length",       "Length",           typeof(double),     "Sets or returns the number of elements in an array");
-            AddMethod("toString", "ToItemString", typeof(string), "Converts an array to a string, and returns the result");            
+            AddProperty(true, true, "length", "Length", typeof(double), "Sets or returns the number of elements in an array");
+            AddMethod("toString", "ToItemString", typeof(string), "Converts an array to a string, and returns the result");
         }
-
 
         /// <summary>
         /// Whether or not the associted obj of this methods class has the supplied member.
@@ -37,7 +34,6 @@ namespace ComLib.Lang.Types
             return false;
         }
 
-
         /// <summary>
         /// Whether or not the associted obj of this methods class has the supplied method.
         /// </summary>
@@ -53,7 +49,6 @@ namespace ComLib.Lang.Types
             return false;
         }
 
-
         /// <summary>
         /// Whether or not the associted obj of this methods class has the supplied property.
         /// </summary>
@@ -68,7 +63,6 @@ namespace ComLib.Lang.Types
             return map.Contains(propertyName);
         }
 
-
         /// <summary>
         /// Gets the property value for the specified propertyname.
         /// </summary>
@@ -80,7 +74,6 @@ namespace ComLib.Lang.Types
             var map = target.GetValue() as IDictionary;
             return map[propName];
         }
-
 
         /// <summary>
         /// Sets the property value for the specified propertyname.
@@ -95,8 +88,8 @@ namespace ComLib.Lang.Types
             map[propName] = val;
         }
 
-
         #region Javascript API methods
+
         /// <summary>
         /// Lenght of the array.
         /// </summary>
@@ -106,7 +99,6 @@ namespace ComLib.Lang.Types
             var map = target.GetValue() as IDictionary;
             return map.Count;
         }
-
 
         /// <summary>
         /// Converts an the map to a string of keyvalue pairs.
@@ -126,21 +118,21 @@ namespace ComLib.Lang.Types
                 var val = pair.Value as LObject;
                 var rawval = "";
                 prefix = "";
-                if(val != LObjects.Null)
+                if (val != LObjects.Null)
                     rawval = val.GetValue().ToString();
 
                 if (total != 0 && total < count)
                     prefix = ", ";
                 text += prefix + pair.Key + " : " + rawval;
-                total++;                
+                total++;
             }
             return new LString(text);
         }
-        #endregion
 
-
+        #endregion Javascript API methods
 
         #region Helpers
+
         /// <summary>
         /// Get the value of a property.
         /// </summary>
@@ -154,7 +146,6 @@ namespace ComLib.Lang.Types
             return returnVal;
         }
 
-
         /// <summary>
         /// Get / set value by index.
         /// </summary>
@@ -163,13 +154,12 @@ namespace ComLib.Lang.Types
         /// <returns></returns>
         public override object GetByStringMember(LObject target, string member)
         {
-            if (target == null ) return LObjects.Null;
+            if (target == null) return LObjects.Null;
             var map = target.GetValue() as IDictionary;
             if (map == null || map.Count == 0) return LObjects.Null;
             if (string.IsNullOrEmpty(member)) throw new IndexOutOfRangeException("Property does not exist : " + member);
             return map[member];
         }
-
 
         /// <summary>
         /// Get / set value by index.
@@ -186,6 +176,7 @@ namespace ComLib.Lang.Types
             if (string.IsNullOrEmpty(member)) throw new IndexOutOfRangeException("Property does not exist : " + member);
             map[member] = val;
         }
-        #endregion
+
+        #endregion Helpers
     }
 }

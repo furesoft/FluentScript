@@ -1,31 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Parsing;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
-    // Enables the units components that are built into the system. 
+    <doc:example>
+    // Enables the units components that are built into the system.
     // These include
-    //   
+    //
     //   Abbr:   Name:
     //   in      inch
     //   in      inches
-    //   ft      foot   
-    //   ft      feet   
-    //   yd      yard   
-    //   yd      yards 
-    //   mi      mile 
-    //   mi      miles 
+    //   ft      foot
+    //   ft      feet
+    //   yd      yard
+    //   yd      yards
+    //   mi      mile
+    //   mi      miles
     //
     //   B       bytes
     //   kb      kilobyte
@@ -35,28 +32,28 @@ namespace ComLib.Lang.Plugins
     //   gig     gigabyte
     //   gigs    gigabytes
     //
-    //   oz      ounces    
-    //   lb      pound     
-    //   lbs     pounds    
-    //   tn      ton       
-    //   tn      tons      
-    //   mg      milligram 
+    //   oz      ounces
+    //   lb      pound
+    //   lbs     pounds
+    //   tn      ton
+    //   tn      tons
+    //   mg      milligram
     //   mg      milligrams
-    //   g       gram      
-    //   g       grams     
-    //   kg      kilogram  
-    //   kg      kilograms 
-    //   t       tonne     
-    //   t       tonnes  
-    
+    //   g       gram
+    //   g       grams
+    //   kg      kilogram
+    //   kg      kilograms
+    //   t       tonne
+    //   t       tonnes
+
     enable units;
     var result = 3 inches + 5 feet + 2 yards + 1 mile;
-     
+
     </doc:example>
     ***************************************************************************/
 
     /// <summary>
-    /// Combinator for enabling and disabling the 
+    /// Combinator for enabling and disabling the
     /// </summary>
     public class EnablePlugin : ExprPlugin
     {
@@ -71,7 +68,6 @@ namespace ComLib.Lang.Plugins
             _components["units"] = true;
         }
 
-
         /// <summary>
         /// Intialize.
         /// </summary>
@@ -82,7 +78,6 @@ namespace ComLib.Lang.Plugins
             this.IsEndOfStatementRequired = true;
             this.StartTokens = new string[] { "enable", "disable" };
         }
-
 
         /// <summary>
         /// Whether or not this can handle the token supplied.
@@ -96,7 +91,6 @@ namespace ComLib.Lang.Plugins
                 return true;
             return false;
         }
-
 
         /// <summary>
         /// enable units;
@@ -120,6 +114,6 @@ namespace ComLib.Lang.Plugins
             // Move past this plugin.
             _tokenIt.Advance();
             return new EmptyExpr();
-        }     
+        }
     }
 }

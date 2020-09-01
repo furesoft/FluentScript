@@ -1,28 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Parsing;
 using ComLib.Lang.Types;
+using System;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Print plugin derives from the "TakeoverPlugin"
     // Takeovers are keywords that consume the entire line of text in the script
-    // after the keyword. 
+    // after the keyword.
     // In this case of the Print plugin, it consume the rest of the line and you
     // don't need to wrap text around quotes.
-    
+
     var language = 'fluentscript';
-    print No need for quotes in #{language} if text to print is on one line    
+    print No need for quotes in #{language} if text to print is on one line
     </doc:example>
     ***************************************************************************/
 
@@ -39,7 +36,6 @@ namespace ComLib.Lang.Plugins
             _tokens = new string[] { "print", "println" };
         }
 
-
         /// <summary>
         /// Can only handle print if no ( and " supplied.
         /// </summary>
@@ -53,7 +49,6 @@ namespace ComLib.Lang.Plugins
             return true;
         }
 
-
         /// <summary>
         /// Parse the expression.
         /// </summary>
@@ -64,18 +59,15 @@ namespace ComLib.Lang.Plugins
             var resultTokens = base.ParseLine(includeNewLine);
 
             // Add new line to end if using "println"
-            if(resultTokens.Length == 2 && includeNewLine)
+            if (resultTokens.Length == 2 && includeNewLine)
             {
                 var first = resultTokens[1];
-                if(first.Kind != TokenKind.Multi)
+                if (first.Kind != TokenKind.Multi)
                     first.SetTextAndValue(first.Text, first.Text + Environment.NewLine);
-                
             }
             return resultTokens;
         }
     }
-
-
 
     /// <summary>
     /// Prints the next token.
@@ -93,7 +85,6 @@ namespace ComLib.Lang.Plugins
             _startTokens = new string[] { "print", "println" };
         }
 
-
         /// <summary>
         /// Whether or not this plugin can handle the current token.
         /// </summary>
@@ -104,9 +95,8 @@ namespace ComLib.Lang.Plugins
             var next = _tokenIt.Peek().Token;
             if (next == Tokens.LeftParenthesis)
                 return false;
-            return true;    
+            return true;
         }
-
 
         /// <summary>
         /// Parse the expression.
@@ -125,7 +115,7 @@ namespace ComLib.Lang.Plugins
             var nameExp = Exprs.Ident(printToken.Token.Text, printToken);
             var exp = (FunctionCallExpr)Exprs.FunctionCall(nameExp, null, printToken);
             exp.ParamListExpressions.Add(lineExp);
-            
+
             // Move past this plugin.
             _tokenIt.Advance();
             return exp;

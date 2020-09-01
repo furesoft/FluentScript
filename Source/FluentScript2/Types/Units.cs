@@ -1,6 +1,4 @@
-﻿
-using System.Collections.Generic;
-
+﻿using System.Collections.Generic;
 
 namespace ComLib.Lang.Types
 {
@@ -24,14 +22,11 @@ namespace ComLib.Lang.Types
             /// </summary>
             public string BaseName;
 
-
             /// <summary>
             /// Another name of the basevalue e.g. "inch" for "length"
             /// </summary>
             public string BaseName2;
         }
-
-
 
         /// <summary>
         /// Subgroup eg. "e.g" feet, yards of units length
@@ -43,7 +38,6 @@ namespace ComLib.Lang.Types
             /// </summary>
             public string ShortName;
 
-
             /// <summary>
             /// Name of the group
             /// </summary>
@@ -54,18 +48,15 @@ namespace ComLib.Lang.Types
             /// </summary>
             public string Group;
 
-
             /// <summary>
             /// Conversion value from basevalue.
             /// </summary>
             public double ConversionValue;
         }
 
-
         private Dictionary<string, UnitGroup> _groups;
         private Dictionary<string, UnitSubGroup> _subGroups;
         private Dictionary<string, string> _subGroupsToGroupMap;
-
 
         /// <summary>
         /// Initialize
@@ -77,12 +68,10 @@ namespace ComLib.Lang.Types
             _subGroupsToGroupMap = new Dictionary<string, string>();
         }
 
-
         /// <summary>
         /// Whether or not to enable units
         /// </summary>
         public bool IsEnabled { get; set; }
-
 
         /// <summary>
         /// Register all the units.
@@ -103,31 +92,31 @@ namespace ComLib.Lang.Types
             RegisterUnit("computerspace", "kb", "kilobyte", 12);
             RegisterUnit("computerspace", "kb", "kilobytes", 12);
             RegisterUnit("computerspace", "mb", "megabyte", 36);
-            RegisterUnit("computerspace", "mb", "megabytes",  36);
+            RegisterUnit("computerspace", "mb", "megabytes", 36);
             RegisterUnit("computerspace", "gig", "gigabyte", 63360);
-            RegisterUnit("computerspace", "gigs", "gigabytes",  63360);
+            RegisterUnit("computerspace", "gigs", "gigabytes", 63360);
 
             // Weight
-            RegisterGroup("weight", "oz", "ounces"    , "ounce");
-            RegisterUnit("weight",  "lb", "pound"     ,  16);
-            RegisterUnit("weight",  "lbs","pounds"    , 16);
-            RegisterUnit("weight",  "tn", "ton"       ,  32000);
-            RegisterUnit("weight",  "tn", "tons"      , 32000);
-            RegisterUnit("weight",  "mg", "milligram" , .000352739);
-            RegisterUnit("weight",  "mg", "milligrams", .000352739);
-            RegisterUnit("weight",  "g",  "gram"      , .0352739);
-            RegisterUnit("weight",  "g",  "grams"     , .0352739);
-            RegisterUnit("weight",  "kg", "kilogram"  , 35.273962);
-            RegisterUnit("weight",  "kg", "kilograms" , 35.273962);
-            RegisterUnit("weight",  "t",  "tonne"     , 32000);
-            RegisterUnit("weight",  "t",  "tonnes"    , 32000);
+            RegisterGroup("weight", "oz", "ounces", "ounce");
+            RegisterUnit("weight", "lb", "pound", 16);
+            RegisterUnit("weight", "lbs", "pounds", 16);
+            RegisterUnit("weight", "tn", "ton", 32000);
+            RegisterUnit("weight", "tn", "tons", 32000);
+            RegisterUnit("weight", "mg", "milligram", .000352739);
+            RegisterUnit("weight", "mg", "milligrams", .000352739);
+            RegisterUnit("weight", "g", "gram", .0352739);
+            RegisterUnit("weight", "g", "grams", .0352739);
+            RegisterUnit("weight", "kg", "kilogram", 35.273962);
+            RegisterUnit("weight", "kg", "kilograms", 35.273962);
+            RegisterUnit("weight", "t", "tonne", 32000);
+            RegisterUnit("weight", "t", "tonnes", 32000);
 
             // Volume
             RegisterGroup("volume", "tsp", "teaspoon", "teaspoons");
-            RegisterUnit("volume",  "tbsp", "tablespoon", 3);
-            RegisterUnit("volume",  "tbsp", "tablespoons", 3);
-            RegisterUnit("volume",  "cup", "cup", 48);
-            RegisterUnit("volume",  "cup", "cups", 48);
+            RegisterUnit("volume", "tbsp", "tablespoon", 3);
+            RegisterUnit("volume", "tbsp", "tablespoons", 3);
+            RegisterUnit("volume", "cup", "cup", 48);
+            RegisterUnit("volume", "cup", "cups", 48);
             RegisterUnit("volume", "pt", "pint", 96);
             RegisterUnit("volume", "pt", "pints", 96);
             RegisterUnit("volume", "qt", "quart", 192);
@@ -136,7 +125,6 @@ namespace ComLib.Lang.Types
             RegisterUnit("volume", "gal", "gallons", 768);
         }
 
-
         /// <summary>
         /// Whether or not the units name supplied is valid.
         /// </summary>
@@ -144,11 +132,10 @@ namespace ComLib.Lang.Types
         /// <returns></returns>
         public bool Contains(string unitName)
         {
-            if (_subGroupsToGroupMap.ContainsKey(unitName)) 
+            if (_subGroupsToGroupMap.ContainsKey(unitName))
                 return true;
             return false;
         }
-
 
         /// <summary>
         /// Register the base value always as 1 using the group, and names.
@@ -167,7 +154,6 @@ namespace ComLib.Lang.Types
                 RegisterUnit(group, abbreviation, alias, 1);
         }
 
-
         /// <summary>Registers the unit.</summary>
         /// <param name="group">e.g. "length"</param>
         /// <param name="abbreviation">"ft"</param>
@@ -175,12 +161,12 @@ namespace ComLib.Lang.Types
         /// <param name="conversionValue">12 as in how many base units it takes to get 1 of this unit.</param>
         public void RegisterUnit(string group, string abbreviation, string unitsName, double conversionValue)
         {
-            UnitSubGroup unit = unit = new UnitSubGroup() 
+            UnitSubGroup unit = unit = new UnitSubGroup()
             {
                 ShortName = abbreviation,
-                Name = unitsName, 
-                Group = group, 
-                ConversionValue = conversionValue 
+                Name = unitsName,
+                Group = group,
+                ConversionValue = conversionValue
             };
             _subGroups[group + "_" + unitsName] = unit;
             _subGroups[group + "_" + abbreviation] = unit;
@@ -188,7 +174,6 @@ namespace ComLib.Lang.Types
             _subGroupsToGroupMap[abbreviation] = group;
         }
 
-        
         /// <summary>
         /// Gets the basename "inches", "bytes" for groups "length", "computerspace" respectively.
         /// </summary>
@@ -202,7 +187,6 @@ namespace ComLib.Lang.Types
             return g.BaseName;
         }
 
-        
         /// <summary>
         /// Gets conversion value for the group/unit combo, e.g 12 for "length, "feet" since 1 feet = 12 "inches"
         /// </summary>
@@ -216,7 +200,6 @@ namespace ComLib.Lang.Types
 
             return units.ConversionValue;
         }
-
 
         /// <summary>
         /// Convert the value from the source unit to the destination unit. eg. 5 feet to yards
@@ -234,17 +217,16 @@ namespace ComLib.Lang.Types
             // e.g. Convert( 5, "feet", "yards" )
             // Convert 5 feet to inches.
             // Convert 60 inches to yards
-                        
+
             // 1. Convert from source to base
             // e.g. 5 feet to 60 inches.
             double sourceBaseUnits = value * sourceUnits.ConversionValue;
-            
+
             // 2. Convert from base to destination
             // e.g. 60 inches to yards
             double destinationUnits = ConvertToRelativeValue(sourceBaseUnits, destinationName, destUnits);
             return destinationUnits;
         }
-
 
         /// <summary>
         /// Converts a baseunits value into the relative value. e.g. 60inches, "feet" returns 5
@@ -255,7 +237,7 @@ namespace ComLib.Lang.Types
         /// <returns></returns>
         public double ConvertToRelativeValue(double sourceBaseUnits, string unitsName, UnitSubGroup destUnits)
         {
-            if(destUnits == null)
+            if (destUnits == null)
             {
                 var group = _subGroupsToGroupMap[unitsName];
                 destUnits = GetUnitsFor(group, unitsName);
@@ -277,7 +259,6 @@ namespace ComLib.Lang.Types
 
             return destinationUnits;
         }
-
 
         /// <summary>
         /// Converts the inputs into a LUnit object e.g. 3, "yards"
@@ -304,7 +285,6 @@ namespace ComLib.Lang.Types
             return unit;
         }
 
-
         /// <summary>
         /// Convert the value from the source unit to the destination unit.
         /// </summary>
@@ -325,7 +305,6 @@ namespace ComLib.Lang.Types
             double sourceBaseUnits = value * sourceUnits.ConversionValue;
             return sourceBaseUnits;
         }
-
 
         /// <summary>
         /// Add units together.
@@ -356,7 +335,6 @@ namespace ComLib.Lang.Types
             double result = Convert(totalBaseUnits, baseUnitName, source);
             return result;
         }
-
 
         private UnitSubGroup GetUnitsFor(string group, string unitName)
         {

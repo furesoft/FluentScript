@@ -1,27 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
-using ComLib.Lang.Core;
-using ComLib.Lang.AST;
-using ComLib.Lang.Parsing;
-using ComLib.Lang.Helpers;
+﻿// <lang:using>
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Def plugin allows the word "def" to be used instead of "function" when declaring functions.
-        
-    def add( a, b ) 
-    { 
+
+    def add( a, b )
+    {
         return a + b
     }
-    
+
     </doc:example>
     ***************************************************************************/
 

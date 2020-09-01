@@ -1,65 +1,63 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
-using ComLib.Lang.Types;
 using ComLib.Lang.Helpers;
 using ComLib.Lang.Parsing;
+using ComLib.Lang.Types;
+using System;
+using System.Collections.Generic;
+using System.IO;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
     <doc:example>
-    
-    // CONFIGURATION    
+
+    // CONFIGURATION
     // 1. Set level to "error" and log to console
     log.configure( 'error', 'console' )
-    
+
     // 2. Fluen mode, set level = "error" and log to console.
     log configure 'error', 'console'
-    
+
     // 3. File logging: set level to "warn" and log to file
     log configure 'warn', 'c:/temp/myapp.log'
-    
+
     // 4. File logging: set level to "warn" and log to file with a name format.
     // log file name will be converted to "myapp-2012-07-15-time-09-45-12.log"
     log configure 'warn', 'c:/temp/myapp.log', '${yyyy-MM-dd}-time-${HH-mm-ss}'
-    
+
     // 5. Get the current log level : this is only a getter property
     print( log.level )
-    
-    
-    // LOGGING   
+
+    // LOGGING
     // 1. Using OO ( object oriented ) syntax e.g. "log.<method>"
     log.error( 'an error occurred' )
-    
+
     // 2. Using OO syntax with formatting
     log.warn( 'could not load {0}', 'blogs' )
-    
+
     // 3. Using OO syntax in fluent mode
     log info 'finished updating data'
-    
+
     // 4. functional mode - without prefixing with "log."
     error 'unable to initialize'
     warn 'could not send notification'
     info 'finished updating data'
-    
+
     // NOTES: Log-level
     // 1. fatal
     // 2. error
     // 3. warn
     // 4. info
     // 5. debug
-    // 6. put   ( this will always output the log message )    
+    // 6. put   ( this will always output the log message )
     </doc:example>
     ***************************************************************************/
+
     /// <summary>
     /// Constants used for the log plugin
     /// </summary>
@@ -68,44 +66,41 @@ namespace ComLib.Lang.Plugins
         private static Dictionary<string, int> _methodMap;
 
         // Error levels
-        public const int Put = 6; 
+        public const int Put = 6;
+
         public const int Fatal = 5;
         public const int Error = 4;
-        public const int Warn  = 3;
-        public const int Info  = 2;
+        public const int Warn = 3;
+        public const int Info = 2;
         public const int Debug = 1;
 
         // For output modes
         public const int Console = 1;
+
         public const int File = 2;
         public const int Callback = 3;
-
 
         static LogPluginConstants()
         {
             _methodMap = new Dictionary<string, int>();
-            _methodMap["critical"]  = LogPluginConstants.Fatal;
-            _methodMap["error"]     = LogPluginConstants.Error;
-            _methodMap["warn"]      = LogPluginConstants.Warn;
-            _methodMap["info"]      = LogPluginConstants.Info;
-            _methodMap["debug"]     = LogPluginConstants.Debug;
-            _methodMap["put"]       = LogPluginConstants.Put;
+            _methodMap["critical"] = LogPluginConstants.Fatal;
+            _methodMap["error"] = LogPluginConstants.Error;
+            _methodMap["warn"] = LogPluginConstants.Warn;
+            _methodMap["info"] = LogPluginConstants.Info;
+            _methodMap["debug"] = LogPluginConstants.Debug;
+            _methodMap["put"] = LogPluginConstants.Put;
         }
-
 
         internal static bool ContainsKey(string key)
         {
             return _methodMap.ContainsKey(key);
         }
 
-
         internal static int LevelFor(string key)
         {
             return _methodMap[key];
         }
     }
-
-
 
     /// <summary>
     /// Combinator for handling days of the week.
@@ -118,7 +113,6 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         private Action<int, string, LError> _callback;
 
-
         /// <summary>
         /// Initialize
         /// </summary>
@@ -126,20 +120,18 @@ namespace ComLib.Lang.Plugins
         {
         }
 
-
         /// <summary>
         /// Initialize
         /// </summary>
         public LogPlugin(Action<int, string, LError> callback)
         {
             _callback = callback;
-            this.StartTokens = new string[]{ "log", "put", "fatal", "error", "warn", "info", "debug" };
+            this.StartTokens = new string[] { "log", "put", "fatal", "error", "warn", "info", "debug" };
             this.IsAutoMatched = true;
             this.IsStatement = true;
             this.IsEndOfStatementRequired = true;
             this.Precedence = 100;
         }
-
 
         /// <summary>
         /// The grammer for the function declaration
@@ -152,7 +144,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// Examples
         /// </summary>
@@ -162,17 +153,16 @@ namespace ComLib.Lang.Plugins
             {
                 return new string[]
                 {
-                    "log.fatal ( 'testing' );", 
+                    "log.fatal ( 'testing' );",
                     "log.error ( 'testing' );",
                     "log.error ( 'testing', err );",
                     "log.warn  ( 'testing', err );",
                     "log.info  ( 'testing', err );",
-                    "log.debug ( 'testing', err );", 
-                    "log.put   ( 'testing', err );", 
+                    "log.debug ( 'testing', err );",
+                    "log.put   ( 'testing', err );",
                 };
             }
         }
-
 
         /// <summary>
         /// Checks whether or not this plugin can handle the current token.
@@ -190,7 +180,6 @@ namespace ComLib.Lang.Plugins
             return false;
         }
 
-
         /// <summary>
         /// Parses the day expression.
         /// Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
@@ -199,7 +188,7 @@ namespace ComLib.Lang.Plugins
         public override Expr Parse()
         {
             LogExpr logexpr = null;
-            
+
             // CASE 1: logging using OO mode e.g. log.warn ( 'some message' )
             if (_tokenIt.NextToken.Token.Text == "log")
             {
@@ -228,14 +217,13 @@ namespace ComLib.Lang.Plugins
                 throw _tokenIt.BuildSyntaxUnexpectedTokenException();
 
             logexpr.Callback = _callback;
-                
+
             // Move to parameters.
             _tokenIt.Advance();
             bool expectParenthesis = _tokenIt.NextToken.Token == Tokens.LeftParenthesis;
             _parser.ParseParameters(logexpr, expectParenthesis, true, true);
             return logexpr;
         }
-
 
         /// <summary>
         /// Shutsdown the log plugin by closing any open file resources.
@@ -244,10 +232,8 @@ namespace ComLib.Lang.Plugins
         {
             var settings = _parser.Context.Plugins.GetSettings<LogExpr.LogSettings>("comlib.log");
             LogExpr.Dispose(settings);
-        }        
+        }
     }
-
-
 
     /// <summary>
     /// New instance creation.
@@ -263,40 +249,34 @@ namespace ComLib.Lang.Plugins
             ParamListExpressions = new List<Expr>();
         }
 
-
         /// <summary>
-        /// The log mode, currently this expression supports 
-        /// 1.  level assignment  : log level = error 
-        /// 2a. output assignment : log to console 
-        /// 2b. output assignment : log to c:\temp.txt, 'myapp-${yyyy-mm-dd}-time-${hh-mm-ss}' 
-        /// 3.  log message       : log error 'an error occurred' 
+        /// The log mode, currently this expression supports
+        /// 1.  level assignment  : log level = error
+        /// 2a. output assignment : log to console
+        /// 2b. output assignment : log to c:\temp.txt, 'myapp-${yyyy-mm-dd}-time-${hh-mm-ss}'
+        /// 3.  log message       : log error 'an error occurred'
         /// </summary>
         public string Mode { get; set; }
-
 
         /// <summary>
         /// The log level e.g. Error, Warn. etc.
         /// </summary>
         public string LogLevel { get; set; }
 
-
         /// <summary>
         /// Callback for logging.
         /// </summary>
         public Action<int, string, LError> Callback;
-
 
         /// <summary>
         /// List of expressions.
         /// </summary>
         public List<Expr> ParamListExpressions { get; set; }
 
-
         /// <summary>
         /// List of arguments.
         /// </summary>
         public List<object> ParamList { get; set; }
-
 
         /// <summary>
         /// Creates new instance of the type.
@@ -313,7 +293,7 @@ namespace ComLib.Lang.Plugins
 
             // 1. Resolve the parameters.
             ParamHelper.ResolveNonNamedParameters(ParamListExpressions, ParamList, visitor);
-            
+
             if (Mode == "log")
             {
                 Log(settings);
@@ -340,7 +320,6 @@ namespace ComLib.Lang.Plugins
             }
             return LObjects.EmptyString;
         }
-
 
         private void Configure(LogSettings settings)
         {
@@ -370,7 +349,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         private void Log(LogSettings settings)
         {
             // Only log if the log level is appropriate
@@ -387,9 +365,8 @@ namespace ComLib.Lang.Plugins
             else if (settings.OutputMode == LogPluginConstants.Callback)
                 settings.Callback(level, message, null);
             else if (settings.OutputMode == LogPluginConstants.File && settings.Logger != null)
-                settings.Logger.WriteLine(LogLevel + " : " + message);            
+                settings.Logger.WriteLine(LogLevel + " : " + message);
         }
-
 
         private void SetupFileLog(LogSettings settings)
         {
@@ -428,7 +405,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// Shutsdown the log plugin by closing any open file resources.
         /// </summary>
@@ -445,8 +421,7 @@ namespace ComLib.Lang.Plugins
             catch (Exception)
             {
             }
-        } 
-
+        }
 
         internal class LogSettings
         {
@@ -455,33 +430,28 @@ namespace ComLib.Lang.Plugins
             /// </summary>
             public string LogLevelName = "INFO";
 
-
             /// The log level value
             public int LogLevelValue = LogPluginConstants.Debug;
-
 
             /// <summary>
             /// Whether or not outputting to console.
             /// </summary>
             public int OutputMode = LogPluginConstants.Console;
 
-
             /// <summary>
             /// Filename if outputting to file.
             /// </summary>
             public string FileName = string.Empty;
-
 
             /// <summary>
             /// Writer to file.
             /// </summary>
             public StreamWriter Logger;
 
-
             /// <summary>
             /// Used to call an external c# method
             /// </summary>
             public Action<int, string, LError> Callback;
         }
-    } 
+    }
 }

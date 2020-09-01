@@ -1,7 +1,7 @@
-﻿using System;
+﻿using ComLib.Lang.Core;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using ComLib.Lang.Core;
 
 namespace ComLib.Lang.Types
 {
@@ -23,22 +23,17 @@ namespace ComLib.Lang.Types
             this.Type = LTypes.Array;
         }
 
-
         public IList Value;
-
 
         public override object GetValue()
         {
             return this.Value;
         }
 
-
         public override object Clone()
         {
             return new LArray(this.Value);
         }
-
-
     }
 
     public class LArrayType : LObjectType
@@ -50,9 +45,7 @@ namespace ComLib.Lang.Types
             this.TypeVal = TypeConstants.Array;
             this.IsSystemType = true;
         }
-
     }
-
 
     /// <summary>Datatype for bool</summary>
     public class LBool : LObject
@@ -63,22 +56,17 @@ namespace ComLib.Lang.Types
             this.Type = LTypes.Bool;
         }
 
-
         public bool Value;
-
 
         public override object GetValue()
         {
             return this.Value;
         }
 
-
         public override object Clone()
         {
             return new LBool(this.Value);
         }
-
-
     }
 
     public class LBoolType : LObjectType
@@ -90,9 +78,7 @@ namespace ComLib.Lang.Types
             this.TypeVal = TypeConstants.Bool;
             this.IsSystemType = true;
         }
-
     }
-
 
     /// <summary>Datatype for class</summary>
     public class LClass : LObject
@@ -103,22 +89,17 @@ namespace ComLib.Lang.Types
             this.Type = LTypes.Class;
         }
 
-
         public object Value;
-
 
         public override object GetValue()
         {
             return this.Value;
         }
 
-
         public override object Clone()
         {
             return new LClass(this.Value);
         }
-
-
     }
 
     public class LClassType : LObjectType
@@ -132,9 +113,7 @@ namespace ComLib.Lang.Types
         }
 
         public Type DataType;
-
     }
-
 
     /// <summary>Datatype for datetime</summary>
     public class LDate : LObject
@@ -145,22 +124,17 @@ namespace ComLib.Lang.Types
             this.Type = LTypes.Date;
         }
 
-
         public DateTime Value;
-
 
         public override object GetValue()
         {
             return this.Value;
         }
 
-
         public override object Clone()
         {
             return new LDate(this.Value);
         }
-
-
     }
 
     public class LDateType : LObjectType
@@ -172,9 +146,7 @@ namespace ComLib.Lang.Types
             this.TypeVal = TypeConstants.Date;
             this.IsSystemType = true;
         }
-
     }
-
 
     /// <summary>Datatype for dayofweek</summary>
     public class LDayOfWeek : LObject
@@ -185,22 +157,17 @@ namespace ComLib.Lang.Types
             this.Type = LTypes.DayOfWeek;
         }
 
-
         public DayOfWeek Value;
-
 
         public override object GetValue()
         {
             return this.Value;
         }
 
-
         public override object Clone()
         {
             return new LDayOfWeek(this.Value);
         }
-
-
     }
 
     public class LDayOfWeekType : LObjectType
@@ -212,9 +179,7 @@ namespace ComLib.Lang.Types
             this.TypeVal = TypeConstants.DayOfWeek;
             this.IsSystemType = true;
         }
-
     }
-
 
     /// <summary>Datatype for function</summary>
     public class LFunction : LObject
@@ -225,22 +190,17 @@ namespace ComLib.Lang.Types
             this.Type = LTypes.Function;
         }
 
-
         public object Value;
-
 
         public override object GetValue()
         {
             return this.Value;
         }
 
-
         public override object Clone()
         {
             return new LFunction(this.Value);
         }
-
-
     }
 
     public class LFunctionType : LObjectType
@@ -254,9 +214,7 @@ namespace ComLib.Lang.Types
         }
 
         public LType Parent;
-
     }
-
 
     /// <summary>Datatype for map</summary>
     public class LMap : LObject
@@ -267,22 +225,17 @@ namespace ComLib.Lang.Types
             this.Type = LTypes.Map;
         }
 
-
         public IDictionary<string, object> Value;
-
 
         public override object GetValue()
         {
             return this.Value;
         }
 
-
         public override object Clone()
         {
             return new LMap(this.Value);
         }
-
-
     }
 
     public class LMapType : LObjectType
@@ -294,9 +247,7 @@ namespace ComLib.Lang.Types
             this.TypeVal = TypeConstants.Map;
             this.IsSystemType = true;
         }
-
     }
-
 
     /// <summary>Datatype for module</summary>
     public class LModule : LObject
@@ -307,22 +258,17 @@ namespace ComLib.Lang.Types
             this.Type = LTypes.Module;
         }
 
-
         public object Value;
-
 
         public override object GetValue()
         {
             return this.Value;
         }
 
-
         public override object Clone()
         {
             return new LModule(this.Value);
         }
-
-
     }
 
     public class LModuleType : LObjectType
@@ -334,9 +280,7 @@ namespace ComLib.Lang.Types
             this.TypeVal = TypeConstants.Module;
             this.IsSystemType = true;
         }
-
     }
-
 
     /// <summary>Datatype for null</summary>
     public class LNull : LObject
@@ -347,22 +291,17 @@ namespace ComLib.Lang.Types
             this.Type = LTypes.Null;
         }
 
-
         public object Value;
-
 
         public override object GetValue()
         {
             return this.Value;
         }
 
-
         public override object Clone()
         {
             return new LNull(this.Value);
         }
-
-
     }
 
     public class LNullType : LObjectType
@@ -374,9 +313,7 @@ namespace ComLib.Lang.Types
             this.TypeVal = TypeConstants.Null;
             this.IsSystemType = true;
         }
-
     }
-
 
     /// <summary>Datatype for number</summary>
     public class LNumber : LObject
@@ -387,22 +324,17 @@ namespace ComLib.Lang.Types
             this.Type = LTypes.Number;
         }
 
-
         public double Value;
-
 
         public override object GetValue()
         {
             return this.Value;
         }
 
-
         public override object Clone()
         {
             return new LNumber(this.Value);
         }
-
-
     }
 
     public class LNumberType : LObjectType
@@ -414,9 +346,7 @@ namespace ComLib.Lang.Types
             this.TypeVal = TypeConstants.Number;
             this.IsSystemType = true;
         }
-
     }
-
 
     /// <summary>Datatype for string</summary>
     public class LString : LObject
@@ -427,22 +357,17 @@ namespace ComLib.Lang.Types
             this.Type = LTypes.String;
         }
 
-
         public string Value;
-
 
         public override object GetValue()
         {
             return this.Value;
         }
 
-
         public override object Clone()
         {
             return new LString(this.Value);
         }
-
-
     }
 
     public class LStringType : LObjectType
@@ -454,9 +379,7 @@ namespace ComLib.Lang.Types
             this.TypeVal = TypeConstants.String;
             this.IsSystemType = true;
         }
-
     }
-
 
     /// <summary>Datatype for table</summary>
     public class LTable : LObject
@@ -467,24 +390,19 @@ namespace ComLib.Lang.Types
             this.Type = LTypes.Table;
         }
 
-
         public IList Value;
-
 
         public override object GetValue()
         {
             return this.Value;
         }
 
-
         public override object Clone()
         {
             return new LTable(this.Value);
         }
 
-
         public List<string> Fields;
-
     }
 
     public class LTableType : LObjectType
@@ -496,9 +414,7 @@ namespace ComLib.Lang.Types
             this.TypeVal = TypeConstants.Table;
             this.IsSystemType = true;
         }
-
     }
-
 
     /// <summary>Datatype for time</summary>
     public class LTime : LObject
@@ -509,22 +425,17 @@ namespace ComLib.Lang.Types
             this.Type = LTypes.Time;
         }
 
-
         public TimeSpan Value;
-
 
         public override object GetValue()
         {
             return this.Value;
         }
 
-
         public override object Clone()
         {
             return new LTime(this.Value);
         }
-
-
     }
 
     public class LTimeType : LObjectType
@@ -536,9 +447,7 @@ namespace ComLib.Lang.Types
             this.TypeVal = TypeConstants.Time;
             this.IsSystemType = true;
         }
-
     }
-
 
     /// <summary>Datatype for unit</summary>
     public class LUnit : LObject
@@ -549,28 +458,23 @@ namespace ComLib.Lang.Types
             this.Type = LTypes.Unit;
         }
 
-
         public double Value;
-
 
         public override object GetValue()
         {
             return this.Value;
         }
 
-
         public override object Clone()
         {
             return new LUnit(this.Value);
         }
-
 
         public double BaseValue { get; set; }
 
         public string Group { get; set; }
 
         public string SubGroup { get; set; }
-
     }
 
     public class LUnitType : LObjectType
@@ -582,73 +486,53 @@ namespace ComLib.Lang.Types
             this.TypeVal = TypeConstants.Unit;
             this.IsSystemType = true;
         }
-
     }
-
 
     public class LTypes
     {
-
-
         /// Single instance of the Array type
         public static LObjectType Array = new LArrayType();
-
 
         /// Single instance of the Bool type
         public static LObjectType Bool = new LBoolType();
 
-
         /// Single instance of the Class type
         public static LObjectType Class = new LClassType();
-
 
         /// Single instance of the Date type
         public static LObjectType Date = new LDateType();
 
-
         /// Single instance of the DayOfWeek type
         public static LObjectType DayOfWeek = new LDayOfWeekType();
-
 
         /// Single instance of the Function type
         public static LObjectType Function = new LFunctionType();
 
-
         /// Single instance of the Map type
         public static LObjectType Map = new LMapType();
-
 
         /// Single instance of the Module type
         public static LObjectType Module = new LModuleType();
 
-
         /// Single instance of the Null type
         public static LObjectType Null = new LNullType();
-
 
         /// Single instance of the Number type
         public static LObjectType Number = new LNumberType();
 
-
         /// Single instance of the Object type
         public static LObjectType Object = new LObjectType();
-
 
         /// Single instance of the String type
         public static LObjectType String = new LStringType();
 
-
         /// Single instance of the Table type
         public static LObjectType Table = new LTableType();
-
 
         /// Single instance of the Time type
         public static LObjectType Time = new LTimeType();
 
-
         /// Single instance of the Unit type
         public static LObjectType Unit = new LUnitType();
-
-
     }
 }

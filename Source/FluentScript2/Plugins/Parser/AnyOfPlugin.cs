@@ -1,42 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
-using ComLib.Lang.Helpers;
-using ComLib.Lang.Types;
 using ComLib.Lang.Parsing;
+using System;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
-    // Aggregate plugin allows sum, min, max, avg, count aggregate functions to 
+    <doc:example>
+    // Aggregate plugin allows sum, min, max, avg, count aggregate functions to
     // be applied to lists of objects.
-    
+
     var numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     var result = 0;
-    
+
     // Example 1: Using format sum of <expression>
     result = sum of numbers;
     result = avg of numbers;
     result = min of numbers;
     result = max of numbers;
     result = count of numbers;
-    
+
     // Example 2: Using format sum(<expression>)
     result = sum( numbers );
     result = avg( numbers );
     result = min( numbers );
     result = max( numbers );
-    result = count( numbers );    
+    result = count( numbers );
     </doc:example>
     ***************************************************************************/
+
     // <fs:plugin-autogenerate>
     /// <summary>
     /// Combinator for handling comparisons.
@@ -52,8 +49,6 @@ namespace ComLib.Lang.Plugins
             this.StartTokens = new string[] { "any" };
         }
 
-
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -61,7 +56,6 @@ namespace ComLib.Lang.Plugins
         {
             get { return "any of ( <expr> ( , <expr> )* )"; }
         }
-
 
         /// <summary>
         /// Examples
@@ -73,8 +67,8 @@ namespace ComLib.Lang.Plugins
                 return new string[] { "if 2 == anyof ( 3, 4, 1, 2 )" };
             }
         }
-        // </fs:plugin-autogenerate>
 
+        // </fs:plugin-autogenerate>
 
         /// <summary>
         /// Whether or not this parser can handle the supplied token.
@@ -88,7 +82,6 @@ namespace ComLib.Lang.Plugins
                 return true;
             return false;
         }
-
 
         /// <summary>
         /// run step 123.
@@ -112,7 +105,7 @@ namespace ComLib.Lang.Plugins
             else
             {
                 _parser.ParseParameters(anyofExpr, false, true, true);
-            }            
+            }
             return anyofExpr;
         }
     }

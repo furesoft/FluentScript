@@ -1,24 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
-using ComLib.Lang.Core;
+﻿// <lang:using>
 using ComLib.Lang.AST;
+using ComLib.Lang.Core;
 using ComLib.Lang.Parsing;
 using ComLib.Lang.Types;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Percent plugin allow using a percent sign % after a number to indicate percentage
-     
+
     a = 25%
     b = 75 %
-     
+
     // NOTES
     // 1. You can not use this when an identifier comes after the "%"
     // 2. You can not use this when another number comes after the "%"
@@ -38,7 +34,6 @@ namespace ComLib.Lang.Plugins
             this.StartTokens = new string[] { "$Suffix" };
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -49,7 +44,6 @@ namespace ComLib.Lang.Plugins
                 return "<numbertoken> %";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -66,7 +60,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// Whether or not this plugin can handle current token(s).
         /// </summary>
@@ -80,18 +73,17 @@ namespace ComLib.Lang.Plugins
             // Now check that the token after % is not a number or a ident.
             // e.g. The following would indicate doing a modulo operation
             // 1. 25 % 4
-            // 2. 25 % result            
+            // 2. 25 % result
             t = _tokenIt.Peek(2, false);
             if (t.Token.IsLiteralAny()) return false;
             if (t.Token.Kind == TokenKind.Ident) return false;
             //if (t.Token is LiteralToken)
-            //{                
+            //{
             //    if (((LiteralToken)t.Token).IsNumeric())
             //        return false;
             //}
             return true;
         }
-
 
         /// <summary>
         /// Sorts expression
@@ -105,7 +97,7 @@ namespace ComLib.Lang.Plugins
 
             var percentToken = _tokenIt.Peek(1);
             var numberVal = (LObject)constExp.Value;
-            // Validate 
+            // Validate
             if (numberVal.Type != LTypes.Number)
                 throw _tokenIt.BuildSyntaxException("number required when percentage( % ) : " + percentToken.Token.Text, percentToken);
 

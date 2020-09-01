@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ComLib.Lang.Templating
 {
@@ -12,7 +10,6 @@ namespace ComLib.Lang.Templating
     public class Templater
     {
         private static IDictionary<string, Func<ITemplateEngine>> _engines = new Dictionary<string, Func<ITemplateEngine>>();
-        
 
         /// <summary>
         /// Registers a custom template engine.
@@ -24,7 +21,6 @@ namespace ComLib.Lang.Templating
             _engines[type] = engine;
         }
 
-
         /// <summary>
         /// Render using default template engine similar to webforms.
         /// </summary>
@@ -35,7 +31,6 @@ namespace ComLib.Lang.Templating
             var finalscript = engine.Render();
             return finalscript;
         }
-
 
         /// <summary>
         /// Render using custom template engine.

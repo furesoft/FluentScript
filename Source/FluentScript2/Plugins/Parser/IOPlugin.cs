@@ -1,44 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.IO;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
-using ComLib.Lang.Types;
 using ComLib.Lang.Helpers;
 using ComLib.Lang.Parsing;
+using ComLib.Lang.Types;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Provides basic File/Directory operations.
-         
+
     // Case 1: Fluent-mode ( files ) - with Uri plugin and FluentMember plugin
     create   file  c:\temp\fs.txt   contents: 'testing'
     append   file  c:\temp\fs.txt   contents: 'testing'
     copy     file  c:\temp\fs.txt   to: c:\temp\fs.log
     move     file  c:\temp\fs.txt   to: c:\temp\fs2.txt
     rename   file  c:\temp\fs.txt   to: 'fs1.txt'
-    delete   file  c:\temp\fs.txt 
+    delete   file  c:\temp\fs.txt
     var exists = file exists c:\temp\fs.txt
-    
-     
+
     // Case 2: Fluent-mode ( directories ) - with Uri plugin and FluentMember plugin
     create   dir   c:\temp\fs
     copy     dir   c:\temp\fs,       to: c:\temp\fs1
     move     dir   c:\temp\fs2,      to: c:\temp\fs
     rename   dir   c:\temp\fs1,      to: 'fs2'
     delete   dir   c:\temp\fs
-    var exists = dir exists       c:\temp\fs 
-    
-   
+    var exists = dir exists       c:\temp\fs
+
     // Case 3: Files  ( Explicit calls )
     File.Create( 'c:\\build\\log.txt', 'contents' )
     File.Append( 'c:\\build\\log.txt', 'contents' )
@@ -46,18 +40,18 @@ namespace ComLib.Lang.Plugins
     File.Rename( 'c:\\temp\\fs.txt',  'fs-io-test2.txt', true );
     File.Delete( 'c:\\temp\\fs.txt' )
     File.Move  ( 'c:\\temp\\fs.txt',  'c:\\temp\\fs-io-test.txt' )
-    
-   
+
     // Case 4: Directories ( Explicit calls )
     // NOTE: This is similar to case 3 where each call is "Dir.<method>( <paramlist> )"
-    
+
     </doc:example>
     ***************************************************************************/
+
     /// <summary>
     /// Combinator for handling days of the week.
     /// </summary>
     public class FileIOPlugin : SetupPlugin
-    {        
+    {
         /// <summary>
         /// Executes further Registration actions
         /// </summary>
@@ -66,12 +60,10 @@ namespace ComLib.Lang.Plugins
         {
             ctx.Types.Register(typeof(File), null);
             ctx.Types.Register(typeof(Files), null);
-            ctx.Types.Register(typeof(Dir),  null);
+            ctx.Types.Register(typeof(Dir), null);
             ctx.Types.Register(typeof(Dirs), null);
         }
     }
-
-
 
     /// <summary>
     /// API for File based IO.
@@ -88,7 +80,6 @@ namespace ComLib.Lang.Plugins
             System.IO.File.WriteAllText(path, contents);
         }
 
-
         /// <summary>
         /// Writes to a file
         /// </summary>
@@ -98,7 +89,6 @@ namespace ComLib.Lang.Plugins
         {
             System.IO.File.WriteAllText(path, contents);
         }
-
 
         /// <summary>
         /// Appends text to a file
@@ -110,7 +100,6 @@ namespace ComLib.Lang.Plugins
             System.IO.File.AppendAllText(path, contents);
         }
 
-
         /// <summary>
         /// Copy a file
         /// </summary>
@@ -121,7 +110,6 @@ namespace ComLib.Lang.Plugins
         {
             System.IO.File.Copy(path, to, overwrite);
         }
-
 
         /// <summary>
         /// Appends text to a file
@@ -136,7 +124,6 @@ namespace ComLib.Lang.Plugins
             System.IO.File.Move(path, newpath);
         }
 
-
         /// <summary>
         /// Moves a file
         /// </summary>
@@ -147,17 +134,15 @@ namespace ComLib.Lang.Plugins
             System.IO.File.Move(path, to);
         }
 
-
         /// <summary>
         /// Appends text to a file
         /// </summary>
         /// <param name="path">The path to the file to append to</param>
         public static void Delete(string path)
         {
-            if(File.Exists(path))
+            if (File.Exists(path))
                 System.IO.File.Delete(path);
         }
-
 
         /// <summary>
         /// whether or not the file exists
@@ -168,7 +153,6 @@ namespace ComLib.Lang.Plugins
         {
             return System.IO.File.Exists(path);
         }
-
 
         /// <summary>
         /// Gets the version of the file specified.
@@ -193,8 +177,6 @@ namespace ComLib.Lang.Plugins
         }
     }
 
-
-
     /// <summary>
     /// API for File based IO.
     /// </summary>
@@ -209,7 +191,6 @@ namespace ComLib.Lang.Plugins
             System.IO.Directory.CreateDirectory(path);
         }
 
-
         /// <summary>
         /// Creates the directory
         /// </summary>
@@ -218,7 +199,6 @@ namespace ComLib.Lang.Plugins
         {
             System.IO.Directory.CreateDirectory(path);
         }
-
 
         /// <summary>
         /// Copy a file
@@ -234,19 +214,18 @@ namespace ComLib.Lang.Plugins
             string[] files = Directory.GetFiles(path);
             foreach (string file in files)
             {
-                string name = Path.GetFileName( file );
+                string name = Path.GetFileName(file);
                 string dest = Path.Combine(to, name);
-                System.IO.File.Copy( file, dest );
+                System.IO.File.Copy(file, dest);
             }
             string[] folders = Directory.GetDirectories(path);
             foreach (string folder in folders)
             {
-                string name = Path.GetFileName( folder );
+                string name = Path.GetFileName(folder);
                 string dest = Path.Combine(to, name);
-                Copy( folder, dest, overwrite );
+                Copy(folder, dest, overwrite);
             }
         }
-
 
         /// <summary>
         /// Copy a file
@@ -271,7 +250,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// Copy a file
         /// </summary>
@@ -283,12 +261,11 @@ namespace ComLib.Lang.Plugins
             string[] folders = Directory.GetDirectories(path);
             foreach (string folder in folders)
             {
-                if(recurse)
+                if (recurse)
                     ForEachFile(folder, recurse, callback);
                 callback(folder);
             }
         }
-        
 
         /// <summary>
         /// Renames a directory
@@ -302,7 +279,6 @@ namespace ComLib.Lang.Plugins
             System.IO.Directory.Move(path, newpath);
         }
 
-
         /// <summary>
         /// Moves a directory
         /// </summary>
@@ -313,13 +289,12 @@ namespace ComLib.Lang.Plugins
             System.IO.Directory.Move(path, to);
         }
 
-
         /// <summary>
         /// Appends text to a directory
         /// </summary>
         /// <param name="path">The path to the directory to delete</param>
         public static void Delete(string path)
-        {            
+        {
             string[] files = Directory.GetFiles(path);
             foreach (string file in files)
             {
@@ -333,7 +308,6 @@ namespace ComLib.Lang.Plugins
             System.IO.Directory.Delete(path);
         }
 
-
         /// <summary>
         /// whether or not the directory exists
         /// </summary>
@@ -343,7 +317,6 @@ namespace ComLib.Lang.Plugins
         {
             return System.IO.Directory.Exists(path);
         }
-
 
         /// <summary>
         /// Zips a directory
@@ -355,8 +328,6 @@ namespace ComLib.Lang.Plugins
             //System.IO.Compression.
         }
     }
-
-
 
     /// <summary>
     /// Helper class to perform operations find/delete on files.
@@ -375,8 +346,7 @@ namespace ComLib.Lang.Plugins
         {
             var files = FindInternal(path, named, exts, recursive);
             return files;
-        }       
-
+        }
 
         /// <summary>
         /// Finds files that match the filters supplied.
@@ -393,8 +363,7 @@ namespace ComLib.Lang.Plugins
 
             foreach (var file in files)
                 System.IO.File.Delete((string)file);
-        }        
-
+        }
 
         private static List<object> FindInternal(string path, string[] named, string[] exts, bool recursive)
         {
@@ -425,8 +394,6 @@ namespace ComLib.Lang.Plugins
         }
     }
 
-
-
     /// <summary>
     /// Directory class to find delete multiple directories
     /// </summary>
@@ -445,7 +412,6 @@ namespace ComLib.Lang.Plugins
             return files;
         }
 
-
         /// <summary>
         /// Finds files that match the filters supplied.
         /// </summary>
@@ -461,7 +427,6 @@ namespace ComLib.Lang.Plugins
             foreach (var file in files)
                 System.IO.File.Delete((string)file);
         }
-
 
         private static List<object> FindInternal(string path, string[] named, bool recursive)
         {
@@ -486,4 +451,3 @@ namespace ComLib.Lang.Plugins
         }
     }
 }
-

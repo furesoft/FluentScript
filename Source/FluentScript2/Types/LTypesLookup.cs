@@ -1,7 +1,5 @@
-﻿
+﻿using ComLib.Lang.Core;
 using System.Collections.Generic;
-using ComLib.Lang.Core;
-
 
 namespace ComLib.Lang.Types
 {
@@ -13,7 +11,6 @@ namespace ComLib.Lang.Types
         private static Dictionary<string, LType> _types = new Dictionary<string, LType>();
         private static Dictionary<string, LType> _sysBasicTypes = new Dictionary<string, LType>();
         private static IDictionary<int, Dictionary<int, int>> _basicConversions = new Dictionary<int, Dictionary<int, int>>();
-
 
         /// <summary>
         /// Initialize with defaults
@@ -31,7 +28,6 @@ namespace ComLib.Lang.Types
             Register(LTypes.Time);
         }
 
-
         /// <summary>
         /// Register the type
         /// </summary>
@@ -40,7 +36,6 @@ namespace ComLib.Lang.Types
         {
             RegisterAlias(type, type.FullName, type.Name);
         }
-
 
         /// <summary>
         /// Register the type
@@ -55,7 +50,6 @@ namespace ComLib.Lang.Types
                 _sysBasicTypes[name] = type;
         }
 
-
         /// <summary>
         /// Whether or not the type name supplied is a basic system type. e.g. bool, date etc.
         /// </summary>
@@ -66,7 +60,6 @@ namespace ComLib.Lang.Types
             return _sysBasicTypes.ContainsKey(name);
         }
 
-        
         /// <summary>
         /// Check whether or nor the fulltype name supplied is a basic type
         /// </summary>
@@ -80,7 +73,6 @@ namespace ComLib.Lang.Types
             return type.IsBuiltInType();
         }
 
-
         /// <summary>
         /// Gets the type of the fullname supplied.
         /// </summary>
@@ -93,7 +85,6 @@ namespace ComLib.Lang.Types
 
             return _types[fullName];
         }
-
 
         public static void SetupDefaultConversionMatrix()
         {
@@ -123,7 +114,7 @@ namespace ComLib.Lang.Types
             AddConversionTo(LTypes.Date, TypeConstants.Null, TypeConversionMode.NotSupported);
             AddConversionTo(LTypes.Date, TypeConstants.String, TypeConversionMode.Supported);
             AddConversionTo(LTypes.Date, TypeConstants.Time, TypeConversionMode.Supported);
-            
+
             // DayOfWeek
             AddConversionTo(LTypes.DayOfWeek, TypeConstants.Array, TypeConversionMode.NotSupported);
             AddConversionTo(LTypes.DayOfWeek, TypeConstants.Bool, TypeConversionMode.NotSupported);
@@ -146,7 +137,7 @@ namespace ComLib.Lang.Types
 
             // Null
             SetDefaultConversionMatrix(LTypes.Null, TypeConversionMode.NotSupported);
-            
+
             // Number
             AddConversionTo(LTypes.Number, TypeConstants.Array, TypeConversionMode.NotSupported);
             AddConversionTo(LTypes.Number, TypeConstants.Bool, TypeConversionMode.Supported);
@@ -188,7 +179,6 @@ namespace ComLib.Lang.Types
             // AddConversionTo(LTypes.Unit, TypeConstants.Time, TypeConversionMode.SameType);
         }
 
-
         /// <summary>
         /// Adds a conversion flag that indicates if converting from this type to the supplied type is possible
         /// </summary>
@@ -207,7 +197,6 @@ namespace ComLib.Lang.Types
             }
             conversionMap[typeVal] = mode;
         }
-
 
         /// <summary>
         /// Sets up the matrix of possible conversions to all basic datatypes to the mode supplied.

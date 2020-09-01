@@ -1,20 +1,14 @@
-﻿
-using System.IO;
-using ComLib.Lang.AST;
-
-namespace ComLib.Lang.Runtime.Switches
+﻿namespace ComLib.Lang.Runtime.Switches
 {
     public class DirectiveSwitch : Switch
     {
         private string _directives;
-
 
         public DirectiveSwitch(string directives)
         {
             _directives = directives;
             this.OutputResult = false;
         }
-
 
         /// <summary>
         /// Prints tokens to file supplied, if file is not supplied, prints to console.

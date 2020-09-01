@@ -1,25 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
-
-// <lang:using>
-using ComLib.Lang.Core;
+﻿// <lang:using>
 using ComLib.Lang.AST;
+using ComLib.Lang.Core;
 using ComLib.Lang.Helpers;
 using ComLib.Lang.Parsing;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Fluent Func plugins allows calling functions with spaces.
-     
-    
-    // @summary: finds doctors based on the zip code provided and 
+
+    // @summary: finds doctors based on the zip code provided and
     // the specicality and accepted insurance
     // @arg: name: zip,       type: number, desc: The zipcode, examples: 11201
     // @arg: name: specialty, type: text,   desc: Specialization, examples: 'Familye'
@@ -28,28 +21,25 @@ namespace ComLib.Lang.Plugins
     {
 	    // ... some code here.
     }
-    
-    
+
     // @arg: name: product, desc: The product id,  type: text, examples: 'AS-1232'
     // @arg: name: amount,  desc: Number of items, type: text, examples: 23
     function refill_inventory( product, amount )
     {
         // ... some code here.
     }
-    
-    
+
     // Call functions replacing "_" with space - parameters are optional if function call
     // is on a single line.
-    
+
     // Example 1:
     find doctors by zipcode 11200, 'family practice', 'empire insurance'
-     
+
     // Example 2:
     refill inventory 'KL-131', 200
-    
+
     </doc:example>
     ***************************************************************************/
-
 
     /// <summary>
     /// Combinator for handles method/function calls in a more fluent way.
@@ -57,7 +47,6 @@ namespace ComLib.Lang.Plugins
     public class FluentFuncPlugin : ExprPlugin
     {
         private FunctionLookupResult _result;
-
 
         /// <summary>
         /// Initialize.
@@ -68,7 +57,6 @@ namespace ComLib.Lang.Plugins
             this.IsStatement = true;
             this.StartTokens = new string[] { "$IdToken" };
         }
-
 
         /// <summary>
         /// This can not handle all idtoken based expressions.
@@ -88,7 +76,6 @@ namespace ComLib.Lang.Plugins
             return _result.Exists;
         }
 
-
         /// <summary>
         /// Parses the fluent function call.
         /// </summary>
@@ -97,7 +84,7 @@ namespace ComLib.Lang.Plugins
         {
             // 1. Is it a function call?
             var nameExp = Exprs.Ident(_result.Name, null);
-            
+
             _tokenIt.Advance(_result.TokenCount);
             var exp = _parser.ParseFuncExpression(nameExp, null);
             return exp;

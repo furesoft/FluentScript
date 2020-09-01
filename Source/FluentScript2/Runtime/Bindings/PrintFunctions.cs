@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ComLib.Lang.AST;
+﻿using ComLib.Lang.AST;
 using ComLib.Lang.Types;
+using System;
+using System.Collections.Generic;
 
 namespace ComLib.Lang.Runtime.Bindings
 {
@@ -21,7 +18,6 @@ namespace ComLib.Lang.Runtime.Bindings
             this.ExportedFunctions.Add("println");
         }
 
-
         /// <summary>
         /// Prints to the console.
         /// </summary>
@@ -29,14 +25,13 @@ namespace ComLib.Lang.Runtime.Bindings
         public void Print(FunctionCallExpr exp)
         {
             var settings = this.Ctx.Settings;
-            if (!settings.EnablePrinting) 
-                return; 
+            if (!settings.EnablePrinting)
+                return;
 
             string message = BuildMessage(exp.ParamList);
-            if (settings.EnablePrinting) 
+            if (settings.EnablePrinting)
                 Console.Write(message);
         }
-
 
         /// <summary>
         /// Prints a line to the console.
@@ -53,7 +48,6 @@ namespace ComLib.Lang.Runtime.Bindings
                 Console.WriteLine(message);
         }
 
-
         /// <summary>
         /// Logs a call to the console.
         /// </summary>
@@ -62,14 +56,13 @@ namespace ComLib.Lang.Runtime.Bindings
         {
             var settings = this.Ctx.Settings;
             if (!settings.EnablePrinting)
-                return; 
-            
+                return;
+
             var funcname = exp.ToQualifiedName();
             var severity = funcname.Substring(funcname.IndexOf(".") + 1);
             var message = BuildMessage(exp.ParamList);
             Console.WriteLine(severity.ToUpper() + " : " + message);
         }
-
 
         /// <summary>
         /// Builds a single message from multiple arguments
@@ -97,7 +90,6 @@ namespace ComLib.Lang.Runtime.Bindings
             }
             return val;
         }
-
 
         private static string GetVal(object val)
         {

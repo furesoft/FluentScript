@@ -1,14 +1,11 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
-using ComLib.Lang.Types;
 using ComLib.Lang.Parsing;
+using ComLib.Lang.Types;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
@@ -27,7 +24,6 @@ namespace ComLib.Lang.Plugins
             this.ConfigureAsSystemStatement(true, false, "function");
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -35,7 +31,6 @@ namespace ComLib.Lang.Plugins
         {
             get { return "function ( <id> | <stringliteral> ) ( ',' ( <id> | <stringliteral> ) )* <statementblock>"; }
         }
-
 
         /// <summary>
         /// Examples
@@ -53,7 +48,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// return value;
         /// </summary>
@@ -63,15 +57,13 @@ namespace ComLib.Lang.Plugins
             return Parse(_tokenIt.NextToken, true);
         }
 
-
-
         /// <summary>
         /// Parses a function declaration statement.
-        /// This method is made public to allow other plugins to be used to allow different 
+        /// This method is made public to allow other plugins to be used to allow different
         /// words to represent "function" e.g. "def" instead of "function"
         /// </summary>
         /// <param name="token">The tokendata representing the starting token e.g. "function".</param>
-        /// <param name="expectToken">Whether or not to expect the token in tokenData. 
+        /// <param name="expectToken">Whether or not to expect the token in tokenData.
         /// If false, advances the token iterator</param>
         /// <returns></returns>
         public Expr Parse(TokenData token, bool expectToken)
@@ -88,7 +80,7 @@ namespace ComLib.Lang.Plugins
             var nextToken = _tokenIt.NextToken;
             List<string> argNames = null;
 
-            // Option 1: Wild card 
+            // Option 1: Wild card
             if (nextToken.Token == Tokens.Multiply)
             {
                 stmt.Function.Meta.HasWildCard = true;
@@ -125,7 +117,6 @@ namespace ComLib.Lang.Plugins
             return stmt;
         }
 
-
         /// <summary>
         /// Parses a block by first pushing symbol scope and then popping after completion.
         /// </summary>
@@ -157,7 +148,6 @@ namespace ComLib.Lang.Plugins
             _parser.ParseBlock(stmt);
             this.Ctx.Symbols.Pop();
         }
-
 
         /// <summary>
         /// Called by the framework after the parse method is called

@@ -1,8 +1,7 @@
-﻿using System;
-
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Core;
+using System;
+
 // </lang:using>
 
 namespace ComLib.Lang.Types
@@ -19,42 +18,35 @@ namespace ComLib.Lang.Types
         {
         }
 
-
         /// <summary>
         /// Name of the message
         /// </summary>
         public string name { get; set; }
-
 
         /// <summary>
         /// Message
         /// </summary>
         public string message { get; set; }
 
-
         /// <summary>
         /// The source script that caused the error.
         /// </summary>
         public string Source { get; set; }
-
 
         /// <summary>
         /// Line number that caused the error.
         /// </summary>
         public int LineNumber { get; set; }
 
-
         /// <summary>
         /// Information about the stack trace.
         /// </summary>
         public string StackTrace { get; set; }
 
-
         /// <summary>
         /// Inner excpetion.
         /// </summary>
         public LangException Inner { get; set; }
-
 
         /// <summary>
         /// Converts from a LangException to LError datatype

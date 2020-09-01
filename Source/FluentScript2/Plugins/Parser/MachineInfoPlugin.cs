@@ -1,43 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Parsing;
 using ComLib.Lang.Types;
+using System;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Machine info plugin provides variable names to get information about the machine
-        
+
     print ( @machine        )
     print ( @domain         )
     print ( @user           )
     print ( @cmdline        )
-    
+
     print ( mac.numprocs    )
     print ( mac.osname      )
     print ( mac.osversion   )
     print ( mac.osspack     )
-    
+
     print ( mac sysdir      )
     print ( mac memory      )
     print ( mac version     )
-    print ( mac currentdir  )  
-	
+    print ( mac currentdir  )
+
 	// NOTES:
     // Any of the properties above can be prefixed with either
     // 1. mac.<property>
     // 2. mac <property>
     // 3. @<property>
-    
+
     </doc:example>
     ***************************************************************************/
 
@@ -45,36 +43,33 @@ namespace ComLib.Lang.Plugins
     /// Combinator for handling days of the week.
     /// </summary>
     public class MachineInfoPlugin : ExprPlugin
-    {        
+    {
         private static IDictionary<string, bool> _map;
-
 
         static MachineInfoPlugin()
         {
             _map = new Dictionary<string, bool>();
-            _map["machine"]     = true;
-            _map["domain"]      = true;
-            _map["user"]        = true;
-            _map["cmdline"]     = true;
-            _map["numprocs"]    = true;
-            _map["osname"]      = true;
-            _map["osversion"]   = true;
-            _map["osspack"]     = true;
-            _map["sysdir"]      = true;
-            _map["memory"]      = true;
-            _map["version"]     = true;
-            _map["currentdir"]  = true;
+            _map["machine"] = true;
+            _map["domain"] = true;
+            _map["user"] = true;
+            _map["cmdline"] = true;
+            _map["numprocs"] = true;
+            _map["osname"] = true;
+            _map["osversion"] = true;
+            _map["osspack"] = true;
+            _map["sysdir"] = true;
+            _map["memory"] = true;
+            _map["version"] = true;
+            _map["currentdir"] = true;
         }
-
 
         /// <summary>
         /// Initialize
         /// </summary>
         public MachineInfoPlugin()
         {
-            this.StartTokens = new string[]{ "mac", "@" };
+            this.StartTokens = new string[] { "mac", "@" };
         }
-
 
         /// <summary>
         /// The grammer for the function declaration
@@ -86,7 +81,6 @@ namespace ComLib.Lang.Plugins
                 return "( (mac '.' ) | '@' ) <ident>";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -113,7 +107,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// Whether or not this plugin can handle the current token.
         /// </summary>
@@ -131,7 +124,6 @@ namespace ComLib.Lang.Plugins
             return false;
         }
 
-
         /// <summary>
         /// Parses the day expression.
         /// Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
@@ -144,18 +136,17 @@ namespace ComLib.Lang.Plugins
             // mac.user : move past "."
             if (_tokenIt.NextToken.Token == Tokens.Dot)
                 _tokenIt.Advance();
-            
+
             var propToken = _tokenIt.NextToken;
             var propname = _tokenIt.ExpectId();
 
             // Invalid property name?
             if (!_map.ContainsKey(propname))
                 throw _tokenIt.BuildSyntaxException("Unknown machine property : " + propname, propToken);
-                        
+
             return new MachineInfoExpr(propname);
         }
     }
-
 
     /// <summary>
     /// Variable expression data
@@ -168,18 +159,18 @@ namespace ComLib.Lang.Plugins
         static MachineInfoExpr()
         {
             _map = new Dictionary<string, Func<string>>();
-            _map["machine"]     = () => Environment.MachineName;
-            _map["domain"]      = () => Environment.UserDomainName;
-            _map["user"]        = () => Environment.UserName;
-            _map["cmdline"]     = () => Environment.CommandLine;
-            _map["numprocs"]    = () => Environment.ProcessorCount.ToString();
-            _map["osname"]      = () => Environment.OSVersion.Platform.ToString();
-            _map["osversion"]   = () => Environment.OSVersion.Version.ToString();
-            _map["osspack"]     = () => Environment.OSVersion.ServicePack;
-            _map["sysdir"]      = () => Environment.SystemDirectory;
-            _map["memory"]      = () => Environment.WorkingSet.ToString();
-            _map["version"]     = () => Environment.Version.ToString();
-            _map["currentdir"]  = () => Environment.CurrentDirectory;
+            _map["machine"] = () => Environment.MachineName;
+            _map["domain"] = () => Environment.UserDomainName;
+            _map["user"] = () => Environment.UserName;
+            _map["cmdline"] = () => Environment.CommandLine;
+            _map["numprocs"] = () => Environment.ProcessorCount.ToString();
+            _map["osname"] = () => Environment.OSVersion.Platform.ToString();
+            _map["osversion"] = () => Environment.OSVersion.Version.ToString();
+            _map["osspack"] = () => Environment.OSVersion.ServicePack;
+            _map["sysdir"] = () => Environment.SystemDirectory;
+            _map["memory"] = () => Environment.WorkingSet.ToString();
+            _map["version"] = () => Environment.Version.ToString();
+            _map["currentdir"] = () => Environment.CurrentDirectory;
         }
 
         /// <summary>
@@ -190,7 +181,6 @@ namespace ComLib.Lang.Plugins
         {
             _propName = propname;
         }
-
 
         /// <summary>
         /// Evaluate

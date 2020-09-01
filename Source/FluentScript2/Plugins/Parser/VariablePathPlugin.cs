@@ -1,50 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Parsing;
 using ComLib.Lang.Types;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Provides representation of file paths in more convenient ways
-    
+
     // Set the home dir
     home    = c:\myapp\
     script  = "build"
-    
+
     // Case 1: Typical approach
-    file = home + "\\build\\build.xml"    
-    
+    file = home + "\\build\\build.xml"
+
     // Case 2: VariablePath plugin simple case
     // The @ is optional on the first variable in the path.
     file = home\build\script.xml
     file = @home\build\script.xml
-     
+
     // Case 3: Use variables in the path by prefixing @
     file = @home\build\@script.xml
     file = @home\build\@script-build.xml
     file = @home\build\@script.build.xml
-     
+
     // Case 4: Use variables by prefixing with @ and surrounding by {}
     // This is only needed when separating a variable name from another variable name.
     file = @home\build\@{script}build.xml
     file = @home\build\@{script}-build.xml
     file = @home\build\@{script}.build.xml
-     
-     
+
     // NOTE:
     // This plugin is useful since the beginning drive letter ( "c:\" or "d:\" )
     // should NOT be hardcoded. This plugin removes the need to:
     // 1. use "+" for appending parts of the path
     // 2. use doublequotes for wrapping the path name e.g. "\build\appbuild.fs"
-    
+
     </doc:example>
     ***************************************************************************/
 
@@ -62,7 +60,6 @@ namespace ComLib.Lang.Plugins
             this.IsStatement = true;
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -73,7 +70,6 @@ namespace ComLib.Lang.Plugins
                 return "@? '\\' ( ( <idtoken> | <numbertoken> | '-' | '.' )*  '\\'?)";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -90,7 +86,6 @@ namespace ComLib.Lang.Plugins
                 };
             }
         }
-
 
         /// <summary>
         /// Whether or not this plugin can handle current token(s).
@@ -115,28 +110,27 @@ namespace ComLib.Lang.Plugins
             return afterIdToken == Tokens.BackSlash;
         }
 
-
         /// <summary>
         /// Sorts expression
         /// </summary>
         /// <returns></returns>
-        public override Expr  Parse()
+        public override Expr Parse()
         {
             var pathExps = new List<Expr>();
             var variableToken = _tokenIt.NextToken;
-            
+
             // Move past the @ if it is first.
-            if (variableToken.Token == Tokens.At) 
+            if (variableToken.Token == Tokens.At)
                 variableToken = _tokenIt.Advance();
 
             // 1. Create a variable expression from the first idtoken
-            AppendPathPart(pathExps, variableToken, null, false);                
+            AppendPathPart(pathExps, variableToken, null, false);
 
             var path = string.Empty;
             var lastStringBasedPathToken = _tokenIt.Advance();
             var resetLastPathToken = false;
 
-            while(!_tokenIt.IsEnded && !_tokenIt.IsEndOfStmtOrBlock())
+            while (!_tokenIt.IsEnded && !_tokenIt.IsEndOfStmtOrBlock())
             {
                 var td = _tokenIt.NextToken;
                 var token = td.Token;
@@ -166,7 +160,7 @@ namespace ComLib.Lang.Plugins
                 {
                     CaptureVariableReference(pathExps, lastStringBasedPathToken, path);
                     resetLastPathToken = true;
-                }                
+                }
                 // Separator for function calls, arrays, dictionarys, endof statement
                 else
                     break;
@@ -181,13 +175,12 @@ namespace ComLib.Lang.Plugins
                     resetLastPathToken = false;
                 }
             }
-            if(!string.IsNullOrEmpty(path))
-                AppendPathPart(pathExps, lastStringBasedPathToken, path, true);    
+            if (!string.IsNullOrEmpty(path))
+                AppendPathPart(pathExps, lastStringBasedPathToken, path, true);
 
             var exp = ConstructBinaryExpr(pathExps);
             return exp;
         }
-
 
         private void AppendPathPart(List<Expr> pathExps, TokenData token, string text, bool isConstant)
         {
@@ -199,7 +192,6 @@ namespace ComLib.Lang.Plugins
             _parser.SetupContext(start, token);
             pathExps.Add(start);
         }
-
 
         private void CaptureVariableReference(List<Expr> pathExps, TokenData lastPathToken, string path)
         {
@@ -227,7 +219,6 @@ namespace ComLib.Lang.Plugins
             AppendPathPart(pathExps, n, n.Token.Text, false);
         }
 
-
         private Expr ConstructBinaryExpr(List<Expr> pathExps)
         {
             // Case 1: Simple addition of @home and "\build\script.xml" as in "@home\build\script.xml"
@@ -237,16 +228,16 @@ namespace ComLib.Lang.Plugins
             }
             // Case 2: Add up all the expressions.
             // Start with the last 2 and keep adding backwards.
-            // e.g. 0 1 2 3 
+            // e.g. 0 1 2 3
             // Exp1: Bin( 2, add, 3 )
             // Exp2: Bin( 1, Exp1 )
             // Exp3: Bin( 0, Exp2 )
             // e.g.  Bin( 0, add, Bin( 1, add, Bin( 2, add, 3 ) ) )
             var lastIndex = pathExps.Count - 1;
-            var left =  pathExps[lastIndex - 1];
+            var left = pathExps[lastIndex - 1];
             var right = pathExps[lastIndex];
             var exp = Exprs.Binary(left, Operator.Add, right, left.Token);
-            
+
             for (var ndx = lastIndex - 2; ndx >= 0; ndx--)
             {
                 left = pathExps[ndx];

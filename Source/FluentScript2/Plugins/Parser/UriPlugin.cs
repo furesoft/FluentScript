@@ -1,33 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Helpers;
 using ComLib.Lang.Parsing;
+using System;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
-    // Uri plugin allows you urls and file paths without surrounding them in 
+    <doc:example>
+    // Uri plugin allows you urls and file paths without surrounding them in
     // quotes as long as there are no spaces. These are interpreted as strings.
-    
+
     var url1 = www.yahoo.com;
     var url2 = http://www.google.com;
     var url3 = http://www.yahoo.com?user=kishore%20&id=123;
     var file1 = c:\users\kishore\settings.ini;
     var file2 = c:/data/blogposts.xml;
     var printer = \\printnetwork1\printer1
-    
+
     // Since this file has a space in it... you have to surround in quotes.
     var file3 = 'c:/data/blog posts.xml';
-    
+
     </doc:example>
     ***************************************************************************/
 
@@ -37,7 +33,6 @@ namespace ComLib.Lang.Plugins
     public class UriPlugin : LexPlugin
     {
         private static Dictionary<string, string> _keywords = new Dictionary<string, string>();
-
 
         /// <summary>
         /// Initialize keywords for lookup.
@@ -50,7 +45,6 @@ namespace ComLib.Lang.Plugins
             _keywords["www"] = "www";
         }
 
-
         /// <summary>
         /// Initialize
         /// </summary>
@@ -59,7 +53,6 @@ namespace ComLib.Lang.Plugins
             _tokens = new string[] { "http", "https", "ftp", "www", "$IdToken", "\\" };
             _canHandleToken = true;
         }
-
 
         /// <summary>
         /// The grammer for the function declaration
@@ -72,7 +65,6 @@ namespace ComLib.Lang.Plugins
                        + " | ( <id> ':' '\' '\' ( [a-zA-Z0-9] | [^' ' \t '(' ')' ';' ',' '[' ']' ] )* ) )";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -92,22 +84,21 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// Whether or not this uri plugin can handle the current token.
         /// </summary>
         /// <param name="current"></param>
         /// <returns></returns>
-        public override bool  CanHandle(Token current)
+        public override bool CanHandle(Token current)
         {
             var n = _lexer.State.CurrentChar;
             var n2 = _lexer.Scanner.PeekChar();
-            
+
             // c:\folder\file.txt
             // c:/folder/file.txt
             if (n == ':' && (n2 == '/' || n2 == '\\'))
                 return true;
-            
+
             // server name e.g. \\server1\share\user1
             if (current.Text == "\\" && n == '\\')
                 return true;
@@ -118,10 +109,9 @@ namespace ComLib.Lang.Plugins
 
             if (n == ':' || (n == '.' && string.Compare(current.Text, "www", StringComparison.InvariantCultureIgnoreCase) == 0))
                 return true;
-            
+
             return false;
         }
-
 
         /// <summary>
         /// run step 123.
@@ -129,7 +119,7 @@ namespace ComLib.Lang.Plugins
         /// <returns></returns>
         public override Token[] Parse()
         {
-            // http https ftp ftps www 
+            // http https ftp ftps www
             var takeoverToken = _lexer.LastTokenData;
             var line = _lexer.State.Line;
             var pos = _lexer.State.LineCharPosition;

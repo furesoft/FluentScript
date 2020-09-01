@@ -1,45 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
-using ComLib.Lang.Types;
-using ComLib.Lang.Parsing;
 using ComLib.Lang.Helpers;
+using ComLib.Lang.Parsing;
+using ComLib.Lang.Types;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Provides ability to check variable types and convert from one type to another.
-        
-    // 1. Supported types = "number", "yesno", "date", "time", "string"    
+
+    // 1. Supported types = "number", "yesno", "date", "time", "string"
     // 2. Supported functions :
     // 3. You can replace the the "<type>" below with any of the supported types above.
-     
+
     //  NAME             EXAMPLE                            RESULT
     //  is_<type>        is_number( 123 )                   true
     //  is_<type>        is_number( '123' )                 false
     //  is_<type>_like   is_number_like( '123' )            true
     //  to_<type>        to_number( '123' )                 123
-    
+
     //  is_<type>        is_bool( true )                   true
     //  is_<type>        is_bool( 'true' )                 false
     //  is_<type>_like   is_bool_like( 'true' )            true
     //  to_<type>        to_bool( 'true' )                 true
-    
+
     //  is_<type>        is_date( new Date(2012, 9, 10 )    true
     //  is_<type>        is_date( '9/10/2012' )             false
     //  is_<type>_like   is_date_like( '9/10/2012' )        true
     //  to_<type>        to_date( '9/10/2012' )             Date(2012, 9, 10)
     //  to_<type>        to_time( '8:30' )                  Time(8, 30, 0)
-    
+
     </doc:example>
     ***************************************************************************/
 
@@ -49,7 +47,6 @@ namespace ComLib.Lang.Plugins
     public class TypeOperationsPlugin : ExprPlugin
     {
         private IDictionary<string, string> _functionToTypeMap;
-
 
         /// <summary>
         /// Intialize.
@@ -75,7 +72,6 @@ namespace ComLib.Lang.Plugins
             this.StartTokens = _functionToTypeMap.Keys.ToArray();
         }
 
-
         /// <summary>
         /// The grammer for the function declaration
         /// </summary>
@@ -86,7 +82,6 @@ namespace ComLib.Lang.Plugins
                 return "typeof <expression>";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -104,7 +99,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// run step 123.
         /// </summary>
@@ -112,7 +106,7 @@ namespace ComLib.Lang.Plugins
         public override Expr Parse()
         {
             var functionName = _tokenIt.NextToken.Token.Text;
-            
+
             // Move to next token. possibly a "("
             _tokenIt.Advance();
             var expectParenthesis = _tokenIt.NextToken.Token.Type == TokenTypes.LeftParenthesis;
@@ -120,14 +114,14 @@ namespace ComLib.Lang.Plugins
                 _tokenIt.Advance();
 
             // 1. Get the expression.
-            var exp = _parser.ParseExpression(Terminators.ExpFlexibleEnd, true, false, true, true, false);            
+            var exp = _parser.ParseExpression(Terminators.ExpFlexibleEnd, true, false, true, true, false);
 
             // 2. map the function name to the expression.
             var destinationType = _functionToTypeMap[functionName];
 
             // 3. determine if converting or just checking.
-            var isConverting = functionName.StartsWith("to"); 
-            
+            var isConverting = functionName.StartsWith("to");
+
             // 4. checking for possible conversion? is_number_like( "123" )
             var isConversionCheck = functionName.Contains("like");
 
@@ -138,68 +132,64 @@ namespace ComLib.Lang.Plugins
         }
     }
 
-
-
     /// <summary>
     /// Variable expression data
     /// </summary>
     public class TypeOperationsExpr : Expr
-    {        
+    {
         private Expr _exp;
         private bool _isConversion;
         private bool _isConversionCheck;
         private string _destinationType;
-        private static int CONVERT_MODE_DIRECT   = 0;
+        private static int CONVERT_MODE_DIRECT = 0;
         private static int CONVERT_MODE_TOSTRING = 1;
-        private static int CONVERT_MODE_LAMBDA   = 2;
-        private static int CONVERT_MODE_NA       = 3;
-        
+        private static int CONVERT_MODE_LAMBDA = 2;
+        private static int CONVERT_MODE_NA = 3;
 
         private static Dictionary<string, ConvertSpec> _conversionLookup = new Dictionary<string, ConvertSpec>();
+
         private static List<ConvertSpec> _conversionSpecs = new List<ConvertSpec>()
         {
 	        // 				source		dest	   can change		case sensitive	convert mode	regex	handler,  	allowedvalues
-	        new ConvertSpec("string",	"string" , true ,			true , 		  	CONVERT_MODE_DIRECT,  	"",  	null, 		                                null),
-	        new ConvertSpec("string",	"bool"   , true ,			false, 			CONVERT_MODE_LAMBDA, 	"",  	ConversionHelper.Convert_String_To_Bool,    null),
-	        new ConvertSpec("string",	"number" , true ,			false, 			CONVERT_MODE_LAMBDA,  	"",  	ConversionHelper.Convert_String_To_Number,  null),
-	        new ConvertSpec("string",	"date"   , true ,			false, 			CONVERT_MODE_LAMBDA,  	"",  	ConversionHelper.Convert_String_To_Date,    null),
-	        new ConvertSpec("string",	"time"   , true ,			false, 			CONVERT_MODE_LAMBDA,  	"",  	ConversionHelper.Convert_String_To_Time,    null),
-	        
-            new ConvertSpec("bool"  ,	"string" , true ,			false, 			CONVERT_MODE_TOSTRING,  "",  	null, 		                                null),
-	        new ConvertSpec("bool"  ,	"bool"   , true ,			false, 			CONVERT_MODE_DIRECT,  	"",  	null, 		                                null),
-	        new ConvertSpec("bool"  ,	"number" , true ,			false, 			CONVERT_MODE_LAMBDA,  	"",  	ConversionHelper.Convert_Bool_To_Number,    null),
-	        new ConvertSpec("bool"  ,	"date"   , false,			false, 			CONVERT_MODE_NA,     	"",  	null, 		                                null),
-	        new ConvertSpec("bool"  ,	"time"   , false,			false, 			CONVERT_MODE_NA,     	"",  	null, 		                                null),
-	        
-            new ConvertSpec("number",	"string" , true ,			false, 			CONVERT_MODE_TOSTRING,  "",  	null, 		                                null),
-	        new ConvertSpec("number",	"bool"   , true ,			false, 			CONVERT_MODE_LAMBDA,  	"",  	ConversionHelper.Convert_Number_To_Bool,    null),
-	        new ConvertSpec("number",	"number" , true ,			false, 			CONVERT_MODE_DIRECT,  	"",  	null, 		                                null),
-	        new ConvertSpec("number",	"date"   , false,			false, 			CONVERT_MODE_NA,    	"",  	null, /*Convert_Number_To_Date*/ 	        null),
-	        new ConvertSpec("number",	"time"   , false,			false, 			CONVERT_MODE_NA,    	"",  	null, /*Convert_Number_To_Time*/            null),
-	        
-            new ConvertSpec("date"  ,	"string" , true ,			false, 			CONVERT_MODE_LAMBDA,    "",  	ConversionHelper.Convert_Date_To_String,    null),
-	        new ConvertSpec("date"  ,	"bool"   , false,			false, 			CONVERT_MODE_NA,     	"",  	null, 		                                null),
-	        new ConvertSpec("date"  ,	"number" , false ,			false, 			CONVERT_MODE_NA,  	    "",  	null, /*Convert_Date_To_Number*/            null),
-	        new ConvertSpec("date"  ,	"date"   , true ,			false, 			CONVERT_MODE_DIRECT,  	"",  	null, 		                                null),
-	        new ConvertSpec("date"  ,	"time"   , true ,			false, 			CONVERT_MODE_LAMBDA,  	"",  	ConversionHelper.Convert_Date_To_Time,      null),
-	        
-            new ConvertSpec("time"  ,	"string" , true ,			false, 			CONVERT_MODE_LAMBDA,    "",  	ConversionHelper.Convert_Time_To_String,    null),
-	        new ConvertSpec("time"  ,	"bool"   , false,			false, 			CONVERT_MODE_NA,  	    "",  	null, 		                                null),
-	        new ConvertSpec("time"  ,	"number" , false ,			false, 			CONVERT_MODE_NA,  	    "",  	null, /*Convert_Time_To_Number*/            null),
-	        new ConvertSpec("time"  ,	"date"   , true ,			false, 			CONVERT_MODE_LAMBDA,  	"",  	ConversionHelper.Convert_Time_To_Date,      null),
-	        new ConvertSpec("time"  ,	"time"   , true ,			false, 			CONVERT_MODE_DIRECT,  	"",  	null, 		                                null),
-        };
+	        new ConvertSpec("string",   "string" , true ,           true ,          CONVERT_MODE_DIRECT,    "",     null,                                       null),
+            new ConvertSpec("string",   "bool"   , true ,           false,          CONVERT_MODE_LAMBDA,    "",     ConversionHelper.Convert_String_To_Bool,    null),
+            new ConvertSpec("string",   "number" , true ,           false,          CONVERT_MODE_LAMBDA,    "",     ConversionHelper.Convert_String_To_Number,  null),
+            new ConvertSpec("string",   "date"   , true ,           false,          CONVERT_MODE_LAMBDA,    "",     ConversionHelper.Convert_String_To_Date,    null),
+            new ConvertSpec("string",   "time"   , true ,           false,          CONVERT_MODE_LAMBDA,    "",     ConversionHelper.Convert_String_To_Time,    null),
 
+            new ConvertSpec("bool"  ,   "string" , true ,           false,          CONVERT_MODE_TOSTRING,  "",     null,                                       null),
+            new ConvertSpec("bool"  ,   "bool"   , true ,           false,          CONVERT_MODE_DIRECT,    "",     null,                                       null),
+            new ConvertSpec("bool"  ,   "number" , true ,           false,          CONVERT_MODE_LAMBDA,    "",     ConversionHelper.Convert_Bool_To_Number,    null),
+            new ConvertSpec("bool"  ,   "date"   , false,           false,          CONVERT_MODE_NA,        "",     null,                                       null),
+            new ConvertSpec("bool"  ,   "time"   , false,           false,          CONVERT_MODE_NA,        "",     null,                                       null),
+
+            new ConvertSpec("number",   "string" , true ,           false,          CONVERT_MODE_TOSTRING,  "",     null,                                       null),
+            new ConvertSpec("number",   "bool"   , true ,           false,          CONVERT_MODE_LAMBDA,    "",     ConversionHelper.Convert_Number_To_Bool,    null),
+            new ConvertSpec("number",   "number" , true ,           false,          CONVERT_MODE_DIRECT,    "",     null,                                       null),
+            new ConvertSpec("number",   "date"   , false,           false,          CONVERT_MODE_NA,        "",     null, /*Convert_Number_To_Date*/ 	        null),
+            new ConvertSpec("number",   "time"   , false,           false,          CONVERT_MODE_NA,        "",     null, /*Convert_Number_To_Time*/            null),
+
+            new ConvertSpec("date"  ,   "string" , true ,           false,          CONVERT_MODE_LAMBDA,    "",     ConversionHelper.Convert_Date_To_String,    null),
+            new ConvertSpec("date"  ,   "bool"   , false,           false,          CONVERT_MODE_NA,        "",     null,                                       null),
+            new ConvertSpec("date"  ,   "number" , false ,          false,          CONVERT_MODE_NA,        "",     null, /*Convert_Date_To_Number*/            null),
+            new ConvertSpec("date"  ,   "date"   , true ,           false,          CONVERT_MODE_DIRECT,    "",     null,                                       null),
+            new ConvertSpec("date"  ,   "time"   , true ,           false,          CONVERT_MODE_LAMBDA,    "",     ConversionHelper.Convert_Date_To_Time,      null),
+
+            new ConvertSpec("time"  ,   "string" , true ,           false,          CONVERT_MODE_LAMBDA,    "",     ConversionHelper.Convert_Time_To_String,    null),
+            new ConvertSpec("time"  ,   "bool"   , false,           false,          CONVERT_MODE_NA,        "",     null,                                       null),
+            new ConvertSpec("time"  ,   "number" , false ,          false,          CONVERT_MODE_NA,        "",     null, /*Convert_Time_To_Number*/            null),
+            new ConvertSpec("time"  ,   "date"   , true ,           false,          CONVERT_MODE_LAMBDA,    "",     ConversionHelper.Convert_Time_To_Date,      null),
+            new ConvertSpec("time"  ,   "time"   , true ,           false,          CONVERT_MODE_DIRECT,    "",     null,                                       null),
+        };
 
         /// <summary>
         /// Initalize lookups
         /// </summary>
         static TypeOperationsExpr()
         {
-            foreach(var spec in _conversionSpecs)
+            foreach (var spec in _conversionSpecs)
                 _conversionLookup[spec.LookupKey()] = spec;
         }
-
 
         /// <summary>
         /// Initialize.
@@ -215,7 +205,6 @@ namespace ComLib.Lang.Plugins
             _destinationType = destinationType;
             _isConversionCheck = isConversionCheck;
         }
-
 
         /// <summary>
         /// Evaluate the type check/conversion operation.
@@ -233,7 +222,6 @@ namespace ComLib.Lang.Plugins
             return CheckExplicitType(visitor);
         }
 
-
         /// <summary>
         /// Used for function calls like "is_number(123)"
         /// </summary>
@@ -246,13 +234,13 @@ namespace ComLib.Lang.Plugins
 
             var lobj = val as LObject;
             var result = false;
-            if (     _destinationType == "string" ) result = lobj.Type == LTypes.String;
-            else if (_destinationType == "number" ) result = lobj.Type == LTypes.Number;
-            else if (_destinationType == "bool"   ) result = lobj.Type == LTypes.Bool;
-            else if (_destinationType == "date"   ) result = lobj.Type == LTypes.Date;
-            else if (_destinationType == "time"   ) result = lobj.Type == LTypes.Time;
-            else if (_destinationType == "list"   ) result = lobj.Type == LTypes.Array;
-            else if (_destinationType == "map"    ) result = lobj.Type == LTypes.Map;
+            if (_destinationType == "string") result = lobj.Type == LTypes.String;
+            else if (_destinationType == "number") result = lobj.Type == LTypes.Number;
+            else if (_destinationType == "bool") result = lobj.Type == LTypes.Bool;
+            else if (_destinationType == "date") result = lobj.Type == LTypes.Date;
+            else if (_destinationType == "time") result = lobj.Type == LTypes.Time;
+            else if (_destinationType == "list") result = lobj.Type == LTypes.Array;
+            else if (_destinationType == "map") result = lobj.Type == LTypes.Map;
             return new LBool(result);
         }
 
@@ -278,7 +266,6 @@ namespace ComLib.Lang.Plugins
             return new LBool(canConvert);
         }
 
-
         /// <summary>
         /// Used for function calls like "to_number( '123' )";
         /// </summary>
@@ -291,7 +278,6 @@ namespace ComLib.Lang.Plugins
             var result = DoConvertValue(_destinationType, val, true);
             return result;
         }
-
 
         private object DoConvertValue(string destinationType, object val, bool handleError)
         {
@@ -336,7 +322,6 @@ namespace ComLib.Lang.Plugins
             }
             return result;
         }
-
 
         private static string GetTypeName(object val)
         {
