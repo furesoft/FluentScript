@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
-using ComLib.Lang.Helpers;
-using ComLib.Lang.Plugins;
-// </lang:using>
+using System;
+using System.Collections.Generic;
 
+// </lang:using>
 
 namespace ComLib.Lang.Parsing
 {
@@ -19,12 +15,12 @@ namespace ComLib.Lang.Parsing
     public class AstVisitor : IAstVisitor
     {
         /// <summary>
-        /// Callback 
+        /// Callback
         /// </summary>
         private Action<AstNode> _callBackOnNodeStart;
+
         private Action<AstNode> _callBackOnNodeEnd;
 
-        
         /// <summary>
         /// Initialize
         /// </summary>
@@ -33,7 +29,6 @@ namespace ComLib.Lang.Parsing
             _callBackOnNodeStart = callBackOnNodeStart;
             _callBackOnNodeEnd = callBackOnNodeEnd;
         }
-
 
         /// <summary>
         /// Visits each statement
@@ -48,52 +43,40 @@ namespace ComLib.Lang.Parsing
             return null;
         }
 
-
         /// <summary>
         /// Visit the statement
         /// </summary>
         /// <param name="exp"></param>
-        public object VisitExpr( Expr exp)
+        public object VisitExpr(Expr exp)
         {
             if (exp.IsNodeType(NodeTypes.SysAssign))
                 VisitAssign(exp as AssignExpr);
 
             if (exp.IsNodeType(NodeTypes.SysAssignMulti))
                 VisitAssignMulti(exp as AssignMultiExpr);
-
             else if (exp.IsNodeType(NodeTypes.SysFor))
                 VisitFor(exp as ForExpr);
-
             else if (exp.IsNodeType(NodeTypes.SysForEach))
                 VisitForEach(exp as ForEachExpr);
-
             else if (exp.IsNodeType(NodeTypes.SysIf))
                 VisitIf(exp as IfExpr);
-
             else if (exp.IsNodeType(NodeTypes.SysTryCatch))
                 VisitTryCatch(exp as TryCatchExpr);
-
             else if (exp.IsNodeType(NodeTypes.SysWhile))
                 VisitWhile(exp as WhileExpr);
-
             else if (exp.IsNodeType(NodeTypes.SysBinary))
                 VisitBinary(exp as BinaryExpr);
-
             else if (exp.IsNodeType(NodeTypes.SysCompare))
                 VisitCompare(exp as CompareExpr);
-
             else if (exp.IsNodeType(NodeTypes.SysCondition))
                 VisitCondition(exp as ConditionExpr);
-
             else if (exp.IsNodeType(NodeTypes.SysFunctionDeclare))
                 VisitFunctionDeclare(exp as FunctionDeclareExpr);
-
             else if (exp.IsNodeType(NodeTypes.SysFunctionCall))
                 VisitFunctionCall(exp as FunctionCallExpr);
 
             return null;
         }
-
 
         /// <summary>
         /// Visits the var statement tree.
@@ -109,18 +92,15 @@ namespace ComLib.Lang.Parsing
             return null;
         }
 
-
-        public object VisitAnyOf( AnyOfExpr expr )
+        public object VisitAnyOf(AnyOfExpr expr)
         {
             return null;
         }
-
 
         public object VisitArray(ArrayExpr expr)
         {
             return null;
         }
-
 
         /// <summary>
         /// Evaluates a table declaration.
@@ -132,16 +112,14 @@ namespace ComLib.Lang.Parsing
             return null;
         }
 
-
         public object VisitBlock(BlockExpr expr)
-        {            
+        {
             foreach (var stmt in expr.Statements)
             {
                 stmt.Visit(this);
             }
             return null;
         }
-
 
         /// <summary>
         /// Visits the var statement tree.
@@ -156,13 +134,10 @@ namespace ComLib.Lang.Parsing
             return null;
         }
 
-
-
         public object VisitBindingCall(BindingCallExpr expr)
         {
             return null;
         }
-
 
         /// <summary>
         /// Visits the var statement tree.
@@ -174,7 +149,6 @@ namespace ComLib.Lang.Parsing
             return null;
         }
 
-
         /// <summary>
         /// Visits the var statement tree.
         /// </summary>
@@ -185,7 +159,6 @@ namespace ComLib.Lang.Parsing
             return null;
         }
 
-
         /// <summary>
         /// Check the date expr.
         /// </summary>
@@ -193,7 +166,6 @@ namespace ComLib.Lang.Parsing
         {
             return null;
         }
-
 
         /// <summary>
         /// Check the day expression.
@@ -203,12 +175,10 @@ namespace ComLib.Lang.Parsing
             return null;
         }
 
-
         public object VisitDuration(DurationExpr expr)
         {
             return null;
         }
-
 
         /// <summary>
         /// Visit the relative date expression.
@@ -220,7 +190,6 @@ namespace ComLib.Lang.Parsing
             return null;
         }
 
-
         /// <summary>
         /// Check the epxr which checks the presense / count of the enumerable expression(list/map) into bool true/false.
         /// </summary>
@@ -230,7 +199,6 @@ namespace ComLib.Lang.Parsing
         {
             return null;
         }
-
 
         /// <summary>
         /// Visits the for statement tree.
@@ -249,7 +217,6 @@ namespace ComLib.Lang.Parsing
             return null;
         }
 
-
         /// <summary>
         /// Visits the for each statement tree.
         /// </summary>
@@ -264,7 +231,6 @@ namespace ComLib.Lang.Parsing
             }
             return null;
         }
-
 
         /// <summary>
         /// Visits the if statement tree.
@@ -283,12 +249,10 @@ namespace ComLib.Lang.Parsing
             return null;
         }
 
-
         public object VisitLambda(LambdaExpr expr)
         {
             return null;
         }
-
 
         /// <summary>
         /// Visits the try statement tree.
@@ -300,7 +264,6 @@ namespace ComLib.Lang.Parsing
             return null;
         }
 
-
         /// <summary>
         /// Visits the try statement tree.
         /// </summary>
@@ -310,7 +273,6 @@ namespace ComLib.Lang.Parsing
             _callBackOnNodeStart(expr);
             return null;
         }
-
 
         /// <summary>
         /// Visits the try statement tree.
@@ -330,7 +292,6 @@ namespace ComLib.Lang.Parsing
             return null;
         }
 
-
         /// <summary>
         /// Visits the while statement tree.
         /// </summary>
@@ -346,7 +307,6 @@ namespace ComLib.Lang.Parsing
             return null;
         }
 
-
         /// <summary>
         /// Visits the binary expression tree
         /// </summary>
@@ -358,7 +318,6 @@ namespace ComLib.Lang.Parsing
             _callBackOnNodeStart(exp.Right);
             return null;
         }
-
 
         /// <summary>
         /// Visits the compare expression tree
@@ -372,7 +331,6 @@ namespace ComLib.Lang.Parsing
             return null;
         }
 
-
         /// <summary>
         /// Visits the condition expression tree
         /// </summary>
@@ -385,7 +343,6 @@ namespace ComLib.Lang.Parsing
             return null;
         }
 
-
         /// <summary>
         /// Visits the condition expression tree
         /// </summary>
@@ -395,7 +352,6 @@ namespace ComLib.Lang.Parsing
             return null;
         }
 
-
         /// <summary>
         /// Visits the function call expression tree
         /// </summary>
@@ -403,7 +359,7 @@ namespace ComLib.Lang.Parsing
         public object VisitFunctionDeclare(FunctionDeclareExpr exp)
         {
             _callBackOnNodeStart(exp);
-            for(var ndx = 0; ndx < exp.Function.Statements.Count; ndx++)
+            for (var ndx = 0; ndx < exp.Function.Statements.Count; ndx++)
             {
                 var stmt = exp.Function.Statements[ndx];
                 stmt.Visit(this);
@@ -412,13 +368,11 @@ namespace ComLib.Lang.Parsing
             return null;
         }
 
-
         public object VisitFunction(FunctionExpr expr)
         {
             return null;
         }
-        
-        
+
         /// <summary>
         /// Visits the function call expression tree
         /// </summary>
@@ -432,19 +386,17 @@ namespace ComLib.Lang.Parsing
             return null;
         }
 
-
         /// <summary>
         /// Visits the function call expression tree
         /// </summary>
         /// <param name="exp"></param>
         public object VisitIndex(IndexExpr exp)
         {
-            _callBackOnNodeStart(exp);            
+            _callBackOnNodeStart(exp);
             _callBackOnNodeStart(exp.VarExp);
             _callBackOnNodeStart(exp.IndexExp);
             return null;
         }
-
 
         /// <summary>
         /// Visits the function call expression tree
@@ -455,7 +407,6 @@ namespace ComLib.Lang.Parsing
             return null;
         }
 
-
         /// <summary>
         /// Visits the function call expression tree
         /// </summary>
@@ -465,7 +416,6 @@ namespace ComLib.Lang.Parsing
             return null;
         }
 
-
         /// <summary>
         /// Visits the function call expression tree
         /// </summary>
@@ -474,7 +424,6 @@ namespace ComLib.Lang.Parsing
         {
             return null;
         }
-
 
         /// <summary>
         /// Visits the function call expression tree
@@ -494,7 +443,6 @@ namespace ComLib.Lang.Parsing
             return null;
         }
 
-
         /// <summary>
         /// Visits the function call expression tree
         /// </summary>
@@ -504,12 +452,10 @@ namespace ComLib.Lang.Parsing
             return null;
         }
 
-
         public object VisitUnary(UnaryExpr expr)
         {
             return null;
         }
-
 
         /// <summary>
         /// Evaluate
@@ -520,23 +466,19 @@ namespace ComLib.Lang.Parsing
             return null;
         }
 
-
         public object VisitRun(RunExpr expr)
         {
             return null;
         }
-
 
         public object VisitVariable(VariableExpr expr)
         {
             return null;
         }
 
-
         public void VisitBlockEnter(Expr expr)
         {
         }
-
 
         public void VisitBlockExit(Expr expr)
         {

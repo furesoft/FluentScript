@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Collections;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Helpers;
 using ComLib.Lang.Parsing;
-using ComLib.Lang.Runtime.Bindings;
-using ComLib.Lang.Types;
 using ComLib.Lang.Phases;
 using ComLib.Lang.Runtime;
+using ComLib.Lang.Runtime.Bindings;
+using ComLib.Lang.Types;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
 // </lang:using>
 
 namespace ComLib.Lang
@@ -25,7 +22,7 @@ namespace ComLib.Lang
     /// </summary>
     /// <remarks>
     /// Provides high-level functionality for parsing/executing scripts.
-    /// 
+    ///
     /// Features include:
     /// 1. Convert script into a list of tokens ( Using Lexer ) - prints out line numbers and char positions of each token
     /// 2. Convert script into a sequence of expressions/statements (Using Parser ) - prints out line numbers and char positions of exp/stmts.
@@ -37,6 +34,7 @@ namespace ComLib.Lang
     {
         //private InterpreterSettings _settings;
         private Memory _memory;
+
         private Parser _parser;
         private Context _context;
         private LangSettings _settings;
@@ -63,7 +61,6 @@ namespace ComLib.Lang
             InitSystemFunctions();
         }
 
-
         /// <summary>
         /// Scope of the script
         /// </summary>
@@ -71,7 +68,6 @@ namespace ComLib.Lang
         {
             get { return _context.Memory; }
         }
-
 
         /// <summary>
         /// Context for the script.
@@ -81,7 +77,6 @@ namespace ComLib.Lang
             get { return _context; }
         }
 
-
         /// <summary>
         /// The settings for the interpreter.
         /// </summary>
@@ -89,7 +84,6 @@ namespace ComLib.Lang
         {
             get { return _context.Settings; }
         }
-
 
         /// <summary>
         /// Run result
@@ -99,7 +93,6 @@ namespace ComLib.Lang
             get { return _runResult; }
         }
 
-
         /// <summary>
         /// Registers all the plugins.
         /// </summary>
@@ -107,7 +100,6 @@ namespace ComLib.Lang
         {
             this.Context.Plugins.RegisterAll();
         }
-
 
         /// <summary>
         /// Registers all the plugins.
@@ -119,8 +111,6 @@ namespace ComLib.Lang
             this.Context.Plugins.RegisterAllCustomForDevice();
         }
 
-
-
         /// <summary>
         /// Register the callback for custom functions
         /// </summary>
@@ -130,7 +120,6 @@ namespace ComLib.Lang
         {
             _parser.Context.ExternalFunctions.Register(funcCallPattern, callback);
         }
-
 
         /// <summary>
         /// Parses the script but does not execute it.
@@ -142,7 +131,6 @@ namespace ComLib.Lang
             Parse(script);
         }
 
-
         /// <summary>
         /// Parses the script but does not execute it.
         /// </summary>
@@ -151,7 +139,6 @@ namespace ComLib.Lang
         {
             this.Execute(script, true, true, new ParsePhase(_parser), new ShutdownPhase());
         }
-
 
         /// <summary>
         /// Parses the script but does not execute it.
@@ -163,7 +150,6 @@ namespace ComLib.Lang
             Lint(script);
         }
 
-
         /// <summary>
         /// Parses the script but does not execute it.
         /// </summary>
@@ -172,7 +158,6 @@ namespace ComLib.Lang
         {
             this.Execute(script, true, true, new ParsePhase(_parser), new LintPhase(true), new ShutdownPhase());
         }
-
 
         /// <summary>
         /// Executes the file.
@@ -184,7 +169,6 @@ namespace ComLib.Lang
             Execute(script);
         }
 
-
         /// <summary>
         /// Executes the script
         /// </summary>
@@ -194,7 +178,6 @@ namespace ComLib.Lang
             this.Execute(script, true, true, new ParsePhase(_parser), new ExecutionPhase(true), new ShutdownPhase());
         }
 
-
         /// <summary>
         /// Executes existing already parsed.
         /// </summary>
@@ -202,7 +185,6 @@ namespace ComLib.Lang
         {
             this.Execute(string.Empty, false, false, new ExecutionPhase(true));
         }
-
 
         /// <summary>
         /// Executes the script
@@ -214,7 +196,6 @@ namespace ComLib.Lang
             this.Execute(script, true, true, new ParsePhase(_parser), new TranslateToJsPhase(), new ShutdownPhase());
         }
 
-
         /// <summary>
         /// Appends the script to the existing parsed scripts
         /// </summary>
@@ -223,7 +204,6 @@ namespace ComLib.Lang
         {
             this.Execute(script, false, true, new ParsePhase(_parser));
         }
-
 
         /// <summary>
         /// Append the script to the existing code and executes only the new code.
@@ -234,7 +214,6 @@ namespace ComLib.Lang
             this.Execute(script, false, true, new ParsePhase(_parser), new ExecutionPhase(false));
         }
 
-
         /// <summary>
         /// Append the script to the existing code and executes only the new code.
         /// </summary>
@@ -244,7 +223,6 @@ namespace ComLib.Lang
             var script = ReadFile(scriptPath);
             this.Execute(script, false, true, new ParsePhase(_parser), new ExecutionPhase(false));
         }
-
 
         /// <summary>
         /// Executes the script
@@ -277,7 +255,6 @@ namespace ComLib.Lang
             var result = phaseExecutor.Execute(script, _phaseCtx, _context, phasesList);
             this._runResult = result.Result;
         }
-
 
         /// <summary>
         /// Loads the arguments supplied into the runtime.
@@ -316,7 +293,6 @@ namespace ComLib.Lang
             return result;
         }
 
-
         /// <summary>
         /// Call a fluent script function from c#.
         /// </summary>
@@ -328,7 +304,6 @@ namespace ComLib.Lang
             return FunctionHelper.CallFunctionViaCSharp(this._context, functionName, convertApplicableTypes, args);
         }
 
-
         /// <summary>
         /// Replaces a token with another token.
         /// </summary>
@@ -339,7 +314,6 @@ namespace ComLib.Lang
             _parser.Lexer.SetReplacement(text, newValue);
         }
 
-
         /// <summary>
         /// Removes a token during the lexing process.
         /// </summary>
@@ -348,7 +322,6 @@ namespace ComLib.Lang
         {
             _parser.Lexer.SetRemoval(text);
         }
-
 
         /// <summary>
         /// Adds a token during the lexing process.
@@ -360,7 +333,6 @@ namespace ComLib.Lang
         {
             _parser.Lexer.SetInsert(before, text, newValue);
         }
-
 
         /// <summary>
         /// Convert the script to a series of tokens.
@@ -396,13 +368,11 @@ namespace ComLib.Lang
             },
             () => string.Format("Last token: {0}, Line : {1}, Pos : {2} ", lexer.LastToken.Text, lexer.State.Line, lexer.State.LineCharPosition));
 
-
             //Console.WriteLine("total : " + lexer.DiagnosticData.TotalTokens);
             //Console.WriteLine("total white space: " + lexer.DiagnosticData.TotalWhiteSpaceTokens);
             //Console.WriteLine("total new line   : " + lexer.DiagnosticData.TotalNewLineTokens);
             return tokens;
         }
-
 
         /// <summary>
         /// Convert the script to a series of tokens.
@@ -420,7 +390,6 @@ namespace ComLib.Lang
             return statements;
         }
 
-
         /// <summary>
         /// Prints the run result to the file path specified.
         /// </summary>
@@ -434,8 +403,8 @@ namespace ComLib.Lang
             }
         }
 
-
         #region Private methods
+
         private string ReadFile(string scriptPath)
         {
             if (!File.Exists(scriptPath))
@@ -444,7 +413,6 @@ namespace ComLib.Lang
             var script = File.ReadAllText(scriptPath);
             return script;
         }
-
 
         private void Execute(Action action, Func<string> exceptionMessageFetcher = null)
         {
@@ -475,7 +443,6 @@ namespace ComLib.Lang
             _runResult = new RunResult(start, end, success, message);
             _runResult.Ex = scriptError;
         }
-
 
         public void InitPlugins()
         {
@@ -521,7 +488,6 @@ namespace ComLib.Lang
             _pluginsInitialized = true;
         }
 
-
         private void InitSystemFunctions()
         {
             // Print and log functions.
@@ -530,7 +496,6 @@ namespace ComLib.Lang
             _parser.Context.ExternalFunctions.Register("log.*", (objname, method, exp) => LogHelper.Log(_settings, exp));
             _parser.Context.ExternalFunctions.Register("metacompiler.*", (objname, method, exp) => RunCompilerMethod(objname, method, _settings, exp));
         }
-
 
         /// <summary>
         /// Runs the compiler hook/function call on the compiler languge binding class.
@@ -547,7 +512,7 @@ namespace ComLib.Lang
             binding.ExecuteFunction(method, new object[] { expr });
             return LObjects.Null;
         }
-        #endregion
 
+        #endregion Private methods
     }
 }

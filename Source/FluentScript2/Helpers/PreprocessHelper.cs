@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Parsing;
+using System.Collections.Generic;
 
 // </lang:using>
-
 
 namespace ComLib.Lang.Helpers
 {
@@ -21,15 +19,12 @@ namespace ComLib.Lang.Helpers
         public bool IsAnd;
     }
 
-
-
     /// <summary>
     /// Helper class to parse a preprocessor directive.
     /// </summary>
     public class PreprocessHelper
     {
         public static Context Ctx;
-
 
         /// <summary>
         /// Process the line of code for preprocessor conditions.

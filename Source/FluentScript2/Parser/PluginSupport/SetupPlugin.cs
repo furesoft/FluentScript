@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
-using ComLib.Lang.Core;
-using ComLib.Lang.AST;
+﻿// <lang:using>
 // </lang:using>
 
 namespace ComLib.Lang.Parsing
@@ -23,18 +16,15 @@ namespace ComLib.Lang.Parsing
             this.Id = "ComLib." + this.GetType().Name.Replace("Plugin", string.Empty);
         }
 
-
         /// <summary>
         /// Id of the setup plugin
         /// </summary>
         public string Id { get; set; }
 
-
         /// <summary>
         /// Precedencce of this plugin in relation to other setup plguins.
         /// </summary>
         public int Precedence { get; set; }
-
 
         /// <summary>
         /// Executes a setup on the interpreter

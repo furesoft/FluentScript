@@ -1,8 +1,7 @@
 ﻿#pragma warning disable 1591
-using System;
-using System.Collections.Generic;
-using ComLib.Lang.Helpers;
 
+using ComLib.Lang.Helpers;
+using System.Collections.Generic;
 
 namespace ComLib.Lang.Core
 {
@@ -25,73 +24,61 @@ namespace ComLib.Lang.Core
         /// </summary>
         public const int Keyword = 0;
 
-
         /// <summary>
         /// Symbol such as + - / !=
         /// </summary>
         public const int Symbol = 1;
-
 
         /// <summary>
         /// Identifier such as variabls, function names.
         /// </summary>
         public const int Ident = 3;
 
-
         /// <summary>
         /// Comment - single line or multiline
         /// </summary>
         public const int Comment = 4;
-
 
         /// <summary>
         /// Represents a token that is made up of multiple tokens ( used for interpolated strings )
         /// </summary>
         public const int Multi = 5;
 
-
         /// <summary>
         /// Other type of token.
         /// </summary>
         public const int Other = 6;
-
 
         /// <summary>
         /// String, bool, numeric literal such as true, 0, false
         /// </summary>
         public const int LiteralString = 20;
 
-
         /// <summary>
         /// String, bool, numeric literal such as true, 0, false
         /// </summary>
         public const int LiteralNumber = 21;
-
 
         /// <summary>
         /// String, bool, numeric literal such as true, 0, false
         /// </summary>
         public const int LiteralDate = 22;
 
-
         /// <summary>
         /// String, bool, numeric literal such as true, 0, false
         /// </summary>
         public const int LiteralBool = 23;
-
 
         /// <summary>
         /// String, bool, numeric literal such as true, 0, false
         /// </summary>
         public const int LiteralTime = 24;
 
-
         /// <summary>
         /// String, bool, numeric literal such as true, 0, false
         /// </summary>
         public const int LiteralOther = 25;
     }
-
 
     public class TokenTypes
     {
@@ -172,7 +159,6 @@ namespace ComLib.Lang.Core
         public const int LiteralOther = 215;
     }
 
-
     public class Tokens
     {
         public static readonly Token Var = TokenBuilder.ToKeyword(TokenTypes.Var, "var");
@@ -240,11 +226,12 @@ namespace ComLib.Lang.Core
         public static readonly Token WhiteSpace = TokenBuilder.ToLiteralOther(TokenTypes.WhiteSpace, " ", "");
         public static readonly Token NewLine = TokenBuilder.ToLiteralOther(TokenTypes.NewLine, "newline", "newline");
         public static readonly Token CommentSLine = TokenBuilder.ToLiteralOther(TokenTypes.CommentSLine, "comment_sl", "comment_sl");
-        public static readonly Token CommentMLine = TokenBuilder.ToLiteralOther(TokenTypes.CommentMLine, "comment_ml", "comment_ml");	
+        public static readonly Token CommentMLine = TokenBuilder.ToLiteralOther(TokenTypes.CommentMLine, "comment_ml", "comment_ml");
 
         internal static IDictionary<string, Token> AllTokens = new Dictionary<string, Token>();
         internal static IDictionary<string, Token> CompareTokens = new Dictionary<string, Token>();
         internal static IDictionary<string, Token> MathTokens = new Dictionary<string, Token>();
+
         internal static IDictionary<string, bool> ExpressionCombinatorOps = new Dictionary<string, bool>()
         {
             { "*",       true },
@@ -264,7 +251,6 @@ namespace ComLib.Lang.Core
             { ")",       true },
             { "}",       true },
         };
-
 
         /// <summary>
         /// Defaults the token collection.
@@ -340,18 +326,15 @@ namespace ComLib.Lang.Core
             RegisterMathOps("*", "/", "+", "-", "%");
         }
 
-
         public static bool ContainsKey(string text)
         {
             return AllTokens.ContainsKey(text);
         }
 
-
         public static Token GetToken(string text)
         {
             return AllTokens[text];
         }
-
 
         /// <summary>
         /// Determines if the text supplied is a literal token
@@ -366,7 +349,6 @@ namespace ComLib.Lang.Core
             return t.Kind >= TokenKind.LiteralString;
         }
 
-
         /// <summary>
         /// Gets whether or not the text provided is a keyword
         /// </summary>
@@ -376,7 +358,6 @@ namespace ComLib.Lang.Core
         {
             return IsTokenKind(text, TokenKind.Keyword);
         }
-
 
         /// <summary>
         /// Gets whether or not the key provided is a symbol
@@ -388,7 +369,6 @@ namespace ComLib.Lang.Core
             return IsTokenKind(text, TokenKind.Symbol);
         }
 
-
         /// <summary>
         /// Checks if the token is a comparison token ( less lessthan more morethan equal not equal ).
         /// </summary>
@@ -399,7 +379,6 @@ namespace ComLib.Lang.Core
             return CompareTokens.ContainsKey(token.Text);
         }
 
-
         /// <summary>
         /// Checks if the token supplied is a math op ( * / + - % )
         /// </summary>
@@ -409,7 +388,6 @@ namespace ComLib.Lang.Core
         {
             return MathTokens.ContainsKey(token.Text);
         }
-
 
         /// <summary>
         /// Determines if the text supplied is a literal token
@@ -425,7 +403,6 @@ namespace ComLib.Lang.Core
             return t.Kind == tokenKind;
         }
 
-
         /// <summary>
         /// Adds the token to the lookup
         /// </summary>
@@ -434,7 +411,6 @@ namespace ComLib.Lang.Core
         {
             AllTokens[token.Text] = token;
         }
-
 
         /// <summary>
         /// Registers compares operators.
@@ -449,7 +425,6 @@ namespace ComLib.Lang.Core
             }
         }
 
-
         /// <summary>
         /// Registers math ops.
         /// </summary>
@@ -463,7 +438,6 @@ namespace ComLib.Lang.Core
             }
         }
 
-
         /// <summary>
         /// Creates a token from an existing token and position information.
         /// </summary>
@@ -474,7 +448,6 @@ namespace ComLib.Lang.Core
             var t = AllTokens[text];
             return t.Clone();
         }
-
 
         /// <summary>
         /// Returns a token by looking it up by it's text
@@ -487,38 +460,33 @@ namespace ComLib.Lang.Core
         }
     }
 
-
-
     /// <summary>
-    /// Represents a a single character or a series of characters that represents a recogized part of a language. 
+    /// Represents a a single character or a series of characters that represents a recogized part of a language.
     /// e.g. "var" "+" "=" "for" "function"
     /// </summary>
     public class Token
     {
         #region Protected Members
+
         /// <summary>
         /// Category of the token.
         /// </summary>
         protected int _kind;
-
 
         /// <summary>
         /// The type of the token.
         /// </summary>
         protected int _type;
 
-
         /// <summary>
         /// Text of the token
         /// </summary>
         protected string _text = string.Empty;
 
-
         /// <summary>
         /// The tokens value.
         /// </summary>
         protected object _value = string.Empty;
-
 
         /// <summary>
         /// Whether or not this a keyword.
@@ -529,10 +497,11 @@ namespace ComLib.Lang.Core
         /// Index position of the token in the script.
         /// </summary>
         protected int _index;
-        #endregion
 
+        #endregion Protected Members
 
         #region Constructors
+
         /// <summary>
         /// Initialize token information
         /// </summary>
@@ -547,53 +516,49 @@ namespace ComLib.Lang.Core
             _text = text;
             _value = val;
         }
-        #endregion
 
+        #endregion Constructors
 
         #region Value Info
+
         /// <summary>
         /// The type of the token.
         /// </summary>
         public virtual int Type { get { return _type; } }
-
 
         /// <summary>
         /// The category of the token.
         /// </summary>
         public virtual int Kind { get { return _kind; } }
 
-
         /// <summary>
         /// Text of the token
         /// </summary>
         public virtual string Text { get { return _text; } }
 
-
         /// <summary>
         /// Value of the token.
         /// </summary>
         public virtual object Value { get { return _value; } }
-        #endregion
 
+        #endregion Value Info
 
         #region Position Info
+
         /// <summary>
         /// Line number of the token
         /// </summary>
         public int Line { get; set; }
-
 
         /// <summary>
         /// Char position in the line of the token.
         /// </summary>
         public int LineCharPos { get; set; }
 
-
         /// <summary>
         /// The position of the first char of token based on entire script.
         /// </summary>
         public int Pos { get; set; }
-
 
         /// <summary>
         /// The index position of the token.
@@ -602,16 +567,16 @@ namespace ComLib.Lang.Core
         {
             get { return _index; }
         }
-        #endregion
 
+        #endregion Position Info
 
         #region Instance Methods
+
         /// <summary>
         /// Whether or not this token is a keyword
         /// </summary>
         /// <returns></returns>
         public bool IsKeyword() { return _kind == TokenKind.Keyword; }
-
 
         /// <summary>
         /// Whether or not this token is a comment
@@ -619,13 +584,11 @@ namespace ComLib.Lang.Core
         /// <returns></returns>
         public bool IsComment() { return _kind == TokenKind.Comment; }
 
-
         /// <summary>
         /// Whether or not this token is a identifier token
         /// </summary>
         /// <returns></returns>
         public bool IsIdent() { return _kind == TokenKind.Ident; }
-
 
         /// <summary>
         /// Whether or not this token is a multi-token token
@@ -633,13 +596,11 @@ namespace ComLib.Lang.Core
         /// <returns></returns>
         public bool IsMulti() { return _kind == TokenKind.Multi; }
 
-
         /// <summary>
         /// Whether or not this token is a symbol token
         /// </summary>
         /// <returns></returns>
         public bool IsSymbol() { return _kind == TokenKind.Symbol; }
-
 
         /// <summary>
         /// Whether or not this token is a literal token.
@@ -647,13 +608,11 @@ namespace ComLib.Lang.Core
         /// <returns></returns>
         public bool IsLiteralAny() { return _kind >= TokenKind.LiteralString; }
 
-
         /// <summary>
         /// Whether or not this token is a literal token.
         /// </summary>
         /// <returns></returns>
         public bool IsLiteralString() { return _kind >= TokenKind.LiteralString; }
-
 
         /// <summary>
         /// Whether or not this token is a literal token.
@@ -661,13 +620,11 @@ namespace ComLib.Lang.Core
         /// <returns></returns>
         public bool IsLiteralNumber() { return _kind >= TokenKind.LiteralNumber; }
 
-
         /// <summary>
         /// Whether or not this token is a literal token.
         /// </summary>
         /// <returns></returns>
         public bool IsLiteralDate() { return _kind >= TokenKind.LiteralDate; }
-
 
         /// <summary>
         /// Sets the index of this token.
@@ -677,7 +634,6 @@ namespace ComLib.Lang.Core
         {
             _index = ndx;
         }
-
 
         /// <summary>
         /// Sets values from another token.
@@ -689,7 +645,6 @@ namespace ComLib.Lang.Core
             _type = t._type;
         }
 
-
         /// <summary>
         /// Set the text of the interpolated token.
         /// </summary>
@@ -698,7 +653,6 @@ namespace ComLib.Lang.Core
         {
             _text = text;
         }
-
 
         /// <summary>
         /// Set the text of the interpolated token.
@@ -711,7 +665,6 @@ namespace ComLib.Lang.Core
             _value = val;
         }
 
-
         /// <summary>
         /// Whether or not the token supplied is a new line.
         /// </summary>
@@ -721,7 +674,6 @@ namespace ComLib.Lang.Core
         {
             return (token._type == TokenTypes.NewLine || token._type == TokenTypes.NewLine);
         }
-
 
         /// <summary>
         /// String representation of tokendata.
@@ -733,7 +685,6 @@ namespace ComLib.Lang.Core
             return info;
         }
 
-
         /// <summary>
         /// Clones this instance of the token and returns a new instance with the same values.
         /// </summary>
@@ -743,6 +694,7 @@ namespace ComLib.Lang.Core
             var token = new Token(this.Kind, this.Type, this.Text, this.Value);
             return token;
         }
-        #endregion
+
+        #endregion Instance Methods
     }
 }

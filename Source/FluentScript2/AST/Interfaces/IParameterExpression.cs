@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ComLib.Lang.AST
 {
@@ -15,12 +12,10 @@ namespace ComLib.Lang.AST
         /// </summary>
         List<object> ParamList { get; set; }
 
-
         /// <summary>
         /// List of expressions representing the parameters.
         /// </summary>
         List<Expr> ParamListExpressions { get; set; }
-
 
         string ToQualifiedName();
     }

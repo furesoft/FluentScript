@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ComLib.Lang.Core
+﻿namespace ComLib.Lang.Core
 {
     /// <summary>
     /// References to the script name, line number, char position.
@@ -23,22 +18,19 @@ namespace ComLib.Lang.Core
             this.ScriptName = name;
         }
 
-
         /// <summary>
         /// Script info.
         /// </summary>
         public readonly string ScriptName;
-
 
         /// <summary>
         /// Line number in the script.
         /// </summary>
         public readonly int Line;
 
-
         /// <summary>
         /// Char position in the line in the script.
         /// </summary>
-        public readonly int CharPos; 
+        public readonly int CharPos;
     }
 }

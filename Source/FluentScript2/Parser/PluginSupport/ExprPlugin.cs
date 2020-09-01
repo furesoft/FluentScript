@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
-using ComLib.Lang.Core;
+﻿// <lang:using>
 using ComLib.Lang.AST;
+using ComLib.Lang.Core;
+
 // </lang:using>
 
 namespace ComLib.Lang.Parsing
@@ -26,7 +22,6 @@ namespace ComLib.Lang.Parsing
             return Parse(null);
         }
 
-
         /// <summary>
         /// Parses using the contextual object supplied.
         /// </summary>
@@ -37,10 +32,8 @@ namespace ComLib.Lang.Parsing
             return null;
         }
 
-
         public virtual void OnParseComplete(AstNode node)
         {
-            
         }
     }
 }

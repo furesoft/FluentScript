@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ComLib.Lang.AST
+﻿namespace ComLib.Lang.AST
 {
     /// <summary>
     /// Interface for a loop
@@ -15,12 +10,10 @@ namespace ComLib.Lang.AST
         /// </summary>
         bool DoContinueLoop { get; set; }
 
-
         /// <summary>
         /// Break the loop.
         /// </summary>
         bool DoBreakLoop { get; set; }
-
 
         bool DoContinueRunning { get; set; }
     }

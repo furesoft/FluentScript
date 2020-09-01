@@ -1,6 +1,4 @@
-﻿
-using System.Collections.Generic;
-
+﻿using System.Collections.Generic;
 
 namespace ComLib.Lang.AST
 {
@@ -11,9 +9,7 @@ namespace ComLib.Lang.AST
     {
         public ConditionalBlockExpr()
         {
-
         }
-
 
         /// <summary>
         /// Initialize
@@ -25,7 +21,6 @@ namespace ComLib.Lang.AST
             this.Condition = condition;
             this._statements = statements ?? new List<Expr>();
         }
-
 
         /// <summary>
         /// The condition to check.

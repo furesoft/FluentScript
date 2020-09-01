@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ComLib.Lang.Core
 {
@@ -14,7 +11,6 @@ namespace ComLib.Lang.Core
         /// The error info.
         /// </summary>
         public ScriptError Error;
-
 
         /// <summary>
         /// Initialize
@@ -35,7 +31,6 @@ namespace ComLib.Lang.Core
         }
     }
 
-
     /// <summary>
     /// Exception used in script parsing
     /// </summary>
@@ -48,12 +43,10 @@ namespace ComLib.Lang.Core
         /// <param name="scriptpath">Script where error occurred.</param>
         /// <param name="lineNumber">Line number where error occurred.</param>
         public LangFailException(string error, string scriptpath, int lineNumber)
-            : base("Exit Error", error, scriptpath, lineNumber) 
+            : base("Exit Error", error, scriptpath, lineNumber)
         {
         }
     }
-
-
 
     /// <summary>
     /// Exception used in script for sandbox/limits functionality. e.g. loop/callstack limits.
@@ -67,6 +60,6 @@ namespace ComLib.Lang.Core
         /// <param name="scriptpath">Script where error occurred.</param>
         /// <param name="lineNumber">Line number where error occurred.</param>
         public LangLimitException(string error, string scriptpath, int lineNumber)
-            : base("Limit Error", error, scriptpath, lineNumber) {  }
+            : base("Limit Error", error, scriptpath, lineNumber) { }
     }
 }

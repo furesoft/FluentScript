@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Core;
 using ComLib.Lang.Types;
+
 // </lang:using>
 
 namespace ComLib.Lang.Parsing
@@ -15,12 +11,10 @@ namespace ComLib.Lang.Parsing
         private Context _ctx;
         private bool _hasSettings;
 
-
         public Limits(Context ctx)
         {
             _ctx = ctx;
         }
-
 
         /// <summary>
         /// Reset the limit.
@@ -29,7 +23,6 @@ namespace ComLib.Lang.Parsing
         {
             _hasSettings = _ctx.Settings != null;
         }
-
 
         /// <summary>
         /// Checks the length of the script.
@@ -41,7 +34,6 @@ namespace ComLib.Lang.Parsing
             if (_ctx.Settings.MaxScriptLength > 0 && script.Length > _ctx.Settings.MaxScriptLength)
                 throw BuildLimitException(null, "script length", _ctx.Settings.MaxScriptLength);
         }
-
 
         /// <summary>
         /// Check the lenght of the string.
@@ -56,12 +48,11 @@ namespace ComLib.Lang.Parsing
             // Check limit
             if (_hasSettings && _ctx.Settings.MaxScopeStringVariablesLength > 0)
             {
-                var strval = ((LString) val).Value;
+                var strval = ((LString)val).Value;
                 if (strval.Length > _ctx.Settings.MaxScopeStringVariablesLength)
                     throw BuildLimitException(node, "string lenth", _ctx.Settings.MaxScopeStringVariablesLength);
             }
         }
-
 
         /// <summary>
         /// Checks that the string is with in limits.
@@ -79,7 +70,6 @@ namespace ComLib.Lang.Parsing
             }
         }
 
-
         /// <summary>
         /// Check the maximum number of exceptions that can occurr
         /// </summary>
@@ -96,7 +86,6 @@ namespace ComLib.Lang.Parsing
                     throw BuildLimitException(node, "# Exceptions", _ctx.Settings.MaxExceptions);
             }
         }
-
 
         /// <summary>
         /// Check the call stack limit.
@@ -116,10 +105,9 @@ namespace ComLib.Lang.Parsing
             }
         }
 
-
         /// <summary>
         /// Checks the loop limit.
-        /// </summary>        
+        /// </summary>
         /// <param name="node">The ast node associated with the operation.</param>
         internal void CheckLoop(AstNode node)
         {
@@ -133,21 +121,19 @@ namespace ComLib.Lang.Parsing
                 throw BuildLimitException(node, "loops", _ctx.Settings.MaxLoopLimit);
         }
 
-
         /// <summary>
         /// Checks the limit of number of scope variables
-        /// </summary>        
+        /// </summary>
         /// <param name="node">The ast node associated with the operation.</param>
         internal void CheckScopeCount(AstNode node)
         {
             if (_hasSettings && _ctx.Settings.MaxScopeVariables > 0)
-            {                
+            {
                 // Check if max loop limit
                 if (_ctx.Memory.Total > _ctx.Settings.MaxScopeVariables)
                     throw BuildLimitException(node, "variables", _ctx.Settings.MaxScopeVariables);
             }
         }
-
 
         /// <summary>
         /// Checks the limit of the total length of all string variables.
@@ -163,8 +149,8 @@ namespace ComLib.Lang.Parsing
             }
         }
 
-
         #region Parser limits
+
         /// <summary>
         /// Checks the number of statements.
         /// </summary>
@@ -175,7 +161,6 @@ namespace ComLib.Lang.Parsing
             if (_hasSettings && _ctx.Settings.MaxStatements > 0 && _ctx.State.StatementCount >= _ctx.Settings.MaxStatements)
                 throw BuildLimitException(node, "statements : " + _ctx.Settings.MaxStatements);
         }
-
 
         /// <summary>
         /// Checks the nested statement depth.
@@ -188,7 +173,6 @@ namespace ComLib.Lang.Parsing
                 throw BuildLimitExceptionFromToken(token, "nested statements", _ctx.Settings.MaxStatementsNested);
         }
 
-
         /// <summary>
         /// Checks the nested statement depth.
         /// </summary>
@@ -200,7 +184,6 @@ namespace ComLib.Lang.Parsing
                 throw BuildLimitExceptionFromToken(token, "nested function call", _ctx.Settings.MaxFuncCallNested);
         }
 
-
         /// <summary>
         /// Check the number of continous expressions.
         /// </summary>
@@ -210,9 +193,7 @@ namespace ComLib.Lang.Parsing
         {
             if (_hasSettings && _ctx.Settings.MaxConsequetiveExpressions > 0 && expressionCount > _ctx.Settings.MaxConsequetiveExpressions)
                 throw BuildLimitException(node, "consequetive expressions (" + expressionCount + ")", _ctx.Settings.MaxConsequetiveExpressions);
-
         }
-
 
         /// <summary>
         /// Check the number of member access expressions.
@@ -225,7 +206,6 @@ namespace ComLib.Lang.Parsing
                 throw BuildLimitException(node, "consequetive member access ( '(),[],.' )", _ctx.Settings.MaxConsequetiveMemberAccess);
         }
 
-
         /// <summary>
         /// Checks the number of function parameters.
         /// </summary>
@@ -236,8 +216,8 @@ namespace ComLib.Lang.Parsing
             if (_hasSettings && _ctx.Settings.MaxFuncParams > 0 && paramCount > _ctx.Settings.MaxFuncParams)
                 throw BuildLimitException(node, "function parameters", _ctx.Settings.MaxFuncParams);
         }
-        #endregion
 
+        #endregion Parser limits
 
         private LangLimitException BuildLimitException(AstNode node, string error, int limit = -1)
         {
@@ -257,7 +237,6 @@ namespace ComLib.Lang.Parsing
             ex.Error.Column = charPos;
             return ex;
         }
-
 
         private LangLimitException BuildLimitExceptionFromToken(TokenData token, string error, int limit = -1)
         {

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace ComLib.Lang.Helpers
@@ -17,7 +14,7 @@ namespace ComLib.Lang.Helpers
         /// <param name="paramCount">The number of parameters</param>
         /// <returns></returns>
         public static bool CanCreateTimeFrom(int paramCount)
-        {            
+        {
             // 1. 0 args = new TimeSpan()
             // 2. 3 args = new TimeSpan(hours, mins, secs)
             // 3. 4 args = new TimeSpan(days, hours, mins, secs)
@@ -27,7 +24,6 @@ namespace ComLib.Lang.Helpers
             return false;
         }
 
-
         /// <summary>
         /// Whether or not a timespan can be created from the number of arguments supplied.
         /// </summary>
@@ -36,7 +32,7 @@ namespace ComLib.Lang.Helpers
         public static TimeSpan CreateTimeFrom(object[] args)
         {
             // Validate
-            if (!CanCreateTimeFrom(args.Length)) 
+            if (!CanCreateTimeFrom(args.Length))
                 throw new ArgumentException("Incorrect number of inputs for creating time");
 
             // Convert object into ints
@@ -52,7 +48,6 @@ namespace ComLib.Lang.Helpers
             // 3. 4 args = new TimeSpan(days, hours, mins, secs)
             return new TimeSpan(timeArgs[0], timeArgs[1], timeArgs[2], timeArgs[3]);
         }
-
 
         /// <summary>
         /// Parse the time using Regular expression.
@@ -108,15 +103,14 @@ namespace ComLib.Lang.Helpers
             return new Tuple<TimeSpan, bool, string>(new TimeSpan(hours, minutes, seconds), true, string.Empty);
         }
 
-
         public static TimeSpan ParseTimeWithoutColons(string numericPart, bool isAm)
         {
             var time = Convert.ToInt32(numericPart);
             var hours = 0;
             var minutes = 0;
-            
+
             // 1pm || 12am
-            if(time <= 12)
+            if (time <= 12)
             {
                 hours = time;
             }
@@ -126,7 +120,7 @@ namespace ComLib.Lang.Helpers
                 hours = Convert.ToInt32(numericPart[0].ToString());
                 minutes = Convert.ToInt32(numericPart.Substring(1));
             }
-            // 1030 - 1230  am|pm                
+            // 1030 - 1230  am|pm
             else
             {
                 hours = Convert.ToInt32(numericPart.Substring(0, 2));
@@ -136,7 +130,6 @@ namespace ComLib.Lang.Helpers
                 hours += 12;
             return new TimeSpan(0, hours, minutes, 0);
         }
-
 
         /// <summary>
         /// Can create from the paramelist expressions supplied.
@@ -148,7 +141,6 @@ namespace ComLib.Lang.Helpers
                 return false;
             return true;
         }
-
 
         /// <summary>
         /// Creates a datetime from the parameters supplied.
@@ -179,7 +171,7 @@ namespace ComLib.Lang.Helpers
                 return result;
             }
 
-            // Convert all parameters to int            
+            // Convert all parameters to int
             var args = new int[parameters.Length];
             for (int ndx = 0; ndx < parameters.Length; ndx++)
             {

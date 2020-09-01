@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Collections;
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.Types;
-using ComLib.Lang.Helpers;
+
 // </lang:using>
 
 namespace ComLib.Lang.AST
@@ -34,24 +26,20 @@ namespace ComLib.Lang.AST
             this.Op = op;
         }
 
-
         /// <summary>
         /// Left hand expression
         /// </summary>
         public Expr Left;
-
 
         /// <summary>
         /// Operator > >= == != less less than
         /// </summary>
         public Operator Op;
 
-
         /// <summary>
         /// Right hand expression
         /// </summary>
         public Expr Right;
-
 
         /// <summary>
         /// Execute the statement.
@@ -60,5 +48,5 @@ namespace ComLib.Lang.AST
         {
             return visitor.VisitCondition(this);
         }
-    }    
+    }
 }

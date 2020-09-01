@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Specialized;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Types;
+using System;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Core
@@ -18,7 +14,6 @@ namespace ComLib.Lang.Core
     {
         private int _totalStringLength;
 
-
         /// <summary>
         /// Get the variable value associated with name from the scope
         /// </summary>
@@ -26,17 +21,16 @@ namespace ComLib.Lang.Core
         /// <param name="name">Name of the varibale to get</param>
         /// <returns></returns>
         public T Get<T>(string name)
-        {            
+        {
             Variable variable = this[name] as Variable;
             // Convert to correct type if basic type.
             if (typeof(T) == typeof(object))
             {
                 return (T)variable.Value;
-            }            
+            }
 
             return (T)Convert.ChangeType(variable.Value, typeof(T), null);
         }
-
 
         /// <summary>
         /// Sets a value into the current scope.
@@ -49,14 +43,14 @@ namespace ComLib.Lang.Core
         public void SetValue(string name, object val, bool declare = false)
         {
             // Assert failure
-            var lval = (LObject) val;
+            var lval = (LObject)val;
 
             Variable variable = null;
             bool add = false;
             int addVal = 0;
             if (!this.ContainsKey(name))
             {
-                variable = new Variable() { Name = name, Value = val };                
+                variable = new Variable() { Name = name, Value = val };
                 add = true;
             }
             else
@@ -64,7 +58,7 @@ namespace ComLib.Lang.Core
                 variable = this[name] as Variable;
                 variable.Value = val;
                 if (lval.Type == LTypes.String)
-                    addVal = ((LString) lval).Value.Length;
+                    addVal = ((LString)lval).Value.Length;
             }
             variable.IsInitialized = val != LObjects.Null && val != null;
             variable.DataType = val != null ? val.GetType() : typeof(LNullType);
@@ -85,7 +79,6 @@ namespace ComLib.Lang.Core
             }
         }
 
-
         /// <summary>
         /// Get the size of the total length of all string variables in this block.
         /// </summary>
@@ -95,18 +88,15 @@ namespace ComLib.Lang.Core
         }
     }
 
-
-
     /// <summary>
     /// Used to store local variables.
     /// </summary>
-    public class Scope 
-    {        
+    public class Scope
+    {
         private List<Block> _stack;
         private int _currentStackIndex = 0;
         private int _total = 0;
         private int _totalStringLength = 0;
-
 
         /// <summary>
         /// Initialize
@@ -116,7 +106,6 @@ namespace ComLib.Lang.Core
             _stack = new List<Block>();
             _stack.Add(new Block());
         }
-
 
         /// <summary>
         /// Whether or not the scope contains the supplied variable name
@@ -129,7 +118,6 @@ namespace ComLib.Lang.Core
             return stackIndex > -1;
         }
 
-
         /// <summary>
         /// Iterate through all the variables in the current block
         /// </summary>
@@ -139,7 +127,6 @@ namespace ComLib.Lang.Core
             var block = _stack[_currentStackIndex];
             ForEach(block, pair => callback(pair));
         }
-
 
         /// <summary>
         /// Get the variable from the current scope.
@@ -153,7 +140,6 @@ namespace ComLib.Lang.Core
                 return Get<object>(name);
             }
         }
-
 
         /// <summary>
         /// Get the variable value associated with name from the scope
@@ -170,14 +156,13 @@ namespace ComLib.Lang.Core
             return _stack[stackIndex].Get<T>(name);
         }
 
-
         /// <summary>
         /// Get the variable value associated with name from the scope
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="name">Name of the varibale to get</param>
         /// <returns></returns>
-        public T GetAs<T>(string name) where T: class
+        public T GetAs<T>(string name) where T : class
         {
             int stackIndex = Find(name);
             // Not found?
@@ -186,7 +171,6 @@ namespace ComLib.Lang.Core
             var obj = _stack[stackIndex].Get<object>(name);
             return (T)obj;
         }
-
 
         /// <summary>
         /// Sets a value into the current scope.
@@ -212,9 +196,8 @@ namespace ComLib.Lang.Core
 
             // LIMITS: Increment total vars and string length;
             _total += 1;
-            _totalStringLength += (-oldTotalStringLength + newTotalStringLength);             
+            _totalStringLength += (-oldTotalStringLength + newTotalStringLength);
         }
-
 
         /// <summary>
         /// Finds the index of the scope where the variable provided resides.
@@ -235,7 +218,6 @@ namespace ComLib.Lang.Core
             return stackIndex;
         }
 
-
         /// <summary>
         /// Push another scope into the script.
         /// </summary>
@@ -244,7 +226,6 @@ namespace ComLib.Lang.Core
             _stack.Add(new Block());
             _currentStackIndex++;
         }
-
 
         /// <summary>
         /// Remove the current scope from the script.
@@ -255,7 +236,7 @@ namespace ComLib.Lang.Core
 
             var frameIndex = _stack.Count - 1;
             var frame = _stack[frameIndex];
-            
+
             // LIMITS: Decrement total vars and string length;
             _total -= frame.Count;
             _totalStringLength -= frame.TotalStringSize;
@@ -263,7 +244,6 @@ namespace ComLib.Lang.Core
             _stack.RemoveAt(frameIndex);
             _currentStackIndex--;
         }
-
 
         /// <summary>
         /// Remove variable from the current stack index
@@ -275,15 +255,14 @@ namespace ComLib.Lang.Core
                 return;
 
             int oldTotalStringLength = _stack[_currentStackIndex].TotalStringSize;
-             object val = _stack[_currentStackIndex][name];
+            object val = _stack[_currentStackIndex][name];
             _stack[_currentStackIndex].Remove(name);
-            int newTotalStringLength = _stack[_currentStackIndex].TotalStringSize;           
+            int newTotalStringLength = _stack[_currentStackIndex].TotalStringSize;
 
             // LIMITS: Decrement total vars and string length;
             _total -= 1;
             _totalStringLength += (-oldTotalStringLength + newTotalStringLength);
         }
-
 
         /// <summary>
         /// Get the total number of items in scope.
@@ -296,7 +275,6 @@ namespace ComLib.Lang.Core
             }
         }
 
-
         /// <summary>
         /// Total lenght of all string variables.
         /// </summary>
@@ -305,19 +283,17 @@ namespace ComLib.Lang.Core
             get { return _totalStringLength; }
         }
 
-
         /// <summary>
         /// Clear the scope.
         /// </summary>
         public void Clear()
-        {            
+        {
             _currentStackIndex = 0;
             _total = 0;
             _totalStringLength = 0;
             _stack = new List<Block>();
             _stack.Add(new Block());
         }
-
 
         /// <summary>
         /// Execute action on each item in enumeration.

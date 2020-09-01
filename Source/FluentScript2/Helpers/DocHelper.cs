@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Core;
 using ComLib.Lang.Docs;
-// </lang:using>
+using System;
+using System.Collections.Generic;
 
+// </lang:using>
 
 namespace ComLib.Lang.Helpers
 {
@@ -29,7 +26,6 @@ namespace ComLib.Lang.Helpers
 
             return ParseDocTags(commentTokens);
         }
-
 
         /// <summary>
         /// Parses doctags supporting simple format for the 1st release.
@@ -66,7 +62,7 @@ namespace ComLib.Lang.Helpers
                     Try(() => tags.Examples.Add(ParseExample(comment)), "example", comment, 1, warnings);
                     lastType = "ex";
                 }
-                else if(comment.StartsWith("@"))
+                else if (comment.StartsWith("@"))
                 {
                     Try(() =>
                             {
@@ -75,7 +71,7 @@ namespace ComLib.Lang.Helpers
                                 lastType = tag.Name;
                             }, "custom tag", comment, 1, warnings);
                 }
-                else if(lastType != "sum" && string.IsNullOrEmpty(comment))
+                else if (lastType != "sum" && string.IsNullOrEmpty(comment))
                 {
                     continue;
                 }
@@ -87,7 +83,6 @@ namespace ComLib.Lang.Helpers
             }
             return new Tuple<DocTags, List<string>>(tags, warnings);
         }
-
 
         /// <summary>
         /// Parses an arg attribute
@@ -108,7 +103,6 @@ namespace ComLib.Lang.Helpers
             return tag;
         }
 
-
         /// <summary>
         /// Parses an arg attribute
         /// </summary>
@@ -128,15 +122,14 @@ namespace ComLib.Lang.Helpers
             return ParseArgByPositionProperties(argText);
         }
 
-
         /// <summary>
-        /// Parses arguments by 
+        /// Parses arguments by
         /// </summary>
         /// <param name="argText"></param>
         /// <returns></returns>
         private static ArgAttribute ParseArgByNamedProperties(string argText)
         {
-            // Remove the @arg: from the argText            
+            // Remove the @arg: from the argText
             var arg = new ArgAttribute();
             // NOTE: Do a simple split on "," for the 1st version of fluentscript.
             string[] fields = argText.Split(',');
@@ -145,7 +138,7 @@ namespace ComLib.Lang.Helpers
             {
                 var tokens = field.Split(':');
 
-                // Name 
+                // Name
                 string name = tokens[0].Trim().ToLower();
                 string value = tokens[1].Trim();
                 if (name == "name") arg.Name = value;
@@ -160,9 +153,8 @@ namespace ComLib.Lang.Helpers
             return arg;
         }
 
-
         /// <summary>
-        /// Parses arguments by 
+        /// Parses arguments by
         /// </summary>
         /// <param name="argText"></param>
         /// <returns></returns>
@@ -187,7 +179,6 @@ namespace ComLib.Lang.Helpers
             return arg;
         }
 
-
         private static string StripArgDocTag(string argText)
         {
             argText = argText.Replace("@arg", "");
@@ -196,7 +187,6 @@ namespace ComLib.Lang.Helpers
                 argText = argText.Substring(1);
             return argText;
         }
-
 
         /// <summary>
         /// Parses an arg attribute
@@ -212,12 +202,11 @@ namespace ComLib.Lang.Helpers
             // NOTE: Do a simple split on "," for the 1st version of fluentscript.
             int ndxFirstComma = exText.IndexOf(",");
             int ndxFirstQuote = exText.IndexOf("'");
-            int ndxLastQuote  = exText.LastIndexOf("'");
+            int ndxLastQuote = exText.LastIndexOf("'");
             example.Desc = exText.Substring(9, ndxFirstComma - 9).Trim();
-            example.Code = exText.Substring(ndxFirstQuote + 1, (ndxLastQuote - ndxFirstQuote) -1).Trim();
+            example.Code = exText.Substring(ndxFirstQuote + 1, (ndxLastQuote - ndxFirstQuote) - 1).Trim();
             return example;
         }
-
 
         private static void ParseExamples(ArgAttribute arg, string example)
         {
@@ -230,7 +219,6 @@ namespace ComLib.Lang.Helpers
                     arg.Examples.Add(ex.Trim());
             }
         }
-
 
         private static void Try(Action action, string errorType, string line, int lineNum, List<string> warnings)
         {

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 // <lang:using>
-using ComLib.Lang.Core;
-using ComLib.Lang.Plugins;
 // </lang:using>
 
 namespace ComLib.Lang.Parsing
@@ -17,7 +12,6 @@ namespace ComLib.Lang.Parsing
     {
         private IDictionary<string, bool> _directives;
         private List<string> _directiveStack;
- 
 
         /// <summary>
         /// Initialize
@@ -28,7 +22,6 @@ namespace ComLib.Lang.Parsing
             this._directiveStack = new List<string>();
         }
 
-
         /// <summary>
         /// Register a directive
         /// </summary>
@@ -37,7 +30,6 @@ namespace ComLib.Lang.Parsing
         {
             this._directives[directive] = true;
         }
-
 
         public void RegisterDelimited(string directivesDelimited)
         {
@@ -54,7 +46,6 @@ namespace ComLib.Lang.Parsing
             }
         }
 
-
         /// <summary>
         /// Whether or not the directive is present.
         /// </summary>
@@ -65,7 +56,6 @@ namespace ComLib.Lang.Parsing
             return this._directives.ContainsKey(directive);
         }
 
-
         /// <summary>
         /// The total items on the directive stack
         /// </summary>
@@ -74,7 +64,6 @@ namespace ComLib.Lang.Parsing
         {
             return _directiveStack.Count;
         }
-
 
         /// <summary>
         /// Call to keep track of current directive in code.
@@ -85,13 +74,12 @@ namespace ComLib.Lang.Parsing
             _directiveStack.Add(word);
         }
 
-
         /// <summary>
         /// Called on end of the directive code block.
         /// </summary>
         public void EndDirectiveCode()
         {
-            _directiveStack.RemoveAt(_directiveStack.Count-1);
+            _directiveStack.RemoveAt(_directiveStack.Count - 1);
         }
     }
 }

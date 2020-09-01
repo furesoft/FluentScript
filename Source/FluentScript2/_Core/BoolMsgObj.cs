@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ComLib.Lang.Core
+﻿namespace ComLib.Lang.Core
 {
-   /// <summary>
+    /// <summary>
     /// Combines a boolean succes/fail flag with a error/status message and an object.
     /// </summary>
     public class BoolMsgObj
@@ -15,30 +10,25 @@ namespace ComLib.Lang.Core
         /// </summary>
         private object _item;
 
-		
-		/// <summary>
+        /// <summary>
         /// Success / failure ?
         /// </summary>
         public readonly bool Success;
 
-		
         /// <summary>
         /// Error message for failure, status message for success.
         /// </summary>
         public readonly string Message;
-
 
         /// <summary>
         /// True message.
         /// </summary>
         public static readonly BoolMsgObj True = new BoolMsgObj(null, true, string.Empty);
 
-
         /// <summary>
         /// False message.
         /// </summary>
         public static readonly BoolMsgObj False = new BoolMsgObj(null, false, string.Empty);
-        
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BoolMessageItem&lt;T&gt;"/> class.
@@ -49,10 +39,9 @@ namespace ComLib.Lang.Core
         public BoolMsgObj(object item, bool success, string message)
         {
             _item = item;
-			Success = success;
-			Message = message;
+            Success = success;
+            Message = message;
         }
-
 
         /// <summary>
         /// Return readonly item.

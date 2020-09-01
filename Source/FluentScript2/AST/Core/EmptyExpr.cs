@@ -1,8 +1,6 @@
-﻿using System;
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Types;
-using ComLib.Lang.Helpers;
+
 // </lang:using>
 
 namespace ComLib.Lang.AST
@@ -19,7 +17,6 @@ namespace ComLib.Lang.AST
         public EmptyExpr()
         {
         }
-
 
         /// <summary>
         /// Evaluate value.

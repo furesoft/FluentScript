@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
-using ComLib.Lang.Types;
 using ComLib.Lang.Helpers;
 using ComLib.Lang.Plugins;
+using ComLib.Lang.Types;
+using System;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Parsing
@@ -17,12 +16,12 @@ namespace ComLib.Lang.Parsing
     /// Uses the Lexer to parse script in terms of sequences of Statements and Expressions;
     /// Each statement and expression is a sequence of Tokens( see Lexer )
     /// Main method is Parse(script) and ParseStatement();
-    /// 
+    ///
     /// 1. var name = "kishore";
     /// 2. if ( name == "kishore" ) print("true");
-    /// 
+    ///
     /// Statements:
-    /// 
+    ///
     /// VALUE:         TYPE:
     /// 1. AssignStmt ( "var name = "kishore"; )
     /// 2. IfStmt ( "if (name == "kishore" ) { print ("true"); }
@@ -35,17 +34,16 @@ namespace ComLib.Lang.Parsing
         /// <param name="context"></param>
         public Parser(Context context) : base(context)
         {
-            _tokenIt = new TokenIterator();   
+            _tokenIt = new TokenIterator();
         }
-
 
         /// <summary>
         /// Used to visit evaluate nodes immediately ( currently used for meta compiler plugins ).
         /// </summary>
         public IAstVisitor OnDemandEvaluator { get; set; }
 
-
         #region Public API
+
         /// <summary>
         /// Initializes the parser with the script and setups various components.
         /// </summary>
@@ -67,7 +65,6 @@ namespace ComLib.Lang.Parsing
             Exprs.Setup(_tokenIt, _context, _scriptPath);
         }
 
-
         /// <summary>
         /// Parses the script into statements and expressions.
         /// </summary>
@@ -86,7 +83,7 @@ namespace ComLib.Lang.Parsing
                 {
                     // Get next statement.
                     var stmt = ParseStatement();
-                    
+
                     if (stmt != null)
                     {
                         // Limit case:
@@ -101,7 +98,6 @@ namespace ComLib.Lang.Parsing
             }
             return _statements;
         }
-
 
         /// <summary>
         /// Parses a statement.
@@ -126,7 +122,7 @@ namespace ComLib.Lang.Parsing
 
                 var isNewLineOrComment = nexttoken == Tokens.NewLine || nexttoken.Kind == TokenKind.Comment;
 
-                // Token replacements                
+                // Token replacements
                 if (!isNewLineOrComment && hasTokenReplacePlugins && (nexttoken.Kind == TokenKind.Ident) && _context.PluginsMeta.CanHandleTok(nexttoken, true))
                 {
                     var plugin = _context.PluginsMeta.LastMatchedTokenPlugin;
@@ -135,13 +131,13 @@ namespace ComLib.Lang.Parsing
                 }
 
                 // 1. System statements.
-                if (!isNewLineOrComment &&_context.Plugins.CanHandleSysStmt(nexttoken))
+                if (!isNewLineOrComment && _context.Plugins.CanHandleSysStmt(nexttoken))
                 {
                     stmt = ParseSystemStatement();
                 }
                 // 2a. Custom expressions/statements at metaplugin level
                 else if (!isNewLineOrComment && _context.PluginsMeta.CanHandleExp(nexttoken))
-                {                    
+                {
                     stmt = _context.PluginsMeta.ParseExp(this.OnDemandEvaluator);
                 }
                 // 2b. Custom expressions/statements.
@@ -169,7 +165,7 @@ namespace ComLib.Lang.Parsing
                 }
                 if (stmt != null)
                 {
-                    this.SetupContext(stmt, stmtToken);                    
+                    this.SetupContext(stmt, stmtToken);
                     _state.LastStmt = stmt;
                     _state.StatementNested--;
 
@@ -187,7 +183,6 @@ namespace ComLib.Lang.Parsing
             return stmt;
         }
 
-
         /// <summary>
         /// Parses expressions that are either built-in or possibly combinators/plugins.
         /// Examples include:
@@ -196,7 +191,7 @@ namespace ComLib.Lang.Parsing
         /// 3. array    : [
         /// 4. map      : {
         /// 5. oper     : + - * / > >= == != ! etc.
-        /// 6. new      : new 
+        /// 6. new      : new
         /// </summary>
         /// <remarks>
         /// This is one of the most important and relatively complex methods of the parser.
@@ -207,7 +202,7 @@ namespace ComLib.Lang.Parsing
         /// <param name="handleSingleExpression">Whether or not to handle only 1 expression.</param>
         /// <param name="enablePlugins">Whether or not the enable usage of plugins just for parsing current expression</param>
         /// <param name="passNewLine">Whether or not to pass the new line when advancing to the next token.</param>
-        /// <param name="enableIdentTokenTextAsEndToken">Whether or not use ident tokens from the endTokens as expression terminators. This 
+        /// <param name="enableIdentTokenTextAsEndToken">Whether or not use ident tokens from the endTokens as expression terminators. This
         /// is used for making fluent function calls where the parameter names terminate an expression.</param>
         /// <returns></returns>
         public Expr ParseExpression(IDictionary<Token, bool> endTokens, bool handleMathOperator = true, bool handleSingleExpression = false, bool enablePlugins = true, bool passNewLine = true, bool enableIdentTokenTextAsEndToken = false)
@@ -222,7 +217,7 @@ namespace ComLib.Lang.Parsing
             IDictionary<string, bool> identEndTokens = null;
 
             // For fluent function calls, this creates dictionary of strings ( ids )
-            // representing the names of the functions parameters which will be used 
+            // representing the names of the functions parameters which will be used
             // to terminate an expression.
             if (enableIdentTokenTextAsEndToken && endTokens != null)
             {
@@ -231,7 +226,7 @@ namespace ComLib.Lang.Parsing
                     if (pair.Key.Kind == TokenKind.Ident)
                         identEndTokens[pair.Key.Text] = true;
             }
-            
+
             while (true)
             {
                 var isUnknownToken = false;
@@ -253,15 +248,15 @@ namespace ComLib.Lang.Parsing
                     token = _tokenIt.NextToken.Token;
                     tokenData = _tokenIt.NextToken;
                 }
-                // OPTIMIZATION: 
-                // If identifier followed by "." | "[" | "=" there is no need to check 
+                // OPTIMIZATION:
+                // If identifier followed by "." | "[" | "=" there is no need to check
                 // plugins. Checking plugins can be expensive. Avoid if applicable.
                 // Case 1: user.  -> member access
                 // Case 2: user[  -> array index access
                 // Case 3: user = -> assignment
                 var okToCheckPlugins = !IsExplicitIdentQualifierExpression(token);
 
-                // Token replacements                
+                // Token replacements
                 if (okToCheckPlugins && enablePlugins && hasTokenReplacePlugins && _context.PluginsMeta.CanHandleTok(token, true))
                 {
                     token = _context.PluginsMeta.ParseTokens();
@@ -276,7 +271,7 @@ namespace ComLib.Lang.Parsing
 
                 // META-PLUGINS-START
                 // 1. TEMP: Handle metaplugins first.
-                if(okToCheckPlugins && enablePlugins && hasMetaPlugins && _context.PluginsMeta.CanHandleExp(token))
+                if (okToCheckPlugins && enablePlugins && hasMetaPlugins && _context.PluginsMeta.CanHandleExp(token))
                 {
                     var visitor = this.OnDemandEvaluator;
                     exp = _context.PluginsMeta.ParseExp(visitor);
@@ -291,7 +286,7 @@ namespace ComLib.Lang.Parsing
                     _state.ExpressionCount++;
                 }
                 // CASE: Lambda
-                else if ( token == Tokens.Function )
+                else if (token == Tokens.Function)
                 {
                     //exp = ParseLambda();
                 }
@@ -311,7 +306,7 @@ namespace ComLib.Lang.Parsing
                     _state.ExpressionCount++;
                     exp = ParseIdExpression(null, exp, true);
                 }
-                // Error Check: Prevent consequtive expressions 
+                // Error Check: Prevent consequtive expressions
                 // That are not bound together by some expression combination operator.
                 // e.g. var result = a 2 is an error. consequite expressions a 2 do not make sense.
                 //      var result = a + 2 | a < 2 | a && b would make sense.
@@ -352,15 +347,15 @@ namespace ComLib.Lang.Parsing
                         exp = Exprs.Negate(exp, current);
                     }
                 }
-                // CASE: Identifier 
+                // CASE: Identifier
                 // description: This will get any identifier based expression
                 // examples: name, user.isactive, user.activate(), getuser()
                 else if (token.Kind == TokenKind.Ident)
                 {
                     exp = ParseIdExpression(null, null, false);
-                    _state.ExpressionCount++;                    
+                    _state.ExpressionCount++;
                 }
-                // CASE: List 
+                // CASE: List
                 // description: This gets an array/list
                 // examples: [ 1, 2, age, gettotal() ]
                 else if (token == Tokens.LeftBracket)
@@ -368,7 +363,7 @@ namespace ComLib.Lang.Parsing
                     _state.ExpressionCount++;
                     exp = ParseArray();
                 }
-                // CASE: Map 
+                // CASE: Map
                 // description: This gets an array/list
                 // examples: [ 1, 2, age, gettotal() ]
                 else if (token == Tokens.LeftBrace)
@@ -378,7 +373,7 @@ namespace ComLib.Lang.Parsing
                 }
                 // Exp 5. Not !
                 else if (token == Tokens.LogicalNot)
-                {                    
+                {
                     var op = Operators.ToOp(token.Text);
                     _tokenIt.Advance();
                     var right = ParseExpression(endTokens);
@@ -421,7 +416,6 @@ namespace ComLib.Lang.Parsing
             }
             return exp;
         }
-
 
         /// <summary>
         /// Parses an interpolated token into a set of tokens making up an interpolated expression.
@@ -478,7 +472,6 @@ namespace ComLib.Lang.Parsing
             return iexp;
         }
 
-
         /// <summary>
         /// Barses a block of code.
         /// </summary>
@@ -489,7 +482,7 @@ namespace ComLib.Lang.Parsing
             // { statemnt1; statement2; }
             bool isMultiLine = false;
 
-            // Check for single line block 
+            // Check for single line block
             if (_tokenIt.NextToken.Token == Tokens.NewLine)
                 _tokenIt.Advance();
 
@@ -507,14 +500,13 @@ namespace ComLib.Lang.Parsing
 
             // Case 2: Multi-line block
             _tokenIt.Expect(Tokens.LeftBrace);
-                        
+
             while (true)
             {
                 // Check for end of statment or invalid end of script.
                 if (IsEndOfStatementOrEndOfScript(Tokens.RightBrace))
                     break;
 
-                
                 // New line?
                 if (_tokenIt.NextToken.Token == Tokens.NewLine)
                 {
@@ -535,12 +527,11 @@ namespace ComLib.Lang.Parsing
             return block;
         }
 
-
         /// <summary>
         /// Parses unary
         /// 1. ndx++
         /// 2. ndx--
-        /// 3. ndx += 2 
+        /// 3. ndx += 2
         /// 4. ndx -= 2
         /// 5. ndx *= 2
         /// 6. ndx /= 2
@@ -558,10 +549,10 @@ namespace ComLib.Lang.Parsing
 
             // 1. Create variable expression from the name
             var nameExpr = Exprs.Ident(name, idToken);
-                
-            // ++ -- 
+
+            // ++ --
             if (_tokenIt.IsEndOfStmtOrBlock())
-            {                
+            {
                 var unaryVal = Exprs.Unary(name, null, 1.0, op, opToken);
                 stmt = Exprs.Assign(false, nameExpr, unaryVal, idToken);
                 _tokenIt.ExpectEndOfStmt();
@@ -576,7 +567,6 @@ namespace ComLib.Lang.Parsing
             return stmt;
         }
 
-
         /// <summary>
         /// Parses a conditional statement.
         /// </summary>
@@ -587,7 +577,7 @@ namespace ComLib.Lang.Parsing
         {
             if (stmt == null) stmt = new ConditionalBlockExpr(null, null);
 
-            // Case 1: if ( <expression> ) 
+            // Case 1: if ( <expression> )
             // Case 2: if   <expression> then
             bool hasParenthesis = _tokenIt.NextToken.Token == Tokens.LeftParenthesis;
             var terminator = hasParenthesis ? Terminators.ExpParenthesisEnd : Terminators.ExpThenEnd;
@@ -601,7 +591,7 @@ namespace ComLib.Lang.Parsing
 
             if (hasParenthesis)
                 Expect(Tokens.RightParenthesis);
-            else if (_tokenIt.NextToken.Token == Tokens.NewLine 
+            else if (_tokenIt.NextToken.Token == Tokens.NewLine
                 || _tokenIt.NextToken.Token == Tokens.Then)
                 _tokenIt.Advance();
 
@@ -613,10 +603,11 @@ namespace ComLib.Lang.Parsing
             ParseBlock(stmt);
             return stmt;
         }
-        #endregion
 
+        #endregion Public API
 
         #region Parse Statments
+
         private Expr ParseSystemStatement()
         {
             var token = _tokenIt.NextToken.Token;
@@ -630,9 +621,8 @@ namespace ComLib.Lang.Parsing
 
             if (plugin.IsEndOfStatementRequired)
                 _tokenIt.ExpectEndOfStmt();
-            return stmt;        
+            return stmt;
         }
-
 
         /// <summary>
         /// Parses a combinator into a statement.
@@ -644,7 +634,7 @@ namespace ComLib.Lang.Parsing
             var plugin = _context.Plugins.LastMatchedExtStmtPlugin;
             var expPlugin = plugin as IExprPlugin;
             Expr result = null;
-            if(!expPlugin.IsAssignmentSupported )
+            if (!expPlugin.IsAssignmentSupported)
             {
                 expPlugin.Ctx = _context;
                 result = expPlugin.Parse();
@@ -676,13 +666,12 @@ namespace ComLib.Lang.Parsing
             return result;
         }
 
-
         /// <summary>
         /// Parses an id based statement.
         /// - user = 'john';
         /// - activateuser();
         /// - ndx++;
-        /// 
+        ///
         /// Complex:
         ///     - users[0] = new User();
         ///     - user.name = 'john';
@@ -707,18 +696,17 @@ namespace ComLib.Lang.Parsing
             }
             else if (IsIncrementOp(token))  // ++ -- += *= /= -=
             {
-                stmt = ParseUnary(name);                
+                stmt = ParseUnary(name);
             }
             if (stmt != null)
             {
                 if (_tokenIt.IsEndOfStmtOrBlock())
-                    _tokenIt.ExpectEndOfStmt();            
+                    _tokenIt.ExpectEndOfStmt();
                 return stmt;
             }
 
             throw _tokenIt.BuildSyntaxUnexpectedTokenException(tokenData);
         }
-
 
         /// <summary>
         /// Parses assignment.
@@ -728,9 +716,8 @@ namespace ComLib.Lang.Parsing
         private Expr ParseAssignment(Expr left)
         {
             var plugin = this.Context.Plugins.GetSysStmt(Tokens.Var) as VarPlugin;
-            return plugin.Parse(left);            
+            return plugin.Parse(left);
         }
-
 
         /// <summary>
         /// This is an implementation of the Shunting Yard Algorithm to handle expressions
@@ -742,7 +729,7 @@ namespace ComLib.Lang.Parsing
         /// <param name="identTokens"></param>
         /// <param name="enableIdentTokensAsEndTokens"></param>
         /// <returns></returns>
-        private Tuple<bool, Expr> ParseExpressionsWithPrecedence(IDictionary<Token, bool> endTokens, Expr initial, 
+        private Tuple<bool, Expr> ParseExpressionsWithPrecedence(IDictionary<Token, bool> endTokens, Expr initial,
             bool enableTokenPlugins = true, IDictionary<string, bool> identTokens = null, bool enableIdentTokensAsEndTokens = false)
         {
             _state.PrecedenceParseStackCount++;
@@ -753,8 +740,8 @@ namespace ComLib.Lang.Parsing
             var tokenData = _tokenIt.NextToken;
             var ops = new List<TokenData>();
             var stack = new List<object>();
-            if(initial != null) stack.Add(initial);
-            var lastPrecendence = 0; 
+            if (initial != null) stack.Add(initial);
+            var lastPrecendence = 0;
             var leftParenCount = 0;
             var continueParsing = true;
             var hasTokenReplacePlugins = _context.PluginsMeta.TotalTokens() > 0;
@@ -770,9 +757,9 @@ namespace ComLib.Lang.Parsing
                     break;
 
                 var isOp = Operators.IsOp(token.Text);
-                var isNegation = isOp && ( !isLastNodeExpr && token.Type == TokenTypes.Minus );
+                var isNegation = isOp && (!isLastNodeExpr && token.Type == TokenTypes.Minus);
                 // Case 1: Not an operator or logical not "!"
-                if( !isOp || token == Tokens.LogicalNot || isNegation)
+                if (!isOp || token == Tokens.LogicalNot || isNegation)
                 {
                     // Must be followed by an expression.
                     var exp = ParseExpression(endTokens, false, true);
@@ -780,9 +767,9 @@ namespace ComLib.Lang.Parsing
                     stack.Add(exp);
                     isLastNodeExpr = true;
                     continueParsing = false;
-                } 
-                // Operator ( * / + - ( ) > >= < <= == != && || 
-                else if(isOp)
+                }
+                // Operator ( * / + - ( ) > >= < <= == != && ||
+                else if (isOp)
                 {
                     isLastNodeExpr = false;
                     continueParsing = token != Tokens.RightParenthesis;
@@ -817,7 +804,7 @@ namespace ComLib.Lang.Parsing
                     {
                         ops.Add(tokenData);
                     }
-                    // ) 
+                    // )
                     // 1. Make sure parenthesesis count match up.
                     // 2. Restructure the postfix ??
                     else if (token == Tokens.RightParenthesis)
@@ -859,31 +846,31 @@ namespace ComLib.Lang.Parsing
                     // 2. Add the current op to the ops stack.
                     else if (precendence <= lastPrecendence)
                     {
-                        // * / have same precedence so add last from ops into stack.                    
+                        // * / have same precedence so add last from ops into stack.
                         TokenData op = ops[lastOpIndex];
                         ops.RemoveAt(lastOpIndex);
                         stack.Add(op);
                         ops.Add(tokenData);
                     }
                 }
-                
+
                 // Operator token e.g. < > && || + etc.
                 // We did not move the token forward but only add the operator token to the stack/ops.
                 if (current == _tokenIt.NextToken.Token)
                     _tokenIt.Advance();
 
                 // Ok to skip newlines?
-                if( endTokens != null && !endTokens.ContainsKey(Tokens.NewLine))
+                if (endTokens != null && !endTokens.ContainsKey(Tokens.NewLine))
                     _tokenIt.AdvancePastNewLines();
 
                 current = _tokenIt.NextToken.Token;
-                
+
                 // This handles token replacements for operators.
                 // Start:
                 bool replaceToken = false;
                 ITokenPlugin tokenPlugin = null;
- 
-                // Token replacements                
+
+                // Token replacements
                 if (current != Tokens.EndToken && enableTokenPlugins && hasTokenReplacePlugins && _context.PluginsMeta.CanHandleTok(current, true))
                 {
                     tokenPlugin = _context.PluginsMeta.LastMatchedTokenPlugin;
@@ -894,7 +881,7 @@ namespace ComLib.Lang.Parsing
 
                 if (IsEndOfExpressionPrecedence(current, leftParenCount, continueParsing, lastExpression))
                     break;
-                
+
                 // Now move to next token.
                 if (replaceToken)
                 {
@@ -912,7 +899,7 @@ namespace ComLib.Lang.Parsing
 
             // Last rule ops left ?
             if (ops.Count > 0)
-                for(int ndx = ops.Count - 1; ndx >= 0; ndx--)
+                for (int ndx = ops.Count - 1; ndx >= 0; ndx--)
                     stack.Add(ops[ndx]);
 
             finalExp = LangHelper.ProcessShuntingYardList(_context, this, stack);
@@ -921,7 +908,6 @@ namespace ComLib.Lang.Parsing
 
             return new Tuple<bool, Expr>(false, finalExp);
         }
-
 
         private bool IsEndOfExpressionPart(Expr lastExp, IDictionary<Token, bool> endTokens, IDictionary<string, bool> identEndTokens)
         {
@@ -940,26 +926,24 @@ namespace ComLib.Lang.Parsing
             return isend;
         }
 
-
         private bool IsEndOfExpressionPrecedence(Token token, int leftParenCount, bool continueParsing, Expr lastExpression)
         {
             // Is the token a valid operator that has precedence ?
-            // Should continue parsing 
+            // Should continue parsing
             if ((!Terminators.ExpMathShuntingYard.ContainsKey(token) && !continueParsing)) return true;
-            
+
             // Termination case 1: Avoid handling ) when doing math expressions inside a function call.
-            // Termination case 2: Avoid handling ) of an if / while statement.            
+            // Termination case 2: Avoid handling ) of an if / while statement.
             if (token == Tokens.RightParenthesis)
-            {                
+            {
                 if (leftParenCount == 0) return true;
             }
-            
+
             // Case 3: End token - invalid script.
             if (token == Tokens.EndToken) return true;
 
             return false;
         }
-
 
         /// <summary>
         /// [ "user01", true, false, 123, 45.6, 'company.com']
@@ -992,14 +976,13 @@ namespace ComLib.Lang.Parsing
                     var exp = ParseExpression(Terminators.ExpArrayDeclareEnd);
                     items.Add(exp);
                 }
-                // More items? 
+                // More items?
                 if (_tokenIt.NextToken.Token == Tokens.Comma)
                     _tokenIt.Advance();
             }
             Expect(Tokens.RightBracket);
             return Exprs.Array(items, startToken);
         }
-
 
         /// <summary>
         /// { Name: "user01", IsActive: true, IsAdmin: false, Id: 123, Sales: 45.6, Company: 'company.com' }
@@ -1031,7 +1014,7 @@ namespace ComLib.Lang.Parsing
                 token = _tokenIt.NextToken.Token;
 
                 // Check for error: Format must be <key> : <value>
-                // Example 1: "Name" : "kishore" 
+                // Example 1: "Name" : "kishore"
                 // Example 2: Name   : "kishore"
                 var key = string.Empty;
                 if (!(token.IsLiteralAny() || token.Kind == TokenKind.Ident))
@@ -1039,7 +1022,7 @@ namespace ComLib.Lang.Parsing
                     throw _tokenIt.BuildSyntaxExpectedException("Text based key for map");
                 }
 
-                // 1. key : 
+                // 1. key :
                 key = token.Text;
                 _tokenIt.AdvanceAndExpect(Tokens.Colon);
 
@@ -1054,7 +1037,6 @@ namespace ComLib.Lang.Parsing
             Expect(Tokens.RightBrace);
             return Exprs.Map(items, startToken);
         }
-
 
         /// <summary>
         /// Parses function expression :
@@ -1086,7 +1068,7 @@ namespace ComLib.Lang.Parsing
                 ParseParameters(funcExp, expectParenthesis, false, !expectParenthesis);
             }
             // Case 2: Internal function in global namespace.
-            else if(isScriptFunc)
+            else if (isScriptFunc)
             {
                 var sym = nameExp.SymScope.GetSymbol(fname) as SymbolFunction;
                 var meta = sym.Meta;
@@ -1094,7 +1076,7 @@ namespace ComLib.Lang.Parsing
             }
             else if (!isScriptFunc) // Type method call.
             {
-                FluentHelper.ParseFuncParameters(funcExp.ParamListExpressions, _tokenIt, this, expectParenthesis, !expectParenthesis, null);                
+                FluentHelper.ParseFuncParameters(funcExp.ParamListExpressions, _tokenIt, this, expectParenthesis, !expectParenthesis, null);
             }
             // Case 3: Member acccess
             else if (hasMemberAccess)
@@ -1105,10 +1087,10 @@ namespace ComLib.Lang.Parsing
                 for (var ndx = 0; ndx < members.Count; ndx++)
                 {
                     var member = members[ndx];
-                    
+
                     // module ?
                     var sym = symScope.GetSymbol(member);
-                    if( sym.Category == SymbolCategory.Module)
+                    if (sym.Category == SymbolCategory.Module)
                     {
                         symScope = ((SymbolModule)sym).Scope;
                     }
@@ -1120,12 +1102,11 @@ namespace ComLib.Lang.Parsing
                     }
                 }
                 funcExp.Function = fexpr;
-                FluentHelper.ParseFuncParameters(funcExp.ParamListExpressions, _tokenIt, this, expectParenthesis, !expectParenthesis, meta); 
+                FluentHelper.ParseFuncParameters(funcExp.ParamListExpressions, _tokenIt, this, expectParenthesis, !expectParenthesis, meta);
             }
             _state.FunctionCall--;
             return funcExp;
         }
-
 
         /// <summary>
         /// Parses an Id based expression:
@@ -1133,9 +1114,9 @@ namespace ComLib.Lang.Parsing
         /// 2. getUser()    : function call
         /// 3. users[       : index expression
         /// 4. user.name    : member access
-        /// 
-        /// ASSIGNMENT:						EXPRESSION:						
-        /// result = 2;						result					-> variableexpression				
+        ///
+        /// ASSIGNMENT:						EXPRESSION:
+        /// result = 2;						result					-> variableexpression
         /// items[0] = 'kishore';			items[0]				-> indexexpression( variableexpression  | name)
         /// getuser();					    getuser()				-> functionexpression()
         /// user.age = 30;					user.age				-> memberexpression( variableexpression | name/member )
@@ -1153,7 +1134,7 @@ namespace ComLib.Lang.Parsing
             var aheadToken = isCurrentTokenAnOperator ? _tokenIt.NextToken : _tokenIt.Peek();
             var currentName = "";
             var withEnabled = Exprs.WithCount() > 0;
-            
+
             // NOT coming in from ParseExpression
             // e.g. [1, 2].length;
             if (existing == null)
@@ -1162,26 +1143,26 @@ namespace ComLib.Lang.Parsing
                 exp = Exprs.Ident(currentName, _tokenIt.NextToken);
             }
             if (!isCurrentTokenAnOperator)
-                _tokenIt.Advance();   
-             
+                _tokenIt.Advance();
+
             int memberAccess = 0;
 
             // 1. Get whether the variable is either a function/variable/module.
             var isVarType = exp.IsNodeType(NodeTypes.SysVariable);
             bool isFunction = false, isVariable = false, isModule = false, isExternalFunc = false;
-            var varName = isVarType ? ((VariableExpr) exp).Name : string.Empty;
+            var varName = isVarType ? ((VariableExpr)exp).Name : string.Empty;
             if (isVarType)
-            {                
+            {
                 isFunction = _context.Symbols.IsFunc(varName);
-                isVariable = _context.Symbols.IsVar (varName);
-                isModule =   _context.Symbols.IsMod (varName);
+                isVariable = _context.Symbols.IsVar(varName);
+                isModule = _context.Symbols.IsMod(varName);
                 isExternalFunc = _context.ExternalFunctions.Contains(varName);
-            }            
-            
+            }
+
             // CASE 1: Binding function call ( only for compiler right now )
             //         Only supporting compiler bindings right now. e.g. sys.compiler language bindings
             var n1 = _tokenIt.Peek(1);
-            if(currentName == "sys" && _tokenIt.NextToken.Token == Tokens.Dot && n1.Token.Text == "compiler" )
+            if (currentName == "sys" && _tokenIt.NextToken.Token == Tokens.Dot && n1.Token.Text == "compiler")
             {
                 return this.ParseBindingCallExpr("sys", "compiler");
             }
@@ -1195,7 +1176,7 @@ namespace ComLib.Lang.Parsing
             }
 
             // CASE 3: Simple variable expression - e.g. result + 2
-            bool isMemberAccessAhead = ( aheadToken.Token == Tokens.LeftParenthesis || aheadToken.Token == Tokens.LeftBracket || aheadToken.Token == Tokens.Dot );
+            bool isMemberAccessAhead = (aheadToken.Token == Tokens.LeftParenthesis || aheadToken.Token == Tokens.LeftBracket || aheadToken.Token == Tokens.Dot);
             if (isVariable && !isMemberAccessAhead)
             {
                 exp.Ctx = _context;
@@ -1205,11 +1186,11 @@ namespace ComLib.Lang.Parsing
             // CASE 4: Using with block and variable not existing
             //         e.g. with each contact {  print( birthday ) => print( contact.birthday ).
             if (withEnabled && !isFunction && !isVariable && !isModule && !isExternalFunc && varName != Exprs.WithName())
-            {                
+            {
                 var objectNameExp = Exprs.IdentWith(exp.Token);
                 exp = Exprs.MemberAccess(objectNameExp, exp.ToQualifiedName(), false, exp.Token);
             }
-           
+
             // CASE 5: Member access of some sort using either "." | "[]" | "()"
             // 1. result.total  : Dot access
             // 2. result[0]     : Array access
@@ -1223,7 +1204,7 @@ namespace ComLib.Lang.Parsing
                 // Case 2: "("- function call
                 if (token == Tokens.LeftParenthesis)
                 {
-                    exp = ParseFuncExpression(exp, members); 
+                    exp = ParseFuncExpression(exp, members);
                 }
 
                 // Case 3: "[" - indexing
@@ -1243,7 +1224,7 @@ namespace ComLib.Lang.Parsing
                     bool isAssignment = _tokenIt.NextToken.Token == Tokens.Assignment;
                     exp = Exprs.Index(exp, index, isAssignment, istart);
                 }
-            
+
                 // Case 4: "." - member access
                 else if (_tokenIt.NextToken.Token == Tokens.Dot)
                 {
@@ -1270,7 +1251,6 @@ namespace ComLib.Lang.Parsing
             return exp;
         }
 
-
         /// <summary>
         /// Parses a binding function call expression to hook into language bindings from the scripts.
         /// </summary>
@@ -1280,13 +1260,13 @@ namespace ComLib.Lang.Parsing
         public BindingCallExpr ParseBindingCallExpr(string root, string n1)
         {
             var startToken = _tokenIt.LastToken;
-            
+
             // 1. Move past the "." after "sys".
             _tokenIt.Advance();
 
             // 2. "compiler" after "sys."
             var bindingName = _tokenIt.ExpectId();
-            
+
             // 3. Expect "." for function name after the dot.
             _tokenIt.Expect(Tokens.Dot);
 
@@ -1298,7 +1278,6 @@ namespace ComLib.Lang.Parsing
             this.SetupContext(bexpr, startToken);
             return bexpr;
         }
-
 
         /// <summary>
         /// Parses all the dot "." members. e.g. "user.address.name"
@@ -1314,8 +1293,8 @@ namespace ComLib.Lang.Parsing
             dotAccess.RootScope = _context.Symbols.Global;
 
             // Keep processing members until "." is not there.
-            while (token == Tokens.Dot && !_tokenIt.IsEnded )
-            {                
+            while (token == Tokens.Dot && !_tokenIt.IsEnded)
+            {
                 // 1. Move past "."
                 _tokenIt.Advance();
 
@@ -1335,8 +1314,8 @@ namespace ComLib.Lang.Parsing
             }
             return dotAccess;
         }
-        #endregion
 
+        #endregion Parse Statments
 
         /// <summary>
         /// Parses parameters.
@@ -1351,7 +1330,7 @@ namespace ComLib.Lang.Parsing
             if (_tokenIt.NextToken.Token == Tokens.LeftParenthesis)
                 expectParenthesis = true;
 
-            if(expectParenthesis)
+            if (expectParenthesis)
                 _tokenIt.Expect(Tokens.LeftParenthesis);
 
             bool passNewLine = !enableNewLineAsEnd;
@@ -1362,9 +1341,9 @@ namespace ComLib.Lang.Parsing
                 if (IsEndOfParameterList(Tokens.RightParenthesis, enableNewLineAsEnd))
                     break;
 
-                if (_tokenIt.NextToken.Token == Tokens.Comma) 
+                if (_tokenIt.NextToken.Token == Tokens.Comma)
                     _tokenIt.Advance();
-                                 
+
                 var exp = ParseExpression(endTokens, true, false, true, passNewLine);
                 pexp.ParamListExpressions.Add(exp);
 
@@ -1378,10 +1357,9 @@ namespace ComLib.Lang.Parsing
                 // Advance.
                 Expect(Tokens.Comma);
             }
-            if(expectParenthesis)
+            if (expectParenthesis)
                 _tokenIt.Expect(Tokens.RightParenthesis);
         }
-
 
         /// <summary>
         /// Is end of parameter list.
@@ -1397,12 +1375,11 @@ namespace ComLib.Lang.Parsing
             if (next == Tokens.Semicolon) return true;
             if (next == Tokens.EndToken) return true;
 
-            if(enableNewLineAsEnd)
+            if (enableNewLineAsEnd)
                 if (last != Tokens.Comma && next == Tokens.NewLine) return true;
 
             return false;
         }
-
 
         /// <summary>
         /// Whether or not the token represents the start of an explicit ident expressions e.g. ident( "." | "[" | "=" )
@@ -1410,15 +1387,15 @@ namespace ComLib.Lang.Parsing
         /// <param name="token"></param>
         /// <returns></returns>
         public bool IsExplicitIdentQualifierExpression(Token token)
-        {            
+        {
             if (!(token.Kind == TokenKind.Ident)) return false;
-            
+
             // Check if variable.
             bool isVar = _context.Symbols.IsVar(token.Text);
             var ahead = _tokenIt.Peek(1, false);
 
             // variable member access, index access, assignment
-            if (isVar && ( ahead.Token == Tokens.Dot || ahead.Token == Tokens.LeftBracket || ahead.Token == Tokens.Assignment))
+            if (isVar && (ahead.Token == Tokens.Dot || ahead.Token == Tokens.LeftBracket || ahead.Token == Tokens.Assignment))
                 return true;
 
             // function call
@@ -1427,7 +1404,6 @@ namespace ComLib.Lang.Parsing
 
             return false;
         }
-
 
         /// <summary>
         /// Whether or not the token supplied is an increment operator.
@@ -1442,7 +1418,6 @@ namespace ComLib.Lang.Parsing
             return false;
         }
 
-
         /// <summary>
         /// Parses a postfix function call
         /// </summary>
@@ -1452,7 +1427,7 @@ namespace ComLib.Lang.Parsing
         /// <param name="isCurrentToken">Whether or not hte current token in the token iterator is the current token to use for checking for postfix plugins</param>
         /// <returns></returns>
         protected Expr ParsePostfix(Expr exp, bool enablePlugins, bool hasTokenReplacePlugins, bool isCurrentToken = false)
-        {            
+        {
             var next = isCurrentToken ? _tokenIt.NextToken : _tokenIt.Peek(1, false);
 
             // Validate.
@@ -1470,7 +1445,6 @@ namespace ComLib.Lang.Parsing
             return finalExp;
         }
 
-
         /// <summary>
         /// Sets up the context, symbol scope and script source reference for the expression supplied.
         /// </summary>
@@ -1482,11 +1456,10 @@ namespace ComLib.Lang.Parsing
 
             var reftoken = token == null ? _tokenIt.NextToken : token;
             expr.Ctx = this._context;
-            if(expr.SymScope == null) expr.SymScope = this._context.Symbols.Current;
-            if(expr.Token == null )   expr.Token = reftoken;
-            if(expr.Ref == null   )   expr.Ref = new ScriptRef(this.ScriptName, reftoken.Line, reftoken.LineCharPos);
+            if (expr.SymScope == null) expr.SymScope = this._context.Symbols.Current;
+            if (expr.Token == null) expr.Token = reftoken;
+            if (expr.Ref == null) expr.Ref = new ScriptRef(this.ScriptName, reftoken.Line, reftoken.LineCharPos);
         }
-
 
         protected void SetupTokenIteratorReferences(TokenIterator tokenIt)
         {

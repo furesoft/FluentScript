@@ -1,22 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using ComLib.Lang.AST;
 using ComLib.Lang.Core;
 using ComLib.Lang.Helpers;
 using ComLib.Lang.Types;
-using ComLib.Lang.AST;
+using System.Collections.Generic;
 
 namespace ComLib.Lang.Parsing
 {
-/// ------------------------------------------------------------------------------------------------
-/// remarks: This file is auto-generated from the FSGrammar specification and should not be modified.
-/// summary: This file contains all the AST for expressions at the system level.
-///			features like control-flow e..g if, while, for, try, break, continue, return etc.
-/// version: 0.9.8.10
-/// author:  kishore reddy
-/// date:	Wednesday, December 19, 2012
-/// ------------------------------------------------------------------------------------------------
-	public class ExprParser
-	{
-		public Parser _parser;
+    /// ------------------------------------------------------------------------------------------------
+    /// remarks: This file is auto-generated from the FSGrammar specification and should not be modified.
+    /// summary: This file contains all the AST for expressions at the system level.
+    ///			features like control-flow e..g if, while, for, try, break, continue, return etc.
+    /// version: 0.9.8.10
+    /// author:  kishore reddy
+    /// date:	Wednesday, December 19, 2012
+    /// ------------------------------------------------------------------------------------------------
+    public class ExprParser
+    {
+        public Parser _parser;
 
         /// <summary>
         /// Called by the framework after the parse method is called
@@ -54,7 +54,6 @@ namespace ComLib.Lang.Parsing
             }
         }
 
-
         public Expr OnParseNew()
         {
             var tokenIt = this._parser.TokenIt;
@@ -87,11 +86,9 @@ namespace ComLib.Lang.Parsing
             return expr;
         }
 
-
         public void OnParseNewComplete(Expr expr)
         {
         }
-
 
         public Expr OnParseBreak()
         {
@@ -105,11 +102,9 @@ namespace ComLib.Lang.Parsing
             return expr;
         }
 
-
         public void OnParseBreakComplete(Expr expr)
         {
         }
-
 
         public Expr OnParseContinue()
         {
@@ -123,14 +118,12 @@ namespace ComLib.Lang.Parsing
             return expr;
         }
 
-
         public void OnParseContinueComplete(Expr expr)
         {
         }
-		
 
-		public Expr OnParseForEach()
-		{
+        public Expr OnParseForEach()
+        {
             var tokenIt = this._parser.TokenIt;
             var initiatorToken = tokenIt.NextToken;
             // <codeForEach>
@@ -146,33 +139,31 @@ namespace ComLib.Lang.Parsing
             var varname = tokenIt.ExpectId();
             tokenIt.Expect(Tokens.In);
 
-		    var sourceExpr = _parser.ParseExpression(Terminators.ExpParenthesisNewLineEnd, true, false, true, false, false);
+            var sourceExpr = _parser.ParseExpression(Terminators.ExpParenthesisNewLineEnd, true, false, true, false, false);
             tokenIt.Expect(Tokens.RightParenthesis);
             var expr = Exprs.ForEach(varname, sourceExpr, initiatorToken) as BlockExpr;
             this.ParseBlock(expr);
-            
+
             // </codeForEach>
-			this._parser.SetupContext(expr, initiatorToken);
-			return expr;
-		}
+            this._parser.SetupContext(expr, initiatorToken);
+            return expr;
+        }
 
+        public void OnParseForEachComplete(Expr expr)
+        {
+        }
 
-		public void OnParseForEachComplete(Expr expr)
-		{
-		}
-		
-
-		public Expr OnParseFor()
-		{
+        public Expr OnParseFor()
+        {
             var tokenIt = this._parser.TokenIt;
             var initiatorToken = tokenIt.NextToken;
             // <codeFor>
 
-            if(initiatorToken.Token == Tokens.For)
+            if (initiatorToken.Token == Tokens.For)
             {
                 tokenIt.ExpectMany(Tokens.For, Tokens.LeftParenthesis);
                 var ahead = tokenIt.Peek(1);
-                if (ahead.Token == Tokens.In) 
+                if (ahead.Token == Tokens.In)
                     return OnParseForEach();
             }
 
@@ -187,21 +178,19 @@ namespace ComLib.Lang.Parsing
 
             // </codeFor>
             this._parser.SetupContext(expr, initiatorToken);
-			return expr;
-		}
+            return expr;
+        }
 
+        public void OnParseForComplete(Expr expr)
+        {
+        }
 
-		public void OnParseForComplete(Expr expr)
-		{
-		}
-		
-
-		public Expr OnParseFunctionDeclare()
-		{
+        public Expr OnParseFunctionDeclare()
+        {
             var tokenIt = this._parser.TokenIt;
-			var initiatorToken = tokenIt.NextToken;
-			var expr = new FunctionDeclareExpr();
-			// <codeFunctionDeclare>
+            var initiatorToken = tokenIt.NextToken;
+            var expr = new FunctionDeclareExpr();
+            // <codeFunctionDeclare>
 
             var token = tokenIt.NextToken;
             var expectToken = true;
@@ -218,7 +207,7 @@ namespace ComLib.Lang.Parsing
             var nextToken = tokenIt.NextToken;
             List<string> argNames = null;
 
-            // Option 1: Wild card 
+            // Option 1: Wild card
             if (nextToken.Token == Tokens.Multiply)
             {
                 expr.Function.Meta.HasWildCard = true;
@@ -252,19 +241,18 @@ namespace ComLib.Lang.Parsing
             OnParseFunctionDeclareBlock(expr.Function);
 
             // </codeFunctionDeclare>
-			this._parser.SetupContext(expr, initiatorToken);
-			return expr;
-		}
-
+            this._parser.SetupContext(expr, initiatorToken);
+            return expr;
+        }
 
         /// <summary>
         /// Parses a block by first pushing symbol scope and then popping after completion.
         /// </summary>
         public void OnParseFunctionDeclareBlock(BlockExpr expr)
-        {        
+        {
             var fs = expr as FunctionExpr;
             var funcName = fs.Meta.Name;
-            
+
             // 1. Define the function in global symbol scope
             var funcSymbol = new SymbolFunction(fs.Meta);
             funcSymbol.FuncExpr = expr;
@@ -275,23 +263,22 @@ namespace ComLib.Lang.Parsing
             if (fs.Meta.Aliases != null && fs.Meta.Aliases.Count > 0)
                 foreach (var alias in fs.Meta.Aliases)
                     this._parser.Context.Symbols.DefineAlias(alias, fs.Meta.Name);
-            
+
             // 3. Push the current scope.
             expr.SymScope = this._parser.Context.Symbols.Current;
             this._parser.Context.Symbols.Push(new SymbolsFunction(fs.Meta.Name), true);
 
             // 4. Register the parameter names in the symbol scope.
-            if( fs.Meta.Arguments != null && fs.Meta.Arguments.Count > 0)
-                foreach(var arg in fs.Meta.Arguments)
+            if (fs.Meta.Arguments != null && fs.Meta.Arguments.Count > 0)
+                foreach (var arg in fs.Meta.Arguments)
                     this._parser.Context.Symbols.DefineVariable(arg.Name, LTypes.Object);
 
             this._parser.ParseBlock(expr);
             this._parser.Context.Symbols.Pop();
         }
 
-
-		public void OnParseFunctionDeclareComplete(Expr expr)
-		{
+        public void OnParseFunctionDeclareComplete(Expr expr)
+        {
             var function = (expr as FunctionDeclareExpr).Function;
 
             // 1. Register the function as a symbol
@@ -305,10 +292,9 @@ namespace ComLib.Lang.Parsing
                     this._parser.Context.Symbols.DefineAlias(alias, function.Meta.Name);
                 }
             }
-		}
-		
+        }
 
-		public Expr OnParseIf()
+        public Expr OnParseIf()
         {
             var tokenIt = this._parser.TokenIt;
             var initiatorToken = tokenIt.NextToken;
@@ -327,7 +313,7 @@ namespace ComLib.Lang.Parsing
                 tokenIt.Advance();
                 tokenIt.AdvancePastNewLines();
 
-                // What's after else? 
+                // What's after else?
                 // 1. "if"      = else if statement
                 // 2. "{"       = multi  line else
                 // 3. "nothing" = single line else
@@ -346,21 +332,19 @@ namespace ComLib.Lang.Parsing
                 }
             }
             // </codeIf>
-			this._parser.SetupContext(expr, initiatorToken);
-			return expr;
-		}
+            this._parser.SetupContext(expr, initiatorToken);
+            return expr;
+        }
 
+        public void OnParseIfComplete(Expr expr)
+        {
+        }
 
-		public void OnParseIfComplete(Expr expr)
-		{
-		}
-		
-
-		public Expr OnParseLambda()
-		{
+        public Expr OnParseLambda()
+        {
             var tokenIt = this._parser.TokenIt;
-			var initiatorToken = tokenIt.NextToken;
-			// <codeLambda>
+            var initiatorToken = tokenIt.NextToken;
+            // <codeLambda>
 
             // Check for lambda or function declare.
             var next = tokenIt.Peek();
@@ -382,12 +366,11 @@ namespace ComLib.Lang.Parsing
             funcExp.Meta.Init(name, argnames);
             tokenIt.Expect(Tokens.RightParenthesis);
             this.OnParseLambdaBlock(funcExp);
-            
-            // </codeLambda>
-			this._parser.SetupContext(expr, initiatorToken);
-			return expr;
-		}
 
+            // </codeLambda>
+            this._parser.SetupContext(expr, initiatorToken);
+            return expr;
+        }
 
         public void OnParseLambdaBlock(Expr expr)
         {
@@ -408,16 +391,14 @@ namespace ComLib.Lang.Parsing
             this._parser.Context.Symbols.Pop();
         }
 
-
-		public void OnParseLambdaComplete(Expr expr)
-		{
+        public void OnParseLambdaComplete(Expr expr)
+        {
             if (expr.Nodetype == NodeTypes.SysFunctionDeclare)
                 this.OnParseFunctionDeclareComplete(expr);
-		}
-		
+        }
 
-		public Expr OnParseReturn()
-		{
+        public Expr OnParseReturn()
+        {
             var tokenIt = this._parser.TokenIt;
             var initiatorToken = tokenIt.NextToken;
             var expr = new ReturnExpr();
@@ -431,43 +412,39 @@ namespace ComLib.Lang.Parsing
             expr.Exp = exp;
 
             // </codeReturn>
-			this._parser.SetupContext(expr, initiatorToken);
-			return expr;
-		}
+            this._parser.SetupContext(expr, initiatorToken);
+            return expr;
+        }
 
+        public void OnParseReturnComplete(Expr expr)
+        {
+        }
 
-		public void OnParseReturnComplete(Expr expr)
-		{
-		}
-		
-
-		public Expr OnParseThrow()
-		{
+        public Expr OnParseThrow()
+        {
             var tokenIt = this._parser.TokenIt;
             var initiatorToken = tokenIt.NextToken;
-			var expr = new ThrowExpr();
-			// <codeThrow>
+            var expr = new ThrowExpr();
+            // <codeThrow>
 
             tokenIt.Expect(Tokens.Throw);
             expr.Exp = this._parser.ParseExpression(Terminators.ExpStatementEnd, true, false, true, true, false);
-            
+
             // </codeThrow>
-			this._parser.SetupContext(expr, initiatorToken);
-			return expr;
-		}
+            this._parser.SetupContext(expr, initiatorToken);
+            return expr;
+        }
 
+        public void OnParseThrowComplete(Expr expr)
+        {
+        }
 
-		public void OnParseThrowComplete(Expr expr)
-		{
-		}
-		
-
-		public Expr OnParseTryCatch()
-		{
+        public Expr OnParseTryCatch()
+        {
             var tokenIt = this._parser.TokenIt;
             var initiatorToken = tokenIt.NextToken;
-			var expr = new TryCatchExpr();
-			// <codeTryCatch>
+            var expr = new TryCatchExpr();
+            // <codeTryCatch>
 
             // Try
             tokenIt.Expect(Tokens.Try);
@@ -483,20 +460,18 @@ namespace ComLib.Lang.Parsing
             expr.Catch = new BlockExpr();
             this.ParseBlock(expr.Catch);
             this._parser.SetupContext(expr.Catch, catchToken);
-            
+
             // </codeTryCatch>
-			this._parser.SetupContext(expr, initiatorToken);
-			return expr;
-		}
+            this._parser.SetupContext(expr, initiatorToken);
+            return expr;
+        }
 
+        public void OnParseTryCatchComplete(Expr expr)
+        {
+        }
 
-		public void OnParseTryCatchComplete(Expr expr)
-		{
-		}
-		
-
-		public Expr OnParseWhile()
-		{
+        public Expr OnParseWhile()
+        {
             var tokenIt = this._parser.TokenIt;
             var initiatorToken = tokenIt.NextToken;
             var expr = new WhileExpr();
@@ -507,14 +482,12 @@ namespace ComLib.Lang.Parsing
 
             // </codeWhile>
             this._parser.SetupContext(expr, initiatorToken);
-			return expr;
-		}
+            return expr;
+        }
 
-
-		public void OnParseWhileComplete(Expr expr)
-		{
-		}
-
+        public void OnParseWhileComplete(Expr expr)
+        {
+        }
 
         /// <summary>
         /// Parses a block by first pushing symbol scope and then popping after completion.
@@ -541,7 +514,6 @@ namespace ComLib.Lang.Parsing
                 Exprs.WithPop();
         }
 
-
         /// <summary>
         /// Parses a conditional block by first pushing symbol scope and then popping after completion.
         /// </summary>
@@ -553,5 +525,5 @@ namespace ComLib.Lang.Parsing
             this._parser.ParseConditionalStatement(expr);
             this._parser.Context.Symbols.Pop();
         }
-	}
+    }
 }

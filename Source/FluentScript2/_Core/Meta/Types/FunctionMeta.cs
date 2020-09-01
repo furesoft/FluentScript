@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-
-using ComLib.Lang.Docs;
+﻿using ComLib.Lang.Docs;
 using ComLib.Lang.Types;
-
+using System;
+using System.Collections.Generic;
 
 namespace ComLib.Lang.Core
 {
@@ -19,17 +17,15 @@ namespace ComLib.Lang.Core
         {
         }
 
-
         /// <summary>
         /// Initailize
         /// </summary>
         /// <param name="name"></param>
         /// <param name="argNames"></param>
         public FunctionMetaData(string name, List<string> argNames)
-        {            
+        {
             Init(name, argNames);
         }
-
 
         /// <summary>
         /// Initialize
@@ -45,7 +41,7 @@ namespace ComLib.Lang.Core
 
             if (argNames != null && argNames.Count > 0)
             {
-                for(int ndx = 0; ndx < argNames.Count; ndx++)
+                for (int ndx = 0; ndx < argNames.Count; ndx++)
                 {
                     var argName = argNames[ndx];
                     var arg = new ArgAttribute() { Name = argName };
@@ -56,7 +52,6 @@ namespace ComLib.Lang.Core
                 }
             }
         }
-
 
         /// <summary>
         /// Initailizes
@@ -86,42 +81,35 @@ namespace ComLib.Lang.Core
             this.ArgumentNames[arg.Alias] = arg.Name;
         }
 
-
         /// <summary>
         /// Function declaration
         /// </summary>
         public string Name;
-
 
         /// <summary>
         /// The doc tags for this function.
         /// </summary>
         public DocTags Doc;
 
-
         /// <summary>
         /// The aliases for the function name.
         /// </summary>
         public List<string> Aliases;
-
 
         /// <summary>
         /// Lookup for all the arguments.
         /// </summary>
         public IDictionary<string, ArgAttribute> ArgumentsLookup;
 
-
         /// <summary>
         /// Lookup for all the arguments names
         /// </summary>
         public IDictionary<string, string> ArgumentNames;
 
-
         /// <summary>
         /// Names of the parameters
         /// </summary>
         public List<ArgAttribute> Arguments;
-
 
         /// <summary>
         /// Whether or not this function can be used as a suffix for a single parameter
@@ -129,12 +117,10 @@ namespace ComLib.Lang.Core
         /// </summary>
         public bool IsSuffixable { get; set; }
 
-
         /// <summary>
         /// Whether or not this function supports a wild card.
         /// </summary>
         public bool HasWildCard { get; set; }
-
 
         /// <summary>
         /// The version of the function. defaulted to 1.0.0.0.
@@ -142,12 +128,10 @@ namespace ComLib.Lang.Core
         /// </summary>
         public Version Version { get; set; }
 
-
         /// <summary>
         /// The return type of the function.
         /// </summary>
         public LType ReturnType { get; set; }
-
 
         /// <summary>
         /// Total arguments
@@ -157,12 +141,10 @@ namespace ComLib.Lang.Core
             get { return Arguments == null ? 0 : Arguments.Count; }
         }
 
-
         public bool HasArguments()
         {
             return this.TotalArgs > 0;
         }
-
 
         /// <summary>
         /// Getst the total required arguments.

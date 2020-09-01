@@ -9,7 +9,6 @@ namespace ComLib.Lang.Helpers
     {
         private object[] _args;
 
-
         /// <summary>
         /// Initialize with arguments.
         /// </summary>
@@ -19,12 +18,10 @@ namespace ComLib.Lang.Helpers
             _args = args;
         }
 
-
         /// <summary>
         /// Arguments
         /// </summary>
         public object[] Args { get { return _args; } }
-
 
         /// <summary>
         /// Get value of type T at index position supplied.
@@ -38,7 +35,6 @@ namespace ComLib.Lang.Helpers
             val = Convert.ChangeType(val, typeof(T), null);
             return (T)val;
         }
-
 
         /// <summary>
         /// Get the default value if ndx outof bounds

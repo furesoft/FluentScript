@@ -1,32 +1,31 @@
-﻿using System;
+﻿// <lang:using>
+using ComLib.Lang.Core;
+using ComLib.Lang.Plugins;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-
-// <lang:using>
-using ComLib.Lang.Core;
-using ComLib.Lang.Plugins;
 // </lang:using>
 
 namespace ComLib.Lang.Parsing
-{    
+{
     /// <summary>
     /// Stores all the combinators.
     /// </summary>
-    public class RegisteredPlugins 
+    public class RegisteredPlugins
     {
         // e.g.
         // [ "monday"   ] = [ DayPlugin ]
         // [ "$IdToken" ] = [ LinqPlugin, ]
         private IDictionary<string, List<ILangPlugin>> _sysStmtPlugins = new Dictionary<string, List<ILangPlugin>>();
-        private IDictionary<string, List<ILangPlugin>> _expPlugins     = new Dictionary<string, List<ILangPlugin>>();
-        private IDictionary<string, List<ILangPlugin>> _tokPlugins     = new Dictionary<string, List<ILangPlugin>>();
-        private IDictionary<string, List<ILangPlugin>> _lexPlugins     = new Dictionary<string, List<ILangPlugin>>();
+
+        private IDictionary<string, List<ILangPlugin>> _expPlugins = new Dictionary<string, List<ILangPlugin>>();
+        private IDictionary<string, List<ILangPlugin>> _tokPlugins = new Dictionary<string, List<ILangPlugin>>();
+        private IDictionary<string, List<ILangPlugin>> _lexPlugins = new Dictionary<string, List<ILangPlugin>>();
         private IDictionary<string, List<ILangPlugin>> _postfixPlugins = new Dictionary<string, List<ILangPlugin>>();
-        private IDictionary<string, List<ILangPlugin>> _stmtPlugins    = new Dictionary<string, List<ILangPlugin>>();
+        private IDictionary<string, List<ILangPlugin>> _stmtPlugins = new Dictionary<string, List<ILangPlugin>>();
         private IDictionary<string, List<ILangPlugin>> _expStmtPlugins = new Dictionary<string, List<ILangPlugin>>();
-        private IDictionary<string, ISetupPlugin>      _setupPlugins   = new Dictionary<string, ISetupPlugin>();
-        
+        private IDictionary<string, ISetupPlugin> _setupPlugins = new Dictionary<string, ISetupPlugin>();
 
         private int _totalExpPlugins = 0;
         private bool _hasLiteralCombinators = false;
@@ -43,7 +42,6 @@ namespace ComLib.Lang.Parsing
         private IDictionary<string, object> _pluginSettings;
         private IList<IDisposable> _disposablePlugins;
 
-
         /// <summary>
         /// Initialize plugins.
         /// </summary>
@@ -55,85 +53,83 @@ namespace ComLib.Lang.Parsing
             _pluginSettings = new Dictionary<string, object>();
         }
 
-
         /// <summary>
         /// Initialize
         /// </summary>
         public void Init()
         {
             // System plugins ( basic features - loops, if etc )
-            _sysMap["Break"]           =  new BreakPlugin();
-            _sysMap["Continue"]        =  new ContinuePlugin();
-            _sysMap["For"]             =  new ForPlugin();
-            _sysMap["Lambda"]          =  new LambdaPlugin();
-            _sysMap["FuncDeclare"]     =  new FunctionDeclarePlugin();
-            _sysMap["If"]              =  new IfPlugin();
-            _sysMap["New"]             =  new NewPlugin();
-            _sysMap["Return"]          =  new ReturnPlugin();
-            _sysMap["Throw"]           =  new ThrowPlugin();
-            _sysMap["TryCatch"]        =  new TryCatchPlugin();
-            _sysMap["TypeOf"]          =  new TypeOfPlugin();
-            _sysMap["While"]           =  new WhilePlugin();
-            _sysMap["Var"]             =  new VarPlugin();
-            _sysMap["Plugin"]          =  new PluginPlugin();
+            _sysMap["Break"] = new BreakPlugin();
+            _sysMap["Continue"] = new ContinuePlugin();
+            _sysMap["For"] = new ForPlugin();
+            _sysMap["Lambda"] = new LambdaPlugin();
+            _sysMap["FuncDeclare"] = new FunctionDeclarePlugin();
+            _sysMap["If"] = new IfPlugin();
+            _sysMap["New"] = new NewPlugin();
+            _sysMap["Return"] = new ReturnPlugin();
+            _sysMap["Throw"] = new ThrowPlugin();
+            _sysMap["TryCatch"] = new TryCatchPlugin();
+            _sysMap["TypeOf"] = new TypeOfPlugin();
+            _sysMap["While"] = new WhilePlugin();
+            _sysMap["Var"] = new VarPlugin();
+            _sysMap["Plugin"] = new PluginPlugin();
 
             // Custom plugins - extended functionality.
-            _extMap["AnyOf"]           =  new AnyOfPlugin();
-            _extMap["Aggregate"]       =  new AggregatePlugin();
-            _extMap["Alias"]           =  new AliasPlugin();
+            _extMap["AnyOf"] = new AnyOfPlugin();
+            _extMap["Aggregate"] = new AggregatePlugin();
+            _extMap["Alias"] = new AliasPlugin();
             //_extMap["AndOr"]		   =  new AndOrPlugin();
             //_extMap["Bool"]      	   =  new BoolPlugin();
             //_extMap["Compare"]		   =  new ComparePlugin();
-            _extMap["ConstCaps"]       =  new ConstCapsPlugin(); 
+            _extMap["ConstCaps"] = new ConstCapsPlugin();
             //_extMap["Date"]      	   =  new DatePlugin();
-            _extMap["DateNumber"]      =  new DateNumberPlugin();
+            _extMap["DateNumber"] = new DateNumberPlugin();
             //_extMap["DateTimeCombiner"] = new DateTimeCombinerPlugin();
             //_extMap["Day"]      	   =  new DayPlugin();
             //_extMap["Def"]      	   =  new DefPlugin();
-            _extMap["Enable"]      	   =  new EnablePlugin();
-            _extMap["Email"]      	   =  new EmailPlugin();
-            _extMap["Fail"]            =  new FailPlugin();
-            _extMap["FileExt"]         =  new FileExtPlugin();
-            _extMap["FluentFunc"]      =  new FluentFuncPlugin();
-            _extMap["FluentMember"]    =  new FluentMemberPlugin();
-            _extMap["FuncWildCard"]    =  new FuncWildCardPlugin();
-            _extMap["HashComment"]     =  new HashCommentPlugin();
-            _extMap["Holiday"]         =  new HolidayPlugin();
-            _extMap["Linq"]      	   =  new LinqPlugin();
-            _extMap["Log"]             =  new LogPlugin();
-            _extMap["MachineInfo"]     =  new MachineInfoPlugin();
-            _extMap["Marker"]      	   =  new MarkerPlugin();
-            _extMap["MarkerLex"]       =  new MarkerLexPlugin();
+            _extMap["Enable"] = new EnablePlugin();
+            _extMap["Email"] = new EmailPlugin();
+            _extMap["Fail"] = new FailPlugin();
+            _extMap["FileExt"] = new FileExtPlugin();
+            _extMap["FluentFunc"] = new FluentFuncPlugin();
+            _extMap["FluentMember"] = new FluentMemberPlugin();
+            _extMap["FuncWildCard"] = new FuncWildCardPlugin();
+            _extMap["HashComment"] = new HashCommentPlugin();
+            _extMap["Holiday"] = new HolidayPlugin();
+            _extMap["Linq"] = new LinqPlugin();
+            _extMap["Log"] = new LogPlugin();
+            _extMap["MachineInfo"] = new MachineInfoPlugin();
+            _extMap["Marker"] = new MarkerPlugin();
+            _extMap["MarkerLex"] = new MarkerLexPlugin();
             //_extMap["Money"]      	   =  new MoneyPlugin();
-            _extMap["Module"]          =  new ModulePlugin();
-            _extMap["NamedIndex"]      =  new NamedIndexPlugin();
-            _extMap["Percent"]         =  new PercentPlugin();
-            _extMap["PhoneNumber"]     =  new PhoneNumberPlugin();
-            _extMap["Preprocessor"]    =  new PreprocessorPlugin();
-            _extMap["Plugin"]          =  new PluginPlugin();            
-            _extMap["Print"]      	   =  new PrintPlugin();
-            _extMap["PrintExpression"] =  new PrintExpressionPlugin();
-            _extMap["Records"]         =  new RecordsPlugin();
-            _extMap["Repeat"]          =  new RepeatPlugin();
-            _extMap["Round"]      	   =  new RoundPlugin();
-            _extMap["Run"]      	   =  new RunPlugin();
+            _extMap["Module"] = new ModulePlugin();
+            _extMap["NamedIndex"] = new NamedIndexPlugin();
+            _extMap["Percent"] = new PercentPlugin();
+            _extMap["PhoneNumber"] = new PhoneNumberPlugin();
+            _extMap["Preprocessor"] = new PreprocessorPlugin();
+            _extMap["Plugin"] = new PluginPlugin();
+            _extMap["Print"] = new PrintPlugin();
+            _extMap["PrintExpression"] = new PrintExpressionPlugin();
+            _extMap["Records"] = new RecordsPlugin();
+            _extMap["Repeat"] = new RepeatPlugin();
+            _extMap["Round"] = new RoundPlugin();
+            _extMap["Run"] = new RunPlugin();
             //_extMap["Set"]      	   =  new SetPlugin();
-            _extMap["Sort"]      	   =  new SortPlugin();
+            _extMap["Sort"] = new SortPlugin();
             //_extMap["Step"]            =  new StepPlugin();
             //_extMap["StringLiteral"]   =  new StringLiteralPlugin();
-            _extMap["Suffix"]      	   =  new SuffixPlugin();
-            _extMap["Swap"]      	   =  new SwapPlugin();
-            _extMap["Time"]      	   =  new TimePlugin();
-            _extMap["TypeOperations"]  =  new TypeOperationsPlugin();
-            _extMap["Units"]      	   =  new UnitsPlugin();
-            _extMap["Uri"]      	   =  new UriPlugin();
-            _extMap["VariablePath"]    =  new VariablePathPlugin();
-            _extMap["Version"]         =  new VersionPlugin();
-            _extMap["Words"]           =  new WordsPlugin();
-            _extMap["WordsInterpret"]  =  new WordsInterpretPlugin();
+            _extMap["Suffix"] = new SuffixPlugin();
+            _extMap["Swap"] = new SwapPlugin();
+            _extMap["Time"] = new TimePlugin();
+            _extMap["TypeOperations"] = new TypeOperationsPlugin();
+            _extMap["Units"] = new UnitsPlugin();
+            _extMap["Uri"] = new UriPlugin();
+            _extMap["VariablePath"] = new VariablePathPlugin();
+            _extMap["Version"] = new VersionPlugin();
+            _extMap["Words"] = new WordsPlugin();
+            _extMap["WordsInterpret"] = new WordsInterpretPlugin();
             //SerializePluginMetadata();
         }
-
 
         public int Total()
         {
@@ -141,79 +137,66 @@ namespace ComLib.Lang.Parsing
             return total;
         }
 
-
         /// <summary>
         /// The total number of expression plugins.
         /// </summary>
         public int TotalExpressions { get { return _totalExpPlugins; } }
 
-
         /// <summary>
         /// The total number of combinators.
         /// </summary>
-        public int TotalLexical  { get { return _lexPlugins.Count; } }
-
+        public int TotalLexical { get { return _lexPlugins.Count; } }
 
         /// <summary>
         /// The total number of token based plugins.
         /// </summary>
         public int TotalTokens { get { return _lexPlugins.Count; } }
 
-
         /// <summary>
         /// The total number of statement based plugins.
         /// </summary>
         public int TotalStmts { get { return _stmtPlugins.Count; } }
 
-        
         /// <summary>
         /// Whether there exist combinators that handle generic literls aside from IdTokens.
         /// </summary>
         public bool HasLiteralTokenPlugins { get { return _hasLiteralCombinators; } }
-
 
         /// <summary>
         /// Whether there exist token based plugins.
         /// </summary>
         public bool HasTokenBasedPlugins { get { return _hasTokenPlugins; } }
 
-
         /// <summary>
         /// Whether or not there are any postfix plugins.
         /// </summary>
         public bool HasPostfixPlugins { get { return _hasPostfixPlugins; } }
-
 
         /// <summary>
         /// Last matched expression plugin.
         /// </summary>
         public IExprPlugin LastMatchedExpressionPlugin { get { return _lastMatchedExp; } }
 
-
         /// <summary>
         /// Last matched token plugin.
         /// </summary>
         public ITokenPlugin LastMatchedTokenPlugin { get { return _lastMatchedTok; } }
-
 
         /// <summary>
         /// Last matched lex plugin.
         /// </summary>
         public ILexPlugin LastMatchedLexPlugin { get { return _lastMatchedLex; } }
 
-
         /// <summary>
         /// Last matched sys stmt plugin.
         /// </summary>
         public IExprPlugin LastMatchedSysStmtPlugin { get { return _lastMatchedSysStmt; } }
-
 
         /// <summary>
         /// Last matched sys stmt plugin.
         /// </summary>
         public IExprPlugin LastMatchedExtStmtPlugin { get { return _lastMatchedExtStmt; } }
 
-        
         /// <summary>
         /// Register all plugins within the commonlibrary
         /// </summary>
@@ -229,7 +212,6 @@ namespace ComLib.Lang.Parsing
             Register(new FileIOPlugin());
         }
 
-
         /// <summary>
         /// Registers the system plugins.
         /// </summary>
@@ -238,7 +220,6 @@ namespace ComLib.Lang.Parsing
             RegisterExtensionsByNames(_sysMap.Keys, _sysMap);
         }
 
-
         /// <summary>
         /// Register all of the custom extensions
         /// </summary>
@@ -246,7 +227,6 @@ namespace ComLib.Lang.Parsing
         {
             RegisterExtensionsByNames(_extMap.Keys, _extMap);
         }
-
 
         /// <summary>
         /// Register all of the custom extensions
@@ -262,19 +242,17 @@ namespace ComLib.Lang.Parsing
             Register(plugins.ToArray());
         }
 
-
         /// <summary>
         /// Register all of the custom extensions
         /// </summary>
         public void RegisterCustomByType(Type pluginType)
         {
             var name = pluginType.Name.Replace("Plugin", "");
-            ILangPlugin plugin = _extMap.ContainsKey(name) 
+            ILangPlugin plugin = _extMap.ContainsKey(name)
                                  ? _extMap[name]
                                  : (ILangPlugin)CreatePluginInstance(pluginType);
-            Register(plugin);            
+            Register(plugin);
         }
-
 
         /// <summary>
         /// Register a specific set of custom extensions
@@ -285,8 +263,6 @@ namespace ComLib.Lang.Parsing
             RegisterExtensionsByNames(pluginKeys, _extMap);
         }
 
-
-
         /// <summary>
         /// Registers a setup plugin.
         /// </summary>
@@ -295,7 +271,6 @@ namespace ComLib.Lang.Parsing
         {
             _setupPlugins[plugin.Id] = plugin;
         }
-
 
         /// <summary>
         /// Register the list of plugins.
@@ -308,7 +283,6 @@ namespace ComLib.Lang.Parsing
             foreach (var plugin in sorted)
                 Register(plugin, false);
         }
-
 
         /// <summary>
         /// Registers a custom function callback.
@@ -365,8 +339,7 @@ namespace ComLib.Lang.Parsing
                     AddPlugin(_expPlugins, plugin, token, sort);
                     if (plugin.IsSystemLevel)
                         AddPlugin(_sysStmtPlugins, plugin, token, sort);
-
-                    else if(plugin.IsStatement)
+                    else if (plugin.IsStatement)
                         AddPlugin(_expStmtPlugins, plugin, token, sort);
 
                     if (token == "$NumericLiteralToken")
@@ -374,7 +347,6 @@ namespace ComLib.Lang.Parsing
                 }
             }
         }
-
 
         /// <summary>
         /// Register token plugin.
@@ -387,7 +359,6 @@ namespace ComLib.Lang.Parsing
             _hasTokenPlugins = true;
         }
 
-
         /// <summary>
         /// Registers a lex plugin.
         /// </summary>
@@ -398,12 +369,11 @@ namespace ComLib.Lang.Parsing
             RegisterPlugin(_lexPlugins, plugin, plugin.StartTokens, sort);
         }
 
-
         /// <summary>
         /// Iterate through all the combinators
         /// </summary>
         /// <param name="callback"></param>
-        public void ForEach<T>(Action<T> callback) where T: class
+        public void ForEach<T>(Action<T> callback) where T : class
         {
             if (typeof(T) == typeof(ITokenPlugin))
             {
@@ -423,7 +393,6 @@ namespace ComLib.Lang.Parsing
             }
         }
 
-
         /// <summary>
         /// Executes all setup plugins.
         /// </summary>
@@ -435,7 +404,6 @@ namespace ComLib.Lang.Parsing
             foreach (var pair in _setupPlugins)
                 pair.Value.Setup(ctx);
         }
-
 
         /// <summary>
         /// Disposes of all the plugins.
@@ -451,13 +419,12 @@ namespace ComLib.Lang.Parsing
             }
         }
 
-
         /// <summary>
         /// Get settigns for a plugin.
         /// </summary>
         /// <param name="pluginId"></param>
         /// <returns></returns>
-        public T GetSettings<T>(string pluginId) where T: class
+        public T GetSettings<T>(string pluginId) where T : class
         {
             if (!_pluginSettings.ContainsKey(pluginId))
                 return default(T);
@@ -469,7 +436,6 @@ namespace ComLib.Lang.Parsing
             return settings;
         }
 
-
         /// <summary>
         /// Set settigns for a plugin.
         /// </summary>
@@ -480,7 +446,6 @@ namespace ComLib.Lang.Parsing
         {
             _pluginSettings[pluginId] = settings;
         }
-
 
         /// <summary>
         /// Whether or not there is a expression plugin that can handle the token supplied.
@@ -495,7 +460,6 @@ namespace ComLib.Lang.Parsing
             return true;
         }
 
-
         /// <summary>
         /// Whether or not there is a statement plugin that can handle the token supplied.
         /// </summary>
@@ -503,12 +467,11 @@ namespace ComLib.Lang.Parsing
         /// <returns></returns>
         public bool CanHandleStmt(Token token)
         {
-            var plugin = GetStmt(token);           
+            var plugin = GetStmt(token);
             if (plugin == null) return false;
             _lastMatchedExtStmt = plugin;
-            return true;            
+            return true;
         }
-
 
         /// <summary>
         /// Whether or not there is a statement plugin that can handle the token supplied.
@@ -523,8 +486,6 @@ namespace ComLib.Lang.Parsing
             _lastMatchedSysStmt = plugin;
             return true;
         }
-                
-
 
         /// <summary>
         /// Whether or not there is a lex plugin that can handle the token supplied.
@@ -534,14 +495,12 @@ namespace ComLib.Lang.Parsing
         public bool CanHandleLex(Token token)
         {
             _lastMatchedLex = null;
-            var plugin = GetLex(token);            
+            var plugin = GetLex(token);
             if (plugin == null) return false;
             _lastMatchedLex = plugin;
             return true;
         }
 
-
-        
         /// <summary>
         /// Whether or not there is a lex plugin that can handle the token supplied.
         /// </summary>
@@ -556,7 +515,6 @@ namespace ComLib.Lang.Parsing
             if (plugin == null) return false;
             return true;
         }
-        
 
         /// <summary>
         /// Whether or not there is an expression based plugin for the token supplied.
@@ -569,7 +527,6 @@ namespace ComLib.Lang.Parsing
             return plugin != null;
         }
 
-
         /// <summary>
         /// Whether or not there is an statment based plugin for the token supplied.
         /// </summary>
@@ -581,12 +538,11 @@ namespace ComLib.Lang.Parsing
             return plugin != null;
         }
 
-
         /// <summary>
         /// Whether or not there is a token based plugin for the token supplied.
         /// </summary>
         /// <param name="token">The token to check against plugins.</param>
-        /// <param name="tokenPos">The position of the token in relation to the current token. 
+        /// <param name="tokenPos">The position of the token in relation to the current token.
         /// e.g. 0 indicates it's the current token, 1 indicates its the next token</param>
         /// <returns></returns>
         public bool ContainsTok(Token token, int tokenPos)
@@ -594,7 +550,6 @@ namespace ComLib.Lang.Parsing
             var plugin = GetTok(token, tokenPos);
             return plugin != null;
         }
-
 
         /// <summary>
         /// Whether or not there is a lex based plugin for the token supplied.
@@ -607,9 +562,8 @@ namespace ComLib.Lang.Parsing
             return plugin != null;
         }
 
-
         /// <summary>
-        /// Whether or not the function call supplied is a custom function callback that is 
+        /// Whether or not the function call supplied is a custom function callback that is
         /// outside of the script.
         /// </summary>
         /// <param name="name">Name of the function</param>
@@ -621,7 +575,6 @@ namespace ComLib.Lang.Parsing
             return false;
         }
 
-
         /// <summary>
         /// Whether or not there is a statement plugin with the supplied name.
         /// </summary>
@@ -631,13 +584,12 @@ namespace ComLib.Lang.Parsing
         {
             if (_stmtPlugins.ContainsKey(name))
                 return true;
-            
+
             if (_expStmtPlugins.ContainsKey(name))
                 return true;
 
             return false;
         }
-
 
         /// <summary>
         /// Get the postfix plugin.
@@ -649,7 +601,6 @@ namespace ComLib.Lang.Parsing
             return GetPlugin(_postfixPlugins, token, "$Suffix") as IExprPlugin;
         }
 
-
         /// <summary>
         /// Gets the statement based plugin associated with the token supplied.
         /// </summary>
@@ -659,8 +610,7 @@ namespace ComLib.Lang.Parsing
         {
             return GetPlugin(_sysStmtPlugins, token) as IExprPlugin;
         }
-        
-        
+
         /// <summary>
         /// Get the expression based plugin associated with the token supplied
         /// </summary>
@@ -670,7 +620,6 @@ namespace ComLib.Lang.Parsing
         {
             return GetPlugin(_expPlugins, token) as IExprPlugin;
         }
-
 
         /// <summary>
         /// Get the token based plugin associated with the token supplied
@@ -683,7 +632,6 @@ namespace ComLib.Lang.Parsing
             return GetPlugin(_tokPlugins, token, null, tokenPos) as ITokenPlugin;
         }
 
-        
         /// <summary>
         /// Get the lex based plugin associated with the token supplied
         /// </summary>
@@ -694,7 +642,6 @@ namespace ComLib.Lang.Parsing
             return GetPlugin(_lexPlugins, token) as ILexPlugin;
         }
 
-
         /// <summary>
         /// Gets the statement based plugin associated with the token supplied.
         /// </summary>
@@ -702,7 +649,7 @@ namespace ComLib.Lang.Parsing
         /// <returns></returns>
         public IExprPlugin GetStmt(Token token)
         {
-            //string name = token.Text;            
+            //string name = token.Text;
             //if (_expStmtPlugins.ContainsKey(name))
             //{
             //    return GetPlugin(_expStmtPlugins, token) as IExprBasePlugin;
@@ -720,7 +667,6 @@ namespace ComLib.Lang.Parsing
             return pluginToReturn;
         }
 
-
         private void RegisterExtensionsByNames(ICollection<string> pluginKeys, IDictionary<string, ILangPlugin> map)
         {
             var plugins = new ILangPlugin[pluginKeys.Count];
@@ -734,8 +680,7 @@ namespace ComLib.Lang.Parsing
                 ndx++;
             }
             Register(plugins);
-        }  
-
+        }
 
         private void RegisterPlugin(IDictionary<string, List<ILangPlugin>> map, ILangPlugin plugin, string[] tokens, bool sort)
         {
@@ -745,7 +690,6 @@ namespace ComLib.Lang.Parsing
                     AddPlugin(map, plugin, token, sort);
             }
         }
-
 
         /// <summary>
         /// Gets a plugin that matches the token supplied.
@@ -767,7 +711,7 @@ namespace ComLib.Lang.Parsing
             if (name == null)
                 return null;
 
-            if ( (token.Kind == TokenKind.Ident || token.Kind == TokenKind.Keyword || token.Kind == TokenKind.Symbol ) 
+            if ((token.Kind == TokenKind.Ident || token.Kind == TokenKind.Keyword || token.Kind == TokenKind.Symbol)
                 && map.ContainsKey(name))
             {
                 plugins = map[name];
@@ -786,7 +730,7 @@ namespace ComLib.Lang.Parsing
             }
             if (plugins != null)
             {
-                // Either a specific word like "select" or a general IdToken.                
+                // Either a specific word like "select" or a general IdToken.
                 ILangPlugin matchedPlugin = null;
                 foreach (var plugin in plugins)
                 {
@@ -810,7 +754,6 @@ namespace ComLib.Lang.Parsing
             return null;
         }
 
-
         private void CallBack<T>(IDictionary<string, List<ILangPlugin>> map, Action<T> callback)
         {
             foreach (var pair in map)
@@ -819,7 +762,6 @@ namespace ComLib.Lang.Parsing
                     callback((T)plugin);
             }
         }
-
 
         private void AddPlugin(IDictionary<string, List<ILangPlugin>> map, ILangPlugin plugin, string token, bool sort)
         {
@@ -840,20 +782,17 @@ namespace ComLib.Lang.Parsing
             }
         }
 
-
         private List<ILangPlugin> SortPlugins(List<ILangPlugin> plugins)
         {
             var ordered = plugins.OrderBy(plugin => plugin.Precedence).ToList();
             return ordered;
         }
 
-
         private object CreatePluginInstance(Type pluginType)
         {
             var instance = Activator.CreateInstance(pluginType);
             return instance;
         }
-
 
         private string SerializePluginMetadata()
         {
@@ -885,11 +824,9 @@ namespace ComLib.Lang.Parsing
                     }
                     info += Environment.NewLine;
                 }
-                
             }
-            return info;          
+            return info;
         }
-
 
         private string ExprMetaData(IExprPlugin plugin, int id)
         {
@@ -907,7 +844,7 @@ namespace ComLib.Lang.Parsing
             replacements["isAssignmentSupported"] = plugin.IsAssignmentSupported.ToString().ToLower();
 
             var tokens = "";
-            for(var ndx = 0; ndx < plugin.StartTokens.Count(); ndx++)
+            for (var ndx = 0; ndx < plugin.StartTokens.Count(); ndx++)
             {
                 if (ndx != 0)
                     tokens += ", ";
@@ -916,7 +853,7 @@ namespace ComLib.Lang.Parsing
             }
 
             var examples = "";
-            if(plugin.Examples != null)
+            if (plugin.Examples != null)
                 for (var ndx = 0; ndx < plugin.Examples.Count(); ndx++)
                 {
                     if (ndx != 0)
@@ -927,7 +864,7 @@ namespace ComLib.Lang.Parsing
             replacements["starttokens"] = tokens;
             replacements["examples"] = examples;
 
-            foreach(var pair in replacements)
+            foreach (var pair in replacements)
             {
                 content = content.Replace("${" + pair.Key + "}", pair.Value);
             }

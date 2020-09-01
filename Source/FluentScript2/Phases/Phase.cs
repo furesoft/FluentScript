@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using ComLib.Lang.Core;
+﻿using ComLib.Lang.Core;
 using ComLib.Lang.Parsing;
-
+using System;
 
 namespace ComLib.Lang.Phases
 {
@@ -14,24 +9,20 @@ namespace ComLib.Lang.Phases
     /// </summary>
     public class Phase : IPhase
     {
-
         /// <summary>
         /// Name of the phase.
         /// </summary>
         public string Name { get; set; }
-
 
         /// <summary>
         /// The result of excution of this phase.
         /// </summary>
         public PhaseResult Result { get; set; }
 
-
         /// <summary>
         /// The context of the runtime
         /// </summary>
         public Context Ctx { get; set; }
-
 
         /// <summary>
         /// Executes the phase
@@ -42,7 +33,6 @@ namespace ComLib.Lang.Phases
         {
             return ToEmptyPhaseResult(false, string.Empty);
         }
-
 
         /// <summary>
         /// Empty phase result, 0 time duration.
@@ -57,7 +47,6 @@ namespace ComLib.Lang.Phases
             return new PhaseResult(runResult);
         }
 
-
         /// <summary>
         /// Builds up a phase result from start, end, success/message fields.
         /// </summary>
@@ -69,7 +58,7 @@ namespace ComLib.Lang.Phases
         public PhaseResult ToPhaseResult(DateTime start, DateTime end, bool success, string message)
         {
             var runResult = new RunResult(start, end, success, message);
-            return new PhaseResult(runResult);        
+            return new PhaseResult(runResult);
         }
     }
 }

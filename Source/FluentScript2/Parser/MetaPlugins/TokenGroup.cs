@@ -1,6 +1,4 @@
-﻿
-using System.Collections.Generic;
-
+﻿using System.Collections.Generic;
 
 namespace ComLib.Lang.Parsing.MetaPlugins
 {
@@ -9,13 +7,11 @@ namespace ComLib.Lang.Parsing.MetaPlugins
     {
         public List<TokenMatch> Matches;
 
-
         public TokenGroup()
         {
             this.Matches = new List<TokenMatch>();
             this.IsGroup = true;
         }
-
 
         /// <summary>
         /// Gets the total number of required plugins.
@@ -23,7 +19,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
         /// <returns></returns>
         public override int TotalRequired()
         {
-            if (!this.IsRequired) 
+            if (!this.IsRequired)
                 return 0;
 
             if (this.Matches == null || this.Matches.Count == 0)
@@ -32,9 +28,8 @@ namespace ComLib.Lang.Parsing.MetaPlugins
             var totalReq = 0;
             for (var ndx = 0; ndx < this.Matches.Count; ndx++)
             {
-                var match = this.Matches[ndx];                
+                var match = this.Matches[ndx];
                 totalReq += match.TotalRequired();
-                
             }
             return totalReq;
         }

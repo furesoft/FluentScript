@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Types;
-using ComLib.Lang.Parsing;
+using System;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Helpers
@@ -15,8 +14,7 @@ namespace ComLib.Lang.Helpers
     /// Helper class for calling functions in the script.
     /// </summary>
     public class LogHelper
-    {   
-
+    {
         /// <summary>
         /// Prints to the console.
         /// </summary>
@@ -33,7 +31,6 @@ namespace ComLib.Lang.Helpers
             return message;
         }
 
-
         /// <summary>
         /// Logs severity to console.
         /// </summary>
@@ -43,12 +40,11 @@ namespace ComLib.Lang.Helpers
         {
             if (!settings.EnableLogging) return string.Empty;
             var funcname = exp.ToQualifiedName();
-            var severity =funcname.Substring(funcname.IndexOf(".") + 1);
+            var severity = funcname.Substring(funcname.IndexOf(".") + 1);
             var message = BuildMessage(exp.ParamList);
             Console.WriteLine(severity.ToUpper() + " : " + message);
             return message;
         }
-
 
         /// <summary>
         /// Builds a single message from multiple arguments
@@ -78,7 +74,6 @@ namespace ComLib.Lang.Helpers
             }
             return val;
         }
-
 
         private static string GetVal(object val)
         {

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Core;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Parsing
@@ -23,7 +20,6 @@ namespace ComLib.Lang.Parsing
             { Tokens.Semicolon, true },
         };
 
-
         /// <summary>
         /// Used for end of expression;
         /// </summary>
@@ -34,7 +30,6 @@ namespace ComLib.Lang.Parsing
             { Tokens.EndToken, true }
         };
 
-
         /// <summary>
         /// Used for end of expression;
         /// </summary>
@@ -42,7 +37,6 @@ namespace ComLib.Lang.Parsing
         {
             { Tokens.Semicolon, true },
         };
-
 
         /// <summary>
         /// Used for end of expression;
@@ -54,7 +48,6 @@ namespace ComLib.Lang.Parsing
             { Tokens.Semicolon, true }
         };
 
-
         /// <summary>
         /// Used for end of expression;
         /// </summary>
@@ -62,7 +55,6 @@ namespace ComLib.Lang.Parsing
         {
             { Tokens.Comma, true }
         };
-
 
         /// <summary>
         /// Used for end of ( ) in if
@@ -72,7 +64,6 @@ namespace ComLib.Lang.Parsing
             { Tokens.RightParenthesis, true }
         };
 
-
         /// <summary>
         /// Used for end of ( ) in if
         /// </summary>
@@ -81,7 +72,6 @@ namespace ComLib.Lang.Parsing
             { Tokens.RightParenthesis, true },
             { Tokens.NewLine, true },
         };
-
 
         /// <summary>
         /// Used for end of condition in if
@@ -93,7 +83,6 @@ namespace ComLib.Lang.Parsing
             { Tokens.NewLine, true },
         };
 
-
         /// <summary>
         /// Used for end of array index ]
         /// </summary>
@@ -101,7 +90,6 @@ namespace ComLib.Lang.Parsing
         {
             { Tokens.RightBracket, true }
         };
-
 
         /// <summary>
         /// Used for end of parsing expressions in array
@@ -112,7 +100,6 @@ namespace ComLib.Lang.Parsing
             { Tokens.Comma, true }
         };
 
-
         /// <summary>
         /// Used for end of parsing expressions in array
         /// </summary>
@@ -122,7 +109,6 @@ namespace ComLib.Lang.Parsing
             { Tokens.Comma, true }
         };
 
-
         /// <summary>
         /// Used to terminate parsing for function call.
         /// </summary>
@@ -131,7 +117,6 @@ namespace ComLib.Lang.Parsing
             { Tokens.Comma, true },
             { Tokens.RightParenthesis, true }
         };
-
 
         /// <summary>
         /// Used to terminate a fluent expression
@@ -143,7 +128,6 @@ namespace ComLib.Lang.Parsing
             { Tokens.RightParenthesis, true },
             { Tokens.NewLine, true },
         };
-
 
         /// <summary>
         /// Used to terminate a fluent expression
@@ -158,7 +142,6 @@ namespace ComLib.Lang.Parsing
             { Tokens.RightBracket, true }
         };
 
-
         /// <summary>
         /// Used to terminate a fluent expression
         /// </summary>
@@ -169,7 +152,6 @@ namespace ComLib.Lang.Parsing
             { Tokens.NewLine, true },
         };
 
-
         /// <summary>
         /// Use in separating expressions using and/or.
         /// </summary>
@@ -178,7 +160,6 @@ namespace ComLib.Lang.Parsing
             { Tokens.Semicolon, true },
             { Tokens.Then, true },
         };
-
 
         /// <summary>
         /// Used for Math precedence shunting yard algorithm.

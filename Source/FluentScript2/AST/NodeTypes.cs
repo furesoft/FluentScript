@@ -1,5 +1,4 @@
-﻿
-namespace ComLib.Lang.AST
+﻿namespace ComLib.Lang.AST
 {
     /// ------------------------------------------------------------------------------------------------
     /// remarks: This file is auto-generated from the FSGrammar specification and should not be modified.
@@ -53,8 +52,8 @@ namespace ComLib.Lang.AST
 
         // Other
         public const string SysBlock = "SysBlock";
+
         public const string SysIndexable = "SysIndexable";
         public const string SysDataType = "SysDataType";
-
     }
 }

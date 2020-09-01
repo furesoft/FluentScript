@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ComLib.Lang.Core
 {
@@ -15,12 +12,10 @@ namespace ComLib.Lang.Core
         public const string Loop = "loop";
     }
 
-
     public class ParseStack
     {
         private List<string> _stack;
         private int _currentIndex = -1;
-       
 
         /// <summary>
         /// Initialize.
@@ -29,7 +24,6 @@ namespace ComLib.Lang.Core
         {
             _stack = new List<string>();
         }
-
 
         /// <summary>
         /// Number of items on the stack.
@@ -40,7 +34,6 @@ namespace ComLib.Lang.Core
             return _stack.Count;
         }
 
-
         /// <summary>
         /// Gets the last item placed on the compilation stack.
         /// </summary>
@@ -49,7 +42,6 @@ namespace ComLib.Lang.Core
         {
             return _stack[_currentIndex];
         }
-
 
         /// <summary>
         /// Push the type being currently parsed on the stack.
@@ -61,7 +53,6 @@ namespace ComLib.Lang.Core
             _currentIndex = _currentIndex + 1;
         }
 
-
         /// <summary>
         /// Pop the last type on the stack.
         /// </summary>
@@ -71,8 +62,6 @@ namespace ComLib.Lang.Core
             _currentIndex = _currentIndex - 1;
         }
     }
-
-
 
     /// <summary>
     /// Used as a stack to keep track of nested elements such as functions, blocks, arrays.
@@ -93,7 +82,6 @@ namespace ComLib.Lang.Core
             this._namedStack.Add("function_declares", new ParseStack());
         }
 
-
         /// <summary>
         /// Gets the last item placed on the compilation stack.
         /// </summary>
@@ -103,7 +91,6 @@ namespace ComLib.Lang.Core
             return _genericStack.Current();
         }
 
-
         /// <summary>
         /// Current elements on the stack.
         /// </summary>
@@ -112,7 +99,6 @@ namespace ComLib.Lang.Core
         {
             return _genericStack.Count();
         }
-
 
         /// <summary>
         /// Current elements on the stack.
@@ -125,7 +111,6 @@ namespace ComLib.Lang.Core
             return _namedStack[namedStack].Count();
         }
 
-
         /// <summary>
         /// Push the type being currently parsed on the stack.
         /// </summary>
@@ -135,7 +120,6 @@ namespace ComLib.Lang.Core
             _genericStack.Push(astType);
         }
 
-
         /// <summary>
         /// Pop the last type on the stack.
         /// </summary>
@@ -143,7 +127,6 @@ namespace ComLib.Lang.Core
         {
             _genericStack.Pop();
         }
-
 
         /// <summary>
         /// Push the type being currently parsed on the stack.
@@ -156,7 +139,6 @@ namespace ComLib.Lang.Core
             _namedStack[name].Push(astType);
         }
 
-
         /// <summary>
         /// Push the type being currently parsed on the stack.
         /// </summary>
@@ -167,7 +149,6 @@ namespace ComLib.Lang.Core
             _namedStack[name].Pop();
         }
 
-
         /// <summary>
         /// Push an array on the stack
         /// </summary>
@@ -175,7 +156,6 @@ namespace ComLib.Lang.Core
         {
             this.PushNamed("arrays", ParseStackType.Array);
         }
-
 
         /// <summary>
         /// Pop an array off the stack
@@ -185,7 +165,6 @@ namespace ComLib.Lang.Core
             this.PopNamed("arrays", ParseStackType.Array);
         }
 
-
         /// <summary>
         /// Push a map onto current stack
         /// </summary>
@@ -193,7 +172,6 @@ namespace ComLib.Lang.Core
         {
             this.PushNamed("maps", ParseStackType.Map);
         }
-
 
         /// <summary>
         /// Pop a map off the stack
@@ -203,7 +181,6 @@ namespace ComLib.Lang.Core
             this.PopNamed("maps", ParseStackType.Map);
         }
 
-
         /// <summary>
         /// Push a function call onto current stack
         /// </summary>
@@ -211,7 +188,6 @@ namespace ComLib.Lang.Core
         {
             this.PushNamed("function_calls", ParseStackType.FunctionCall);
         }
-
 
         /// <summary>
         /// Pop a function call off current stack
@@ -221,7 +197,6 @@ namespace ComLib.Lang.Core
             this.PopNamed("function_calls", ParseStackType.FunctionCall);
         }
 
-
         /// <summary>
         /// Push an array on the stack
         /// </summary>
@@ -229,7 +204,6 @@ namespace ComLib.Lang.Core
         {
             this.PushNamed("loops", ParseStackType.Loop);
         }
-
 
         /// <summary>
         /// Push an array on the stack

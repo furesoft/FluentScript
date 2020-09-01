@@ -1,13 +1,11 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using ComLib.Lang.AST;
+﻿using ComLib.Lang.AST;
 using ComLib.Lang.Core;
 using ComLib.Lang.Helpers;
 using ComLib.Lang.Plugins;
 using ComLib.Lang.Types;
-
+using System;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace ComLib.Lang.Parsing.MetaPlugins
 {
@@ -20,12 +18,13 @@ namespace ComLib.Lang.Parsing.MetaPlugins
         6. type conversions
         7. simplify method calls / functions ( performance improvement )
         8. multi plugin support: IsMatch() to handle duplicate start tokens
-        9. chaing plugins e.g. #ref:time  
+        9. chaing plugins e.g. #ref:time
        10. set up metacompiler tokens/context earlier on
        11. make sure plugins also support statements ?
        12. support for "this" in plugin to eventually have plugins in javascript as classes
-       13. support for new function()   to eventually have plugins in javascript as classes       
+       13. support for new function()   to eventually have plugins in javascript as classes
     */
+
     public class MetaPluginContainer
     {
         private IDictionary<string, List<CompilerPlugin>> _pluginExprs;
@@ -36,11 +35,9 @@ namespace ComLib.Lang.Parsing.MetaPlugins
         private const string _typeNumberToken = "$NumberToken";
         private const string _typeIdentSymbolToken = "$IdentSymbolToken";
 
- 
         private MatchResult _matchResult;
         private MatchResult _matchTokenResult;
         public MatchResult EmtpyMatch = new MatchResult(false, null, null);
-
 
         public MetaPluginContainer()
         {
@@ -51,15 +48,14 @@ namespace ComLib.Lang.Parsing.MetaPlugins
         }
 
         public Lexer Lex;
-        
-        public ExprParser Parser;        
+
+        public ExprParser Parser;
 
         public TokenIterator TokenIt;
 
         public TokenReplacePlugin LastMatchedTokenPlugin;
 
         public Symbols Symbols;
-
 
         /// <summary>
         /// Register the compiler plugin.
@@ -91,7 +87,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
                     _pluginLexTokens[startToken] = list;
                 }
             }
-            else if(plugin.PluginType == "token" )
+            else if (plugin.PluginType == "token")
             {
                 var tplugin = new TokenReplacePlugin();
 
@@ -100,9 +96,9 @@ namespace ComLib.Lang.Parsing.MetaPlugins
                 plugin.Handler = tplugin;
                 list.Add(plugin);
 
-                if( hasStartTokens )
+                if (hasStartTokens)
                 {
-                    foreach(var startToken in plugin.StartTokens)
+                    foreach (var startToken in plugin.StartTokens)
                     {
                         _pluginTokens[startToken] = list;
                     }
@@ -114,7 +110,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
                         var alias = replacements[0];
                         var replaceWith = replacements[1];
                         tplugin.SetupReplacement(alias, replaceWith);
-                        if(!hasStartTokens)
+                        if (!hasStartTokens)
                         {
                             _pluginTokens[alias] = list;
                         }
@@ -122,7 +118,6 @@ namespace ComLib.Lang.Parsing.MetaPlugins
                 }
             }
         }
-
 
         /// <summary>
         /// Iterates through each plugin.
@@ -136,7 +131,6 @@ namespace ComLib.Lang.Parsing.MetaPlugins
             }
         }
 
-
         /// <summary>
         /// Total plugins.
         /// </summary>
@@ -145,7 +139,6 @@ namespace ComLib.Lang.Parsing.MetaPlugins
         {
             return _pluginExprs == null ? 0 : _pluginExprs.Count;
         }
-
 
         /// <summary>
         /// The total number of tokens.
@@ -156,7 +149,6 @@ namespace ComLib.Lang.Parsing.MetaPlugins
             return _pluginTokens == null ? 0 : _pluginTokens.Count;
         }
 
-
         /// <summary>
         /// The total number of tokens.
         /// </summary>
@@ -166,12 +158,10 @@ namespace ComLib.Lang.Parsing.MetaPlugins
             return _pluginLexTokens == null ? 0 : _pluginLexTokens.Count;
         }
 
-
         public bool ContainsTok(Token token, int tokenPos)
         {
             return this.CanHandleTok(token, tokenPos == 0);
         }
-
 
         /// <summary>
         /// Validates the compiler plugin.
@@ -181,22 +171,22 @@ namespace ComLib.Lang.Parsing.MetaPlugins
         public BoolMsgObj Validate(CompilerPlugin plugin)
         {
             var errors = new List<string>();
-            if(string.IsNullOrEmpty(plugin.Grammar))
+            if (string.IsNullOrEmpty(plugin.Grammar))
                 errors.Add("Grammar not supplied");
 
-            if(string.IsNullOrEmpty(plugin.Name))
+            if (string.IsNullOrEmpty(plugin.Name))
                 errors.Add("Compiler plugin name not supplied");
 
-            if(string.IsNullOrEmpty(plugin.FullName))
+            if (string.IsNullOrEmpty(plugin.FullName))
                 errors.Add("Compiler plugin full name not supplied");
 
-            if(plugin.StartTokens.Length == 0)
+            if (plugin.StartTokens.Length == 0)
                 errors.Add("Start tokens not supplied");
 
-            if(string.IsNullOrEmpty(plugin.PluginType))
+            if (string.IsNullOrEmpty(plugin.PluginType))
                 errors.Add("Plugin type not supplied");
 
-            if(plugin.BuildExpr == null)
+            if (plugin.BuildExpr == null)
                 errors.Add("Plugin parse function not supplied");
 
             var success = errors.Count == 0;
@@ -210,7 +200,6 @@ namespace ComLib.Lang.Parsing.MetaPlugins
             return result;
         }
 
-        
         /// <summary>
         /// Whether or not there is a compiler plugin that can handle the token provided.
         /// </summary>
@@ -218,7 +207,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
         /// <returns></returns>
         public bool CanHandleExp(Token token)
         {
-            // Avoid literal strings 
+            // Avoid literal strings
             if (token.Kind == TokenKind.LiteralString)
                 return false;
 
@@ -246,25 +235,22 @@ namespace ComLib.Lang.Parsing.MetaPlugins
             }
             if (plugins == null)
                 return false;
-            
+
             _matchResult = EmtpyMatch;
             _matchResult = IsMatch(plugins);
             return _matchResult.Success;
         }
-
 
         public bool CanHandleLex(Token token)
         {
             if (!_pluginLexTokens.ContainsKey(token.Text))
                 return false;
             var plugins = _pluginLexTokens[token.Text];
-            foreach(var plugin in plugins)
+            foreach (var plugin in plugins)
             {
-                
             }
             return true;
         }
-
 
         public bool CanHandleTok(Token token, bool isCurrent)
         {
@@ -280,7 +266,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
                 plugins = _pluginTokens[token.Text];
             }
             // Case 3: General symbol e.g. $Ident $DateToken $Time
-            else if(token.Kind == TokenKind.LiteralDate)
+            else if (token.Kind == TokenKind.LiteralDate)
             {
                 if (_pluginTokens.ContainsKey(_typeDateToken))
                     plugins = _pluginTokens[_typeDateToken];
@@ -305,7 +291,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
                 else
                 {
                     var result = IsGrammarMatchOnExpression(plugin);
-                    if(result.Success)
+                    if (result.Success)
                     {
                         _matchTokenResult = result;
                         break;
@@ -314,7 +300,6 @@ namespace ComLib.Lang.Parsing.MetaPlugins
             }
             return _matchTokenResult.Success;
         }
-
 
         /// <summary>
         /// Visit expression.
@@ -343,7 +328,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
 
             // 2. Call the parse function on them metaplugin.
             var result = FunctionHelper.CallFunctionViaCSharpUsingLambda(ctx, expr, true, _matchResult.Args);
-            var rexpr = ((LClass) result).Value as Expr;
+            var rexpr = ((LClass)result).Value as Expr;
 
             // Advance the tokens.
             this.TokenIt.Advance(_matchResult.TokenCount);
@@ -357,12 +342,10 @@ namespace ComLib.Lang.Parsing.MetaPlugins
             return rexpr;
         }
 
-
         public Token ParseLex(IAstVisitor visitor)
         {
             return null;
         }
-
 
         /// <summary>
         /// Visit expression.
@@ -371,19 +354,18 @@ namespace ComLib.Lang.Parsing.MetaPlugins
         public Token ParseTokens()
         {
             var plugin = _matchTokenResult.Plugin;
-            if(!string.IsNullOrEmpty(plugin.GrammarMatch))
+            if (!string.IsNullOrEmpty(plugin.GrammarMatch))
             {
                 var ctx = plugin.BuildExpr.Ctx;
                 var expr = plugin.BuildExpr as FunctionExpr;
                 var result = FunctionHelper.CallFunctionViaCSharpUsingLambda(ctx, expr, true, _matchTokenResult.Args);
-                var token = ((LClass) result).Value as Token;
-                this.TokenIt.Advance(_matchTokenResult.TokenCount -1);
+                var token = ((LClass)result).Value as Token;
+                this.TokenIt.Advance(_matchTokenResult.TokenCount - 1);
                 return token;
             }
             var tokenReplacer = plugin.Handler as TokenReplacePlugin;
             return tokenReplacer.Parse();
         }
-
 
         /// <summary>
         /// Whether or not there is a plugin that matches the current tokens.
@@ -401,7 +383,6 @@ namespace ComLib.Lang.Parsing.MetaPlugins
             var plugins = this._pluginExprs[token.Token.Text];
             return IsMatch(plugins);
         }
-
 
         public MatchResult IsMatch(List<CompilerPlugin> plugins)
         {
@@ -426,7 +407,6 @@ namespace ComLib.Lang.Parsing.MetaPlugins
             return result;
         }
 
-
         private MatchResult IsGrammarMatchOnExpression(CompilerPlugin plugin)
         {
             // 5. Check Grammer.
@@ -437,19 +417,17 @@ namespace ComLib.Lang.Parsing.MetaPlugins
             return result;
         }
 
-
         private MatchResult CheckMatchesForLexer(CompilerPlugin plugin, List<TokenMatch> matches, Dictionary<string, object> args, int peekCount, int matchCount)
         {
             return null;
         }
-
 
         private MatchResult CheckExpressionMatches(CompilerPlugin plugin, List<TokenMatch> matches, Dictionary<string, object> args, int peekCount, int matchCount)
         {
             var isMatch = true;
             var token = peekCount == 0 ? this.TokenIt.NextToken : this.TokenIt.Peek(peekCount);
             var totalMatched = matchCount;
-            
+
             foreach (var match in matches)
             {
                 var continueCheck = false;
@@ -457,8 +435,8 @@ namespace ComLib.Lang.Parsing.MetaPlugins
                 var valueMatched = false;
 
                 // Termninators
-                if (match.TokenType == "@exprTerminators" 
-                    && ( Terminators.ExpFlexibleEnd.ContainsKey(token.Token) || Terminators.ExpThenEnd.ContainsKey(token.Token) ) 
+                if (match.TokenType == "@exprTerminators"
+                    && (Terminators.ExpFlexibleEnd.ContainsKey(token.Token) || Terminators.ExpThenEnd.ContainsKey(token.Token))
                     )
                 {
                     // Don't increment the peekcount
@@ -473,19 +451,19 @@ namespace ComLib.Lang.Parsing.MetaPlugins
                 }
 
                 // Check 1: Group tokens ?
-                if(match.IsGroup)
+                if (match.IsGroup)
                 {
-                    var submatches = ((TokenGroup) match).Matches;
+                    var submatches = ((TokenGroup)match).Matches;
                     var result = CheckExpressionMatches(plugin, submatches, args, peekCount, totalMatched);
-                    if(match.IsRequired && !result.Success)
+                    if (match.IsRequired && !result.Success)
                     {
                         isMatch = false;
                         break;
                     }
-                    if(result.Success)
+                    if (result.Success)
                     {
                         peekCount = result.TokenCount;
-                        if(match.IsRequired)
+                        if (match.IsRequired)
                             totalMatched += result.TotalMatched;
                     }
                 }
@@ -542,21 +520,21 @@ namespace ComLib.Lang.Parsing.MetaPlugins
                     totalMatched++;
                 }
                 // Check 2d: paramlist = @word ( , @word )* parameter names
-                else if(match.TokenType == "@paramnames")
+                else if (match.TokenType == "@paramnames")
                 {
                     var isvalidParamList = true;
                     var maxParams = 10;
                     var totalParams = 0;
                     var paramList = new List<object>();
 
-                    while(totalParams <= maxParams)
+                    while (totalParams <= maxParams)
                     {
                         var token2 = this.TokenIt.Peek(peekCount, false);
-                        if(token2.Token == Tokens.Comma)
+                        if (token2.Token == Tokens.Comma)
                         {
                             peekCount++;
                         }
-                        else if(token2.Token.Kind == TokenKind.Ident)
+                        else if (token2.Token.Kind == TokenKind.Ident)
                         {
                             paramList.Add(token2.Token.Text);
                             peekCount++;
@@ -573,7 +551,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
                     if (continueCheck)
                     {
                         trackNamedArgs = false;
-                        if(!string.IsNullOrEmpty(match.Name))
+                        if (!string.IsNullOrEmpty(match.Name))
                         {
                             args[match.Name] = token;
                             args[match.Name + "Value"] = new LArray(paramList);
@@ -633,8 +611,8 @@ namespace ComLib.Lang.Parsing.MetaPlugins
                 {
                     if (!string.IsNullOrEmpty(match.Name) && trackNamedArgs)
                     {
-                        args[match.Name] = token; 
-                        if(match.TokenPropEnabled)
+                        args[match.Name] = token;
+                        if (match.TokenPropEnabled)
                         {
                             // 1. figure out which token map to use.
                             var lookupmap = plugin.StartTokenMap;
@@ -682,7 +660,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
                             }
                         }
                         // matching values
-                        else if(valueMatched)
+                        else if (valueMatched)
                         {
                             args[match.Name + "Value"] = token.Token.Text;
                         }
@@ -698,12 +676,11 @@ namespace ComLib.Lang.Parsing.MetaPlugins
             return res;
         }
 
-
         private Expr ParseExpressionGrammar(Expr buildexpr, CompilerPlugin plugin, List<TokenMatch> matches, int peekCount)
         {
             var isMatch = true;
             var token = peekCount == 0 ? this.TokenIt.NextToken : this.TokenIt.Peek(peekCount);
-            
+
             foreach (var match in matches)
             {
                 if (match.TokenType == "@expr" && match.TokenPropValue == "block")
@@ -722,17 +699,14 @@ namespace ComLib.Lang.Parsing.MetaPlugins
             return buildexpr;
         }
 
-
-        class TokenFetcherParserLevel
+        private class TokenFetcherParserLevel
         {
             private TokenIterator _tokenIt;
-
 
             public virtual TokenData Curr()
             {
                 return this._tokenIt.NextToken;
             }
-
 
             public virtual TokenData Peek(int count)
             {
@@ -740,17 +714,14 @@ namespace ComLib.Lang.Parsing.MetaPlugins
             }
         }
 
-
-        class TokenFetcherLexerLevel
+        private class TokenFetcherLexerLevel
         {
             private Lexer _lexer;
-
 
             public virtual TokenData Curr()
             {
                 return this._lexer.NextToken();
             }
-
 
             public virtual TokenData Peek(int count)
             {
@@ -759,8 +730,6 @@ namespace ComLib.Lang.Parsing.MetaPlugins
         }
     }
 
-
-
     public class MatchResult
     {
         public bool Success;
@@ -768,7 +737,6 @@ namespace ComLib.Lang.Parsing.MetaPlugins
         public IDictionary<string, object> Args;
         public CompilerPlugin Plugin;
         public int TotalMatched;
-
 
         public MatchResult(bool success, CompilerPlugin plugin, IDictionary<string, object> args)
         {

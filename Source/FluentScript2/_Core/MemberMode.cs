@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ComLib.Lang.Core
+﻿namespace ComLib.Lang.Core
 {
     /// <summary>
     /// Represents the member access mode
@@ -15,36 +10,30 @@ namespace ComLib.Lang.Core
         /// </summary>
         FunctionExternal,
 
-
         /// <summary>
         /// Internal function
         /// </summary>
         FunctionScript,
-
 
         /// <summary>
         /// Instance method on class
         /// </summary>
         CustObjMethodInstance,
 
-
         /// <summary>
         /// Property access/set on object.
         /// </summary>
         PropertyMember,
-
 
         /// <summary>
         /// Method access/call on object.
         /// </summary>
         MethodMember,
 
-
         /// <summary>
         /// Static method on class
         /// </summary>
         CustObjMethodStatic,
-
 
         /// <summary>
         /// A module type.

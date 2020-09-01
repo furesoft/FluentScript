@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
+using System;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Parsing
@@ -19,7 +18,6 @@ namespace ComLib.Lang.Parsing
         private int _lastIndex = -1;
         private Action<AstNode, int> _limitCheck;
 
-        
         /// <summary>
         /// Initialize
         /// </summary>
@@ -29,7 +27,6 @@ namespace ComLib.Lang.Parsing
             _stack = new List<Tuple<string, IParameterExpression>>();
             _limitCheck = limitCheck;
         }
-
 
         /// <summary>
         /// Push the function expression on the call stack
@@ -49,7 +46,6 @@ namespace ComLib.Lang.Parsing
             return true;
         }
 
-
         /// <summary>
         /// Pop the function expression from the call stack.
         /// </summary>
@@ -62,7 +58,6 @@ namespace ComLib.Lang.Parsing
             _lastIndex = count - 1;
         }
 
-
         /// <summary>
         /// Total item in the call stack.
         /// </summary>
@@ -70,7 +65,6 @@ namespace ComLib.Lang.Parsing
         {
             get { return _stack.Count; }
         }
-
 
         /// <summary>
         /// Get by index.

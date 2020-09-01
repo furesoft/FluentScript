@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using ComLib.Lang.Core;
-using ComLib.Lang.AST;
-using ComLib.Lang.Helpers;
+﻿using ComLib.Lang.Helpers;
 using ComLib.Lang.Parsing;
 using ComLib.Lang.Runtime;
-
+using System;
 
 namespace ComLib.Lang.Phases
 {
@@ -28,7 +21,6 @@ namespace ComLib.Lang.Phases
             this.Name = "ast-execution";
         }
 
-
         /// <summary>
         /// Executes all the statements in the script.
         /// </summary>
@@ -43,7 +35,7 @@ namespace ComLib.Lang.Phases
             if (statements == null || statements.Count == 0)
                 return ToPhaseResult(now, now, true, "There are 0 nodes to execute");
 
-            // 3. Execute the nodes and get the run-result which captures various data            
+            // 3. Execute the nodes and get the run-result which captures various data
             var runResult = LangHelper.Execute(() =>
             {
                 var execution = new Execution();
@@ -53,7 +45,7 @@ namespace ComLib.Lang.Phases
             });
 
             // 4. Simply wrap the run-result ( success, message, start/end times )
-            // inside of a phase result. 
+            // inside of a phase result.
             return new PhaseResult(runResult);
         }
     }

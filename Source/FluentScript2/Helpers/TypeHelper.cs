@@ -1,11 +1,9 @@
-﻿using System;
+﻿using ComLib.Lang.Core;
+using ComLib.Lang.Types;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-
-using ComLib.Lang.Types;
-using ComLib.Lang.Core;
-
 
 namespace ComLib.Lang.Helpers
 {
@@ -18,10 +16,10 @@ namespace ComLib.Lang.Helpers
         {
             if (obj.Type == LTypes.Date)
             {
-                var day = (int)((LDate) obj).Value.DayOfWeek;
+                var day = (int)((LDate)obj).Value.DayOfWeek;
                 return new LNumber(day);
             }
-            
+
             if (obj.Type == LTypes.DayOfWeek)
             {
                 var day = (int)((LDayOfWeek)obj).Value;
@@ -30,23 +28,22 @@ namespace ComLib.Lang.Helpers
             return (LNumber)obj;
         }
 
-
         /// <summary>
         /// Converts from c# datatypes to fluentscript datatypes inside
         /// </summary>
         /// <param name="val"></param>
         public static LObject ConvertToLangValue(object val)
         {
-            if (val == null) return LObjects.Null;            
+            if (val == null) return LObjects.Null;
 
             var type = val.GetType();
-            
-            if (type == typeof(int))       
+
+            if (type == typeof(int))
                 return new LNumber(Convert.ToDouble(val));
-            
+
             if (type == typeof(double))
                 return new LNumber((double)val);
-            
+
             if (type == typeof(string))
                 return new LString((string)val);
 
@@ -57,7 +54,7 @@ namespace ComLib.Lang.Helpers
                 return new LTime((TimeSpan)val);
 
             if (type == typeof(DayOfWeek))
-                return new LDayOfWeek((DayOfWeek) val);
+                return new LDayOfWeek((DayOfWeek)val);
 
             if (type == typeof(bool))
                 return new LBool((bool)val);
@@ -66,16 +63,15 @@ namespace ComLib.Lang.Helpers
             if (isGenType)
             {
                 var gentype = type.GetGenericTypeDefinition();
-                if (type == typeof(List<object>) || gentype == typeof (List<>) || gentype == typeof (IList<>))
-                    return new LArray((IList) val);
+                if (type == typeof(List<object>) || gentype == typeof(List<>) || gentype == typeof(IList<>))
+                    return new LArray((IList)val);
 
-                if (type == typeof (Dictionary<string, object>))
-                    return new LMap((Dictionary<string, object>) val);
+                if (type == typeof(Dictionary<string, object>))
+                    return new LMap((Dictionary<string, object>)val);
             }
             // object
             return LangTypeHelper.ConvertToLangClass(val);
         }
-
 
         /// <summary>
         /// Converts from c# datatypes to fluentscript datatypes inside
@@ -106,7 +102,7 @@ namespace ComLib.Lang.Helpers
 
             return LObjects.Null;
         }
-        
+
         /// <summary>
         /// Converts a Type object from the host language to a fluentscript type.
         /// </summary>
@@ -123,10 +119,9 @@ namespace ComLib.Lang.Helpers
             if (hostLangType == typeof(Nullable)) return LTypes.Null;
             if (hostLangType == typeof(IList)) return LTypes.Array;
             if (hostLangType == typeof(IDictionary)) return LTypes.Map;
-            
+
             return LTypes.Object;
         }
-
 
         /// <summary>
         /// Converts a Type object from the host language to a fluentscript type.
@@ -135,14 +130,13 @@ namespace ComLib.Lang.Helpers
         /// <returns></returns>
         public static LType ConvertToLangTypeFromLangTypeName(string langTypeName)
         {
-            if (langTypeName == LTypes.Bool.Name   ) return LTypes.Bool;
-            if (langTypeName == LTypes.Date.Name   ) return LTypes.Date;
-            if (langTypeName == LTypes.Time.Name   ) return LTypes.Time;
-            if (langTypeName == LTypes.Number.Name ) return LTypes.Number;
-            if (langTypeName == LTypes.String.Name ) return LTypes.String;
+            if (langTypeName == LTypes.Bool.Name) return LTypes.Bool;
+            if (langTypeName == LTypes.Date.Name) return LTypes.Date;
+            if (langTypeName == LTypes.Time.Name) return LTypes.Time;
+            if (langTypeName == LTypes.Number.Name) return LTypes.Number;
+            if (langTypeName == LTypes.String.Name) return LTypes.String;
             return LTypes.Object;
         }
-
 
         /// <summary>
         /// Converts to host language type to a fluentscript type.
@@ -158,7 +152,6 @@ namespace ComLib.Lang.Helpers
             return type;
         }
 
-
         /// <summary>
         /// Converts to host language type to a fluentscript type.
         /// </summary>
@@ -173,10 +166,9 @@ namespace ComLib.Lang.Helpers
             lclassType.DataType = type;
             lclassType.TypeVal = TypeConstants.LClass;
             var lclass = new LClass(obj);
-            lclass.Type = lclassType;            
+            lclass.Type = lclassType;
             return lclass;
         }
-
 
         /// <summary>
         /// Converts to host language type to a fluentscript type.
@@ -196,7 +188,6 @@ namespace ComLib.Lang.Helpers
             return lclass;
         }
 
-
         /// <summary>
         /// Get the type in the host language that represents the same type in fluentscript.
         /// </summary>
@@ -213,10 +204,9 @@ namespace ComLib.Lang.Helpers
             if (ltype == LTypes.Array) return typeof(IList);
             if (ltype == LTypes.Map) return typeof(IDictionary);
             if (ltype == LTypes.Null) return typeof(Nullable);
-            
-            return typeof (object);
-        }
 
+            return typeof(object);
+        }
 
         /// <summary>
         /// Converts from c# datatypes to fluentscript datatypes inside
@@ -231,11 +221,10 @@ namespace ComLib.Lang.Helpers
             for (int ndx = 0; ndx < args.Count; ndx++)
             {
                 var val = args[ndx];
-                
+
                 args[ndx] = ConvertToLangValue(val);
             }
         }
-
 
         /// <summary>
         /// Converts from c# datatypes to fluentscript datatypes inside
@@ -259,7 +248,6 @@ namespace ComLib.Lang.Helpers
             return convertedItems;
         }
 
-
         /// <summary>
         /// Converts the source to the target list type by creating a new instance of the list and populating it.
         /// </summary>
@@ -276,15 +264,14 @@ namespace ComLib.Lang.Helpers
             foreach (var item in source)
             {
                 var val = item;
-                if(item is LObject)
+                if (item is LObject)
                 {
-                    val = ((LObject) item).GetValue();
+                    val = ((LObject)item).GetValue();
                 }
                 l.Add(val);
             }
             return targetList;
         }
-
 
         /// <summary>
         /// Converts the source to the target list type by creating a new instance of the list and populating it.
@@ -302,7 +289,6 @@ namespace ComLib.Lang.Helpers
             foreach (var item in source) l.Add(item.Key, item.Value);
             return targetDict;
         }
-
 
         /// <summary>
         /// Converts arguments from one type to another type that is required by the method call.
@@ -327,7 +313,7 @@ namespace ComLib.Lang.Helpers
                     var defaultVal = LangTypeHelper.GetDefaultValue(param.ParameterType);
                     hostLangArgs.Add(defaultVal);
                 }
-                
+
                 // CASE 2: int, bool, date, time
                 else if (sourceArg.Type.IsPrimitiveType())
                 {
@@ -336,14 +322,14 @@ namespace ComLib.Lang.Helpers
                     hostLangArgs.Add(convertedVal);
                 }
                 // CASE 3: LArrayType and generic types.
-                else if (sourceArg.Type == LTypes.Array )
+                else if (sourceArg.Type == LTypes.Array)
                 {
                     // Case 1: Array
-                    if(param.ParameterType.IsArray)
+                    if (param.ParameterType.IsArray)
                     {
-                        if(param.ParameterType == typeof(string[]))
+                        if (param.ParameterType == typeof(string[]))
                         {
-                            var convertedVal = ConvertToHostLangArray(param.ParameterType, (LArray) sourceArg);
+                            var convertedVal = ConvertToHostLangArray(param.ParameterType, (LArray)sourceArg);
                             hostLangArgs.Add(convertedVal);
                         }
                     }
@@ -352,13 +338,13 @@ namespace ComLib.Lang.Helpers
                         var gentype = param.ParameterType.GetGenericTypeDefinition();
 
                         // Case 2: Matching types IList<object>
-                        if (gentype == typeof (IList<object>))
+                        if (gentype == typeof(IList<object>))
                         {
                             var convertedVal = sourceArg.GetValue();
                             hostLangArgs.Add(convertedVal);
                         }
                         // Case 3: Non-matching types List<object> to IList<Person>
-                        else if (gentype == typeof (List<>) || gentype == typeof (IList<>))
+                        else if (gentype == typeof(List<>) || gentype == typeof(IList<>))
                         {
                             //args[ndx] = ConvertToTypedList((List<object>) sourceArg.GetValue(), param.ParameterType);
                             var convertedArr = ConvertToTypedList((List<object>)sourceArg.GetValue(), param.ParameterType);
@@ -368,8 +354,7 @@ namespace ComLib.Lang.Helpers
                 }
             }
             return hostLangArgs.ToArray();
-        } 
-
+        }
 
         /// <summary>
         /// Gets the default value for the supplied type.
@@ -385,7 +370,6 @@ namespace ComLib.Lang.Helpers
             if (type == typeof(TimeSpan)) return TimeSpan.MinValue;
             return null;
         }
-
 
         /// <summary>
         /// Whether or not the type supplied is a basic type.
@@ -407,14 +391,13 @@ namespace ComLib.Lang.Helpers
             return false;
         }
 
-
         /// <summary>
         /// Converts each item in the parameters object array to an integer.
         /// </summary>
         /// <param name="parameters"></param>
         public static int[] ConvertToInts(object[] parameters)
         {
-            // Convert all parameters to int            
+            // Convert all parameters to int
             int[] args = new int[parameters.Length];
             for (int ndx = 0; ndx < parameters.Length; ndx++)
             {
@@ -422,7 +405,6 @@ namespace ComLib.Lang.Helpers
             }
             return args;
         }
-
 
         private static object ConvertToCorrectHostLangValue(Type type, object val)
         {
@@ -435,55 +417,54 @@ namespace ComLib.Lang.Helpers
             return val;
         }
 
-
         private static object ConvertToHostLangArray(Type type, LArray array)
         {
             var length = array.Value.Count;
             var fsarray = array.Value;
             Array items = null;
-            var hostType = typeof (int);
-            if (     type == typeof(string[]))
+            var hostType = typeof(int);
+            if (type == typeof(string[]))
             {
                 items = new string[length];
-                hostType = typeof (string);
+                hostType = typeof(string);
             }
             else if (type == typeof(bool[]))
             {
                 items = new bool[length];
-                hostType = typeof (bool);
+                hostType = typeof(bool);
             }
             else if (type == typeof(DateTime[]))
             {
                 items = new DateTime[length];
-                hostType = typeof (DateTime);
+                hostType = typeof(DateTime);
             }
             else if (type == typeof(TimeSpan[]))
             {
                 items = new TimeSpan[length];
-                hostType = typeof (TimeSpan);
+                hostType = typeof(TimeSpan);
             }
             else if (type == typeof(double[]))
             {
                 items = new double[length];
-                hostType = typeof (double);
+                hostType = typeof(double);
             }
             else if (type == typeof(float[]))
             {
                 items = new float[length];
-                hostType = typeof (float);
+                hostType = typeof(float);
             }
             else if (type == typeof(long[]))
             {
                 items = new long[length];
-                hostType = typeof (long);
+                hostType = typeof(long);
             }
             else if (type == typeof(int[]))
             {
                 items = new int[length];
-                hostType = typeof (int);
+                hostType = typeof(int);
             }
 
-            for(var ndx = 0; ndx < fsarray.Count; ndx++)
+            for (var ndx = 0; ndx < fsarray.Count; ndx++)
             {
                 var val = fsarray[ndx] as LObject;
                 var hostval = val.GetValue();
@@ -494,7 +475,6 @@ namespace ComLib.Lang.Helpers
             }
             return items;
         }
-
 
         /// <summary>
         /// Add 2 unites together.
@@ -514,13 +494,12 @@ namespace ComLib.Lang.Helpers
             unit.Group = u1.Group;
             unit.SubGroup = u1.SubGroup;
 
-            // Set the value to the converted relative value 
+            // Set the value to the converted relative value
             // e.g. if u1.subgroup = feet and u2.subgroup == inches.
             // then multiply result.basevalue by the conversion value.
             // Now convert the units
             return unit;
         }
-
 
         private static void ValidateUnits(LUnit u1, LUnit u2)
         {

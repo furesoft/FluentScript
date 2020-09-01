@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ComLib.Lang.Core;
 using System.Linq;
-using ComLib.Lang.Core;
-using ComLib.Lang.Parsing;
-
 
 namespace ComLib.Lang.Parsing.MetaPlugins
 {
-
     // Used to represent a token match for the grammer check in a plugin.
     public class TokenMatch
     {
@@ -38,30 +33,23 @@ namespace ComLib.Lang.Parsing.MetaPlugins
         // Reference to another component.
         public string Ref;
 
-
         // Named token. can be @starttoken, @n1, @n2, @n3
         public string Name;
-
 
         // Name of the variable that should be used to store this value. ( used in parsing )
         public string VarName;
 
-
         // Either 0 representing @starttoken, 1 = n1, 2 = n2, 3 = n3
         public int TokenIndex;
 
-
         // The token type ( e.g. ) number, ident, bool, etc.
         public string TokenType;
-        
 
         // Whether or not this is required
         public bool IsRequired;
 
-
         // Whether or not there is a range check
         public bool HasRange;
-
 
         /// <summary>
         /// Whether or not to use a start token value instead of it's key.
@@ -69,37 +57,31 @@ namespace ComLib.Lang.Parsing.MetaPlugins
         /// </summary>
         public bool TokenPropEnabled;
 
-
         /// <summary>
         /// A token property value.
         /// </summary>
         public string TokenPropValue;
-
 
         /// <summary>
         /// Whether or not this a group.
         /// </summary>
         public bool IsGroup;
 
-
         /// <summary>
         /// The text to match.
         /// </summary>
         public string Text;
-
 
         /// <summary>
         /// Optional values to match against
         /// </summary>
         public string[] Values;
 
-
         // 1 as in {1, 2}
         public int Min;
 
         // 2 as in {1, 2}
         public int Max;
-
 
         public bool IsMatchingType(Token token)
         {
@@ -108,12 +90,11 @@ namespace ComLib.Lang.Parsing.MetaPlugins
             if (this.TokenType == "@number" && token.Kind == TokenKind.LiteralNumber)
                 return true;
             if (this.TokenType == "@time" && token.Kind == TokenKind.LiteralTime)
-                return true; 
+                return true;
             if (this.TokenType == "@word" && token.Kind == TokenKind.Ident)
                 return true;
             return false;
         }
-
 
         public bool IsMatchingValue(Token token)
         {
@@ -122,14 +103,13 @@ namespace ComLib.Lang.Parsing.MetaPlugins
             return this.Values.Contains(token.Text);
         }
 
-
         /// <summary>
         /// Gets the total number of required plugins.
         /// </summary>
         /// <returns></returns>
         public virtual int TotalRequired()
         {
-            if (this.IsRequired && this.TokenType != "@exprTerminators") 
+            if (this.IsRequired && this.TokenType != "@exprTerminators")
                 return 1;
             return 0;
         }

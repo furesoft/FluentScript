@@ -1,9 +1,5 @@
-﻿using System;
+﻿using ComLib.Lang.Core;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using ComLib.Lang.Core;
 
 namespace ComLib.Lang.Docs
 {
@@ -22,28 +18,24 @@ namespace ComLib.Lang.Docs
             CustomTags = new List<CustomTag>();
         }
 
-
         /// <summary>
         /// The summary of the function/method.
         /// </summary>
         public string Summary { get; set; }
-
 
         /// <summary>
         /// List of all the argument doc tags.
         /// </summary>
         public List<ArgAttribute> Args { get; set; }
 
-
         /// <summary>
         /// List of all the examples of the function.
-        /// </summary>        
+        /// </summary>
         public List<Example> Examples { get; set; }
-
 
         /// <summary>
         /// Custom tags
         /// </summary>
-        public List<CustomTag> CustomTags { get; set; } 
+        public List<CustomTag> CustomTags { get; set; }
     }
 }

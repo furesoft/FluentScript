@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
+
 // </lang:using>
 
 namespace ComLib.Lang.Parsing
@@ -20,30 +15,25 @@ namespace ComLib.Lang.Parsing
         /// </summary>
         public string Id { get; set; }
 
-
         /// <summary>
         /// The starting tokens that are associated w/ the combinator.
         /// </summary>
         protected string[] _tokens;
-
 
         /// <summary>
         /// The core parser.
         /// </summary>
         protected Parser _parser;
 
-
         /// <summary>
         /// The token iterator
         /// </summary>
         protected TokenIterator _tokenIt;
 
-
         /// <summary>
         /// Whether or not this combinator can be made into a statemnt.
         /// </summary>
         protected bool _canHandleToken = false;
-
 
         /// <summary>
         /// Initialize the token plugin.
@@ -52,7 +42,6 @@ namespace ComLib.Lang.Parsing
         {
             this.Id = "ComLib." + this.GetType().Name.Replace("Plugin", string.Empty);
         }
-
 
         /// <summary>
         /// Initialize the combinator.
@@ -65,18 +54,15 @@ namespace ComLib.Lang.Parsing
             _tokenIt = tokenIt;
         }
 
-
         /// <summary>
         /// The token iterator.
         /// </summary>
         public TokenIterator TokenIt { get { return _tokenIt; } set { _tokenIt = value; } }
 
-
         /// <summary>
         /// Precendence
         /// </summary>
         public int Precedence { get; set; }
-
 
         /// <summary>
         /// The tokens that are associated w/ this combinator.
@@ -86,7 +72,6 @@ namespace ComLib.Lang.Parsing
             get { return _tokens; }
         }
 
-
         /// <summary>
         /// Grammer for this plugin
         /// </summary>
@@ -95,7 +80,6 @@ namespace ComLib.Lang.Parsing
             get { return string.Empty; }
         }
 
-
         /// <summary>
         /// Examples of grammer
         /// </summary>
@@ -103,7 +87,6 @@ namespace ComLib.Lang.Parsing
         {
             get { return null; }
         }
-
 
         /// <summary>
         /// Whether or not this parser can handle the supplied token.
@@ -114,7 +97,6 @@ namespace ComLib.Lang.Parsing
         {
             return _canHandleToken;
         }
-
 
         /// <summary>
         /// Whether or not this plugin can handle the current token supplied which may be the current token
@@ -128,7 +110,6 @@ namespace ComLib.Lang.Parsing
             return _canHandleToken;
         }
 
-
         /// <summary>
         /// Parses the expression.
         /// </summary>
@@ -137,7 +118,6 @@ namespace ComLib.Lang.Parsing
         {
             return null;
         }
-
 
         /// <summary>
         /// Parse the expression with parameters for moving the token iterator forward first
@@ -149,7 +129,6 @@ namespace ComLib.Lang.Parsing
         {
             return null;
         }
-
 
         /// <summary>
         /// Peeks at the token and gets the replacement.

@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Parsing;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Plugins
 {
-
     /* *************************************************************************
-    <doc:example>	
+    <doc:example>
     // Alias plugin is a base class for other plugin that want to register aliases
     // for tokens. e.g using "set" to actually represent "var" or using
     // "and" to represent &&
-    
+
     </doc:example>
     ***************************************************************************/
 
@@ -28,7 +23,6 @@ namespace ComLib.Lang.Plugins
     {
         private IDictionary<string, Token> _map = new Dictionary<string, Token>();
 
-
         /// <summary>
         /// Convenient access to token aliases map
         /// </summary>
@@ -36,7 +30,6 @@ namespace ComLib.Lang.Plugins
         {
             get { return _map; }
         }
-
 
         /// <summary>
         /// Initialize
@@ -46,8 +39,7 @@ namespace ComLib.Lang.Plugins
             _tokens = new string[] { alias };
             _canHandleToken = true;
             Register(alias, replacement);
-        }        
-
+        }
 
         /// <summary>
         /// The grammer for the function declaration
@@ -59,7 +51,6 @@ namespace ComLib.Lang.Plugins
                 return "<alias> -> <replacement>";
             }
         }
-
 
         /// <summary>
         /// Examples
@@ -75,7 +66,6 @@ namespace ComLib.Lang.Plugins
             }
         }
 
-
         /// <summary>
         /// Register an alias.
         /// </summary>
@@ -85,7 +75,6 @@ namespace ComLib.Lang.Plugins
         {
             AliasMap[text] = replacement;
         }
-
 
         /// <summary>
         /// Whether or not this plugin is a match for the token supplied.
@@ -98,7 +87,6 @@ namespace ComLib.Lang.Plugins
                 return false;
             return AliasMap.ContainsKey(current.Text);
         }
-
 
         /// <summary>
         /// Whether or not this plugin can handle the current token supplied which may be the current token
@@ -113,10 +101,9 @@ namespace ComLib.Lang.Plugins
                 return false;
 
             if (_parser.Context.Symbols.Contains(token.Text))
-                return false; 
+                return false;
             return AliasMap.ContainsKey(token.Text);
         }
-
 
         /// <summary>
         /// Peeks at the token.
@@ -128,7 +115,6 @@ namespace ComLib.Lang.Plugins
             return token;
         }
 
-
         /// <summary>
         /// Parses the day expression.
         /// Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
@@ -139,7 +125,6 @@ namespace ComLib.Lang.Plugins
             var token = AliasMap[_tokenIt.NextToken.Token.Text];
             return token;
         }
-
 
         /// <summary>
         /// Parse the expression with parameters for moving the token iterator forward first

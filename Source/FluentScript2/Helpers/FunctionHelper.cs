@@ -1,14 +1,15 @@
-﻿using System;
+﻿using ComLib.Lang.AST;
+
+// <lang:using>
+using ComLib.Lang.Core;
+using ComLib.Lang.Parsing;
+using ComLib.Lang.Runtime;
+using ComLib.Lang.Types;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-// <lang:using>
-using ComLib.Lang.Core;
-using ComLib.Lang.AST;
-using ComLib.Lang.Runtime;
-using ComLib.Lang.Types;
-using ComLib.Lang.Parsing;
 // </lang:using>
 
 namespace ComLib.Lang.Helpers
@@ -39,7 +40,6 @@ namespace ComLib.Lang.Helpers
             return result;
         }
 
-
         /// <summary>
         /// Call a fluent script function from c#.
         /// </summary>
@@ -57,7 +57,6 @@ namespace ComLib.Lang.Helpers
             return FunctionHelper.CallFunctionViaCSharpUsingLambda(context, expr, convertApplicableTypes, args);
         }
 
-
         /// <summary>
         /// Calls an internal function or external function.
         /// </summary>
@@ -68,7 +67,7 @@ namespace ComLib.Lang.Helpers
         /// <returns></returns>
         public static object CallFunction(Context ctx, FunctionCallExpr fexpr, string functionName, bool pushCallStack, IAstVisitor visitor)
         {
-            if(string.IsNullOrEmpty(functionName))
+            if (string.IsNullOrEmpty(functionName))
                 functionName = fexpr.NameExp.ToQualifiedName();
 
             // 1. Check if script func or extern func.
@@ -80,7 +79,7 @@ namespace ComLib.Lang.Helpers
                 throw ExceptionHelper.BuildRunTimeException(fexpr, "Function does not exist : '" + functionName + "'");
 
             // 3. Push the name of the function on teh call stack
-            if(pushCallStack)
+            if (pushCallStack)
                 ctx.State.Stack.Push(functionName, fexpr);
 
             // 4. Call the function.
@@ -89,23 +88,22 @@ namespace ComLib.Lang.Helpers
             if (isExternFunc)
                 result = FunctionHelper.CallFunctionExternal(ctx, visitor, functionName, fexpr);
 
-            // Case 2: Script functions "createUser('john');" 
+            // Case 2: Script functions "createUser('john');"
             else
             {
                 var sym = fexpr.SymScope.GetSymbol(functionName) as SymbolFunction;
                 var func = sym.FuncExpr as FunctionExpr;
                 var resolveParams = !fexpr.RetainEvaluatedParams;
-                result = FunctionHelper.CallFunctionInScript(ctx, visitor, functionName, func,  fexpr.ParamListExpressions,
+                result = FunctionHelper.CallFunctionInScript(ctx, visitor, functionName, func, fexpr.ParamListExpressions,
                                                              fexpr.ParamList, resolveParams);
             }
             // 3. Finnaly pop the call stact.
-            if(pushCallStack)
+            if (pushCallStack)
                 ctx.State.Stack.Pop();
 
             result = CheckConvert(result);
             return result;
         }
-
 
         /// <summary>
         /// Calls a property get
@@ -121,7 +119,7 @@ namespace ComLib.Lang.Helpers
 
             // 1. Get methods
             var methods = ctx.Methods.Get(memberAccess.Type);
-            
+
             // 2. Get object on which method/property is being called on.
             var lobj = (LObject)memberAccess.Instance;
 
@@ -133,8 +131,8 @@ namespace ComLib.Lang.Helpers
             // 4. Method
             else if (memberAccess.Mode == MemberMode.MethodMember)
             {
-                object[] args = null; 
-                if(paramListExpressions != null && paramListExpressions.Count > 0)
+                object[] args = null;
+                if (paramListExpressions != null && paramListExpressions.Count > 0)
                 {
                     ParamHelper.ResolveNonNamedParameters(paramListExpressions, paramList, visitor);
                     args = paramList.ToArray();
@@ -144,7 +142,6 @@ namespace ComLib.Lang.Helpers
             result = CheckConvert(result);
             return result;
         }
-
 
         /// <summary>
         /// Execute a member call.
@@ -159,7 +156,7 @@ namespace ComLib.Lang.Helpers
             object result = LObjects.Null;
             var obj = memberAccess.Instance;
             var type = memberAccess.DataType;
-            
+
             // Case 1: Property access
             if (memberAccess.Property != null)
             {
@@ -168,7 +165,7 @@ namespace ComLib.Lang.Helpers
                     result = prop.GetValue(obj, null);
             }
             // Case 2: Method call.
-            else if( memberAccess.Method != null)
+            else if (memberAccess.Method != null)
             {
                 result = FunctionHelper.MethodCall(ctx, obj, type, memberAccess.Method, paramListExpressions, paramList, true, visitor);
             }
@@ -181,20 +178,19 @@ namespace ComLib.Lang.Helpers
             return result;
         }
 
-
         /// <summary>
         /// Call a function by passing in all the values.
         /// </summary>
         /// <param name="ctx">The context of the runtime</param>
         /// <param name="functionName">The name of the function to call.</param>
         /// <param name="paramListExpressions">List of parameters as expressions to evaluate first to actual values</param>
-        /// <param name="paramVals">List to store the resolved paramter expressions. ( these will be resolved if paramListExpressions is supplied and resolveParams is true. If 
+        /// <param name="paramVals">List to store the resolved paramter expressions. ( these will be resolved if paramListExpressions is supplied and resolveParams is true. If
         /// resolveParams is false, the list is assumed to have the values for the paramters to the function.</param>
         /// <param name="resolveParams">Whether or not to resolve the list of parameter expression objects</param>
         /// <returns></returns>
-        public static object CallFunctionInScript(Context ctx, IAstVisitor visitor, 
-            string functionName, FunctionExpr function, 
-            List<Expr> paramListExpressions, List<object> paramVals, 
+        public static object CallFunctionInScript(Context ctx, IAstVisitor visitor,
+            string functionName, FunctionExpr function,
+            List<Expr> paramListExpressions, List<object> paramVals,
             bool resolveParams)
         {
             // 1. Determine if any parameters provided.
@@ -217,14 +213,13 @@ namespace ComLib.Lang.Helpers
             return result;
         }
 
-
         /// <summary>
         /// Calls the custom function.
         /// </summary>
         /// <param name="name">Name of the function</param>
         /// <param name="exp"></param>
         /// <returns></returns>
-        public static object CallFunctionExternal(Context ctx, IAstVisitor visitor, string name, FunctionCallExpr exp )
+        public static object CallFunctionExternal(Context ctx, IAstVisitor visitor, string name, FunctionCallExpr exp)
         {
             var externalFuncs = ctx.ExternalFunctions;
             var objectName = name;
@@ -255,7 +250,6 @@ namespace ComLib.Lang.Helpers
             return result;
         }
 
-
         /// <summary>
         /// Whether or not the name/member combination supplied is a script level function or an external C# function
         /// </summary>
@@ -276,7 +270,6 @@ namespace ComLib.Lang.Helpers
         //    return false;
         //}
 
-
         /// <summary>
         /// Whether or not this variable + member name maps to an external function call.
         /// Note: In fluentscript you can setup "Log.*" and allow all method calls to "Log" to map to that external call.
@@ -293,7 +286,6 @@ namespace ComLib.Lang.Helpers
             return false;
         }
 
-
         /// <summary>
         /// Dynamically invokes a method call.
         /// </summary>
@@ -308,7 +300,7 @@ namespace ComLib.Lang.Helpers
         private static object MethodCall(Context ctx, object obj, Type datatype, MethodInfo methodInfo, List<Expr> paramListExpressions, List<object> paramList, bool resolveParams, IAstVisitor visitor)
         {
             // 1. Convert language expressions to values.
-            if (resolveParams) 
+            if (resolveParams)
                 ParamHelper.ResolveParametersForMethodCall(methodInfo, paramListExpressions, paramList, visitor);
 
             // 2. Convert internal language types to c# code method types.
@@ -323,7 +315,6 @@ namespace ComLib.Lang.Helpers
             object result = methodInfo.Invoke(obj, args);
             return result;
         }
-
 
         public static object CheckConvert(object result)
         {

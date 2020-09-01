@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-
-namespace ComLib.Lang.Core
+﻿namespace ComLib.Lang.Core
 {
     public class CustomTag
     {

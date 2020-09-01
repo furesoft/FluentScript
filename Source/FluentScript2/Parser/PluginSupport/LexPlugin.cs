@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
+
 // </lang:using>
 
 namespace ComLib.Lang.Parsing
@@ -20,24 +15,20 @@ namespace ComLib.Lang.Parsing
         /// </summary>
         public string Id { get; set; }
 
-
         /// <summary>
         /// The starting tokens that are associated w/ the combinator.
         /// </summary>
         protected string[] _tokens;
-
 
         /// <summary>
         /// The main lexer.
         /// </summary>
         protected Lexer _lexer;
 
-
         /// <summary>
         /// Whether or not this combinator can be made into a statemnt.
         /// </summary>
         protected bool _canHandleToken = false;
-
 
         /// <summary>
         /// Initialize the lexical plugin
@@ -47,12 +38,10 @@ namespace ComLib.Lang.Parsing
             this.Id = "ComLib." + this.GetType().Name.Replace("Plugin", string.Empty);
         }
 
-
         /// <summary>
         /// The context of the environment.
         /// </summary>
         public Context Ctx { get; set; }
-
 
         /// <summary>
         /// Initialize the combinator.
@@ -63,12 +52,10 @@ namespace ComLib.Lang.Parsing
             _lexer = lexer;
         }
 
-
         /// <summary>
         /// Precendence
         /// </summary>
         public int Precedence { get; set; }
-
 
         /// <summary>
         /// get / set the lexer.
@@ -79,7 +66,6 @@ namespace ComLib.Lang.Parsing
             set { _lexer = value; }
         }
 
-
         /// <summary>
         /// The tokens that are associated w/ this combinator.
         /// </summary>
@@ -87,7 +73,6 @@ namespace ComLib.Lang.Parsing
         {
             get { return _tokens; }
         }
-
 
         /// <summary>
         /// Grammer for this plugin
@@ -97,7 +82,6 @@ namespace ComLib.Lang.Parsing
             get { return string.Empty; }
         }
 
-
         /// <summary>
         /// Examples of grammer
         /// </summary>
@@ -105,7 +89,6 @@ namespace ComLib.Lang.Parsing
         {
             get { return null; }
         }
-
 
         /// <summary>
         /// Whether or not this parser can handle the supplied token.
@@ -116,7 +99,6 @@ namespace ComLib.Lang.Parsing
         {
             return _canHandleToken;
         }
-
 
         /// <summary>
         /// Parses the expression.

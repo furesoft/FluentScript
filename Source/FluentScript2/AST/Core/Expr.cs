@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Collections;
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.Types;
 using ComLib.Lang.Parsing;
+using ComLib.Lang.Types;
+using System;
+
 // </lang:using>
 
 namespace ComLib.Lang.AST
@@ -23,18 +18,15 @@ namespace ComLib.Lang.AST
         /// </summary>
         public Context Ctx { get; set; }
 
-
         /// <summary>
         /// Empty expr.
         /// </summary>
         public static readonly Expr Empty = new Expr();
 
-
         /// <summary>
         /// The symbol scope associated w/ this instance.
         /// </summary>
         public ISymbols SymScope { get; set; }
-
 
         /// <summary>
         /// Whether or not this statement can be executed immediately at parsing time
@@ -42,18 +34,15 @@ namespace ComLib.Lang.AST
         /// </summary>
         public bool IsImmediatelyExecutable { get; set; }
 
-
         /// <summary>
         /// Whether or not this expression has support for blocks, which hold multiple statements. like an if/while/for.
         /// </summary>
         public bool IsBlockSupported { get; set; }
 
-
         /// <summary>
         /// Whether or not a new scope is needed when entering the block.
         /// </summary>
         public bool IsNewScopeInBlock { get; set; }
-        
 
         /// <summary>
         /// Evaluate
@@ -73,7 +62,6 @@ namespace ComLib.Lang.AST
             return result;
         }
 
-
         /// <summary>
         /// Evaluate and return as datatype T
         /// </summary>
@@ -87,29 +75,25 @@ namespace ComLib.Lang.AST
             if (result == LObjects.Null && typeof(T) == typeof(bool))
                 return default(T);
             if (result is LObject)
-                return (T)Convert.ChangeType(((LObject) result).GetValue(), typeof(T), null);
+                return (T)Convert.ChangeType(((LObject)result).GetValue(), typeof(T), null);
 
             return (T)Convert.ChangeType(result, typeof(T), null);
         }
-
 
         public virtual object DoEvaluate(IAstVisitor visitor)
         {
             return null;
         }
 
-
         public virtual object Visit(IAstVisitor visitor)
         {
             return this.DoVisit(visitor);
         }
 
-        
         public virtual object DoVisit(IAstVisitor visitor)
         {
             return null;
         }
-
 
         /// <summary>
         /// String representation of statement.
@@ -131,7 +115,6 @@ namespace ComLib.Lang.AST
 
             return result;
         }
-
 
         /// <summary>
         /// Build a language exception due to the current token being invalid.

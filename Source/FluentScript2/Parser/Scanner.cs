@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Core;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Parsing
@@ -29,32 +26,26 @@ namespace ComLib.Lang.Parsing
             this.Lines = totalNewLines;
         }
 
-
         /// <summary>
         /// Start position.
         /// </summary>
         public readonly int Start;
-
 
         /// <summary>
         /// Whether or not the token was properly present
         /// </summary>
         public readonly bool Success;
 
-
         /// <summary>
         /// The text of the token.
         /// </summary>
         public readonly string Text;
-
 
         /// <summary>
         /// Number of lines parsed.
         /// </summary>
         public int Lines;
     }
-
-
 
     /// <summary>
     /// Stores the lexical position
@@ -66,42 +57,35 @@ namespace ComLib.Lang.Parsing
         /// </summary>
         public int Pos;
 
-
         /// <summary>
         /// Line number
         /// </summary>
         public int Line;
-
 
         /// <summary>
         /// Line char position.
         /// </summary>
         public int LineCharPosition;
 
-
         /// <summary>
         /// The source code.
         /// </summary>
         public string Text;
-
 
         /// <summary>
         /// The last char parsed.
         /// </summary>
         public char LastChar;
 
-
         /// <summary>
         /// The current char
         /// </summary>
         public char CurrentChar;
 
-
         /// <summary>
         /// The next char.
         /// </summary>
         public char NextChar;
-
 
         /// <summary>
         /// Extracts the text from the start to end inclusive of the positions.
@@ -117,14 +101,12 @@ namespace ComLib.Lang.Parsing
         }
     }
 
-
-
     /// <summary>
     /// This class scans the source code characther by character for words, numbers, symbols.
-    /// It doesn't know anything about tokens like the lexer does. 
+    /// It doesn't know anything about tokens like the lexer does.
     /// The API here is geared toward only getting/checking charaters, scanning words and peeking
-    /// and words/numbers etc. 
-    /// In this sense it is highly reusable across the c# applications and will be reused 
+    /// and words/numbers etc.
+    /// In this sense it is highly reusable across the c# applications and will be reused
     /// in the commonlibrary.net project.
     /// </summary>
     public class Scanner
@@ -134,81 +116,67 @@ namespace ComLib.Lang.Parsing
         /// </summary>
         protected const char SQUOTE = '\'';
 
-
         /// <summary>
         /// Double quote
         /// </summary>
         protected const char DQUOTE = '"';
-
 
         /// <summary>
         /// Space
         /// </summary>
         protected const char SPACE = ' ';
 
-
         /// <summary>
         /// Tab
         /// </summary>
         protected const char TAB = '\t';
 
-
         protected const char CARRIAGERETURN = '\r';
 
-
         protected const char NEWLINE = '\n';
-
 
         /// <summary>
         /// End char
         /// </summary>
         protected const char END_CHAR = char.MinValue;
 
-
         /// <summary>
         /// The escape character. e.g. \
         /// </summary>
         protected char _escapeChar;
 
-
         /// <summary>
         /// Whitespace characters
         /// </summary>
-        protected IDictionary<char, char> _whiteSpaceChars; 
-
+        protected IDictionary<char, char> _whiteSpaceChars;
 
         /// <summary>
         /// The current state of the lexers position in the source text.
         /// </summary>
         protected ScanState _pos;
 
-
         /// <summary>
         /// The index position of the last char in the source text.
         /// </summary>
         public int LAST_POSITION;
-
 
         /// <summary>
         /// The current line number.
         /// </summary>
         public int LineNumber { get { return _pos.Line; } }
 
-
         /// <summary>
         /// The char position on the current line.
         /// </summary>
         public int LineCharPos { get { return _pos.LineCharPosition; } }
-
 
         /// <summary>
         /// Get the positional state of the lexer
         /// </summary>
         public ScanState State { get { return _pos; } }
 
-
-
         #region Init and Resets
+
         /// <summary>
         /// Initialize using the supplied parameters.
         /// </summary>
@@ -227,7 +195,6 @@ namespace ComLib.Lang.Parsing
             ReadChar();
         }
 
-
         /// <summary>
         /// Reset reader for parsing again.
         /// </summary>
@@ -241,9 +208,8 @@ namespace ComLib.Lang.Parsing
             _escapeChar = '\\';
         }
 
-
         /// <summary>
-        /// Resets the scanner position to 
+        /// Resets the scanner position to
         /// </summary>
         /// <param name="pos"></param>
         /// <param name="handleNewLine"></param>
@@ -265,7 +231,6 @@ namespace ComLib.Lang.Parsing
             }
         }
 
-
         /// <summary>
         /// Updates the current char/next char and line number due to direct changes to position
         /// rather than calling ReadChar(), MoveChars().
@@ -280,17 +245,17 @@ namespace ComLib.Lang.Parsing
             }
             else
             {
-                _pos.CurrentChar = _pos.Text[currentPos -1];
+                _pos.CurrentChar = _pos.Text[currentPos - 1];
                 _pos.LastChar = _pos.Text[currentPos - 2];
             }
             var diff = currentPos - startPos;
             _pos.LineCharPosition += diff;
         }
-        #endregion
 
-
+        #endregion Init and Resets
 
         #region Position Checks
+
         /// <summary>
         /// Determine if the end of the text input has been reached.
         /// </summary>
@@ -300,7 +265,6 @@ namespace ComLib.Lang.Parsing
             return _pos.Pos >= _pos.Text.Length;
         }
 
-
         /// <summary>
         /// Determine if at last char.
         /// </summary>
@@ -309,11 +273,11 @@ namespace ComLib.Lang.Parsing
         {
             return _pos.Pos == LAST_POSITION;
         }
-        #endregion
 
-
+        #endregion Position Checks
 
         #region Char Operations
+
         /// <summary>
         /// Returns the char at current position + 1.
         /// </summary>
@@ -328,7 +292,6 @@ namespace ComLib.Lang.Parsing
             return _pos.NextChar;
         }
 
-
         /// <summary>
         /// Returns the nth char from the current char index
         /// </summary>
@@ -342,7 +305,6 @@ namespace ComLib.Lang.Parsing
 
             return _pos.Text[_pos.Pos + countFromCurrentCharIndex];
         }
-
 
         /// <summary>
         /// Returns the chars starting at current position + 1 and
@@ -360,7 +322,6 @@ namespace ComLib.Lang.Parsing
 
             return _pos.Text.Substring(_pos.Pos + 1, count);
         }
-
 
         /// <summary>
         /// Read the next char.
@@ -385,7 +346,6 @@ namespace ComLib.Lang.Parsing
             _pos.CurrentChar = END_CHAR;
             return END_CHAR;
         }
-
 
         /// <summary>
         /// Moves forward by count chars.
@@ -413,14 +373,13 @@ namespace ComLib.Lang.Parsing
             }
             if (endPos > LAST_POSITION + 1)
                 throw new LangException("Syntax", "Can not move past end position of script", "", _pos.Line, _pos.LineCharPosition);
-            
+
             // Can move forward count chars
             _pos.Pos += count;
             _pos.LineCharPosition += count;
             _pos.LastChar = _pos.Text[_pos.Pos - 1];
             _pos.CurrentChar = _pos.Text[_pos.Pos];
         }
-
 
         /// <summary>
         /// Consume all white space.
@@ -450,7 +409,6 @@ namespace ComLib.Lang.Parsing
             if (matched && !setPosAfterWhiteSpace) MoveChars(-1);
         }
 
-
         /// <summary>
         /// Increments the line number
         /// </summary>
@@ -462,7 +420,6 @@ namespace ComLib.Lang.Parsing
             _pos.Line++;
             _pos.LineCharPosition = 1;
         }
-
 
         /// <summary>
         /// Peeks at the next word that does not include a space.
@@ -492,7 +449,6 @@ namespace ComLib.Lang.Parsing
             return new ScanResult(success, start, word, 0);
         }
 
-
         /// <summary>
         /// Peeks at the next word that does not include a space.
         /// </summary>
@@ -511,7 +467,7 @@ namespace ComLib.Lang.Parsing
                     if (!handledDecimal)
                         handledDecimal = true;
 
-                    // 2nd decimal 
+                    // 2nd decimal
                     else
                         break;
                 }
@@ -526,7 +482,6 @@ namespace ComLib.Lang.Parsing
             return new ScanResult(success, start, word, 0);
         }
 
-
         /// <summary>
         /// Reads a word which must not have space in it and must have space/tab before and after
         /// </summary>
@@ -537,7 +492,7 @@ namespace ComLib.Lang.Parsing
         public ScanResult PeekCustomWord(IDictionary<char, bool> validChars, bool advanceFirst)
         {
             var start = advanceFirst ? _pos.Pos + 1 : _pos.Pos;
-            var currPos = start;            
+            var currPos = start;
             while (currPos <= LAST_POSITION)
             {
                 var ch = _pos.Text[currPos];
@@ -552,12 +507,11 @@ namespace ComLib.Lang.Parsing
             return new ScanResult(success, start, word, 0);
         }
 
-
         /// <summary>
         /// Peeks at the next word that does not include a space or new line
         /// </summary>
         /// <param name="expectChar">A char to expect while peeking at the next word.</param>
-        /// <param name="maxAdvancesBeforeExpected">The maximum number of advances that the expectChar should appear by</param>        
+        /// <param name="maxAdvancesBeforeExpected">The maximum number of advances that the expectChar should appear by</param>
         /// <param name="extra1">An extra character that is allowed to be part of the word in addition to the allowed chars</param>
         /// <param name="extra2">A second extra character that is allowed to be part of word in addition to the allowed chars</param>
         /// <returns></returns>
@@ -584,7 +538,7 @@ namespace ComLib.Lang.Parsing
                 var isValidChar = (('a' <= ch && ch <= 'z') || ('A' <= ch && ch <= 'Z') || ch == '$' || ch == '_'
                                    || (!first && '0' <= ch && ch <= '9')
                                  );
-                if ( !isValidChar && (hasExtra1 && ch != extra1) && (hasExtra2 && ch != extra2) )
+                if (!isValidChar && (hasExtra1 && ch != extra1) && (hasExtra2 && ch != extra2))
                     break;
 
                 currPos++;
@@ -594,11 +548,11 @@ namespace ComLib.Lang.Parsing
             var success = !string.IsNullOrEmpty(word);
             return new ScanResult(success, start, word, 0);
         }
-        #endregion
 
-
+        #endregion Char Operations
 
         #region Scanning Operations
+
         /// <summary>
         /// Reads an identifier where legal chars for the identifier are [$ . _ a-z A-Z 0-9]
         /// </summary>
@@ -614,10 +568,10 @@ namespace ComLib.Lang.Parsing
             while (_pos.Pos <= LAST_POSITION)
             {
                 var ch = _pos.Text[_pos.Pos];
-                var isValidChar = (('a' <= ch && ch <= 'z') || ('A' <= ch && ch <= 'Z') || ch == '$' || ch == '_' 
+                var isValidChar = (('a' <= ch && ch <= 'z') || ('A' <= ch && ch <= 'Z') || ch == '$' || ch == '_'
                                     || (!first && '0' <= ch && ch <= '9')
                                   );
-                if(!isValidChar)
+                if (!isValidChar)
                 {
                     break;
                 }
@@ -625,12 +579,11 @@ namespace ComLib.Lang.Parsing
                 first = false;
             }
             var text = _pos.ExtractInclusive(start, _pos.Pos - 1);
-            if(!setPosAfterToken) this.MoveChars(-1);
+            if (!setPosAfterToken) this.MoveChars(-1);
             this.UpdateLineState(start);
             var result = new ScanResult(true, start, text, 0);
             return result;
         }
-
 
         /// <summary>
         /// Reads a number +/-?[0-9]*.?[0-9]*
@@ -646,7 +599,7 @@ namespace ComLib.Lang.Parsing
                 _pos.Pos++;
 
             var handledDecimal = false;
-            
+
             // Handles .9, 0.9, 1.9
             while (_pos.Pos <= LAST_POSITION)
             {
@@ -658,7 +611,7 @@ namespace ComLib.Lang.Parsing
                     if (!handledDecimal)
                         handledDecimal = true;
 
-                    // 2nd decimal 
+                    // 2nd decimal
                     else
                         break;
                 }
@@ -676,7 +629,6 @@ namespace ComLib.Lang.Parsing
             return result;
         }
 
-
         /// <summary>
         /// Read token until endchar
         /// </summary>
@@ -692,11 +644,11 @@ namespace ComLib.Lang.Parsing
             var start = _pos.Pos;
             var initialLineNum = _pos.Line;
             var matched = false;
-            if(advanceFirst) this.ReadChar();
+            if (advanceFirst) this.ReadChar();
             while (_pos.Pos <= LAST_POSITION)
             {
                 var ch = _pos.Text[_pos.Pos];
-                
+
                 // Case 1: End of string.
                 if (ch == quoteChar)
                 {
@@ -724,10 +676,9 @@ namespace ComLib.Lang.Parsing
             }
 
             if (setPosAfterToken) this.MoveChars(1);
-            var totalNewLines = _pos.Line - initialLineNum;            
+            var totalNewLines = _pos.Line - initialLineNum;
             return new ScanResult(matched, start, text, totalNewLines);
         }
-
 
         /// <summary>
         /// Reads until the 2 chars are reached.
@@ -755,10 +706,9 @@ namespace ComLib.Lang.Parsing
             }
             var text = _pos.ExtractInclusive(start, _pos.Pos - 1);
             if (!setPosAfterToken) this.MoveChars(-1);
-            this.UpdateLineState(start); 
+            this.UpdateLineState(start);
             return new ScanResult(true, start, text, 0);
         }
-
 
         /// <summary>
         /// Reads entire line from curr position, does not include the newline in result.
@@ -781,7 +731,7 @@ namespace ComLib.Lang.Parsing
                     is2CharNewLine = n1 == '\n';
                     break;
                 }
-                if(ch == '\n')
+                if (ch == '\n')
                 {
                     break;
                 }
@@ -792,7 +742,6 @@ namespace ComLib.Lang.Parsing
             this.UpdateLineState(start);
             return new ScanResult(true, start, text, 0);
         }
-
 
         /// <summary>
         /// Reads text up the position supplied.
@@ -807,12 +756,11 @@ namespace ComLib.Lang.Parsing
             var actualStartPos = startAtNextChar ? _pos.Pos + 1 : _pos.Pos;
             var word = _pos.ExtractInclusive(actualStartPos, endPos);
 
-            // Update the position and 
+            // Update the position and
             this.ResetPos(endPos, false);
             if (setPosAfterToken) this.ReadChar();
             return new ScanResult(true, actualStartPos, word, 0);
         }
-
 
         /// <summary>
         /// Read the next word
@@ -820,7 +768,7 @@ namespace ComLib.Lang.Parsing
         /// <param name="advanceFirst">Whether or not to advance first</param>
         /// <param name="setPosAfterToken">Whether or not to set the position after the token.</param>
         /// <param name="extra1">An extra character that is allowed to be part of the word in addition to the allowed chars</param>
-        /// <param name="extra2">A second extra character that is allowed to be part of word in addition to the allowed chars</param>        
+        /// <param name="extra2">A second extra character that is allowed to be part of word in addition to the allowed chars</param>
         /// <returns></returns>
         public ScanResult ScanWordUntilChars(bool advanceFirst, bool setPosAfterToken, char extra1, char extra2)
         {
@@ -831,9 +779,9 @@ namespace ComLib.Lang.Parsing
             while (_pos.Pos <= LAST_POSITION)
             {
                 var ch = _pos.Text[_pos.Pos];
-                if ( ('a' <= ch && ch <= 'z') || ('A' <= ch && ch <= 'Z') ||
-                     ('0' <= ch && ch <= '9') ||  ch == '_' || (!first && ch == '-') 
-                    || ch == extra1 || ch == extra2 )
+                if (('a' <= ch && ch <= 'z') || ('A' <= ch && ch <= 'Z') ||
+                     ('0' <= ch && ch <= '9') || ch == '_' || (!first && ch == '-')
+                    || ch == extra1 || ch == extra2)
                 {
                     _pos.Pos++;
                 }
@@ -849,7 +797,6 @@ namespace ComLib.Lang.Parsing
             return new ScanResult(true, start, text, 0);
         }
 
-
         /// <summary>
         /// Reads until the 2 chars are reached.
         /// </summary>
@@ -862,13 +809,13 @@ namespace ComLib.Lang.Parsing
         {
             if (advanceFirst) this.ReadChar();
             var start = _pos.Pos;
-            var lineStartPos = _pos.Pos;         
+            var lineStartPos = _pos.Pos;
             int initialNewLines = _pos.Line;
             while (_pos.Pos <= LAST_POSITION - 1)
             {
                 var ch = _pos.Text[_pos.Pos];
                 // Case 1: Matching
-                if(ch == first)
+                if (ch == first)
                 {
                     var n1 = this.PeekChar();
                     if (n1 == second)
@@ -897,7 +844,6 @@ namespace ComLib.Lang.Parsing
             return new ScanResult(true, start, text, totalNewLines);
         }
 
-
         /// <summary>
         /// Reads a word which must not have space in it and must have space/tab before and after
         /// </summary>
@@ -925,7 +871,6 @@ namespace ComLib.Lang.Parsing
             return new ScanResult(true, start, text, 0);
         }
 
-
         /// <summary>
         /// Scans an escape character.
         /// </summary>
@@ -938,9 +883,9 @@ namespace ComLib.Lang.Parsing
             var next = this.PeekChar();
             if (next == quoteChar) text += quoteChar;
             else if (next == '\\') text = "\\";
-            else if (next == 'r')  text = "\r";
-            else if (next == 'n')  text = "\n";
-            else if (next == 't')  text = "\t";
+            else if (next == 'r') text = "\r";
+            else if (next == 'n') text = "\n";
+            else if (next == 't') text = "\t";
             if (setPosAfterToken)
             {
                 _pos.Pos += 2;
@@ -948,7 +893,6 @@ namespace ComLib.Lang.Parsing
             }
             return new ScanResult(true, start, text, 0);
         }
-
 
         /// <summary>
         /// Scans past the new line after tracking line counts
@@ -960,7 +904,7 @@ namespace ComLib.Lang.Parsing
             {
                 var n1 = this.PeekChar();
                 is2CharNewLine = n1 == '\n';
-                this.IncrementLine(is2CharNewLine);                
+                this.IncrementLine(is2CharNewLine);
             }
             else if (ch == '\n')
             {
@@ -968,7 +912,6 @@ namespace ComLib.Lang.Parsing
             }
             return is2CharNewLine;
         }
-
 
         public ScanResult SkipUntilPrefixedWord(bool advanceFirst, char prefix, string word)
         {
@@ -986,28 +929,28 @@ namespace ComLib.Lang.Parsing
                     checkWord = true;
                     _pos.Pos++;
                 }
-                else if(checkWord )
+                else if (checkWord)
                 {
                     // Case 1: letter
                     if (char.IsLetter(ch))
                         buffer += ch;
-                    
+
                     // Case 2: not a letter after prefix ( so turn off checking word )
-                    else if(string.IsNullOrEmpty(buffer))
+                    else if (string.IsNullOrEmpty(buffer))
                         checkWord = false;
-                    
+
                     // Case 3: buffer has letters but current char is not a letter so end.
                     else
                     {
                         checkWord = false;
                         lastWord = buffer;
                         buffer = string.Empty;
-                        if(ch == '\r')
+                        if (ch == '\r')
                         {
                             var nextchar = this.PeekChar();
                             this.IncrementLine(nextchar == '\n');
                         }
-                        if(lastWord == word)
+                        if (lastWord == word)
                         {
                             break;
                         }
@@ -1028,11 +971,10 @@ namespace ComLib.Lang.Parsing
             return new ScanResult(success, start, lastWord, 0);
         }
 
-        #endregion
-
-
+        #endregion Scanning Operations
 
         #region Character checks
+
         /// <summary>
         /// Whether the char is a valid char for an identifier.
         /// </summary>
@@ -1042,7 +984,6 @@ namespace ComLib.Lang.Parsing
         {
             return c == '_' || ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z');
         }
-
 
         /// <summary>
         /// Whether char is an operator.
@@ -1059,7 +1000,6 @@ namespace ComLib.Lang.Parsing
             return false;
         }
 
-
         /// <summary>
         /// Whether or not the char is a numeric char.
         /// </summary>
@@ -1069,7 +1009,6 @@ namespace ComLib.Lang.Parsing
         {
             return c == '.' || (c >= '0' && c <= '9');
         }
-
 
         /// <summary>
         /// Wheter or not this the start of the string
@@ -1081,7 +1020,6 @@ namespace ComLib.Lang.Parsing
             return c == DQUOTE || c == SQUOTE;
         }
 
-
         /// <summary>
         /// Whether char is a whitespace or tab.
         /// </summary>
@@ -1091,11 +1029,11 @@ namespace ComLib.Lang.Parsing
         {
             return c == SPACE || c == TAB;
         }
-        #endregion
 
-
+        #endregion Character checks
 
         #region Private
+
         /// <summary>
         /// Check if all of the items in the collection satisfied by the condition.
         /// </summary>
@@ -1110,7 +1048,8 @@ namespace ComLib.Lang.Parsing
                 dict[item] = item;
             }
             return dict;
-        } 
-        #endregion
+        }
+
+        #endregion Private
     }
 }

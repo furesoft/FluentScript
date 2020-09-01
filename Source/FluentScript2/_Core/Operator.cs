@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ComLib.Lang.Core
 {
@@ -11,80 +8,71 @@ namespace ComLib.Lang.Core
     public enum Operator
     {
         /* BINARY + - * / %  */
+
         /// <summary>
         /// +
         /// </summary>
         Add,
 
-
         /// <summary>
         /// -
         /// </summary>
         Subtract,
-        
-        
+
         /// <summary>
-        /// * 
+        /// *
         /// </summary>
         Multiply,
-
 
         /// <summary>
         /// /
         /// </summary>
         Divide,
 
-
         /// <summary>
         /// %
         /// </summary>
         Modulus,
 
-
         /* COMPARE < <= > >= != ==  */
+
         /// <summary>
         /// &lt;
         /// </summary>
         LessThan,
-
 
         /// <summary>
         /// &lt;=
         /// </summary>
         LessThanEqual,
 
-
         /// <summary>
         /// >
         /// </summary>
         MoreThan,
-
 
         /// <summary>
         /// >=
         /// </summary>
         MoreThanEqual,
 
-                
         /// <summary>
         /// =
         /// </summary>
         Equal,
-
 
         /// <summary>
         /// ==
         /// </summary>
         EqualEqual,
 
-
         /// <summary>
         /// !=
         /// </summary>
         NotEqual,
 
-
         /* CONDITION && ||  */
+
         /// <summary>
         /// and
         /// </summary>
@@ -95,99 +83,83 @@ namespace ComLib.Lang.Core
         /// </summary>
         Or,
 
-
         /* UNARY ++ -- += -= *= /= */
+
         /// <summary>
         /// ++
         /// </summary>
         PlusPlus,
-
 
         /// <summary>
         /// --
         /// </summary>
         MinusMinus,
 
-
         /// <summary>
-        /// += 
+        /// +=
         /// </summary>
         PlusEqual,
-
 
         /// <summary>
         /// -=
         /// </summary>
         MinusEqual,
 
-
         /// <summary>
         /// *=
         /// </summary>
         MultEqual,
-
 
         /// <summary>
         /// /=
         /// </summary>
         DivEqual,
 
-
         /// <summary>
         /// (
         /// </summary>
         LeftParenthesis,
 
-                
         /// <summary>
         /// {
         /// </summary>
         LeftBrace,
-
 
         /// <summary>
         /// [
         /// </summary>
         LeftBracket,
 
-
         /// <summary>
         /// )
         /// </summary>
         RightParenthesis,
 
-        
         /// <summary>
         /// ]
         /// </summary>
         RightBracket,
-
 
         /// <summary>
         /// }
         /// </summary>
         RightBrace,
 
-        
         /// <summary>
         /// ,
         /// </summary>
         Comma,
-
 
         /// <summary>
         /// !
         /// </summary>
         LogicalNot,
 
-
         /// <summary>
         /// .
         /// </summary>
         Dot
     }
-
-
 
     /// <summary>
     /// Operator lookup class
@@ -197,7 +169,7 @@ namespace ComLib.Lang.Core
         internal static IDictionary<string, Operator> AllOps = new Dictionary<string, Operator>()
         {
             { "*", Operator.Multiply },
-            { "/", Operator.Divide }, 
+            { "/", Operator.Divide },
             { "+", Operator.Add },
             { "-", Operator.Subtract },
             { "%", Operator.Modulus },
@@ -227,7 +199,6 @@ namespace ComLib.Lang.Core
             { ".", Operator.Dot }
         };
 
-
         internal static IDictionary<Operator, bool> MathOps = new Dictionary<Operator, bool>()
         {
             { Operator.Multiply, true },
@@ -236,7 +207,6 @@ namespace ComLib.Lang.Core
             { Operator.Subtract, true },
             { Operator.Modulus, true },
         };
-
 
         internal static IDictionary<Operator, bool> CompareOps = new Dictionary<Operator, bool>()
         {
@@ -248,7 +218,6 @@ namespace ComLib.Lang.Core
             { Operator.NotEqual, true },
         };
 
-
         internal static IDictionary<Operator, bool> IncrementOps = new Dictionary<Operator, bool>()
         {
             { Operator.PlusPlus, true },
@@ -258,7 +227,6 @@ namespace ComLib.Lang.Core
             { Operator.MultEqual, true },
             { Operator.DivEqual, true },
         };
-
 
         internal static IDictionary<string, int> OpsPrecedence = new Dictionary<string, int>()
         {
@@ -279,7 +247,6 @@ namespace ComLib.Lang.Core
             { "||",      0 }
         };
 
-
         /// <summary>
         /// Whether or not this following text is an operator that has precedence value.
         /// </summary>
@@ -290,7 +257,6 @@ namespace ComLib.Lang.Core
             return OpsPrecedence.ContainsKey(op);
         }
 
-
         /// <summary>
         /// Get the operator as an enum
         /// </summary>
@@ -299,7 +265,6 @@ namespace ComLib.Lang.Core
         {
             return AllOps[op];
         }
-
 
         /// <summary>
         /// Checks if the operator supplied is a binary op ( * / + - % )
@@ -311,9 +276,8 @@ namespace ComLib.Lang.Core
             return MathOps.ContainsKey(op);
         }
 
-
         /// <summary>
-        /// Checks if the operator is a conditional 
+        /// Checks if the operator is a conditional
         /// </summary>
         /// <param name="op"></param>
         /// <returns></returns>
@@ -321,7 +285,6 @@ namespace ComLib.Lang.Core
         {
             return op == Operator.And || op == Operator.Or;
         }
-
 
         /// <summary>
         /// Checks if the operator is a comparison operator ( less lessthan more morethan equal not equal ).
@@ -333,7 +296,6 @@ namespace ComLib.Lang.Core
             return CompareOps.ContainsKey(op);
         }
 
-
         /// <summary>
         /// Checks if the operator supplied is a binary op ( * / + - % )
         /// </summary>
@@ -344,7 +306,6 @@ namespace ComLib.Lang.Core
             return IncrementOps.ContainsKey(op);
         }
 
-
         /// <summary>
         /// Checks if the operator supplied is a binary op ( * / + - % )
         /// </summary>
@@ -354,7 +315,6 @@ namespace ComLib.Lang.Core
         {
             return op == Operator.And || op == Operator.Or;
         }
-
 
         /// <summary>
         /// Gets the operator precendence.
@@ -367,5 +327,4 @@ namespace ComLib.Lang.Core
             return precedence;
         }
     }
-
 }

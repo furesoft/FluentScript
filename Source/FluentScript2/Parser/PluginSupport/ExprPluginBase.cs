@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
+
 // </lang:using>
 
 namespace ComLib.Lang.Parsing
@@ -20,36 +15,30 @@ namespace ComLib.Lang.Parsing
         /// </summary>
         protected string _id;
 
-
         /// <summary>
         /// The token iterator
         /// </summary>
         protected TokenIterator _tokenIt;
-
 
         /// <summary>
         /// Tokens to handle the expression.
         /// </summary>
         protected string[] _startTokens;
 
-
         /// <summary>
         /// The core parser.
         /// </summary>
         protected Parser _parser;
-
 
         /// <summary>
         /// Whether or not to handle a new line as end of this expression plugin and for statement support.
         /// </summary>
         protected bool _handleNewLineAsEndOfExpression = false;
 
-
         /// <summary>
         /// The token iterator.
         /// </summary>
         public TokenIterator TokenIt { get { return _tokenIt; } set { _tokenIt = value; } }
-
 
         /// <summary>
         /// Initialize
@@ -58,7 +47,6 @@ namespace ComLib.Lang.Parsing
         {
             this._id = "ComLib." + this.GetType().Name.Replace("Plugin", string.Empty);
         }
-
 
         /// <summary>
         /// Initialize the combinator.
@@ -70,7 +58,6 @@ namespace ComLib.Lang.Parsing
             _parser = parser;
             _tokenIt = tokenIt;
         }
-
 
         /// <summary>
         /// Configures this plugin as a system level statement.
@@ -88,7 +75,6 @@ namespace ComLib.Lang.Parsing
             this.IsAutoMatched = true;
         }
 
-
         /// <summary>
         /// Configures this plugin as a system level statement.
         /// </summary>
@@ -105,54 +91,45 @@ namespace ComLib.Lang.Parsing
             this.IsAutoMatched = true;
         }
 
-
         /// <summary>
         /// Gets the id for this plugin.
         /// </summary>
         public string Id { get { return _id; } }
-
 
         /// <summary>
         /// A number given to each plugin to give it an ordering compared to other plugins.
         /// </summary>
         public int Precedence { get; set; }
 
-
         /// <summary>
         /// Whether or not this grammer is context free grammer.
         /// </summary>
         public bool IsContextFree { get; set; }
-
 
         /// <summary>
         /// Whether or not this expression can be used like a statement.
         /// </summary>
         public bool IsStatement { get; set; }
 
-        
         /// <summary>
         /// Whether or not this is a system level plugin
         /// </summary>
         public bool IsSystemLevel { get; set; }
-
 
         /// <summary>
         /// Whether or not this plugin supports assignments
         /// </summary>
         public bool IsAssignmentSupported { get; set; }
 
-
         /// <summary>
         /// Whether or not a codeblock is supported.
         /// </summary>
         public bool IsCodeBlockSupported { get; set; }
 
-
         /// <summary>
         /// Whether or not a terminator is supported.
         /// </summary>
         public bool IsEndOfStatementRequired { get; set; }
-
 
         /// <summary>
         /// Whether or not this plugin automatically takes over parsing on the match of it's start tokens.
@@ -164,12 +141,10 @@ namespace ComLib.Lang.Parsing
         /// </summary>
         public Context Ctx { get; set; }
 
-
         /// <summary>
         /// Grammar for matching the plugin.
         /// </summary>
         public string GrammarMatch { get; set; }
-
 
         /// <summary>
         /// The tokens that are associated w/ this combinator.
@@ -180,7 +155,6 @@ namespace ComLib.Lang.Parsing
             set { _startTokens = value; }
         }
 
-
         /// <summary>
         /// Grammer for this plugin
         /// </summary>
@@ -188,7 +162,6 @@ namespace ComLib.Lang.Parsing
         {
             get { return string.Empty; }
         }
-
 
         /// <summary>
         /// Examples of grammer
@@ -198,7 +171,6 @@ namespace ComLib.Lang.Parsing
             get { return null; }
         }
 
-
         /// <summary>
         /// Whether or not to handle a new line as end of statement/expression.
         /// </summary>
@@ -206,7 +178,6 @@ namespace ComLib.Lang.Parsing
         {
             get { return _handleNewLineAsEndOfExpression; }
         }
-
 
         /// <summary>
         /// Whether or not this parser can handle the supplied token.
@@ -218,11 +189,10 @@ namespace ComLib.Lang.Parsing
             return IsAutoMatched;
         }
 
-
         public ExprParser ExpParser { get; set; }
 
-
         #region Token methods
+
         /// <summary>
         /// Match the current token to the token supplied.
         /// </summary>
@@ -233,7 +203,6 @@ namespace ComLib.Lang.Parsing
             _tokenIt.Advance(count, passNewLine);
         }
 
-
         /// <summary>
         /// Match the current token to the token supplied.
         /// </summary>
@@ -242,7 +211,6 @@ namespace ComLib.Lang.Parsing
         {
             _tokenIt.Expect(token);
         }
-
 
         /// <summary>
         /// Match the current token to the token supplied.
@@ -255,7 +223,6 @@ namespace ComLib.Lang.Parsing
             _tokenIt.ExpectMany(token1, token2, token3);
         }
 
-
         /// <summary>
         /// Peek at the token ahead of the current token
         /// </summary>
@@ -265,8 +232,8 @@ namespace ComLib.Lang.Parsing
         {
             return _tokenIt.Peek(1, passNewLine);
         }
-        #endregion
 
+        #endregion Token methods
 
         private void InitTokens(string token)
         {

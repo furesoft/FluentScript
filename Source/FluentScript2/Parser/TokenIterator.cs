@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Core;
+using System;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Parsing
@@ -25,67 +23,56 @@ namespace ComLib.Lang.Parsing
         private Func<int, List<TokenData>> _tokensFetcher;
         private Action<int> _resetPosExecutor;
         private List<TokenData> _rewindBatch;
-        
 
         /// <summary>
         /// The index position of the token in the current batch of tokens.
         /// </summary>
         protected int _currentBatchIndex;
 
-
         /// <summary>
         /// The index position of the token in the total tokens processed so far.
         /// </summary>
         protected int _currentIndex;
 
-
         /// <summary>
         /// The parsed tokens from the script
         /// </summary>
         public List<TokenData> TokenList;
-        
 
         /// <summary>
         /// Last token parsed.
         /// </summary>
         public TokenData LastToken;
 
-
         /// <summary>
         /// The next token
         /// </summary>
         public TokenData NextToken;
-
 
         /// <summary>
         /// The path to the script.
         /// </summary>
         public string ScriptPath;
 
-
-
         /// <summary>
         /// The index position of the currrent token being processed
         /// </summary>
         public int CurrentIndex { get { return _currentIndex; } set { _currentIndex = value; } }
-
 
         /// <summary>
         /// The index position of the currrent token in the current batch of tokens.
         /// </summary>
         public int CurrentBatchIndex { get { return _currentBatchIndex; } set { _currentBatchIndex = value; } }
 
-
         /// <summary>
         /// The setting representing the number of tokens / batch to have at any one time.
         /// </summary>
         public int LLK { get { return _LLK; } set { _LLK = value; } }
 
-
         /// <summary>
         /// Initialize.
         /// </summary>
-        /// <param name="tokenFetcher">The callback used to get a batch of tokens.</param>        
+        /// <param name="tokenFetcher">The callback used to get a batch of tokens.</param>
         /// <param name="llK">The batch size of the tokens.</param>
         /// <param name="resetPosExecutor">The callback to use to reset the position when rewinding a token.</param>
         public void Init(Func<int, List<TokenData>> tokenFetcher, int llK, Action<int> resetPosExecutor)
@@ -95,7 +82,7 @@ namespace ComLib.Lang.Parsing
             _LLK = llK;
 
             // Validate inputs
-            if (llK < 4) 
+            if (llK < 4)
                 throw new ArgumentException("Can not initialize token iterator with llk less than 4");
 
             int batchSize = 2 * llK;
@@ -110,12 +97,12 @@ namespace ComLib.Lang.Parsing
             // 8. An LL(4) indicates a look ahead level of minimum 3, maximum 6
 
             // MID POINT:
-            // e.g. if 
+            // e.g. if
             // 1. llk = 4, batchsize = 8, midpoint = 4
             // 2. llk = 5, batchsize = 10, midpoing = 5
             _tokenBatchMidPoint = batchSize / 2;
             _tokenBatchMidPointIndex = _tokenBatchMidPoint - 1;
-            // NOTES: mid is the last position of the current index in the batchsize before it requests 
+            // NOTES: mid is the last position of the current index in the batchsize before it requests
             // the next batch of LLK count tokens from the lexer
             _isLLKEnabled = true;
             CurrentIndex = -1;
@@ -126,7 +113,6 @@ namespace ComLib.Lang.Parsing
             _marks = new Stack<int>();
             TokenList = _tokensFetcher(batchSize);
         }
-
 
         /// <summary>
         /// Initialize.
@@ -144,7 +130,6 @@ namespace ComLib.Lang.Parsing
             _marks = new Stack<int>();
         }
 
-
         /// <summary>
         /// Indicates whether or not the token iteration is ended.
         /// </summary>
@@ -153,7 +138,6 @@ namespace ComLib.Lang.Parsing
         {
             get { return _isEnded; }
         }
-
 
         /// <summary>
         /// Whether the current token is an end of statement token.
@@ -167,7 +151,6 @@ namespace ComLib.Lang.Parsing
             return false;
         }
 
-
         /// <summary>
         /// Whether the current token is an end of statement token.
         /// </summary>
@@ -179,7 +162,6 @@ namespace ComLib.Lang.Parsing
                 return true;
             return false;
         }
-
 
         /// <summary>
         /// Peek into and get the token ahead of the current token.
@@ -208,10 +190,9 @@ namespace ComLib.Lang.Parsing
                 // Is New line important ?
                 if (!passNewLine && next.Token == Tokens.NewLine)
                     advanced++;
-
-                else if (next.Token != Tokens.WhiteSpace 
+                else if (next.Token != Tokens.WhiteSpace
                     && next.Token != Tokens.CommentMLine
-                    && next.Token != Tokens.CommentSLine 
+                    && next.Token != Tokens.CommentSLine
                     && next.Token != Tokens.NewLine)
                     advanced++;
 
@@ -221,13 +202,13 @@ namespace ComLib.Lang.Parsing
             return next;
         }
 
-
         #region Advance calls
+
         /// <summary>
         /// Advances to the next token and returns the next token.
         /// </summary>
         public TokenData Advance(int count = 1, bool passNewLine = false)
-        {            
+        {
             int advanced = 0;
 
             while (true)
@@ -265,7 +246,6 @@ namespace ComLib.Lang.Parsing
                 // Is New line important ?
                 if (!passNewLine && NextToken.Token == Tokens.NewLine)
                     advanced++;
-
                 else if (NextToken.Token != Tokens.WhiteSpace
                        && NextToken.Token != Tokens.CommentMLine
                        && NextToken.Token != Tokens.NewLine
@@ -280,7 +260,6 @@ namespace ComLib.Lang.Parsing
             return NextToken;
         }
 
-
         /// <summary>
         /// Advance to the next token and expect the token supplied.
         /// </summary>
@@ -290,7 +269,6 @@ namespace ComLib.Lang.Parsing
             Advance();
             Expect(expectedToken);
         }
-
 
         /// <summary>
         /// Advance and get the next token.
@@ -307,7 +285,6 @@ namespace ComLib.Lang.Parsing
             return token;
         }
 
-
         /// <summary>
         /// Advances past newlines.
         /// </summary>
@@ -319,15 +296,16 @@ namespace ComLib.Lang.Parsing
             if (NextToken.Token != Tokens.NewLine)
                 return;
 
-            while(NextToken.Token == Tokens.NewLine && !IsEnded)
+            while (NextToken.Token == Tokens.NewLine && !IsEnded)
             {
-                Advance();    
+                Advance();
             }
         }
-        #endregion
 
+        #endregion Advance calls
 
         #region Expect calls
+
         /// <summary>
         /// Expect the end of statement.
         /// </summary>
@@ -344,9 +322,8 @@ namespace ComLib.Lang.Parsing
                 return;
 
             // 3. Something else ?
-            throw BuildSyntaxExpectedException("End of statement");            
+            throw BuildSyntaxExpectedException("End of statement");
         }
-
 
         /// <summary>
         /// Expect the token supplied and advance to next token
@@ -358,7 +335,6 @@ namespace ComLib.Lang.Parsing
             if (NextToken.Token != token) throw BuildSyntaxExpectedException(token.Text);
             Advance();
         }
-
 
         /// <summary>
         /// Expect the token supplied and advance to next token
@@ -394,7 +370,6 @@ namespace ComLib.Lang.Parsing
             Advance();
         }
 
-
         /// <summary>
         /// Expect identifier
         /// </summary>
@@ -413,7 +388,6 @@ namespace ComLib.Lang.Parsing
 
             return id;
         }
-
 
         /// <summary>
         /// Expect identifier
@@ -435,7 +409,6 @@ namespace ComLib.Lang.Parsing
             return id;
         }
 
-
         /// <summary>
         /// Expect identifier
         /// </summary>
@@ -455,7 +428,6 @@ namespace ComLib.Lang.Parsing
 
             return num;
         }
-
 
         /// <summary>
         /// Expect a string literal
@@ -485,10 +457,11 @@ namespace ComLib.Lang.Parsing
 
             return tokenText;
         }
-        #endregion
 
+        #endregion Expect calls
 
         #region Helpers
+
         /// <summary>
         /// Gets a list of consequtive id tokens appended to form potential names.
         /// e.g. [ "refill", "refill inventory" ]
@@ -506,14 +479,13 @@ namespace ComLib.Lang.Parsing
             // Build up the word until , is hit.
             while (ahead.Token.Kind == TokenKind.Ident && total < maxTokenLookAhead)
             {
-                total++;                
+                total++;
                 combinedWord += " " + ahead.Token.Text;
-                possibleWords.Add(combinedWord);                
+                possibleWords.Add(combinedWord);
                 ahead = Peek(total, false);
             }
             return possibleWords;
         }
-
 
         /// <summary>
         /// Gets a list of consequtive id tokens appended to form potential names.
@@ -550,7 +522,6 @@ namespace ComLib.Lang.Parsing
             return possibleWords;
         }
 
-
         /// <summary>
         /// Gets a list of consequtive id tokens
         /// returns list of idtokens.
@@ -575,7 +546,6 @@ namespace ComLib.Lang.Parsing
             return ids;
         }
 
-
         /// <summary>
         /// Gets a list of consequtive id tokens
         /// returns list of idtokens.
@@ -592,10 +562,11 @@ namespace ComLib.Lang.Parsing
             }
             return tokens;
         }
-        #endregion
 
+        #endregion Helpers
 
         #region Parser Errors
+
         /// <summary>
         /// Build a language exception due to the current token being invalid.
         /// </summary>
@@ -605,7 +576,6 @@ namespace ComLib.Lang.Parsing
         {
             return new LangException("Syntax Error", errorMessage, ScriptPath, NextToken.Line, NextToken.LineCharPos);
         }
-
 
         /// <summary>
         /// Build a language exception due to the current token being invalid.
@@ -618,7 +588,6 @@ namespace ComLib.Lang.Parsing
             return new LangException("Syntax Error", errorMessage, ScriptPath, token.Line, token.LineCharPos);
         }
 
-
         /// <summary>
         /// Build a language exception due to the current token being invalid.
         /// </summary>
@@ -629,8 +598,7 @@ namespace ComLib.Lang.Parsing
         {
             return new LangException("Syntax Error", errorMessage, ScriptPath, node.Ref.Line, node.Ref.CharPos);
         }
-        
-        
+
         /// <summary>
         /// Build a language exception due to the current token being invalid.
         /// </summary>
@@ -640,7 +608,6 @@ namespace ComLib.Lang.Parsing
         {
             return new LangException("Syntax Error", string.Format("Expected {0} but found '{1}'", expected, NextToken.Token.Text), ScriptPath, NextToken.Line, NextToken.LineCharPos);
         }
-
 
         /// <summary>
         /// Build a language exception due to the current token being invalid.
@@ -652,7 +619,6 @@ namespace ComLib.Lang.Parsing
             return new LangException("Syntax Error", string.Format("Expected {0} but found '{1}'", token.Text, NextToken.Token.Text), ScriptPath, NextToken.Line, NextToken.LineCharPos);
         }
 
-
         /// <summary>
         /// Build a language exception due to the current token being invalid.
         /// </summary>
@@ -662,7 +628,6 @@ namespace ComLib.Lang.Parsing
             return new LangException("Syntax Error", string.Format("Unexpected token found '{0}'", NextToken.Token.Text), ScriptPath, NextToken.Line, NextToken.LineCharPos);
         }
 
-
         /// <summary>
         /// Build a language exception due to the current token being invalid.
         /// </summary>
@@ -671,7 +636,6 @@ namespace ComLib.Lang.Parsing
         {
             return new LangException("Syntax Error", string.Format("Unexpected token found '{0}'", token.Token.Text), ScriptPath, token.Line, token.LineCharPos);
         }
-
 
         /// <summary>
         /// Build a language exception due to the current token being invalid.
@@ -684,7 +648,6 @@ namespace ComLib.Lang.Parsing
             return new LangException("Syntax Error", string.Format("Unexpected token found {0}", unexpectedTokenText), ScriptPath, token.Line, token.LineCharPos);
         }
 
-
         /// <summary>
         /// Builds a language exception due to the unexpected end of script.
         /// </summary>
@@ -693,7 +656,6 @@ namespace ComLib.Lang.Parsing
         {
             return new LangException("Syntax Error", "Unexpected end of script", ScriptPath, NextToken.Line, NextToken.LineCharPos);
         }
-
 
         /// <summary>
         /// Builds a language exception due to a specific limit being reached.
@@ -706,6 +668,7 @@ namespace ComLib.Lang.Parsing
         {
             return new LangException("Limit Error", error, ScriptPath, NextToken.Line, NextToken.LineCharPos);
         }
-        #endregion
+
+        #endregion Parser Errors
     }
 }

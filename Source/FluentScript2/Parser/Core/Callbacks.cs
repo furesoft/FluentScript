@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
+﻿// <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
+using System;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Parsing
@@ -17,7 +14,6 @@ namespace ComLib.Lang.Parsing
     {
         private IDictionary<string, List<Action<object, AstNode>>> _subscribers = new Dictionary<string, List<Action<object, AstNode>>>();
 
-
         /// <summary>
         /// Whether or not there are any subscribers.
         /// </summary>
@@ -25,7 +21,6 @@ namespace ComLib.Lang.Parsing
         {
             get { return _subscribers.Count > 0; }
         }
-
 
         /// <summary>
         /// Subscribe to a specific topic.
@@ -46,7 +41,6 @@ namespace ComLib.Lang.Parsing
             }
             subscribersForTopic.Add(action);
         }
-
 
         /// <summary>
         /// Notify subscribers.

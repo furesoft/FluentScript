@@ -1,10 +1,9 @@
-﻿using System;
-using System.Reflection;
+﻿using ComLib.Lang.AST;
 using ComLib.Lang.Core;
 using ComLib.Lang.Parsing;
 using ComLib.Lang.Types;
-using ComLib.Lang.AST;
-
+using System;
+using System.Reflection;
 
 namespace ComLib.Lang.Helpers
 {
@@ -24,20 +23,20 @@ namespace ComLib.Lang.Helpers
         public static MemberAccess GetMemberAccess(AstNode node, Context ctx, Expr varExp, string memberName, IAstVisitor visitor)
         {
             var isVariableExp = varExp.IsNodeType(NodeTypes.SysVariable);
-            var variableName = isVariableExp ? ((VariableExpr) varExp).Name : string.Empty;
+            var variableName = isVariableExp ? ((VariableExpr)varExp).Name : string.Empty;
 
             // CASE 1: External function call "user.create"
             if (isVariableExp && FunctionHelper.IsExternalFunction(ctx.ExternalFunctions, variableName, memberName))
-                return new MemberAccess(MemberMode.FunctionExternal) {Name = variableName, MemberName = memberName};
+                return new MemberAccess(MemberMode.FunctionExternal) { Name = variableName, MemberName = memberName };
 
-            // CASE 2. Static method call: "Person.Create" 
+            // CASE 2. Static method call: "Person.Create"
             if (isVariableExp)
             {
                 var result = MemberHelper.IsExternalTypeName(ctx.Memory, ctx.Types, variableName);
                 if (result.Success)
-                    return MemberHelper.GetExternalTypeMember(node, (Type) result.Item, variableName, null, memberName, true);
+                    return MemberHelper.GetExternalTypeMember(node, (Type)result.Item, variableName, null, memberName, true);
             }
-            
+
             // CASE 3: Module
             if (varExp.IsNodeType(NodeTypes.SysVariable))
             {
@@ -51,14 +50,14 @@ namespace ComLib.Lang.Helpers
 
             // CASE 4: Nested member.
             var res = varExp.Visit(visitor);
-            if (res is MemberAccess )
+            if (res is MemberAccess)
             {
                 return res as MemberAccess;
             }
 
             var obj = res as LObject;
             // Check for empty objects.
-            ExceptionHelper.NotNull(node,  obj, "member access");
+            ExceptionHelper.NotNull(node, obj, "member access");
 
             var type = obj.Type;
 
@@ -76,7 +75,6 @@ namespace ComLib.Lang.Helpers
             var member = MemberHelper.GetExternalTypeMember(node, lclassType.DataType, variableName, lclass.Value, memberName, false);
             return member;
         }
-
 
         /// <summary>
         /// Resolve a symbol that is either a module or function.
@@ -111,7 +109,6 @@ namespace ComLib.Lang.Helpers
             return null;
         }
 
-
         /// <summary>
         /// Gets a see MemberAccess object that represents the instance, member name and other information on the member access expression.
         /// </summary>
@@ -123,8 +120,8 @@ namespace ComLib.Lang.Helpers
         public static MemberAccess GetLangBasicTypeMember(AstNode node, RegisteredMethods methods, LObject obj, string memberName)
         {
             var type = obj.Type;
-            
-            // Get the methods implementation LTypeMethods for this basic type 
+
+            // Get the methods implementation LTypeMethods for this basic type
             // e.g. string,  date,  time,  array , map
             // e.g. LStringType  LDateType, LTimeType, LArrayType, LMapType
             var typeMethods = methods.Get(type);
@@ -156,7 +153,6 @@ namespace ComLib.Lang.Helpers
             maccess.Type = type;
             return maccess;
         }
-
 
         /// <summary>
         /// Gets a see MemberAccess object that represents the instance, member name and other information on the member access expression.
@@ -196,13 +192,11 @@ namespace ComLib.Lang.Helpers
             // 2. Method
             else if (matchingMember.MemberType == MemberTypes.Method)
                 member.Method = type.GetMethod(matchingMember.Name);
-
             else if (matchingMember.MemberType == MemberTypes.Field)
                 member.Field = type.GetField(matchingMember.Name);
 
             return member;
         }
-
 
         /// <summary>
         /// Whether or not the variable name provided is an external host language( C# ) type name.
@@ -215,7 +209,7 @@ namespace ComLib.Lang.Helpers
         {
             Type type = null;
             var isStatic = false;
-            
+
             // 1. Class name : "Person" as in "Person.Create" -> so definitely a static method call on custom object.
             if (types.Contains(varName))
             {

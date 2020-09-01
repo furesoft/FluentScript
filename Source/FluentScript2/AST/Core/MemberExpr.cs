@@ -1,13 +1,12 @@
-﻿using System;
+﻿// <lang:using>
+using ComLib.Lang.Core;
+using System;
 using System.Reflection;
 
-// <lang:using>
-using ComLib.Lang.Core;
 // </lang:using>
 
 namespace ComLib.Lang.AST
-{    
-
+{
     /// <summary>
     /// Member access expressions for "." property or "." method.
     /// </summary>
@@ -24,22 +23,18 @@ namespace ComLib.Lang.AST
             this.MemberName = memberName;
         }
 
-        
         /// <summary>
         /// The variable expression representing the list.
         /// </summary>
         public Expr VariableExp;
-
 
         /// <summary>
         /// The name of the member.
         /// </summary>
         public string MemberName;
 
-
-
         /// <summary>
-        /// The full name of the member 
+        /// The full name of the member
         /// </summary>
         /// <returns></returns>
         /// <summary>
@@ -51,7 +46,6 @@ namespace ComLib.Lang.AST
             string name = VariableExp.ToQualifiedName() + "." + MemberName;
             return name;
         }
-
 
         /// <summary>
         /// Whether or not this variable + member name maps to an external function call.
@@ -65,7 +59,6 @@ namespace ComLib.Lang.AST
                 return true;
             return false;
         }
-
 
         /// <summary>
         /// Whether or not this member
@@ -83,7 +76,6 @@ namespace ComLib.Lang.AST
             return true;
         }
 
-
         /// <summary>
         /// Whether or not this member
         /// </summary>
@@ -94,7 +86,6 @@ namespace ComLib.Lang.AST
             Type type = obj.GetType();
             return IsMemberStaticAccess(type);
         }
-
 
         /// <summary>
         /// Whether or not this member
@@ -109,7 +100,6 @@ namespace ComLib.Lang.AST
                 return false;
             return true;
         }
-
 
         /// <summary>
         /// Whether or not the variable name provided and
@@ -130,7 +120,7 @@ namespace ComLib.Lang.AST
             }
             else if (!Ctx.Memory.Contains(variableName))
             {
-                // 3. Static method but with lowercase classname 
+                // 3. Static method but with lowercase classname
                 // Only do this check for "user" -> "User" class / static method.
                 char first = Char.ToUpper(variableName[0]);
                 string name = first + variableName.Substring(1);
@@ -144,7 +134,6 @@ namespace ComLib.Lang.AST
             return new BoolMsgObj(type, isStatic, string.Empty);
         }
 
-
         /// <summary>
         /// Gets the instance member as an MemberAccess object.
         /// </summary>
@@ -154,7 +143,6 @@ namespace ComLib.Lang.AST
         {
             return GetMemberAccess(type, null, true);
         }
-
 
         /// <summary>
         /// Gets the instance member as an MemberAccess object.
@@ -167,13 +155,11 @@ namespace ComLib.Lang.AST
             return GetMemberAccess(type, obj, false);
         }
 
-
-
         private MemberAccess GetMemberAccess(Type type, object obj, bool isStatic)
-        {        
+        {
             // 1. Get the member name.
             MemberInfo[] members = null;
-            members = type.GetMember(MemberName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.IgnoreCase);            
+            members = type.GetMember(MemberName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.IgnoreCase);
 
             MemberInfo result = null;
 
@@ -200,10 +186,10 @@ namespace ComLib.Lang.AST
             else if (result.MemberType == MemberTypes.Method)
             {
                 string name = (VariableExp.IsNodeType(NodeTypes.SysVariable)) ? ((VariableExpr)VariableExp).Name : null;
-                member.Name = name;                
+                member.Name = name;
                 member.Method = type.GetMethod(memberNameCaseIgnorant);
             }
             return member;
         }
-    }    
+    }
 }

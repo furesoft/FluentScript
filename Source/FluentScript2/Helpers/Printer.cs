@@ -1,6 +1,5 @@
 ﻿using System;
 
-
 namespace ComLib.Lang.Helpers
 {
     public class Printer
@@ -15,7 +14,6 @@ namespace ComLib.Lang.Helpers
             Console.WriteLine(text.ToUpper());
         }
 
-
         /// <summary>
         /// Writest the text supplied on 1 line.
         /// </summary>
@@ -24,7 +22,6 @@ namespace ComLib.Lang.Helpers
         {
             Console.WriteLine(text);
         }
-
 
         /// <summary>
         /// Writes out a key/value line.
@@ -43,7 +40,6 @@ namespace ComLib.Lang.Helpers
             Console.WriteLine(val);
             Console.ResetColor();
         }
-
 
         /// <summary>
         /// Writes out lines

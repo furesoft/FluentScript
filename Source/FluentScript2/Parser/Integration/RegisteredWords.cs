@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 // <lang:using>
-using ComLib.Lang.Core;
-using ComLib.Lang.Plugins;
 // </lang:using>
 
 namespace ComLib.Lang.Parsing
@@ -21,7 +16,6 @@ namespace ComLib.Lang.Parsing
         public RegisteredWords()
         {
         }
-
 
         /// <summary>
         /// Register a custom type into the interpreter( for calling c# from the language ).

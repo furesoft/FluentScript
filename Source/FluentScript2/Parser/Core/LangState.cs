@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ComLib.Lang.Parsing
+﻿namespace ComLib.Lang.Parsing
 {
     /// <summary>
     /// State of the language. e.g. loop limits, recursion limits.
@@ -19,38 +14,33 @@ namespace ComLib.Lang.Parsing
             _callStack = stack;
         }
 
-
         /// <summary>
         /// Number of statements
         /// </summary>
         public int StatementCount;
-
 
         /// <summary>
         /// Number of times a loop has been done.
         /// </summary>
         public int LoopCount;
 
-
         /// <summary>
         /// Number of times a recusive call has been made.
         /// </summary>
         public int RecursionCount;
-
 
         /// <summary>
         /// Total number of exceptions.
         /// </summary>
         public int ExceptionCount;
 
-
         /// <summary>
         /// How many times string are appended.
         /// </summary>
         public int StringAppendCount;
 
-
         private CallStack _callStack;
+
         /// <summary>
         /// The call stack for function calls.
         /// </summary>
@@ -58,7 +48,6 @@ namespace ComLib.Lang.Parsing
         {
             get { return _callStack; }
         }
-
 
         /// <summary>
         /// Resets the state.

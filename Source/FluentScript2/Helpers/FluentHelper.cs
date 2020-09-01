@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Parsing;
+using System;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Helpers
@@ -33,8 +33,7 @@ namespace ComLib.Lang.Helpers
             }
             names.Reverse();
             return names;
-        }        
-
+        }
 
         /// <summary>
         /// Finds a matching script function name from the list of strings representing identifiers.
@@ -42,14 +41,14 @@ namespace ComLib.Lang.Helpers
         /// <param name="ctx">The context of the script</param>
         /// <param name="ids">List of strings representing identifier tokens</param>
         /// <returns></returns>
-        public static FunctionLookupResult MatchFunctionName(Context ctx, List<Tuple<string,int>> ids)
+        public static FunctionLookupResult MatchFunctionName(Context ctx, List<Tuple<string, int>> ids)
         {
             var names = ids;
             var foundFuncName = string.Empty;
             var found = false;
             var tokenCount = 0;
             var memberMode = MemberMode.FunctionScript;
-            for( int ndx = ids.Count - 1; ndx >=0; ndx-- )
+            for (int ndx = ids.Count - 1; ndx >= 0; ndx--)
             {
                 // "refill inventory"
                 var possible = ids[ndx];
@@ -61,7 +60,7 @@ namespace ComLib.Lang.Helpers
                 {
                     foundFuncName = funcName;
                 }
-                // Case 2: "refill_inventory" - replace space with underscore. 
+                // Case 2: "refill_inventory" - replace space with underscore.
                 else if (ctx.Symbols.IsFunc(funcNameWithUnderScores))
                 {
                     foundFuncName = funcNameWithUnderScores;
@@ -81,7 +80,7 @@ namespace ComLib.Lang.Helpers
                 }
             }
             // CASE 1: Not found
-            if (!found ) return FunctionLookupResult.False;
+            if (!found) return FunctionLookupResult.False;
 
             // CASE 2: Single word function
             if ((found && tokenCount == 1) && memberMode == MemberMode.FunctionScript)
@@ -95,7 +94,6 @@ namespace ComLib.Lang.Helpers
                 else
                     return FunctionLookupResult.False;
             }
-                
 
             var result = new FunctionLookupResult()
             {
@@ -106,7 +104,6 @@ namespace ComLib.Lang.Helpers
             };
             return result;
         }
-
 
         /// <summary>
         /// Parses parameters.
@@ -128,20 +125,20 @@ namespace ComLib.Lang.Helpers
 
             bool passNewLine = !enableNewLineAsEnd;
             var endTokens = BuildEndTokens(enableNewLineAsEnd, meta);
-            
+
             int totalNamedParams = 0;
             var hasMetaArguments = meta != null && meta.ArgumentNames != null && meta.ArgumentNames.Count > 0;
             while (true)
             {
                 Expr exp = null;
-            
+
                 // Check for end of statment or invalid end of script.
                 if (parser.IsEndOfParameterList(Tokens.RightParenthesis, enableNewLineAsEnd))
                     break;
-                
-                if (tokenIt.NextToken.Token == Tokens.Comma) 
+
+                if (tokenIt.NextToken.Token == Tokens.Comma)
                     tokenIt.Advance();
-                
+
                 var token = tokenIt.NextToken.Token;
                 var peek = tokenIt.Peek().Token;
 
@@ -149,13 +146,13 @@ namespace ComLib.Lang.Helpers
                 var isParamNameMatch = hasMetaArguments && meta.ArgumentsLookup.ContainsKey(token.Text);
                 var isKeywordParamName = token.Kind == TokenKind.Keyword && isParamNameMatch;
 
-                // CASE 1: Named params for external c# object method calls                
+                // CASE 1: Named params for external c# object method calls
                 // CASE 2: Named params for internal script functions ( where we have access to its param metadata )
-                if (   (meta == null && token.Kind == TokenKind.Ident && peek == Tokens.Colon ) 
-                    || (token.Kind == TokenKind.Ident && isParamNameMatch && !isVar) 
+                if ((meta == null && token.Kind == TokenKind.Ident && peek == Tokens.Colon)
+                    || (token.Kind == TokenKind.Ident && isParamNameMatch && !isVar)
                     || (token.Kind == TokenKind.Ident && !isParamNameMatch && !isVar && peek == Tokens.Colon)
-                    || (isKeywordParamName && !isVar ) )
-                {         
+                    || (isKeywordParamName && !isVar))
+                {
                     var paramName = token.Text;
                     var namedParamToken = tokenIt.NextToken;
                     tokenIt.Advance();
@@ -163,7 +160,7 @@ namespace ComLib.Lang.Helpers
                     // Advance and check if ":"
                     if (tokenIt.NextToken.Token == Tokens.Colon)
                         tokenIt.Advance();
-                    
+
                     exp = parser.ParseExpression(endTokens, true, false, true, passNewLine, true);
                     exp = Exprs.NamedParam(paramName, exp, namedParamToken);
 
@@ -193,7 +190,7 @@ namespace ComLib.Lang.Helpers
 
                     exp = parser.ParseExpression(endTokens, true, false, true, passNewLine, true);
                     args.Add(exp);
-                }                
+                }
                 totalParameters++;
                 parser.Context.Limits.CheckParserFunctionParams(exp, totalParameters);
 
@@ -202,14 +199,13 @@ namespace ComLib.Lang.Helpers
                     break;
 
                 // Advance if not using fluent-parameters
-                if(meta == null)
+                if (meta == null)
                     tokenIt.Expect(Tokens.Comma);
             }
 
             // END with check for ")"
             if (expectParenthesis) tokenIt.Expect(Tokens.RightParenthesis);
         }
-
 
         private static IDictionary<Token, bool> BuildEndTokens(bool enableNewLineAsEnd, FunctionMetaData meta)
         {
@@ -220,7 +216,7 @@ namespace ComLib.Lang.Helpers
 
             if (meta == null) return endTokens;
 
-            // Go through all the arguments and use the 
+            // Go through all the arguments and use the
             if (meta.ArgumentsLookup != null && meta.ArgumentsLookup.Count > 0)
             {
                 // Add all the parameter names and aliases to the map.

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ComLib.Lang.Core
 {
@@ -16,54 +14,45 @@ namespace ComLib.Lang.Core
         /// </summary>
         public readonly DateTime StartTime;
 
-
         /// <summary>
         /// The end time of an action.
         /// </summary>
         public readonly DateTime EndTime;
-
 
         /// <summary>
         /// Whether or not the result of the action was succcessful
         /// </summary>
         public readonly bool Success;
 
-
         /// <summary>
         /// A message representing the result of the action.
         /// </summary>
         public readonly string Message;
-
 
         /// <summary>
         /// Duration between start and endtime.
         /// </summary>
         public readonly TimeSpan Duration;
 
-
         /// <summary>
         /// A object that can be return from the result.
         /// </summary>
         public object Item;
-
 
         /// <summary>
         /// The exception from running script.
         /// </summary>
         public Exception Ex;
 
-
         /// <summary>
         /// List of all the script errors.
         /// </summary>
         public List<ScriptError> Errors;
 
-
         /// <summary>
         /// Total number of script errors.
         /// </summary>
-        public int TotalErrors; 
-
+        public int TotalErrors;
 
         /// <summary>
         /// Initialize
@@ -81,7 +70,6 @@ namespace ComLib.Lang.Core
             Duration = ended - started;
             TotalErrors = 1;
         }
-
 
         /// <summary>
         /// Initialize
@@ -106,7 +94,6 @@ namespace ComLib.Lang.Core
             }
         }
 
-
         /// <summary>
         /// string representation of run result
         /// </summary>
@@ -114,7 +101,7 @@ namespace ComLib.Lang.Core
         public override string ToString()
         {
             string template = "Success: {0} - Duration: {1} - Start: {2} - End: {3} - Error(s): {4} - Message: {5}";
-            string result = string.Format(template, Success, Duration.Milliseconds, StartTime.ToShortTimeString(), EndTime.ToShortTimeString(), TotalErrors, Message );
+            string result = string.Format(template, Success, Duration.Milliseconds, StartTime.ToShortTimeString(), EndTime.ToShortTimeString(), TotalErrors, Message);
             return result;
         }
     }

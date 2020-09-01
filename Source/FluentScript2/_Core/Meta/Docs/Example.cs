@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ComLib.Lang.Docs
+﻿namespace ComLib.Lang.Docs
 {
     /// <summary>
     /// An example call for a function
@@ -15,12 +10,10 @@ namespace ComLib.Lang.Docs
         /// </summary>
         public string Tag { get; set; }
 
-
         /// <summary>
         /// Description for the example
         /// </summary>
         public string Desc { get; set; }
-
 
         /// <summary>
         /// The code representing the example.

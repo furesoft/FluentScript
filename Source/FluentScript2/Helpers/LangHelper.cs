@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Parsing;
-using ComLib.Lang.Types;
-// </lang:using>
+using System;
+using System.Collections.Generic;
 
+// </lang:using>
 
 namespace ComLib.Lang.Helpers
 {
@@ -32,14 +31,13 @@ namespace ComLib.Lang.Helpers
             return dict;
         }
 
-
         /// <summary>
         /// Converts a list of items to a dictionary with the items.
         /// </summary>
         /// <typeparam name="T">Type of items to use.</typeparam>
         /// <param name="items">List of items.</param>
         /// <returns>Converted list as dictionary.</returns>
-        public static IDictionary<T, T> ToDictionaryFiltered<T>(IList<T> items )
+        public static IDictionary<T, T> ToDictionaryFiltered<T>(IList<T> items)
         {
             var dict = new Dictionary<T, T>();
             foreach (T item in items)
@@ -48,7 +46,6 @@ namespace ComLib.Lang.Helpers
             }
             return dict;
         }
-
 
         /// <summary>
         /// Executes the statements.
@@ -66,7 +63,6 @@ namespace ComLib.Lang.Helpers
             }
         }
 
-
         /// <summary>
         /// The shunting yard algorithm that processes a postfix list of expressions/operators.
         /// </summary>
@@ -82,7 +78,7 @@ namespace ComLib.Lang.Helpers
             // Shunting yard algorithm handles POSTFIX operations.
             while (index < stack.Count && stack.Count > 0)
             {
-                // Keep moving forward to the first operator * - + / && that is found  
+                // Keep moving forward to the first operator * - + / && that is found
                 // This is a postfix algorithm so it works by creating an expression
                 // from the last 2 items behind an operator.
                 if (!(stack[index] is TokenData))
@@ -91,7 +87,7 @@ namespace ComLib.Lang.Helpers
                     continue;
                 }
 
-                // At this point... we hit an operator 
+                // At this point... we hit an operator
                 // So get the last 2 items on the stack ( they have to be expressions )
                 // left  is 2 behind current position
                 // right is 1 behind current position
@@ -114,12 +110,10 @@ namespace ComLib.Lang.Helpers
                 index = index - 2;
                 stack[index] = exp;
                 index++;
-
             }
             finalExp = stack[0] as Expr;
             return finalExp;
         }
-
 
         /// <summary>
         /// Executes an action.
@@ -138,7 +132,6 @@ namespace ComLib.Lang.Helpers
             }
             catch (Exception ex)
             {
-                
                 success = false;
                 if (ex is LangException)
                 {

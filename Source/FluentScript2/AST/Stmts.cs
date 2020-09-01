@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using ComLib.Lang.Core;
+﻿using System.Collections.Generic;
 
 namespace ComLib.Lang.AST
 {
@@ -13,7 +11,6 @@ namespace ComLib.Lang.AST
     /// date:	02/21/13 04:16:59 PM
     /// ------------------------------------------------------------------------------------------------
 
-
     /// <summary>26: AST class for BreakExpr</summary>
     public class BreakExpr : Expr
     {
@@ -21,7 +18,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysBreak;
         }
-
 
         public override object DoVisit(IAstVisitor visitor)
         {
@@ -38,7 +34,6 @@ namespace ComLib.Lang.AST
             return string.Empty;
         }
     }
-
 
     /// <summary>27: AST class for ContinueExpr</summary>
     public class ContinueExpr : Expr
@@ -48,7 +43,6 @@ namespace ComLib.Lang.AST
             this.Nodetype = NodeTypes.SysContinue;
         }
 
-
         public override object DoVisit(IAstVisitor visitor)
         {
             return visitor.VisitContinue(this);
@@ -65,7 +59,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>28: AST class for ForEachExpr</summary>
     public class ForEachExpr : WhileExpr
     {
@@ -73,7 +66,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysForEach;
         }
-
 
         public string VarName;
 
@@ -97,7 +89,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>29: AST class for ForExpr</summary>
     public class ForExpr : WhileExpr
     {
@@ -105,7 +96,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysFor;
         }
-
 
         public Expr Start;
 
@@ -127,7 +117,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>30: AST class for FunctionDeclareExpr</summary>
     public class FunctionDeclareExpr : Expr
     {
@@ -135,7 +124,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysFunctionDeclare;
         }
-
 
         public FunctionExpr Function;
 
@@ -155,7 +143,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>31: AST class for IfExpr</summary>
     public class IfExpr : ConditionalBlockExpr
     {
@@ -163,7 +150,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysIf;
         }
-
 
         public BlockExpr Else;
 
@@ -183,7 +169,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>32: AST class for LambdaExpr</summary>
     public class LambdaExpr : Expr
     {
@@ -191,7 +176,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysLambda;
         }
-
 
         public FunctionExpr Expr;
 
@@ -211,7 +195,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>33: AST class for ReturnExpr</summary>
     public class ReturnExpr : Expr
     {
@@ -219,7 +202,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysReturn;
         }
-
 
         public Expr Exp;
 
@@ -238,7 +220,6 @@ namespace ComLib.Lang.AST
             return string.Empty;
         }
     }
-
 
     /// <summary>34: AST class for ThrowExpr</summary>
     public class ThrowExpr : Expr
@@ -248,7 +229,6 @@ namespace ComLib.Lang.AST
             this.Nodetype = NodeTypes.SysThrow;
         }
 
-
         public Expr Exp;
 
         public override object DoVisit(IAstVisitor visitor)
@@ -267,7 +247,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>35: AST class for TryCatchExpr</summary>
     public class TryCatchExpr : Expr, IBlockExpr
     {
@@ -275,7 +254,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysTryCatch;
         }
-
 
         public string ErrorName;
 
@@ -299,7 +277,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>36: AST class for WhileExpr</summary>
     public class WhileExpr : ConditionalBlockExpr, ILoop
     {
@@ -307,7 +284,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysWhile;
         }
-
 
         public bool DoBreakLoop { get; set; }
 

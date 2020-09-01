@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using ComLib.Lang.Types;
-
+﻿using ComLib.Lang.Types;
+using System;
 
 namespace ComLib.Lang.Helpers
 {
@@ -19,13 +14,12 @@ namespace ComLib.Lang.Helpers
         /// <param name="spec">The conversion spec</param>
         /// <param name="val">The bool value to convert</param>
         /// <returns></returns>
-        public static object Convert_Bool_To_Number(ConvertSpec spec, object obj) 
+        public static object Convert_Bool_To_Number(ConvertSpec spec, object obj)
         {
             var val = (LBool)obj;
             var result = val.Value == true ? 1 : 0;
             return new LNumber(result);
         }
-
 
         /// <summary>
         /// Converts number to bool
@@ -40,7 +34,6 @@ namespace ComLib.Lang.Helpers
             return new LBool(result);
         }
 
-
         /// <summary>
         /// Converts date to string
         /// </summary>
@@ -52,7 +45,6 @@ namespace ComLib.Lang.Helpers
             var val = (LDate)obj;
             return new LString(val.Value.ToString("MM/DD/yyyy hh:mm tt"));
         }
-
 
         /// <summary>
         /// Converts date to time
@@ -66,7 +58,6 @@ namespace ComLib.Lang.Helpers
             return new LTime(val.Value.TimeOfDay);
         }
 
-
         /// <summary>
         /// Converts time to string
         /// </summary>
@@ -78,7 +69,6 @@ namespace ComLib.Lang.Helpers
             var val = (LTime)obj;
             return new LString(val.Value.ToString("hh:mm tt"));
         }
-
 
         /// <summary>
         /// Converts time to date
@@ -94,7 +84,6 @@ namespace ComLib.Lang.Helpers
             return new LDate(new DateTime(d.Year, d.Month, d.Day, t.Hours, t.Minutes, t.Seconds));
         }
 
-
         /// <summary>
         /// Converts string to number
         /// </summary>
@@ -108,7 +97,6 @@ namespace ComLib.Lang.Helpers
             return new LNumber(result);
         }
 
-
         /// <summary>
         /// Converts string to date
         /// </summary>
@@ -121,7 +109,6 @@ namespace ComLib.Lang.Helpers
             var result = (DateTime)Convert.ChangeType(val.Value, typeof(DateTime), null);
             return new LDate(result);
         }
-
 
         /// <summary>
         /// Converts string to number
@@ -139,7 +126,6 @@ namespace ComLib.Lang.Helpers
             return new LTime(result.Item1);
         }
 
-
         /// <summary>
         /// Converts string to bool.
         /// </summary>
@@ -153,6 +139,6 @@ namespace ComLib.Lang.Helpers
             if (s == "yes" || s == "true" || s == "1" || s == "ok" || s == "on")
                 return new LBool(true);
             return new LBool(false);
-        }  
+        }
     }
 }

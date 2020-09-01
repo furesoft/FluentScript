@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ComLib.Lang.Core
+﻿namespace ComLib.Lang.Core
 {
     /// <summary>
     /// Wraps a token with contextual information about it's script location.
@@ -15,30 +10,25 @@ namespace ComLib.Lang.Core
         /// </summary>
         protected int _index;
 
-
         /// <summary>
         /// The token
         /// </summary>
         public Token Token;
-
 
         /// <summary>
         /// Line number of the token
         /// </summary>
         public int Line { get; set; }
 
-
         /// <summary>
         /// Char position in the line of the token.
         /// </summary>
         public int LineCharPos { get; set; }
 
-
         /// <summary>
         /// The position of the first char of token based on entire script.
         /// </summary>
         public int Pos { get; set; }
-
 
         /// <summary>
         /// The index position of the token.
@@ -47,7 +37,6 @@ namespace ComLib.Lang.Core
         {
             get { return _index; }
         }
-
 
         /// <summary>
         /// Sets the index of this token.
@@ -58,13 +47,12 @@ namespace ComLib.Lang.Core
             _index = ndx;
         }
 
-
         /// <summary>
         /// String representation of tokendata.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
-        {   
+        {
             string tokenType = Token.GetType().Name.Replace("Token", "");
             string text = Token.Text;
             if (Token.Kind == TokenKind.LiteralString)

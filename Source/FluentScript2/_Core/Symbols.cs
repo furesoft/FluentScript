@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Specialized;
+﻿// <lang:using>
+using ComLib.Lang.Types;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-// <lang:using>
-using ComLib.Lang.Core;
-using ComLib.Lang.Types;
-using ComLib.Lang.Helpers;
 // </lang:using>
 
 namespace ComLib.Lang.Core
@@ -22,33 +17,27 @@ namespace ComLib.Lang.Core
         /// Variable
         /// </summary>
         public const string Var = "var";
-        
 
         /// <summary>
         /// Constant
         /// </summary>
         public const string Const = "const";
-        
-        
+
         /// <summary>
         /// Function
         /// </summary>
         public const string Func = "func";
-
 
         /// <summary>
         /// Module level scope.
         /// </summary>
         public const string Module = "module";
 
-
         /// <summary>
         /// Module level scope.
         /// </summary>
         public const string CustomScope1 = "customscope";
     }
-
-
 
     /// <summary>
     /// Represents a symbol definition in the language.
@@ -60,26 +49,21 @@ namespace ComLib.Lang.Core
         /// </summary>
         public string Name { get; set; }
 
-
         /// <summary>
         /// Category of the symbo, e.g. "var", "func", "class", "aggregate"
         /// </summary>
         public string Category { get; set; }
-
 
         /// <summary>
         /// Datatype of the symbol ( not used for now since fluentscript is a dynamic language.
         /// </summary>
         public LType DataType { get; set; }
 
-
         /// <summary>
         /// Name of datatype
         /// </summary>
         public string DataTypeName { get; set; }
     }
-
-
 
     /// <summary>
     /// Symbol type for const.
@@ -92,8 +76,6 @@ namespace ComLib.Lang.Core
         public object Value { get; set; }
     }
 
-
-
     /// <summary>
     /// Symbol type for const.
     /// </summary>
@@ -104,20 +86,17 @@ namespace ComLib.Lang.Core
         /// </summary>
         public ISymbols Scope { get; set; }
 
-
         /// <summary>
         /// The parent scope.
         /// </summary>
         public ISymbols ParentScope { get; set; }
     }
 
-
-
     /// <summary>
     /// Symbol type for function.
     /// </summary>
     public class SymbolFunction : Symbol
-    {        
+    {
         /// <summary>
         /// Initialize with function metadata
         /// </summary>
@@ -131,20 +110,16 @@ namespace ComLib.Lang.Core
             this.DataType.Name = meta.Name;
         }
 
-
         /// <summary>
         /// Function metadata
         /// </summary>
         public FunctionMetaData Meta { get; set; }
-
 
         /// <summary>
         /// The function expression.
         /// </summary>
         public object FuncExpr { get; set; }
     }
-
-
 
     /// <summary>
     /// Interface for a symbol table to store known variables, functions, classes etc.
@@ -156,12 +131,10 @@ namespace ComLib.Lang.Core
         /// </summary>
         string Name { get; }
 
-
         /// <summary>
         /// The parent symbol scope
         /// </summary>
         ISymbols ParentScope { get; set; }
-
 
         /// <summary>
         /// Whether or not the symbol scope contains the name supplied
@@ -170,15 +143,13 @@ namespace ComLib.Lang.Core
         /// <returns></returns>
         bool Contains(string name);
 
-
         /// <summary>
-        /// Whether or not the type of the symbol supplied matches the typename 
+        /// Whether or not the type of the symbol supplied matches the typename
         /// </summary>
         /// <param name="name">The name of the symbol</param>
         /// <param name="categoryName">The category of the symbol</param>
         /// <returns></returns>
         bool IsCategory(string name, string typename);
-
 
         /// <summary>
         /// Whether or not the symbol name supplied is a function.
@@ -186,7 +157,6 @@ namespace ComLib.Lang.Core
         /// <param name="name">Name of the function</param>
         /// <returns></returns>
         bool IsFunction(string name);
-        
 
         /// <summary>
         /// Gets the symbol with the supplied name.
@@ -195,14 +165,12 @@ namespace ComLib.Lang.Core
         /// <returns></returns>
         Symbol GetSymbol(string name);
 
-
         /// <summary>
         /// Gets a list of all the symbol names.
         /// </summary>
         /// <returns></returns>
         List<string> GetSymbolNames();
-        
-        
+
         /// <summary>
         /// Generic version of getsymbol method
         /// </summary>
@@ -210,28 +178,24 @@ namespace ComLib.Lang.Core
         /// <returns></returns>
         T GetSymbol<T>(string name) where T : class;
 
-
         /// <summary>
         /// Define the supplied symbol to this instance of symbol table.
         /// </summary>
         /// <param name="symbol"></param>
         void Define(Symbol symbol);
 
-
         /// <summary>
         /// Defines a variable in the current symbol scope with type object
         /// </summary>
         /// <param name="name">Name of the variable</param>
         void DefineVariable(string name);
-        
-        
+
         /// <summary>
         /// Defines a variable in the current symbol scope.
         /// </summary>
         /// <param name="name">Name of the variable</param>
         /// <param name="type">Type of the variable</param>
         void DefineVariable(string name, LType type);
-
 
         /// <summary>
         /// Create an alias to reference another existing symbol.
@@ -240,7 +204,6 @@ namespace ComLib.Lang.Core
         /// <param name="symbol">The symbol to map the alias to</param>
         void DefineAlias(string alias, string existingName);
 
-
         /// <summary>
         /// Defines a constant in the current symbol scope.
         /// </summary>
@@ -248,16 +211,13 @@ namespace ComLib.Lang.Core
         /// <param name="value">The value of the constant</param>
         void DefineConstant(string name, LType type, object value);
 
-
         /// <summary>
         /// Define a function symbol within this scope.
         /// </summary>
         /// <param name="func">The function metadata</param>
         /// <param name="functionExpr">The function expression object that can execute the function</param>
         void DefineFunction(FunctionMetaData func, object functionExpr);
-    }    
-
-
+    }
 
     /// <summary>
     /// Block scope.
@@ -269,18 +229,15 @@ namespace ComLib.Lang.Core
         /// </summary>
         protected string _name;
 
-
         /// <summary>
         /// Parent symbol scope
         /// </summary>
         protected ISymbols _parent;
 
-
         /// <summary>
         /// Map of the registered symbols in this scope.
         /// </summary>
         protected IDictionary<string, Symbol> _symbols;
-
 
         /// <summary>
         /// Initialize with name and paretn symbol scope.
@@ -292,21 +249,17 @@ namespace ComLib.Lang.Core
             _name = name;
             _parent = parent;
             _symbols = new Dictionary<string, Symbol>();
-
         }
-
 
         /// <summary>
         /// Name of the symbol scope.
         /// </summary>
         public string Name { get { return _name; } }
 
-
         /// <summary>
         /// Gets the parent symbol scope of this scope.
         /// </summary>
-        public virtual ISymbols ParentScope { get { return _parent; } set { _parent = value;} }
-        
+        public virtual ISymbols ParentScope { get { return _parent; } set { _parent = value; } }
 
         /// <summary>
         /// Gets the symbol table for this symbol scope
@@ -317,7 +270,6 @@ namespace ComLib.Lang.Core
             get { return _symbols; }
         }
 
-
         /// <summary>
         /// Gets a list of all the symbol names.
         /// </summary>
@@ -326,7 +278,6 @@ namespace ComLib.Lang.Core
         {
             return _symbols.Keys.ToList();
         }
-
 
         /// <summary>
         /// Get the symbol associated with the supplied name
@@ -338,9 +289,8 @@ namespace ComLib.Lang.Core
             return this.Symbols.ContainsKey(name);
         }
 
-
         /// <summary>
-        /// Whether or not the type of the symbol supplied matches the typename 
+        /// Whether or not the type of the symbol supplied matches the typename
         /// </summary>
         /// <param name="name">The name of the symbol</param>
         /// <param name="categoryName">The category of the symbol</param>
@@ -351,7 +301,6 @@ namespace ComLib.Lang.Core
             if (sym == null) return false;
             return sym.Category == categoryName;
         }
-
 
         /// <summary>
         /// Whether or not the symbol name supplied is a function.
@@ -365,7 +314,6 @@ namespace ComLib.Lang.Core
             return sym.Category == SymbolCategory.Func;
         }
 
-
         /// <summary>
         /// Get the symbol associated with the supplied name
         /// </summary>
@@ -378,7 +326,6 @@ namespace ComLib.Lang.Core
 
             return null;
         }
-
 
         /// <summary>
         /// Get the symbol associated with the supplied name
@@ -394,7 +341,6 @@ namespace ComLib.Lang.Core
             return (T)sym;
         }
 
-
         /// <summary>
         /// Define the supplied symbol to this instance of symbol table.
         /// </summary>
@@ -404,7 +350,6 @@ namespace ComLib.Lang.Core
             this.Symbols[symbol.Name] = symbol;
         }
 
-
         /// <summary>
         /// Define the symbol within this scope with default type of object.
         /// </summary>
@@ -413,8 +358,7 @@ namespace ComLib.Lang.Core
         {
             this.DefineVariable(name, LTypes.Object);
         }
-        
-        
+
         /// <summary>
         /// Define the symbol within this scope.
         /// </summary>
@@ -425,7 +369,6 @@ namespace ComLib.Lang.Core
             var symbol = new Symbol() { Name = name, Category = SymbolCategory.Var, DataTypeName = type.Name, DataType = type };
             this.Define(symbol);
         }
-
 
         /// <summary>
         /// Define the symbol within this scope.
@@ -441,7 +384,6 @@ namespace ComLib.Lang.Core
             this.Define(symbol);
         }
 
-
         /// <summary>
         /// Create an alias to reference another existing symbol.
         /// </summary>
@@ -452,7 +394,6 @@ namespace ComLib.Lang.Core
             var symbol = this.GetSymbol(existing);
             this.Symbols[alias] = symbol;
         }
-
 
         /// <summary>
         /// Define a function symbol within this scope.
@@ -467,8 +408,6 @@ namespace ComLib.Lang.Core
         }
     }
 
-
-
     /// <summary>
     /// Symbol table for global scope.
     /// </summary>
@@ -481,8 +420,6 @@ namespace ComLib.Lang.Core
         {
         }
     }
-
-
 
     /// <summary>
     /// Symbol table for functions
@@ -497,7 +434,6 @@ namespace ComLib.Lang.Core
         {
         }
 
-
         /// <summary>
         /// Get the symbol associated with the supplied name
         /// </summary>
@@ -511,7 +447,6 @@ namespace ComLib.Lang.Core
                 return true;
             return false;
         }
-
 
         /// <summary>
         /// Get the symbol associated with the supplied name
@@ -528,8 +463,6 @@ namespace ComLib.Lang.Core
         }
     }
 
-
-
     /// <summary>
     /// Symbol table for functions
     /// </summary>
@@ -543,7 +476,6 @@ namespace ComLib.Lang.Core
         {
         }
 
-
         /// <summary>
         /// Initialize
         /// </summary>
@@ -555,8 +487,6 @@ namespace ComLib.Lang.Core
         }
     }
 
-
-
     /// <summary>
     /// Used to store local variables.
     /// </summary>
@@ -564,7 +494,6 @@ namespace ComLib.Lang.Core
     {
         private SymbolsGlobal _global;
         private ISymbols _current;
-        
 
         /// <summary>
         /// Initialize default
@@ -575,29 +504,25 @@ namespace ComLib.Lang.Core
             _current = _global;
         }
 
-
         /// <summary>
         /// The symbol table at the global scope
         /// </summary>
         public SymbolsGlobal Global { get { return _global; } }
-
 
         /// <summary>
         /// The symbol table at the current scope
         /// </summary>
         public ISymbols Current { get { return _current; } }
 
-
         /// <summary>
         /// Push as function scope
         /// </summary>
         public void Push(ISymbols symbols, bool assignCurrentScopeAsParent)
         {
-            if(assignCurrentScopeAsParent)
+            if (assignCurrentScopeAsParent)
                 symbols.ParentScope = _current;
             _current = symbols;
         }
-
 
         /// <summary>
         /// Pop the current
@@ -610,7 +535,6 @@ namespace ComLib.Lang.Core
             _current = _current.ParentScope;
         }
 
-
         /// <summary>
         /// Get the symbol associated with the supplied name
         /// </summary>
@@ -620,7 +544,6 @@ namespace ComLib.Lang.Core
         {
             return _current.Contains(name);
         }
-
 
         /// <summary>
         /// Get the symbol associated with the supplied name
@@ -632,7 +555,6 @@ namespace ComLib.Lang.Core
             return _current.GetSymbol(name);
         }
 
-
         /// <summary>
         /// Gets a list of all the symbol names.
         /// </summary>
@@ -642,17 +564,15 @@ namespace ComLib.Lang.Core
             return _current.GetSymbolNames();
         }
 
-
         /// <summary>
         /// Get the symbol associated with the supplied name
         /// </summary>
         /// <param name="name">Name of the symbol</param>
         /// <returns></returns>
-        public T GetSymbol<T>(string name) where T: class
+        public T GetSymbol<T>(string name) where T : class
         {
             return _current.GetSymbol<T>(name);
         }
-
 
         /// <summary>
         /// Whether or not the name of the symbol supplied is a variable
@@ -664,7 +584,6 @@ namespace ComLib.Lang.Core
             return IsCategory(name, SymbolCategory.Var);
         }
 
-
         /// <summary>
         /// Whether or not the symbol supplied is a module
         /// </summary>
@@ -674,7 +593,6 @@ namespace ComLib.Lang.Core
         {
             return IsCategory(name, SymbolCategory.Module);
         }
-
 
         /// <summary>
         /// Whether or not the name of the symbol supplied is a constant
@@ -686,7 +604,6 @@ namespace ComLib.Lang.Core
             return IsCategory(name, SymbolCategory.Const);
         }
 
-
         /// <summary>
         /// Whether or not the name of the symbol supplied is a function
         /// </summary>
@@ -697,9 +614,8 @@ namespace ComLib.Lang.Core
             return IsCategory(name, SymbolCategory.Func);
         }
 
-        
         /// <summary>
-        /// Whether or not the type of the symbol supplied matches the typename 
+        /// Whether or not the type of the symbol supplied matches the typename
         /// </summary>
         /// <param name="name">The name of the symbol</param>
         /// <param name="categoryName">The category of the symbol</param>
@@ -708,7 +624,6 @@ namespace ComLib.Lang.Core
         {
             return _current.IsCategory(name, categoryName);
         }
-
 
         /// <summary>
         /// Define the symbol on the current scope.
@@ -719,7 +634,6 @@ namespace ComLib.Lang.Core
             _current.Define(symbol);
         }
 
-
         /// <summary>
         /// Define the symbol within current scope with default type of object
         /// </summary>
@@ -728,8 +642,7 @@ namespace ComLib.Lang.Core
         {
             _current.DefineVariable(name, LTypes.Object);
         }
-        
-        
+
         /// <summary>
         /// Define the symbol within current scope.
         /// </summary>
@@ -740,7 +653,6 @@ namespace ComLib.Lang.Core
             _current.DefineVariable(name, type);
         }
 
-
         /// <summary>
         /// Defines an alias name for the existing name supplied.
         /// </summary>
@@ -750,7 +662,6 @@ namespace ComLib.Lang.Core
         {
             _current.DefineAlias(alias, existingName);
         }
-
 
         /// <summary>
         /// Define the symbol within this scope.
@@ -763,14 +674,13 @@ namespace ComLib.Lang.Core
             _current.DefineConstant(name, type, value);
         }
 
-
         /// <summary>
         /// Define a function symbol within this scope.
         /// </summary>
         /// <param name="func">The function metadata</param>
         /// <param name="functionExpr">The function expression object that can execute the function</param>
         public virtual void DefineFunction(FunctionMetaData func, object functionExpr)
-        {            
+        {
             _current.DefineFunction(func, functionExpr);
         }
     }

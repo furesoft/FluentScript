@@ -1,6 +1,6 @@
-﻿using System;
+﻿using ComLib.Lang.Core;
+using System;
 using System.Collections.Generic;
-using ComLib.Lang.Core;
 
 namespace ComLib.Lang.AST
 {
@@ -13,7 +13,6 @@ namespace ComLib.Lang.AST
     /// date:	02/25/13 05:13:07 PM
     /// ------------------------------------------------------------------------------------------------
 
-
     /// <summary>1: AST class for ArrayExpr</summary>
     public class ArrayExpr : IndexableExpr
     {
@@ -21,7 +20,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysArray;
         }
-
 
         public List<Expr> Exprs;
 
@@ -41,7 +39,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>2: AST class for AnyOfExpr</summary>
     public class AnyOfExpr : Expr, IParameterExpression
     {
@@ -49,7 +46,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysAnyOf;
         }
-
 
         public Expr CompareExpr;
 
@@ -73,7 +69,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>3: AST class for AssignExpr</summary>
     public class AssignExpr : Expr
     {
@@ -81,7 +76,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysAssign;
         }
-
 
         public Expr VarExp;
 
@@ -105,7 +99,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>4: AST class for AssignMultiExpr</summary>
     public class AssignMultiExpr : Expr
     {
@@ -113,7 +106,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysAssignMulti;
         }
-
 
         public List<AssignExpr> Assignments;
 
@@ -133,7 +125,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>5: AST class for BinaryExpr</summary>
     public class BinaryExpr : Expr
     {
@@ -141,6 +132,7 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysBinary;
         }
+
         public Expr Left;
 
         public Expr Right;
@@ -162,7 +154,6 @@ namespace ComLib.Lang.AST
             return string.Empty;
         }
     }
-
 
     /// <summary>6: AST class for CompareExpr</summary>
     public class CompareExpr : Expr
@@ -171,6 +162,7 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysCompare;
         }
+
         public Expr Left;
 
         public Expr Right;
@@ -192,9 +184,6 @@ namespace ComLib.Lang.AST
             return string.Empty;
         }
     }
-
-
-
 
     /// <summary>8: AST class for ConstantExpr</summary>
     public class ConstantExpr : ValueExpr
@@ -227,7 +216,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>9: AST class for DayExpr</summary>
     public class DayExpr : ValueExpr
     {
@@ -235,7 +223,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysDay;
         }
-
 
         public string Name;
 
@@ -257,7 +244,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>10: AST class for DurationExpr</summary>
     public class DurationExpr : ValueExpr
     {
@@ -265,7 +251,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysDuration;
         }
-
 
         public string Duration;
 
@@ -287,7 +272,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>11: AST class for DateExpr</summary>
     public class DateExpr : Expr
     {
@@ -295,7 +279,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysDate;
         }
-
 
         public int Month;
 
@@ -321,7 +304,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>12: AST class for DateRelativeExpr</summary>
     public class DateRelativeExpr : Expr
     {
@@ -329,7 +311,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysDateRelative;
         }
-
 
         public int Month;
 
@@ -353,7 +334,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>13: AST class for FunctionCallExpr</summary>
     public class FunctionCallExpr : Expr, IParameterExpression
     {
@@ -361,7 +341,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysFunctionCall;
         }
-
 
         public Expr NameExp;
 
@@ -391,7 +370,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>14: AST class for FunctionExpr</summary>
     public class FunctionExpr : BlockExpr
     {
@@ -399,7 +377,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysFunction;
         }
-
 
         public FunctionMetaData Meta;
 
@@ -431,7 +408,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>15: AST class for IndexExpr</summary>
     public class IndexExpr : Expr
     {
@@ -439,7 +415,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysIndex;
         }
-
 
         public Expr IndexExp;
 
@@ -463,7 +438,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>16: AST class for InterpolatedExpr</summary>
     public class InterpolatedExpr : Expr
     {
@@ -471,7 +445,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysInterpolated;
         }
-
 
         public List<Expr> Expressions;
 
@@ -491,7 +464,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>17: AST class for ListCheckExpr</summary>
     public class ListCheckExpr : Expr
     {
@@ -499,7 +471,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysListCheck;
         }
-
 
         public Expr NameExp;
 
@@ -519,7 +490,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>18: AST class for MapExpr</summary>
     public class MapExpr : IndexableExpr
     {
@@ -527,7 +497,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysMap;
         }
-
 
         public List<Tuple<string, Expr>> Expressions;
 
@@ -547,7 +516,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>19: AST class for MemberAccessExpr</summary>
     public class MemberAccessExpr : Expr
     {
@@ -555,7 +523,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysMemberAccess;
         }
-
 
         public string MemberName;
 
@@ -579,7 +546,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>20: AST class for NamedParameterExpr</summary>
     public class NamedParameterExpr : Expr
     {
@@ -587,7 +553,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysNamedParameter;
         }
-
 
         public string Name;
 
@@ -611,7 +576,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>21: AST class for NegateExpr</summary>
     public class NegateExpr : VariableExpr
     {
@@ -619,7 +583,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysNegate;
         }
-
 
         public Expr Expression;
 
@@ -639,7 +602,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>22: AST class for NewExpr</summary>
     public class NewExpr : Expr, IParameterExpression
     {
@@ -647,7 +609,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysNew;
         }
-
 
         public string TypeName;
 
@@ -671,7 +632,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>23: AST class for ParameterExpr</summary>
     public class ParameterExpr : Expr, IParameterExpression
     {
@@ -679,7 +639,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysParameter;
         }
-
 
         public FunctionMetaData Meta;
 
@@ -703,7 +662,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>24: AST class for RunExpr</summary>
     public class RunExpr : Expr
     {
@@ -711,7 +669,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysRun;
         }
-
 
         public string FuncName;
 
@@ -737,7 +694,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>25: AST class for TableExpr</summary>
     public class TableExpr : IndexableExpr
     {
@@ -745,7 +701,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysTable;
         }
-
 
         public List<string> Fields;
 
@@ -765,7 +720,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>26: AST class for UnaryExpr</summary>
     public class UnaryExpr : VariableExpr
     {
@@ -773,7 +727,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysUnary;
         }
-
 
         public Operator Op;
 
@@ -797,7 +750,6 @@ namespace ComLib.Lang.AST
         }
     }
 
-
     /// <summary>38: AST class for VariableExpr</summary>
     public class VariableExpr : Expr
     {
@@ -805,7 +757,6 @@ namespace ComLib.Lang.AST
         {
             this.Nodetype = NodeTypes.SysVariable;
         }
-
 
         public string Name;
 

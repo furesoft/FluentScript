@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ComLib.Lang.Core
 {
@@ -12,24 +9,20 @@ namespace ComLib.Lang.Core
     {
         private List<AstNode> _children;
 
-
         /// <summary>
         /// Reference to the script.
         /// </summary>
         public ScriptRef Ref { get; set; }
-
 
         /// <summary>
         /// The referencing token.
         /// </summary>
         public TokenData Token { get; set; }
 
-        
         /// <summary>
         /// The node type.
         /// </summary>
         public string Nodetype;
-
 
         /// <summary>
         /// Number of children in this node.
@@ -40,7 +33,6 @@ namespace ComLib.Lang.Core
             if (_children == null) return 0;
             return _children.Count;
         }
-
 
         /// <summary>
         /// Adds a child to this node.
@@ -53,7 +45,6 @@ namespace ComLib.Lang.Core
             _children.Add(node);
         }
 
-
         /// <summary>
         /// Get a child at the specified index.
         /// </summary>
@@ -64,7 +55,6 @@ namespace ComLib.Lang.Core
             if (_children == null || _children.Count == 0) return null;
             return _children[index];
         }
-
 
         /// <summary>
         /// Initialize the boundary information.
@@ -77,7 +67,6 @@ namespace ComLib.Lang.Core
             //_boundaryText = boundaryText;
         }
 
-
         /// <summary>
         /// Whether or not this is the same type as the nodeType supplied.
         /// </summary>
@@ -88,7 +77,6 @@ namespace ComLib.Lang.Core
             return this.Nodetype == nodeType;
         }
 
-
         /// <summary>
         /// Returns the fully qualified name of this node.
         /// </summary>
@@ -98,12 +86,10 @@ namespace ComLib.Lang.Core
             return string.Empty;
         }
 
-
         /// <summary>
         /// Parent of this statement
         /// </summary>
         public AstNode Parent { get; set; }
-
 
         /// <summary>
         /// Finds the first parent that is of type T.

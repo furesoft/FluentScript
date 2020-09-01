@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ComLib.Lang.Core
 {
@@ -15,24 +12,20 @@ namespace ComLib.Lang.Core
         /// </summary>
         public string RootName { get; set; }
 
-
         /// <summary>
         /// The root member type
         /// </summary>
         public MemberMode RootType { get; set; }
-
 
         /// <summary>
         /// The symbol scope of the first member.
         /// </summary>
         public ISymbols RootScope { get; set; }
 
-                
         /// <summary>
         /// The remaining members
         /// </summary>
         public List<string> Members { get; set; }
-
 
         /// <summary>
         /// The full name as a string e.g. "modulea.core.functionname"

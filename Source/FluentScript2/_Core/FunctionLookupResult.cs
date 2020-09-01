@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ComLib.Lang.Core
+﻿namespace ComLib.Lang.Core
 {
     /// <summary>
     /// The result of searching for a function that is either internal/external
@@ -15,30 +10,25 @@ namespace ComLib.Lang.Core
         /// </summary>
         public static readonly FunctionLookupResult False = new FunctionLookupResult(false, string.Empty, MemberMode.FunctionScript);
 
-
         /// <summary>
         /// Whether or not the function represented by Name exists.
         /// </summary>
         public bool Exists;
-
 
         /// <summary>
         /// The name of the function.
         /// </summary>
         public string Name;
 
-
         /// <summary>
         /// Whether this is a internal script level or external function name.
         /// </summary>
         public MemberMode FunctionMode;
 
-
         /// <summary>
         /// The number of tokens that represented this.
         /// </summary>
         public int TokenCount;
-
 
         /// <summary>
         /// Intialize with defaults.
@@ -46,7 +36,6 @@ namespace ComLib.Lang.Core
         public FunctionLookupResult()
         {
         }
-
 
         /// <summary>
         /// Initialize

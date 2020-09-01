@@ -1,6 +1,5 @@
-﻿using System;
-
-using ComLib.Lang.Parsing;
+﻿using ComLib.Lang.Parsing;
+using System;
 
 namespace ComLib.Lang.Phases
 {
@@ -20,7 +19,6 @@ namespace ComLib.Lang.Phases
             this.Name = "ast-semantic-check";
         }
 
-
         /// <summary>
         /// Validates all the statements in the script.
         /// </summary>
@@ -39,7 +37,7 @@ namespace ComLib.Lang.Phases
             var result = semacts.Validate(statements);
 
             // 4. Simply wrap the run-result ( success, message, start/end times )
-            // inside of a phase result. 
+            // inside of a phase result.
             return new PhaseResult(result);
         }
     }

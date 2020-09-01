@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using ComLib.Lang.Helpers;
 
 // <lang:using>
 using ComLib.Lang.Types;
-using ComLib.Lang.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
 // </lang:using>
 
 namespace ComLib.Lang.AST
@@ -19,12 +20,10 @@ namespace ComLib.Lang.AST
         /// </summary>
         public bool EnableAutoVariable { get; set; }
 
-
         /// <summary>
         /// List of statements
         /// </summary>
         protected List<Expr> _statements = new List<Expr>();
-
 
         /// <summary>
         /// Public access to statments.
@@ -34,8 +33,6 @@ namespace ComLib.Lang.AST
             get { return _statements; }
             set { _statements = value; }
         }
-
-
 
         /// <summary>
         /// Evaluate
@@ -55,22 +52,19 @@ namespace ComLib.Lang.AST
             return result;
         }
 
-
         /// <summary>
         /// Execute the statements.
         /// </summary>
-        public override object  DoEvaluate(IAstVisitor visitor)
+        public override object DoEvaluate(IAstVisitor visitor)
         {
             LangHelper.Evaluate(this._statements, this.Parent, visitor);
             return LObjects.Null;
         }
 
-
         public override object Visit(IAstVisitor visitor)
         {
             return visitor.VisitBlock(this);
         }
-
 
         /// <summary>
         /// Executes the block with callback/template methods.
@@ -90,24 +84,21 @@ namespace ComLib.Lang.AST
             return result;
         }
 
-
         /// <summary>
         /// On enter of the block.
         /// </summary>
         public virtual void OnBlockEnter(IAstVisitor visitor)
         {
-            visitor.VisitBlockEnter(this); 
+            visitor.VisitBlockEnter(this);
         }
-
 
         /// <summary>
         /// On exit of the block.
         /// </summary>
         public virtual void OnBlockExit(IAstVisitor visitor)
         {
-            visitor.VisitBlockExit(this); 
+            visitor.VisitBlockExit(this);
         }
-
 
         /// <summary>
         /// String representation
@@ -116,7 +107,7 @@ namespace ComLib.Lang.AST
         /// <param name="incrementTab">Whether or not to add another tab</param>
         /// <param name="includeNewLine">Whether or not to include a new line.</param>
         /// <returns></returns>
-        public override string AsString(string tab = "", bool incrementTab = false,  bool includeNewLine = true)
+        public override string AsString(string tab = "", bool incrementTab = false, bool includeNewLine = true)
         {
             string info = base.AsString(tab, incrementTab);
 

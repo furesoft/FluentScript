@@ -1,7 +1,7 @@
-﻿
-// <lang:using>
-using ComLib.Lang.Core;
+﻿// <lang:using>
 using ComLib.Lang.AST;
+using ComLib.Lang.Core;
+
 // </lang:using>
 
 namespace ComLib.Lang.Parsing
@@ -21,7 +21,6 @@ namespace ComLib.Lang.Parsing
             _parser.ParseBlock(stmt);
             this.Ctx.Symbols.Pop();
         }
-
 
         /// <summary>
         /// Parses a conditional block by first pushing symbol scope and then popping after completion.

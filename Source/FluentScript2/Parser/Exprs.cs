@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ComLib.Lang.AST;
 
 // <lang:using>
 using ComLib.Lang.Core;
-using ComLib.Lang.AST;
 using ComLib.Lang.Types;
+using System;
+using System.Collections.Generic;
+
 // </lang:using>
 
 namespace ComLib.Lang.Parsing
@@ -13,12 +14,12 @@ namespace ComLib.Lang.Parsing
     /// Uses the Lexer to parse script in terms of sequences of Statements and Expressions;
     /// Each statement and expression is a sequence of Tokens( see Lexer )
     /// Main method is Parse(script) and ParseStatement();
-    /// 
+    ///
     /// 1. var name = "kishore";
     /// 2. if ( name == "kishore" ) print("true");
-    /// 
+    ///
     /// Statements:
-    /// 
+    ///
     /// VALUE:         TYPE:
     /// 1. AssignStmt ( "var name = "kishore"; )
     /// 2. IfStmt ( "if (name == "kishore" ) { print ("true"); }
@@ -29,7 +30,6 @@ namespace ComLib.Lang.Parsing
         private static Context _ctx;
         private static string _scriptName;
         private static Stack<string> _withStack;
-
 
         /// <summary>
         /// Sets up the reference to token iterator and context
@@ -44,7 +44,6 @@ namespace ComLib.Lang.Parsing
             _withStack = new Stack<string>();
         }
 
-
         /// <summary>
         /// Pushes the name on the with stack to use in "with" expressions.
         /// </summary>
@@ -53,7 +52,6 @@ namespace ComLib.Lang.Parsing
         {
             _withStack.Push(name);
         }
-
 
         /// <summary>
         /// Pops the last variable on the with stack for use in "with" expressions.
@@ -64,7 +62,6 @@ namespace ComLib.Lang.Parsing
                 _withStack.Pop();
         }
 
-
         /// <summary>
         /// The total number of items on the with stack.
         /// </summary>
@@ -72,7 +69,6 @@ namespace ComLib.Lang.Parsing
         {
             return _withStack.Count;
         }
-
 
         /// <summary>
         /// Gets the name on the with stack.
@@ -82,7 +78,6 @@ namespace ComLib.Lang.Parsing
         {
             return _withStack.Peek();
         }
-
 
         /// <summary>
         /// Creates a variable expression with symbol scope, context, script refernce set.
@@ -97,7 +92,6 @@ namespace ComLib.Lang.Parsing
             return exp;
         }
 
-
         /// <summary>
         /// Creates a variable expression with symbol scope, context, script refernce set.
         /// </summary>
@@ -110,7 +104,6 @@ namespace ComLib.Lang.Parsing
             SetupContext(exp, token);
             return exp;
         }
-
 
         /// <summary>
         /// Creates an index expression from the parameters supplied.
@@ -130,7 +123,6 @@ namespace ComLib.Lang.Parsing
             return exp;
         }
 
-
         /// <summary>
         /// Creates a variable expression with symbol scope, context, script refernce set.
         /// </summary>
@@ -143,7 +135,6 @@ namespace ComLib.Lang.Parsing
             SetupContext(exp, token);
             return exp;
         }
-
 
         /// <summary>
         /// Creates a date expression with symbol scope, context, script refernce set.
@@ -159,7 +150,6 @@ namespace ComLib.Lang.Parsing
             SetupContext(exp, token);
             return exp;
         }
-
 
         /// <summary>
         /// Creates a date expression.
@@ -181,7 +171,6 @@ namespace ComLib.Lang.Parsing
             return exp;
         }
 
-
         /// <summary>
         /// Creates a relative date expression with symbol scope, context, script refernce set.
         /// The date expression can handle relative dates: 3rd monday of january
@@ -199,7 +188,6 @@ namespace ComLib.Lang.Parsing
             return exp;
         }
 
-
         /// <summary>
         /// Creates a relative date expression with symbol scope, context, script refernce set.
         /// The date expression can handle relative dates: 3rd monday of january
@@ -216,7 +204,6 @@ namespace ComLib.Lang.Parsing
             return exp;
         }
 
-
         /// <summary>
         /// Creates an array expression from the parameters supplied.
         /// </summary>
@@ -230,7 +217,6 @@ namespace ComLib.Lang.Parsing
             SetupContext(exp, token);
             return exp;
         }
-
 
         /// <summary>
         /// Creates an array expression from the parameters supplied.
@@ -247,7 +233,6 @@ namespace ComLib.Lang.Parsing
             return exp;
         }
 
-
         /// <summary>
         /// Creates an array expression from the parameters supplied.
         /// </summary>
@@ -262,7 +247,6 @@ namespace ComLib.Lang.Parsing
             return exp;
         }
 
-
         /// <summary>
         /// Creates a map expression from the parameters supplied.
         /// </summary>
@@ -276,7 +260,6 @@ namespace ComLib.Lang.Parsing
             SetupContext(exp, token);
             return exp;
         }
-
 
         /// <summary>
         /// Creates a unary expression with symbol scope, context, script refernce set.
@@ -295,7 +278,6 @@ namespace ComLib.Lang.Parsing
             return exp;
         }
 
-
         /// <summary>
         /// Creates a unary expression with symbol scope, context, script refernce set.
         /// </summary>
@@ -309,7 +291,6 @@ namespace ComLib.Lang.Parsing
             SetupContext(exp, token);
             return exp;
         }
-
 
         /// <summary>
         /// Creates a unary expression with symbol scope, context, script refernce set.
@@ -327,7 +308,6 @@ namespace ComLib.Lang.Parsing
             return exp;
         }
 
-
         public static Expr AssignMulti(bool declare, List<AssignExpr> exprs, TokenData token)
         {
             var exp = new AssignMultiExpr();
@@ -335,7 +315,6 @@ namespace ComLib.Lang.Parsing
             SetupContext(exp, token);
             return exp;
         }
-
 
         /// <summary>
         /// Creates a unary expression with symbol scope, context, script refernce set.
@@ -353,7 +332,6 @@ namespace ComLib.Lang.Parsing
             return exp;
         }
 
-
         /// <summary>
         /// Creates a unary expression with symbol scope, context, script refernce set.
         /// </summary>
@@ -368,7 +346,6 @@ namespace ComLib.Lang.Parsing
             SetupContext(exp, token);
             return exp;
         }
-
 
         /// <summary>
         /// Creates a unary expression with symbol scope, context, script refernce set.
@@ -386,7 +363,6 @@ namespace ComLib.Lang.Parsing
             return exp;
         }
 
-
         /// <summary>
         /// Creates a unary expression with symbol scope, context, script refernce set.
         /// </summary>
@@ -403,7 +379,6 @@ namespace ComLib.Lang.Parsing
             return exp;
         }
 
-
         /// <summary>
         /// Creates a unary expression with symbol scope, context, script refernce set.
         /// </summary>
@@ -417,7 +392,6 @@ namespace ComLib.Lang.Parsing
             SetupContext(exp, token);
             return exp;
         }
-
 
         /// <summary>
         /// Creates an expr that checks if the list variable supplied has any items.
@@ -433,7 +407,6 @@ namespace ComLib.Lang.Parsing
             return exp;
         }
 
-
         /// <summary>
         /// Creates a unary expression with symbol scope, context, script refernce set.
         /// </summary>
@@ -448,7 +421,6 @@ namespace ComLib.Lang.Parsing
             SetupContext(exp, token);
             return exp;
         }
-
 
         /// <summary>
         /// Creates a function call expression.
@@ -467,7 +439,6 @@ namespace ComLib.Lang.Parsing
             return funcExp;
         }
 
-
         public static Expr BindingCall(string bindingName, string functionName, TokenData token)
         {
             var bexpr = new BindingCallExpr();
@@ -477,7 +448,6 @@ namespace ComLib.Lang.Parsing
             bexpr.ParamList = new List<object>();
             return bexpr;
         }
-
 
         /// <summary>
         /// Creates a function call expression.
@@ -495,7 +465,6 @@ namespace ComLib.Lang.Parsing
             SetupContext(exp, token);
             return exp;
         }
-
 
         /// <summary>
         /// Sets up the context, symbol scope and script source reference for the expression supplied.

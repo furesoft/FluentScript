@@ -1,5 +1,4 @@
-﻿
-using ComLib.Lang.Core;
+﻿using ComLib.Lang.Core;
 using ComLib.Lang.Types;
 
 namespace ComLib.Lang.Helpers
@@ -18,7 +17,6 @@ namespace ComLib.Lang.Helpers
             return new LangException("Runtime Error", message, node.Ref.ScriptName, node.Ref.Line, node.Ref.CharPos);
         }
 
-
         /// <summary>
         /// Checks for null object and throws a lang exception with the message supplied.
         /// </summary>
@@ -33,7 +31,6 @@ namespace ComLib.Lang.Helpers
                     node.Ref.ScriptName, node.Ref.Line, node.Ref.CharPos);
             }
         }
-
 
         /// <summary>
         /// Checks for null object and throws a lang exception with the message supplied.
@@ -50,7 +47,6 @@ namespace ComLib.Lang.Helpers
             }
         }
 
-        
         /// <summary>
         /// Expects the objects type to be of the supplied type.
         /// </summary>
@@ -59,13 +55,12 @@ namespace ComLib.Lang.Helpers
         /// <param name="lType"></param>
         public static void ExpectType(AstNode node, object result, LType lType)
         {
-            if(!(result is LObject) || ((LObject)result).Type != lType)
+            if (!(result is LObject) || ((LObject)result).Type != lType)
             {
                 throw new LangException("Runtime Error", "Expected type " + lType.Name,
                    node.Ref.ScriptName, node.Ref.Line, node.Ref.CharPos);
             }
         }
-
 
         /// <summary>
         /// Expects the objects type to be of the supplied type.

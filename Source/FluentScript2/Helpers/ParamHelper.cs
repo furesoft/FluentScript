@@ -1,12 +1,9 @@
-﻿
+﻿using ComLib.Lang.AST;
+using ComLib.Lang.Core;
+using ComLib.Lang.Types;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-
-using ComLib.Lang.AST;
-using ComLib.Lang.Core;
-using ComLib.Lang.Types;
-
 
 namespace ComLib.Lang.Helpers
 {
@@ -33,7 +30,6 @@ namespace ComLib.Lang.Helpers
             return false;
         }
 
-
         /// <summary>
         /// Resolve all the non-named parameter expressions and puts the values into the param list supplied.
         /// </summary>
@@ -50,7 +46,6 @@ namespace ComLib.Lang.Helpers
             }
         }
 
-
         /// <summary>
         /// Resolve the parameters in the function call.
         /// </summary>
@@ -63,7 +58,7 @@ namespace ComLib.Lang.Helpers
             foreach (var exp in paramListExpressions)
             {
                 var val = exp.Evaluate(visitor);
-                if(val is LObject)
+                if (val is LObject)
                 {
                     var converted = ((LObject)val).GetValue();
                     paramList.Add(converted);
@@ -72,7 +67,6 @@ namespace ComLib.Lang.Helpers
                     paramList.Add(val);
             }
         }
-
 
         /// <summary>
         /// Resolves the parameter expressions to actual values.
@@ -83,7 +77,7 @@ namespace ComLib.Lang.Helpers
         /// <param name="indexLookup">The lookup callback to get the index position for named parameters</param>
         /// <param name="containsLookup">The lookup callback to determine if the namedparameter exists in the function. </param>
         /// <param name="visitor">The visitor that will evaulate the expressions.</param>
-        public static void ResolveParameters(int totalParams, List<Expr> paramListExpressions, List<object> paramList, Func<NamedParameterExpr, int> indexLookup, 
+        public static void ResolveParameters(int totalParams, List<Expr> paramListExpressions, List<object> paramList, Func<NamedParameterExpr, int> indexLookup,
             Func<NamedParameterExpr, bool> containsLookup, IAstVisitor visitor)
         {
             if (paramListExpressions == null || paramListExpressions.Count == 0)
@@ -98,7 +92,7 @@ namespace ComLib.Lang.Helpers
                 ResolveNonNamedParameters(paramListExpressions, paramList, visitor);
                 return;
             }
-            
+
             // Start of named parameter evaluation.
             // 1. Clear existing list of value.
             paramList.Clear();
@@ -114,7 +108,7 @@ namespace ComLib.Lang.Helpers
             {
                 var exp = paramListExpressions[ndx];
 
-                // 4. Named arg? Evaluate and put its value into the appropriate index of the args list.           
+                // 4. Named arg? Evaluate and put its value into the appropriate index of the args list.
                 if (exp.IsNodeType(NodeTypes.SysNamedParameter))
                 {
                     var namedParam = exp as NamedParameterExpr;
@@ -136,7 +130,6 @@ namespace ComLib.Lang.Helpers
             }
         }
 
-
         /// <summary>
         /// Resolve the parameters in the function call.
         /// </summary>
@@ -152,7 +145,6 @@ namespace ComLib.Lang.Helpers
                 namedParam => meta.ArgumentsLookup.ContainsKey(namedParam.Name), visitor);
         }
 
-
         /// <summary>
         /// Resolve the parameters in the function call.
         /// </summary>
@@ -167,13 +159,12 @@ namespace ComLib.Lang.Helpers
 
             // 1. Convert parameters to map to know what index position in argument list a param is.
             var map = System.Linq.Enumerable.ToDictionary(parameters, p => p.Name);
-            
+
             // 2. Resolve all the parameters to fluentscript values. LObject, LString etc.
             ResolveParameters(parameters.Length, paramListExpressions, paramList,
                 namedParam => map[namedParam.Name].Position,
                 namedParam => map.ContainsKey(namedParam.Name), visitor);
         }
-
 
         /// <summary>
         /// Whether or not there are named parameters here.

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-// <lang:using>
-using ComLib.Lang.Core;
+﻿// <lang:using>
 using ComLib.Lang.AST;
+using ComLib.Lang.Core;
+
 // </lang:using>
 
 namespace ComLib.Lang.Parsing
@@ -21,8 +17,6 @@ namespace ComLib.Lang.Parsing
         TokenIterator TokenIt { get; }
     }
 
-
-
     /// <summary>
     /// A setup plugin to just configure the interpreter
     /// </summary>
@@ -33,20 +27,16 @@ namespace ComLib.Lang.Parsing
         /// </summary>
         string Id { get; }
 
-
         /// <summary>
         /// Used for ordering of plugins.
         /// </summary>
         int Precedence { get; }
-
 
         /// <summary>
         /// Executes the configuration
         /// </summary>
         void Setup(Context ctx);
     }
-
-
 
     /// <summary>
     /// Marker interface for any type of plugin.
@@ -58,24 +48,20 @@ namespace ComLib.Lang.Parsing
         /// </summary>
         string Id { get; }
 
-
         /// <summary>
         /// Used for ordering of plugins.
         /// </summary>
         int Precedence { get; }
-
 
         /// <summary>
         /// Grammer for this plugin
         /// </summary>
         string Grammer { get; }
 
-
         /// <summary>
         /// Examples of grammer
         /// </summary>
         string[] Examples { get; }
-
 
         /// <summary>
         /// Whether or not this parser can handle the supplied token.
@@ -84,8 +70,6 @@ namespace ComLib.Lang.Parsing
         /// <returns></returns>
         bool CanHandle(Token current);
     }
-
-
 
     /// <summary>
     /// Interface for a plugin at the lexing level.
@@ -97,22 +81,18 @@ namespace ComLib.Lang.Parsing
         /// </summary>
         Lexer Lexer { get; set; }
 
-
         /// <summary>
         /// Initialize the combinator.
         /// </summary>
         /// <param name="lexer">The main lexer</param>
         void Init(Lexer lexer);
 
-
         /// <summary>
         /// The tokens that are associated w/ this combinator.
         /// </summary>
         string[] StartTokens { get; }
 
-
         Context Ctx { get; set; }
-
 
         /// <summary>
         /// Parses the expression.
@@ -120,8 +100,6 @@ namespace ComLib.Lang.Parsing
         /// <returns></returns>
         Token[] Parse();
     }
-
-
 
     /// <summary>
     /// Interface for plugin that handles token after lexical analysis but before parsing of expressions.
@@ -135,12 +113,10 @@ namespace ComLib.Lang.Parsing
         /// <param name="tokenIt">The token iterator</param>
         void Init(Parser parser, TokenIterator tokenIt);
 
-
         /// <summary>
         /// The tokens that are associated w/ this combinator.
         /// </summary>
         string[] StartTokens { get; }
-
 
         /// <summary>
         /// Whether or not this plugin can handle the supplied token.
@@ -150,13 +126,11 @@ namespace ComLib.Lang.Parsing
         /// <returns></returns>
         bool CanHandle(Token token, bool isCurrentToken);
 
-
         /// <summary>
         /// Parses the expression.
         /// </summary>
         /// <returns></returns>
         Token Parse();
-
 
         /// <summary>
         /// Parse the expression with parameters for moving the token iterator forward first
@@ -166,7 +140,6 @@ namespace ComLib.Lang.Parsing
         /// <returns></returns>
         Token Parse(bool advanceFirst, int advanceCount);
 
-
         /// <summary>
         /// Peeks at the token without advancing the token iterator to the next token.
         /// </summary>
@@ -174,12 +147,10 @@ namespace ComLib.Lang.Parsing
         Token Peek();
     }
 
-
-
     /// <summary>
     /// Interface for a plugin at the parser/expression level.
     /// </summary>
-    public interface IExprPlugin: ILangParser, ILangPlugin
+    public interface IExprPlugin : ILangParser, ILangPlugin
     {
         /// <summary>
         /// Initialize the combinator.
@@ -198,55 +169,46 @@ namespace ComLib.Lang.Parsing
         /// </summary>
         Context Ctx { get; set; }
 
-
         /// <summary>
         /// Whether or not this combinator can be made into a statement.
         /// </summary>
         bool IsStatement { get; }
-
 
         /// <summary>
         /// Whether or not this is a system level plugin.
         /// </summary>
         bool IsSystemLevel { get; }
 
-
         /// <summary>
         /// Whether or not assignment is supported by this plugin.
         /// </summary>
         bool IsAssignmentSupported { get; }
-        
 
         /// <summary>
         /// Whether or not a termninator is supported
         /// </summary>
         bool IsEndOfStatementRequired { get; }
 
-
         /// <summary>
         /// Whether or not the plugin auto handles if start tokens match.
         /// </summary>
         bool IsAutoMatched { get; set; }
-
 
         /// <summary>
         /// Grammar for matching the plugin.
         /// </summary>
         string GrammarMatch { get; set; }
 
-
         /// <summary>
         /// The tokens starting the expression.
         /// </summary>
         string[] StartTokens { get; }
-
 
         /// <summary>
         /// Parses an expression
         /// </summary>
         /// <returns></returns>
         Expr Parse();
-
 
         /// <summary>
         /// Parses an expression using the contextual object supplied
