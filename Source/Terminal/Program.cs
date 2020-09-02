@@ -1,4 +1,5 @@
 ﻿using ComLib.Lang;
+using ComLib.Lang.Templating;
 using System;
 
 namespace Terminal
@@ -20,6 +21,7 @@ namespace Terminal
 
             while (true)
             {
+                Console.Write(">> ");
                 var src = Console.ReadLine();
 
                 i.AppendExecute(src);

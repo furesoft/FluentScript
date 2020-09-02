@@ -1,5 +1,6 @@
 ﻿using ComLib.Lang.AST;
 using ComLib.Lang.Parsing;
+using ComLib.Lang.Plugins;
 
 namespace Terminal
 {
