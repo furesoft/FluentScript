@@ -16,6 +16,7 @@ namespace Terminal
             i.Context.Plugins.RegisterAllCustom();
             i.Context.Plugins.RegisterCustomByType(typeof(TransactionPlugin));
             i.Context.Plugins.RegisterCustomByType(typeof(ActorPlugin));
+            i.Context.Plugins.RegisterCustomByType(typeof(OnPlugin));
 
             while (true)
             {
