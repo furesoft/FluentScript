@@ -1,4 +1,5 @@
 ﻿using ComLib.Lang;
+using ComLib.Lang.Plugins;
 using ComLib.Lang.Templating;
 using System;
 
@@ -18,6 +19,9 @@ namespace Terminal
             i.Context.Plugins.RegisterCustomByType(typeof(TransactionPlugin));
             i.Context.Plugins.RegisterCustomByType(typeof(ActorPlugin));
             i.Context.Plugins.RegisterCustomByType(typeof(OnPlugin));
+            i.Context.Plugins.RegisterCustomByType(typeof(RangePlugin));
+
+            //ToDo: implement auto collector for Plugins
 
             while (true)
             {

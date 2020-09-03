@@ -34,6 +34,11 @@ namespace ComLib.Lang.Types
         {
             return new LArray(this.Value);
         }
+
+        public override string ToString()
+        {
+            return $"[{Value[0]}...{Value[^1]}]";
+        }
     }
 
     public class LArrayType : LObjectType

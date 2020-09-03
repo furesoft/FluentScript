@@ -5,6 +5,7 @@ using ComLib.Lang.Core;
 using ComLib.Lang.Parsing;
 using ComLib.Lang.Types;
 using System;
+using System.Linq;
 
 // </lang:using>
 
@@ -40,6 +41,7 @@ namespace ComLib.Lang.Plugins
             if (n != Tokens.Dot) return false;
             n = _tokenIt.Peek(2).Token;
             if (n != Tokens.Dot) return false;
+
             return true;
         }
 
@@ -48,7 +50,7 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public override string Grammer
         {
-            get { return "<number>..<number>"; }
+            get { return "<number>...<number>"; }
         }
 
         /// <summary>
@@ -60,7 +62,7 @@ namespace ComLib.Lang.Plugins
             {
                 return new string[]
                 {
-                    "1..10"
+                    "1...10"
                 };
             }
         }
@@ -72,13 +74,13 @@ namespace ComLib.Lang.Plugins
         public override Expr Parse()
         {
             // 1. min
-            var min = Convert.ToDouble(_tokenIt.NextToken.Token);
+            var min = Convert.ToInt32(_tokenIt.NextToken.Token.Value);
 
-            // 2. "." "."
-            _tokenIt.Advance(2);
+            // 2. "." "." "."
+            _tokenIt.Advance(3);
 
             // 3. max
-            var max = _tokenIt.ExpectNumber();
+            var max = Convert.ToInt32(_tokenIt.ExpectNumber());
 
             return new ConstantExpr(new LRange(min, max));
         }
@@ -90,7 +92,7 @@ namespace ComLib.Lang.Plugins
         /// Initialize
         /// </summary>
         /// <param name="val"></param>
-        public LRange(double min, double max)
+        public LRange(int min, int max)
         {
             this.Min = min;
             this.Max = max;
@@ -100,12 +102,12 @@ namespace ComLib.Lang.Plugins
         /// <summary>
         /// Min
         /// </summary>
-        public double Min { get; set; }
+        public int Min { get; set; }
 
         /// <summary>
         /// Max
         /// </summary>
-        public double Max { get; set; }
+        public int Max { get; set; }
 
         /// <summary>
         /// Gets the value of this object.
@@ -113,7 +115,7 @@ namespace ComLib.Lang.Plugins
         /// <returns></returns>
         public override object GetValue()
         {
-            return null;
+            return new LArray(Enumerable.Range(Min, Max).ToList()).Value;
         }
 
         /// <summary>
