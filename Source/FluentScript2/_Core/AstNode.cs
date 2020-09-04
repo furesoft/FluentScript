@@ -40,9 +40,7 @@ namespace ComLib.Lang.Core
 		/// <param name="node"></param>
 		public void AddChild(AstNode node)
 		{
-			if (_children == null)
-				_children = new List<AstNode>();
-			_children.Add(node);
+			(_children ??= new List<AstNode>()).Add(node);
 		}
 
 		/// <summary>

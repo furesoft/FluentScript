@@ -74,11 +74,8 @@ namespace ComLib.Lang.Parsing
 		{
 			Init(script, memory);
 
-			while (true)
+			while (_tokenIt.NextToken.Token != Tokens.EndToken)
 			{
-				if (_tokenIt.NextToken.Token == Tokens.EndToken)
-					break;
-
 				if (_tokenIt.NextToken.Token != Tokens.NewLine)
 				{
 					// Get next statement.
@@ -297,7 +294,7 @@ namespace ComLib.Lang.Parsing
 				// CASE: array access on an indexable expression
 				// description: this involves an index access on an expression that was initially not an identifier
 				// examples: "abcd".length, [0, 1, 3].<method>
-				else if (token == Tokens.LeftBracket && exp != null && (exp.IsNodeType(NodeTypes.SysIndexable)))
+				else if (token == Tokens.LeftBracket && (exp?.IsNodeType(NodeTypes.SysIndexable) == true))
 				{
 					_state.ExpressionCount++;
 					exp = ParseIdExpression(null, exp, true);
@@ -505,12 +502,8 @@ namespace ComLib.Lang.Parsing
 			// Case 2: Multi-line block
 			_tokenIt.Expect(Tokens.LeftBrace);
 
-			while (true)
+			while (!IsEndOfStatementOrEndOfScript(Tokens.RightBrace))
 			{
-				// Check for end of statment or invalid end of script.
-				if (IsEndOfStatementOrEndOfScript(Tokens.RightBrace))
-					break;
-
 				// New line?
 				if (_tokenIt.NextToken.Token == Tokens.NewLine)
 				{
@@ -785,7 +778,7 @@ namespace ComLib.Lang.Parsing
 					var precendence = Operators.Precedence(token.Text);
 
 					// Need to always have the last precedence ( last op on the ops stack ).
-					if (ops.Count > 0) lastPrecendence = Operators.Precedence(ops[ops.Count - 1].Token.Text);
+					if (ops.Count > 0) lastPrecendence = Operators.Precedence(ops[^1].Token.Text);
 
 					// 1st op.
 					if (ops.Count == 0)
@@ -868,7 +861,7 @@ namespace ComLib.Lang.Parsing
 					_tokenIt.Advance();
 
 				// Ok to skip newlines?
-				if (endTokens != null && !endTokens.ContainsKey(Tokens.NewLine))
+				if (endTokens?.ContainsKey(Tokens.NewLine) == false)
 					_tokenIt.AdvancePastNewLines();
 
 				current = _tokenIt.NextToken.Token;
@@ -925,11 +918,11 @@ namespace ComLib.Lang.Parsing
 			var token = _tokenIt.NextToken.Token;
 			if (token == Tokens.EndToken) return true;
 			if (endTokens == null) return false;
-			if (lastExp != null && lastExp.Nodetype == NodeTypes.SysLambda) return true;
+			if (lastExp?.Nodetype == NodeTypes.SysLambda) return true;
 			var isend = endTokens.ContainsKey(token);
 
 			// Check if identTokens supplied.
-			if (!isend && identEndTokens != null && identEndTokens.Count > 0)
+			if (!isend && identEndTokens?.Count > 0)
 			{
 				if (token.Kind == TokenKind.Ident && identEndTokens.ContainsKey(token.Text))
 					isend = true;
@@ -942,7 +935,7 @@ namespace ComLib.Lang.Parsing
 		{
 			// Is the token a valid operator that has precedence ?
 			// Should continue parsing
-			if ((!Terminators.ExpMathShuntingYard.ContainsKey(token) && !continueParsing)) return true;
+			if (!Terminators.ExpMathShuntingYard.ContainsKey(token) && !continueParsing) return true;
 
 			// Termination case 1: Avoid handling ) when doing math expressions inside a function call.
 			// Termination case 2: Avoid handling ) of an if / while statement.
@@ -952,9 +945,7 @@ namespace ComLib.Lang.Parsing
 			}
 
 			// Case 3: End token - invalid script.
-			if (token == Tokens.EndToken) return true;
-
-			return false;
+			return token == Tokens.EndToken;
 		}
 
 		/// <summary>
@@ -971,12 +962,8 @@ namespace ComLib.Lang.Parsing
 			// list of each item in the array.
 			var items = new List<Expr>();
 
-			while (true)
+			while (!IsEndOfStatementOrEndOfScript(Tokens.RightBracket))
 			{
-				// Stop when ] is hit
-				if (IsEndOfStatementOrEndOfScript(Tokens.RightBracket))
-					break;
-
 				if (_tokenIt.NextToken.Token == Tokens.NewLine)
 					_tokenIt.Advance();
 
@@ -1009,12 +996,8 @@ namespace ComLib.Lang.Parsing
 			Expect(Tokens.LeftBrace);
 			var items = new List<Tuple<string, Expr>>();
 
-			while (true)
+			while (!IsEndOfStatementOrEndOfScript(Tokens.RightBrace))
 			{
-				// Stop when } is hit
-				if (IsEndOfStatementOrEndOfScript(Tokens.RightBrace))
-					break;
-
 				var token = _tokenIt.NextToken.Token;
 				if (token == Tokens.NewLine || token == Tokens.WhiteSpace)
 				{
@@ -1349,12 +1332,8 @@ namespace ComLib.Lang.Parsing
 
 			var passNewLine = !enableNewLineAsEnd;
 			var endTokens = enableNewLineAsEnd ? Terminators.ExpFluentFuncExpParenEnd : Terminators.ExpFuncExpEnd;
-			while (true)
+			while (!IsEndOfParameterList(Tokens.RightParenthesis, enableNewLineAsEnd))
 			{
-				// Check for end of statment or invalid end of script.
-				if (IsEndOfParameterList(Tokens.RightParenthesis, enableNewLineAsEnd))
-					break;
-
 				if (_tokenIt.NextToken.Token == Tokens.Comma)
 					_tokenIt.Advance();
 
@@ -1402,7 +1381,7 @@ namespace ComLib.Lang.Parsing
 		/// <returns></returns>
 		public bool IsExplicitIdentQualifierExpression(Token token)
 		{
-			if (!(token.Kind == TokenKind.Ident)) return false;
+			if (token.Kind != TokenKind.Ident) return false;
 
 			// Check if variable.
 			var isVar = _context.Symbols.IsVar(token.Text);
@@ -1426,13 +1405,8 @@ namespace ComLib.Lang.Parsing
 		/// <returns></returns>
 		protected bool IsIncrementOp(Token token)
 		{
-			if (token == Tokens.Increment || token == Tokens.Decrement || token == Tokens.IncrementAdd ||
-				 token == Tokens.IncrementDivide || token == Tokens.IncrementMultiply || token == Tokens.IncrementSubtract)
-			{
-				return true;
-			}
-
-			return false;
+			return token == Tokens.Increment || token == Tokens.Decrement || token == Tokens.IncrementAdd ||
+				 token == Tokens.IncrementDivide || token == Tokens.IncrementMultiply || token == Tokens.IncrementSubtract;
 		}
 
 		/// <summary>
@@ -1471,7 +1445,7 @@ namespace ComLib.Lang.Parsing
 		{
 			if (expr == null) return;
 
-			var reftoken = token == null ? _tokenIt.NextToken : token;
+			var reftoken = token ?? _tokenIt.NextToken;
 			expr.Ctx = _context;
 			if (expr.SymScope == null) expr.SymScope = _context.Symbols.Current;
 			if (expr.Token == null) expr.Token = reftoken;

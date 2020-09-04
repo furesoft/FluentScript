@@ -55,7 +55,7 @@ namespace Terminal
 			var stmt = new RollBackStatement();
 			// transaction {  }
 			//_tokenIt.Expect(Transaction);
-			var id = _tokenIt.ExpectIdText("rollback");
+			_ = _tokenIt.ExpectIdText("rollback");
 
 			return stmt;
 		}
@@ -104,7 +104,7 @@ namespace Terminal
 			var stmt = new TransactionStatement();
 			// transaction {  }
 			//_tokenIt.Expect(Transaction);
-			var id = _tokenIt.ExpectIdText("transaction");
+			_ = _tokenIt.ExpectIdText("transaction");
 			ParseBlock(stmt);
 			return stmt;
 		}
