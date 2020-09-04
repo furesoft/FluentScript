@@ -1,6 +1,5 @@
 ﻿using ComLib.Lang.AST;
 using ComLib.Lang.Core;
-using System;
 using System.Collections.Generic;
 
 namespace Terminal
@@ -17,7 +16,7 @@ namespace Terminal
 
         public override object DoEvaluate(IAstVisitor visitor)
         {
-            var self = this;
+            //do something with actor
             return base.DoEvaluate(visitor);
         }
     }

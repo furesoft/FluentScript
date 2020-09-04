@@ -41,6 +41,7 @@ namespace Terminal
             _tokenIt.ExpectIdText("on");
             var id = _tokenIt.ExpectId(true, true);
             stmt.EventName = id;
+
             ParseBlock(stmt);
             return stmt;
         }

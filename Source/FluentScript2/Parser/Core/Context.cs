@@ -117,5 +117,10 @@ namespace ComLib.Lang.Parsing
         /// Limits for
         /// </summary>
         internal Limits Limits;
+
+        public void RegisterSystemPlugins()
+        {
+            Plugins.RegisterAll();
+        }
     }
 }

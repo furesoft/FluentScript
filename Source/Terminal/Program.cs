@@ -10,16 +10,17 @@ namespace Terminal
         private static void Main(string[] args)
         {
             var i = new Interpreter();
-            i.InitPlugins();
-            i.Context.Plugins.RegisterAll();
+
             i.Settings.EnablePrinting = true;
             i.Settings.EnableFluentMode = true;
             i.Settings.EnableFunctionCallCallBacks = true;
-            i.Context.Plugins.RegisterAllCustom();
+
+            i.Context.Plugins.Init();
+            i.Context.Plugins.RegisterAll();
             i.Context.Plugins.RegisterCustomByType(typeof(TransactionPlugin));
             i.Context.Plugins.RegisterCustomByType(typeof(ActorPlugin));
             i.Context.Plugins.RegisterCustomByType(typeof(OnPlugin));
-            i.Context.Plugins.RegisterCustomByType(typeof(RangePlugin));
+            //i.Context.Plugins.RegisterCustomByType(typeof(RangePlugin));
 
             //ToDo: implement auto collector for Plugins
 
