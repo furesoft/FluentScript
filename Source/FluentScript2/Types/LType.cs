@@ -39,9 +39,9 @@ namespace ComLib.Lang.Types
         /// <returns></returns>
         public bool IsPrimitiveType()
         {
-            if (this.TypeVal == TypeConstants.Null) return true;
-            return this.TypeVal >= TypeConstants.Bool
-                && this.TypeVal <= TypeConstants.Time;
+            if (TypeVal == TypeConstants.Null) return true;
+            return TypeVal >= TypeConstants.Bool
+                && TypeVal <= TypeConstants.Time;
         }
 
         /// <summary>
@@ -50,10 +50,10 @@ namespace ComLib.Lang.Types
         /// <returns></returns>
         public bool IsBuiltInType()
         {
-            if (this.TypeVal == TypeConstants.Null) return true;
-            if (this.TypeVal == TypeConstants.Table) return true;
-            return this.TypeVal >= TypeConstants.Bool
-                && this.TypeVal <= TypeConstants.Map;
+            if (TypeVal == TypeConstants.Null) return true;
+            if (TypeVal == TypeConstants.Table) return true;
+            return TypeVal >= TypeConstants.Bool
+                && TypeVal <= TypeConstants.Map;
         }
 
         ///// <summary>

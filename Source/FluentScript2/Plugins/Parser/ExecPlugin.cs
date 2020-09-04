@@ -36,7 +36,7 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public ExecPlugin()
         {
-            this.Init("exec");
+            Init("exec");
             _funcMeta = new FunctionMetaData("exec", null);
             _funcMeta.AddArg("program", "string", true, "", string.Empty, @"c:\tools\nunit\nunit.exe", "program to launch");
             _funcMeta.AddArg("workingdir", "string", false, "in", string.Empty, @"c:\tools\nunit\", "working directory to launch in");
@@ -98,7 +98,7 @@ namespace ComLib.Lang.Plugins
         /// <param name="meta"></param>
         public ExecExpr(FunctionMetaData meta)
         {
-            this.Init(meta);
+            Init(meta);
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace ComLib.Lang.Plugins
         /// <param name="meta"></param>
         public void Init(FunctionMetaData meta)
         {
-            this.Meta = meta;
+            Meta = meta;
             ParamList = new List<object>();
             ParamListExpressions = new List<Expr>();
         }

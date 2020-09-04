@@ -34,21 +34,21 @@ namespace ComLib.Lang.Core
         /// <param name="argNames"></param>
         public void Init(string name, List<string> argNames)
         {
-            this.Name = name;
-            this.Arguments = new List<ArgAttribute>();
-            this.ArgumentNames = new Dictionary<string, string>();
-            this.ArgumentsLookup = new Dictionary<string, ArgAttribute>();
+            Name = name;
+            Arguments = new List<ArgAttribute>();
+            ArgumentNames = new Dictionary<string, string>();
+            ArgumentsLookup = new Dictionary<string, ArgAttribute>();
 
             if (argNames != null && argNames.Count > 0)
             {
-                for (int ndx = 0; ndx < argNames.Count; ndx++)
+                for (var ndx = 0; ndx < argNames.Count; ndx++)
                 {
                     var argName = argNames[ndx];
                     var arg = new ArgAttribute() { Name = argName };
                     arg.Index = ndx;
-                    this.Arguments.Add(arg);
-                    this.ArgumentsLookup[argName] = arg;
-                    this.ArgumentNames[argName] = argName;
+                    Arguments.Add(arg);
+                    ArgumentsLookup[argName] = arg;
+                    ArgumentNames[argName] = argName;
                 }
             }
         }
@@ -73,12 +73,12 @@ namespace ComLib.Lang.Core
             arg.DefaultValue = defaultVal;
             arg.Alias = alias;
             arg.Examples = new List<string>() { examples };
-            arg.Index = this.Arguments.Count;
-            this.Arguments.Add(arg);
-            this.ArgumentsLookup[arg.Name] = arg;
-            this.ArgumentsLookup[arg.Alias] = arg;
-            this.ArgumentNames[arg.Name] = arg.Name;
-            this.ArgumentNames[arg.Alias] = arg.Name;
+            arg.Index = Arguments.Count;
+            Arguments.Add(arg);
+            ArgumentsLookup[arg.Name] = arg;
+            ArgumentsLookup[arg.Alias] = arg;
+            ArgumentNames[arg.Name] = arg.Name;
+            ArgumentNames[arg.Alias] = arg.Name;
         }
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace ComLib.Lang.Core
 
         public bool HasArguments()
         {
-            return this.TotalArgs > 0;
+            return TotalArgs > 0;
         }
 
         /// <summary>
@@ -152,12 +152,15 @@ namespace ComLib.Lang.Core
         /// <returns></returns>
         public int GetTotalRequiredArgs()
         {
-            if (this.Arguments == null || this.Arguments.Count == 0) return 0;
-            int totalRequired = 0;
+            if (Arguments == null || Arguments.Count == 0) return 0;
+            var totalRequired = 0;
             foreach (var arg in Arguments)
-                if (arg.Required)
+			{
+				if (arg.Required)
                     totalRequired++;
-            return totalRequired;
+			}
+
+			return totalRequired;
         }
     }
 }

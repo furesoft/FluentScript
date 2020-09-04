@@ -13,7 +13,7 @@ namespace ComLib.Lang.Phases
         /// </summary>
         public ShutdownPhase()
         {
-            this.Name = "interpreter-shutdown";
+            Name = "interpreter-shutdown";
         }
 
         /// <summary>

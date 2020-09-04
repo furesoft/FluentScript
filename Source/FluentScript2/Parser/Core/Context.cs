@@ -18,24 +18,24 @@ namespace ComLib.Lang.Parsing
         /// </summary>
         public Context()
         {
-            this.Types = new RegisteredTypes();
-            this.ExternalFunctions = new ExternalFunctions();
-            this.Words = new RegisteredWords();
-            this.Plugins = new RegisteredPlugins();
-            this.PluginsMeta = new MetaPluginContainer();
-            this.Symbols = new Symbols();
-            this.Memory = new Memory();
-            this.Limits = new Limits(this);
-            this.TokenAliases = new Dictionary<string, Token>();
+            Types = new RegisteredTypes();
+            ExternalFunctions = new ExternalFunctions();
+            Words = new RegisteredWords();
+            Plugins = new RegisteredPlugins();
+            PluginsMeta = new MetaPluginContainer();
+            Symbols = new Symbols();
+            Memory = new Memory();
+            Limits = new Limits(this);
+            TokenAliases = new Dictionary<string, Token>();
             var stack = new CallStack(Limits.CheckCallStack);
-            this.Callbacks = new Callbacks();
-            this.State = new LangState(stack);
-            this.Units = new Units();
-            this.Methods = new RegisteredMethods();
-            this.Directives = new RegisteredDirectives();
+            Callbacks = new Callbacks();
+            State = new LangState(stack);
+            Units = new Units();
+            Methods = new RegisteredMethods();
+            Directives = new RegisteredDirectives();
 
             //this.Bindings = new Bindings();
-            this.Plugins.Init();
+            Plugins.Init();
         }
 
         /// <summary>

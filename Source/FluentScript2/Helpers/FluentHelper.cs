@@ -23,9 +23,9 @@ namespace ComLib.Lang.Helpers
         public static List<string> BuildMultiWordFunctionNames(List<string> ids)
         {
             var names = new List<string>();
-            string name = ids[0];
+            var name = ids[0];
             names.Add(name);
-            for (int ndx = 1; ndx < ids.Count; ndx++)
+            for (var ndx = 1; ndx < ids.Count; ndx++)
             {
                 var id = ids[ndx];
                 name = name + " " + id;
@@ -48,12 +48,12 @@ namespace ComLib.Lang.Helpers
             var found = false;
             var tokenCount = 0;
             var memberMode = MemberMode.FunctionScript;
-            for (int ndx = ids.Count - 1; ndx >= 0; ndx--)
+            for (var ndx = ids.Count - 1; ndx >= 0; ndx--)
             {
                 // "refill inventory"
                 var possible = ids[ndx];
-                string funcName = possible.Item1;
-                string funcNameWithUnderScores = funcName.Replace(' ', '_');
+                var funcName = possible.Item1;
+                var funcNameWithUnderScores = funcName.Replace(' ', '_');
 
                 // Case 1: "refill inventory" - exists with spaces
                 if (ctx.Symbols.IsFunc(funcName))
@@ -116,17 +116,17 @@ namespace ComLib.Lang.Helpers
         /// <param name="enableNewLineAsEnd">Whether or not to treat a newline as end</param>
         public static void ParseFuncParameters(List<Expr> args, TokenIterator tokenIt, Parser parser, bool expectParenthesis, bool enableNewLineAsEnd, FunctionMetaData meta)
         {
-            int totalParameters = 0;
+            var totalParameters = 0;
             if (tokenIt.NextToken.Token == Tokens.LeftParenthesis)
                 expectParenthesis = true;
 
             // START with check for "("
             if (expectParenthesis) tokenIt.Expect(Tokens.LeftParenthesis);
 
-            bool passNewLine = !enableNewLineAsEnd;
+            var passNewLine = !enableNewLineAsEnd;
             var endTokens = BuildEndTokens(enableNewLineAsEnd, meta);
 
-            int totalNamedParams = 0;
+            var totalNamedParams = 0;
             var hasMetaArguments = meta != null && meta.ArgumentNames != null && meta.ArgumentNames.Count > 0;
             while (true)
             {

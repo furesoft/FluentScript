@@ -126,11 +126,11 @@ namespace ComLib.Lang.Plugins
         public LogPlugin(Action<int, string, LError> callback)
         {
             _callback = callback;
-            this.StartTokens = new string[] { "log", "put", "fatal", "error", "warn", "info", "debug" };
-            this.IsAutoMatched = true;
-            this.IsStatement = true;
-            this.IsEndOfStatementRequired = true;
-            this.Precedence = 100;
+            StartTokens = new string[] { "log", "put", "fatal", "error", "warn", "info", "debug" };
+            IsAutoMatched = true;
+            IsStatement = true;
+            IsEndOfStatementRequired = true;
+            Precedence = 100;
         }
 
         /// <summary>
@@ -214,13 +214,15 @@ namespace ComLib.Lang.Plugins
                 logexpr = new LogExpr() { Mode = "configure" };
             }
             else
-                throw _tokenIt.BuildSyntaxUnexpectedTokenException();
+			{
+				throw _tokenIt.BuildSyntaxUnexpectedTokenException();
+			}
 
-            logexpr.Callback = _callback;
+			logexpr.Callback = _callback;
 
             // Move to parameters.
             _tokenIt.Advance();
-            bool expectParenthesis = _tokenIt.NextToken.Token == Tokens.LeftParenthesis;
+            var expectParenthesis = _tokenIt.NextToken.Token == Tokens.LeftParenthesis;
             _parser.ParseParameters(logexpr, expectParenthesis, true, true);
             return logexpr;
         }
@@ -305,7 +307,7 @@ namespace ComLib.Lang.Plugins
             }
             else if (Mode == "level_check")
             {
-                var level = this.LogLevel;
+                var level = LogLevel;
                 if (level == "debug") return settings.LogLevelValue == LogPluginConstants.Debug;
                 if (level == "info") return settings.LogLevelValue == LogPluginConstants.Info;
                 if (level == "warn") return settings.LogLevelValue == LogPluginConstants.Warn;
@@ -323,15 +325,15 @@ namespace ComLib.Lang.Plugins
 
         private void Configure(LogSettings settings)
         {
-            ExceptionHelper.NotNullType(this, this.ParamList[0], "log level not supplied", LTypes.String);
-            ExceptionHelper.NotNullType(this, this.ParamList[1], "console or log not supplied", LTypes.String);
+            ExceptionHelper.NotNullType(this, ParamList[0], "log level not supplied", LTypes.String);
+            ExceptionHelper.NotNullType(this, ParamList[1], "console or log not supplied", LTypes.String);
 
             // Param 1: Error level
-            settings.LogLevelName = ((LString)this.ParamList[0]).Value;
+            settings.LogLevelName = ((LString)ParamList[0]).Value;
             settings.LogLevelValue = LogPluginConstants.LevelFor(settings.LogLevelName);
 
             // Param 2: Console or file?
-            var output = ((LString)this.ParamList[1]).Value;
+            var output = ((LString)ParamList[1]).Value;
             if (string.Compare(output, "console", StringComparison.InvariantCultureIgnoreCase) == 0)
             {
                 settings.OutputMode = LogPluginConstants.Console;
@@ -359,7 +361,7 @@ namespace ComLib.Lang.Plugins
                 return;
 
             // Good to log.
-            string message = LogHelper.BuildMessage(ParamList);
+            var message = LogHelper.BuildMessage(ParamList);
             if (settings.OutputMode == LogPluginConstants.Console)
                 Console.WriteLine(LogLevel + " : " + message);
             else if (settings.OutputMode == LogPluginConstants.Callback)
@@ -379,7 +381,7 @@ namespace ComLib.Lang.Plugins
 
             if (ParamList.Count > 2)
             {
-                string format = Convert.ToString(ParamList[2]);
+                var format = Convert.ToString(ParamList[2]);
                 format = format.Replace("${yyyy-MM-dd}", DateTime.Now.ToString("yyyy-MM-dd"));
                 format = format.Replace("${HH-mm-ss}", DateTime.Now.ToString("HH-mm-ss"));
                 format = format.Replace("${yyyy}", DateTime.Now.ToString("yyyy"));

@@ -45,7 +45,7 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public UnitsPlugin()
         {
-            this.StartTokens = new string[] { "$Suffix" };
+            StartTokens = new string[] { "$Suffix" };
         }
 
         /// <summary>

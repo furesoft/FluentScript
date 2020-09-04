@@ -16,7 +16,7 @@ namespace ComLib.Lang.AST
     {
         public BreakExpr()
         {
-            this.Nodetype = NodeTypes.SysBreak;
+            Nodetype = NodeTypes.SysBreak;
         }
 
         public override object DoVisit(IAstVisitor visitor)
@@ -40,7 +40,7 @@ namespace ComLib.Lang.AST
     {
         public ContinueExpr()
         {
-            this.Nodetype = NodeTypes.SysContinue;
+            Nodetype = NodeTypes.SysContinue;
         }
 
         public override object DoVisit(IAstVisitor visitor)
@@ -64,7 +64,7 @@ namespace ComLib.Lang.AST
     {
         public ForEachExpr()
         {
-            this.Nodetype = NodeTypes.SysForEach;
+            Nodetype = NodeTypes.SysForEach;
         }
 
         public string VarName;
@@ -94,7 +94,7 @@ namespace ComLib.Lang.AST
     {
         public ForExpr()
         {
-            this.Nodetype = NodeTypes.SysFor;
+            Nodetype = NodeTypes.SysFor;
         }
 
         public Expr Start;
@@ -122,7 +122,7 @@ namespace ComLib.Lang.AST
     {
         public FunctionDeclareExpr()
         {
-            this.Nodetype = NodeTypes.SysFunctionDeclare;
+            Nodetype = NodeTypes.SysFunctionDeclare;
         }
 
         public FunctionExpr Function;
@@ -148,7 +148,7 @@ namespace ComLib.Lang.AST
     {
         public IfExpr()
         {
-            this.Nodetype = NodeTypes.SysIf;
+            Nodetype = NodeTypes.SysIf;
         }
 
         public BlockExpr Else;
@@ -174,7 +174,7 @@ namespace ComLib.Lang.AST
     {
         public LambdaExpr()
         {
-            this.Nodetype = NodeTypes.SysLambda;
+            Nodetype = NodeTypes.SysLambda;
         }
 
         public FunctionExpr Expr;
@@ -200,7 +200,7 @@ namespace ComLib.Lang.AST
     {
         public ReturnExpr()
         {
-            this.Nodetype = NodeTypes.SysReturn;
+            Nodetype = NodeTypes.SysReturn;
         }
 
         public Expr Exp;
@@ -226,7 +226,7 @@ namespace ComLib.Lang.AST
     {
         public ThrowExpr()
         {
-            this.Nodetype = NodeTypes.SysThrow;
+            Nodetype = NodeTypes.SysThrow;
         }
 
         public Expr Exp;
@@ -252,7 +252,7 @@ namespace ComLib.Lang.AST
     {
         public TryCatchExpr()
         {
-            this.Nodetype = NodeTypes.SysTryCatch;
+            Nodetype = NodeTypes.SysTryCatch;
         }
 
         public string ErrorName;
@@ -282,7 +282,7 @@ namespace ComLib.Lang.AST
     {
         public WhileExpr()
         {
-            this.Nodetype = NodeTypes.SysWhile;
+            Nodetype = NodeTypes.SysWhile;
         }
 
         public bool DoBreakLoop { get; set; }

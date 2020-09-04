@@ -45,14 +45,14 @@ namespace ComLib.Lang.Runtime.Bindings
         public object ExecuteFunction(string name, object[] args)
         {
             // Naming convention ? default to camel case
-            if (!string.IsNullOrEmpty(this.NamingConvention))
+            if (!string.IsNullOrEmpty(NamingConvention))
             {
                 name = name[0].ToString().ToUpper() + name.Substring(1);
             }
-            var method = this.GetType().GetMethod(name);
+            var method = GetType().GetMethod(name);
             if (method == null)
-                throw new ArgumentException("Binding for " + this.ComponentName + " does not have function " + name);
-            object result = method.Invoke(this, args);
+                throw new ArgumentException("Binding for " + ComponentName + " does not have function " + name);
+            var result = method.Invoke(this, args);
             return result;
         }
     }

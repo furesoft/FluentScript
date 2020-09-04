@@ -44,11 +44,11 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public void Init(string name)
         {
-            this.Name = name;
-            this.StartTokens = new string[] { this.Name };
-            this.IsStatement = true;
-            this.IsEndOfStatementRequired = true;
-            this.IsAutoMatched = true;
+            Name = name;
+            StartTokens = new string[] { Name };
+            IsStatement = true;
+            IsEndOfStatementRequired = true;
+            IsAutoMatched = true;
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace ComLib.Lang.Plugins
         /// <returns></returns>
         public Expr ParseFunction(ParameterExpr expr)
         {
-            _tokenIt.ExpectIdText(this.Name);
+            _tokenIt.ExpectIdText(Name);
             var expectParens = _tokenIt.NextToken.Token == Tokens.LeftParenthesis;
             FluentHelper.ParseFuncParameters(expr.ParamListExpressions, _tokenIt, _parser, expectParens, true, _funcMeta);
             return expr;

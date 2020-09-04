@@ -343,9 +343,9 @@ namespace ComLib.Lang.Core
         /// <returns></returns>
         public static bool IsLiteral(string text)
         {
-            bool contains = AllTokens.ContainsKey(text);
+            var contains = AllTokens.ContainsKey(text);
             if (!contains) return false;
-            Token t = AllTokens[text];
+            var t = AllTokens[text];
             return t.Kind >= TokenKind.LiteralString;
         }
 
@@ -397,9 +397,9 @@ namespace ComLib.Lang.Core
         /// <returns></returns>
         public static bool IsTokenKind(string key, int tokenKind)
         {
-            bool contains = AllTokens.ContainsKey(key);
+            var contains = AllTokens.ContainsKey(key);
             if (!contains) return false;
-            Token t = AllTokens[key];
+            var t = AllTokens[key];
             return t.Kind == tokenKind;
         }
 
@@ -418,7 +418,7 @@ namespace ComLib.Lang.Core
         /// <param name="ops"></param>
         public static void RegisterCompareOps(params string[] ops)
         {
-            foreach (string op in ops)
+            foreach (var op in ops)
             {
                 var tokenOp = AllTokens[op];
                 CompareTokens[op] = tokenOp;
@@ -431,7 +431,7 @@ namespace ComLib.Lang.Core
         /// <param name="ops"></param>
         public static void RegisterMathOps(params string[] ops)
         {
-            foreach (string op in ops)
+            foreach (var op in ops)
             {
                 var tokenOp = AllTokens[op];
                 MathTokens[op] = tokenOp;
@@ -681,7 +681,7 @@ namespace ComLib.Lang.Core
         /// <returns></returns>
         public override string ToString()
         {
-            string info = string.Format("Kind: {0}, Type: {1}, Text: {2}, Val: {3}", Kind, Type, Text, Value);
+            var info = string.Format("Kind: {0}, Type: {1}, Text: {2}, Val: {3}", Kind, Type, Text, Value);
             return info;
         }
 
@@ -691,7 +691,7 @@ namespace ComLib.Lang.Core
         /// <returns></returns>
         public Token Clone()
         {
-            var token = new Token(this.Kind, this.Type, this.Text, this.Value);
+            var token = new Token(Kind, Type, Text, Value);
             return token;
         }
 

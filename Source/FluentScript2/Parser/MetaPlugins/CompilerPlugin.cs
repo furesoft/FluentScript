@@ -162,19 +162,21 @@ namespace ComLib.Lang.Parsing.MetaPlugins
 
         public void AddStartTokens(params string[] tokens)
         {
-            this.StartTokens = tokens;
+            StartTokens = tokens;
         }
 
         public string GetFullGrammar()
         {
             var grammar = "";
-            if (string.IsNullOrEmpty(this.Grammar))
-                grammar = this.GrammarMatch;
-            else
+            if (string.IsNullOrEmpty(Grammar))
+			{
+				grammar = GrammarMatch;
+			}
+			else
             {
-                var ndxRef = this.Grammar.IndexOf("#grammarmatch");
+                var ndxRef = Grammar.IndexOf("#grammarmatch");
                 if (ndxRef >= 0)
-                    grammar = this.GrammarMatch + " " + this.Grammar.Substring(ndxRef + 13);
+                    grammar = GrammarMatch + " " + Grammar.Substring(ndxRef + 13);
             }
             return grammar;
         }

@@ -53,8 +53,8 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public TypeOperationsPlugin()
         {
-            this.IsStatement = false;
-            this.IsAutoMatched = true;
+            IsStatement = false;
+            IsAutoMatched = true;
             _functionToTypeMap = new Dictionary<string, string>();
             var types = new string[] { "number", "bool", "date", "time", "string" };
             var functionnames = new List<string>();
@@ -69,7 +69,7 @@ namespace ComLib.Lang.Plugins
                 _functionToTypeMap["is_" + type + "_like"] = type;
                 _functionToTypeMap["to_" + type] = type;
             }
-            this.StartTokens = _functionToTypeMap.Keys.ToArray();
+            StartTokens = _functionToTypeMap.Keys.ToArray();
         }
 
         /// <summary>
@@ -213,8 +213,10 @@ namespace ComLib.Lang.Plugins
         public override object DoEvaluate(IAstVisitor visitor)
         {
             if (_isConversion)
-                return ConvertValue(visitor);
-            else if (_isConversionCheck)
+			{
+				return ConvertValue(visitor);
+			}
+			else if (_isConversionCheck)
             {
                 var result = TryConvertValue(visitor);
                 return result;
@@ -307,8 +309,10 @@ namespace ComLib.Lang.Plugins
             if (spec.ConvertMode == CONVERT_MODE_LAMBDA)
             {
                 if (!handleError)
-                    result = spec.Handler(spec, val);
-                else
+				{
+					result = spec.Handler(spec, val);
+				}
+				else
                 {
                     try
                     {

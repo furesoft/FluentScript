@@ -121,7 +121,7 @@ namespace ComLib.Lang.AST
         /// <returns></returns>
         public bool IsPropertyAccessOnBuiltInType()
         {
-            return this.Type != null && this.Mode == MemberMode.PropertyMember;
+            return Type != null && Mode == MemberMode.PropertyMember;
         }
 
         /// <summary>
@@ -130,12 +130,12 @@ namespace ComLib.Lang.AST
         /// <returns></returns>
         public bool IsPropertyAccessOnClass()
         {
-            return this.DataType != null && this.Property != null;
+            return DataType != null && Property != null;
         }
 
         public bool IsFieldAccessOnClass()
         {
-            return this.DataType != null && this.Field != null;
+            return DataType != null && Field != null;
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace ComLib.Lang.AST
         /// <returns></returns>
         public bool IsModuleAccess()
         {
-            return this.Mode == MemberMode.Module;
+            return Mode == MemberMode.Module;
         }
     }
 }

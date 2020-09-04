@@ -57,11 +57,11 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public SortPlugin()
         {
-            this.StartTokens = new string[] { "sort", "Sort" };
-            this.IsAutoMatched = true;
-            this.IsStatement = true;
-            this.IsContextFree = false;
-            this.IsEndOfStatementRequired = true;
+            StartTokens = new string[] { "sort", "Sort" };
+            IsAutoMatched = true;
+            IsStatement = true;
+            IsContextFree = false;
+            IsEndOfStatementRequired = true;
         }
 
         /// <summary>
@@ -178,7 +178,7 @@ namespace ComLib.Lang.Plugins
         /// <param name="isAsc">Whether or to sort in ascending order.</param>
         public SortExpr(string varName, Expr source, Expr filter, bool isAsc)
         {
-            this.Nodetype = "FSExtSort";
+            Nodetype = "FSExtSort";
             _varName = varName;
             _isAsc = isAsc;
             _source = source;
@@ -230,7 +230,7 @@ namespace ComLib.Lang.Plugins
                     if (x == y) return 0;
 
                     // Now do the actual comparison of values
-                    int result = 0;
+                    var result = 0;
                     if (_isAsc)
                         result = CompareObjects(x, y);
                     else
@@ -256,12 +256,12 @@ namespace ComLib.Lang.Plugins
 
                 // Now do the actual comparison of values
                 Ctx.Memory.SetValue(_varName, x);
-                object a = _filter.Evaluate(visitor);
+                var a = _filter.Evaluate(visitor);
 
                 Ctx.Memory.SetValue(_varName, y);
-                object b = _filter.Evaluate(visitor);
+                var b = _filter.Evaluate(visitor);
 
-                int result = 0;
+                var result = 0;
                 if (_isAsc)
                     result = CompareObjects(a, b);
                 else

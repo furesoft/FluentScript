@@ -38,10 +38,10 @@ namespace ComLib.Lang.Plugins
         {
             _replacements = replacements;
             _replaceMap = new Dictionary<string, string>();
-            for (int ndx = 0; ndx < replacements.GetLength(0); ndx++)
+            for (var ndx = 0; ndx < replacements.GetLength(0); ndx++)
             {
-                string tokenToReplace = (string)replacements.GetValue(ndx, 0);
-                string replaceVal = (string)replacements.GetValue(ndx, 1);
+                var tokenToReplace = (string)replacements.GetValue(ndx, 0);
+                var replaceVal = (string)replacements.GetValue(ndx, 1);
                 _replaceMap[tokenToReplace] = replaceVal;
             }
         }

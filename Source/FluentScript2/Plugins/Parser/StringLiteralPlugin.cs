@@ -30,9 +30,9 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public StringLiteralPlugin()
         {
-            this.Precedence = 1;
-            this.IsAutoMatched = true;
-            this.StartTokens = new string[] { ":" };
+            Precedence = 1;
+            IsAutoMatched = true;
+            StartTokens = new string[] { ":" };
         }
 
         /// <summary>

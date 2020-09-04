@@ -86,7 +86,7 @@ namespace ComLib.Lang.Parsing
 
             var end = DateTime.Now;
             // Now check for success.
-            bool success = _errors.Count == 0;
+            var success = _errors.Count == 0;
             _results = new RunResult(start, end, success, _errors);
             _results.Errors = _errors;
             return _results;
@@ -105,8 +105,8 @@ namespace ComLib.Lang.Parsing
             }
             OnNodeStart(node);
 
-            int initialErrorCount = _errors.Count;
-            string name = node.Nodetype;
+            var initialErrorCount = _errors.Count;
+            var name = node.Nodetype;
             if (!_validators.ContainsKey(name))
                 return true;
 
@@ -146,8 +146,10 @@ namespace ComLib.Lang.Parsing
         {
             List<Func<SemActs, AstNode, SemanticCheckResult>> rules = null;
             if (_validators.ContainsKey(nodeType))
-                rules = _validators[nodeType];
-            else
+			{
+				rules = _validators[nodeType];
+			}
+			else
             {
                 rules = new List<Func<SemActs, AstNode, SemanticCheckResult>>();
                 _validators[nodeType] = rules;
@@ -209,7 +211,7 @@ namespace ComLib.Lang.Parsing
         /// <param name="errorType">Type of error.</param>
         private void AddSemanticError(string errorCode, string errorText, AstNode node, ScriptErrorType errorType)
         {
-            string errormsg = errorText + " at line : " + node.Ref.Line + ", pos : " + node.Ref.CharPos;
+            var errormsg = errorText + " at line : " + node.Ref.Line + ", pos : " + node.Ref.CharPos;
             var error = new ScriptError();
             error.Line = node.Ref.Line;
             error.File = node.Ref.ScriptName;
@@ -257,7 +259,7 @@ namespace ComLib.Lang.Parsing
 
             var exp = stmt.Condition as ConstantExpr;
             if (!(exp.Value is bool)) return SemanticCheckResult.Valid;
-            bool val = (bool)exp.Value;
+            var val = (bool)exp.Value;
             if (val == false)
                 return AddError("If statement condition is always false", stmt);
 

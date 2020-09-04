@@ -53,9 +53,9 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public FluentFuncPlugin()
         {
-            this.Precedence = 100;
-            this.IsStatement = true;
-            this.StartTokens = new string[] { "$IdToken" };
+            Precedence = 100;
+            IsStatement = true;
+            StartTokens = new string[] { "$IdToken" };
         }
 
         /// <summary>

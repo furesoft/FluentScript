@@ -73,13 +73,13 @@ namespace ComLib.Lang.Core
 
         public ParseStackManager()
         {
-            this._genericStack = new ParseStack();
-            this._namedStack = new Dictionary<string, ParseStack>();
-            this._namedStack.Add("maps", new ParseStack());
-            this._namedStack.Add("arrays", new ParseStack());
-            this._namedStack.Add("loops", new ParseStack());
-            this._namedStack.Add("function_calls", new ParseStack());
-            this._namedStack.Add("function_declares", new ParseStack());
+            _genericStack = new ParseStack();
+            _namedStack = new Dictionary<string, ParseStack>();
+            _namedStack.Add("maps", new ParseStack());
+            _namedStack.Add("arrays", new ParseStack());
+            _namedStack.Add("loops", new ParseStack());
+            _namedStack.Add("function_calls", new ParseStack());
+            _namedStack.Add("function_declares", new ParseStack());
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace ComLib.Lang.Core
         /// </summary>
         public void PushArray()
         {
-            this.PushNamed("arrays", ParseStackType.Array);
+            PushNamed("arrays", ParseStackType.Array);
         }
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace ComLib.Lang.Core
         /// </summary>
         public void PopArray()
         {
-            this.PopNamed("arrays", ParseStackType.Array);
+            PopNamed("arrays", ParseStackType.Array);
         }
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace ComLib.Lang.Core
         /// </summary>
         public void PushMap()
         {
-            this.PushNamed("maps", ParseStackType.Map);
+            PushNamed("maps", ParseStackType.Map);
         }
 
         /// <summary>
@@ -178,7 +178,7 @@ namespace ComLib.Lang.Core
         /// </summary>
         public void PopMap()
         {
-            this.PopNamed("maps", ParseStackType.Map);
+            PopNamed("maps", ParseStackType.Map);
         }
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace ComLib.Lang.Core
         /// </summary>
         public void PushFunctionCall()
         {
-            this.PushNamed("function_calls", ParseStackType.FunctionCall);
+            PushNamed("function_calls", ParseStackType.FunctionCall);
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace ComLib.Lang.Core
         /// </summary>
         public void PopFunctionCall()
         {
-            this.PopNamed("function_calls", ParseStackType.FunctionCall);
+            PopNamed("function_calls", ParseStackType.FunctionCall);
         }
 
         /// <summary>
@@ -202,7 +202,7 @@ namespace ComLib.Lang.Core
         /// </summary>
         public void PushLoop()
         {
-            this.PushNamed("loops", ParseStackType.Loop);
+            PushNamed("loops", ParseStackType.Loop);
         }
 
         /// <summary>
@@ -210,7 +210,7 @@ namespace ComLib.Lang.Core
         /// </summary>
         public void PopLoop()
         {
-            this.PopNamed("loops", ParseStackType.Loop);
+            PopNamed("loops", ParseStackType.Loop);
         }
     }
 }

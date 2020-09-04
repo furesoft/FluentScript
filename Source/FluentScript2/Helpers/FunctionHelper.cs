@@ -86,10 +86,12 @@ namespace ComLib.Lang.Helpers
             object result = null;
             // Case 1: Custom C# function blog.create blog.*
             if (isExternFunc)
-                result = FunctionHelper.CallFunctionExternal(ctx, visitor, functionName, fexpr);
+			{
+				result = FunctionHelper.CallFunctionExternal(ctx, visitor, functionName, fexpr);
+			}
 
-            // Case 2: Script functions "createUser('john');"
-            else
+			// Case 2: Script functions "createUser('john');"
+			else
             {
                 var sym = fexpr.SymScope.GetSymbol(functionName) as SymbolFunction;
                 var func = sym.FuncExpr as FunctionExpr;
@@ -246,7 +248,7 @@ namespace ComLib.Lang.Helpers
 
             // 1. Resolve parameter froms expressions into Lang values.
             ParamHelper.ResolveParametersToHostLangValues(exp.ParamListExpressions, exp.ParamList, visitor);
-            object result = callback(objectName, method, exp);
+            var result = callback(objectName, method, exp);
             return result;
         }
 
@@ -280,7 +282,7 @@ namespace ComLib.Lang.Helpers
         /// <returns></returns>
         public static bool IsExternalFunction(ExternalFunctions funcs, string varName, string memberName)
         {
-            string funcName = varName + "." + memberName;
+            var funcName = varName + "." + memberName;
             if (funcs.Contains(funcName))
                 return true;
             return false;
@@ -304,7 +306,7 @@ namespace ComLib.Lang.Helpers
                 ParamHelper.ResolveParametersForMethodCall(methodInfo, paramListExpressions, paramList, visitor);
 
             // 2. Convert internal language types to c# code method types.
-            object[] args = LangTypeHelper.ConvertArgs(paramList, methodInfo);
+            var args = LangTypeHelper.ConvertArgs(paramList, methodInfo);
 
             // 3. Handle  params object[];
             if (methodInfo.GetParameters().Length == 1)
@@ -312,7 +314,7 @@ namespace ComLib.Lang.Helpers
                 if (methodInfo.GetParameters()[0].ParameterType == typeof(object[]))
                     args = new object[] { args };
             }
-            object result = methodInfo.Invoke(obj, args);
+            var result = methodInfo.Invoke(obj, args);
             return result;
         }
 

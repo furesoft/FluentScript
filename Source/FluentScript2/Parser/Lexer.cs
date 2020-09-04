@@ -87,8 +87,8 @@ namespace ComLib.Lang.Parsing
         /// <param name="text">The text to parse</param>
         public Lexer(string text)
         {
-            this._ctx = new Context();
-            this.Init(text);
+            _ctx = new Context();
+            Init(text);
         }
 
         /// <summary>
@@ -97,11 +97,11 @@ namespace ComLib.Lang.Parsing
         /// <param name="script"></param>
         public void Init(string script)
         {
-            this._scanner = new Scanner();
-            this._scanner.Init(script, '\\', new char[] { '\'', '"' }, new char[] { ' ', '\t' });
-            this.LAST_POSITION = this._scanner.LAST_POSITION;
-            this.State = this._scanner.State;
-            this.Scanner = this._scanner;
+            _scanner = new Scanner();
+            _scanner.Init(script, '\\', new char[] { '\'', '"' }, new char[] { ' ', '\t' });
+            LAST_POSITION = _scanner.LAST_POSITION;
+            State = _scanner.State;
+            Scanner = _scanner;
         }
 
         /// <summary>
@@ -234,7 +234,7 @@ namespace ComLib.Lang.Parsing
                     // 3a. Plugins?
                     if (!isNewLine && hasJsPlugins && _ctx.PluginsMeta.CanHandleLex(token.Token))
                     {
-                        var visitor = this.OnDemandEvaluator;
+                        var visitor = OnDemandEvaluator;
                         var parsedToken = _ctx.PluginsMeta.ParseLex(visitor);
                     }
                     // 3b. Plugins?
@@ -246,11 +246,13 @@ namespace ComLib.Lang.Parsing
 
                     // 4. Can immediately add to tokens ?
                     else if (!_hasReplacementsOrRemovals)
-                        _tokens.Add(token);
+					{
+						_tokens.Add(token);
+					}
 
-                    // 5. Special Handling Cases
-                    //    Case 1: Replace token ?
-                    else if (_replacements.ContainsKey(token.Token.Text))
+					// 5. Special Handling Cases
+					//    Case 1: Replace token ?
+					else if (_replacements.ContainsKey(token.Token.Text))
                     {
                         var replaceVal = _replacements[token.Token.Text];
 
@@ -268,8 +270,10 @@ namespace ComLib.Lang.Parsing
                     }
                     // Case 2: Remove token ?
                     else if (!_removals.ContainsKey(token.Token.Text))
-                        _tokens.Add(token);
-                }
+					{
+						_tokens.Add(token);
+					}
+				}
 
                 // If only getting limited number of tokens then get
                 // the specified count number of tokens.
@@ -415,7 +419,7 @@ namespace ComLib.Lang.Parsing
                 if (_lastToken.Kind == TokenKind.Multi)
                 {
                     tokenLength = (_scanner.State.Pos - pos) - 2;
-                    string text = _scanner.State.Text.Substring(pos + 1, tokenLength);
+                    var text = _scanner.State.Text.Substring(pos + 1, tokenLength);
                     _lastToken.SetText(text);
                 }
                 else
@@ -429,7 +433,7 @@ namespace ComLib.Lang.Parsing
             }
             else if (c == '\r')
             {
-                bool is2CharNewline = n == '\n';
+                var is2CharNewline = n == '\n';
                 IncrementLine(is2CharNewline);
             }
             else
@@ -573,7 +577,7 @@ namespace ComLib.Lang.Parsing
 
                 return TokenBuilder.ToLiteralString(result.Text);
             }
-            return this.ReadInterpolatedString(quote, false, true, true);
+            return ReadInterpolatedString(quote, false, true, true);
         }
 
         /// <summary>
@@ -593,7 +597,7 @@ namespace ComLib.Lang.Parsing
         /// <returns></returns>
         public Token ReadLine(bool includeNewLine)
         {
-            return this.ReadInterpolatedString(Char.MinValue, true, includeNewLine, true);
+            return ReadInterpolatedString(Char.MinValue, true, includeNewLine, true);
         }
 
         /// <summary>
@@ -655,13 +659,13 @@ namespace ComLib.Lang.Parsing
                 {
                     // Keep track of interpolations and their start positions.
                     interpolationCount++;
-                    int interpolatedStringStartPos = _scanner.State.LineCharPosition + 2;
-                    int interpolatedStringLinePos = _scanner.State.Line;
+                    var interpolatedStringStartPos = _scanner.State.LineCharPosition + 2;
+                    var interpolatedStringLinePos = _scanner.State.Line;
 
                     // Add any existing text before the interpolation as a token.
                     if (buffer.Length > 0)
                     {
-                        string text = buffer.ToString();
+                        var text = buffer.ToString();
                         token = TokenBuilder.ToLiteralString(text);
                         var t = new TokenData() { Token = token, LineCharPos = 0, Line = _scanner.State.Line };
                         allTokens.Add(t);
@@ -789,7 +793,7 @@ namespace ComLib.Lang.Parsing
                 }
                 else if (c == '\r')
                 {
-                    bool is2CharNewline = n == '\n';
+                    var is2CharNewline = n == '\n';
                     IncrementLine(is2CharNewline);
                 }
                 else
@@ -811,11 +815,11 @@ namespace ComLib.Lang.Parsing
 
         private void PerformDiagnostics(TokenData tokenData)
         {
-            this.DiagnosticData.TotalTokens++;
+            DiagnosticData.TotalTokens++;
             if (tokenData.Token == Tokens.NewLine)
-                this.DiagnosticData.TotalNewLineTokens++;
+                DiagnosticData.TotalNewLineTokens++;
             else if (tokenData.Token == Tokens.WhiteSpace)
-                this.DiagnosticData.TotalWhiteSpaceTokens++;
+                DiagnosticData.TotalWhiteSpaceTokens++;
         }
 
         #endregion Private methods

@@ -36,9 +36,9 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public WordsPlugin()
         {
-            this.StartTokens = new string[] { "@" };
-            this.IsStatement = true;
-            this.IsEndOfStatementRequired = true;
+            StartTokens = new string[] { "@" };
+            IsStatement = true;
+            IsEndOfStatementRequired = true;
         }
 
         /// <summary>
@@ -104,8 +104,8 @@ namespace ComLib.Lang.Plugins
                 if (!hasParens && token.Token == Tokens.Semicolon)
                     break;
 
-                string word = GetNextWord(hasParens);
-                this._parser.Context.Words.Register(word);
+                var word = GetNextWord(hasParens);
+                _parser.Context.Words.Register(word);
 
                 token = _tokenIt.Advance(1, false);
                 if (token.Token == Tokens.Comma)
@@ -121,7 +121,7 @@ namespace ComLib.Lang.Plugins
         {
             var ahead = _tokenIt.Peek(1, false);
             var current = _tokenIt.NextToken;
-            string word = current.Token.Text;
+            var word = current.Token.Text;
 
             // Build up the word until , is hit.
             while (ahead.Token != Tokens.Comma && ahead.Token != Tokens.RightParenthesis
@@ -172,7 +172,7 @@ namespace ComLib.Lang.Plugins
             // Keep reading while word doesn't exist.
             var ahead = _tokenIt.Peek(1, false);
             var words = _parser.Context.Words;
-            bool isWordReplacement = false;
+            var isWordReplacement = false;
 
             // Just 1 word check.
             if (ahead.Token.Kind != TokenKind.Ident || ahead.Token == Tokens.EndToken)
@@ -181,15 +181,15 @@ namespace ComLib.Lang.Plugins
                 _word = current.Text;
                 return isWordReplacement;
             }
-            bool found = false;
+            var found = false;
             _possibleWords = _tokenIt.PeekConsequetiveIdsAppended(_tokenIt.LLK);
 
             // Do a reverse check.
             // 1. Get consequetive id tokens.
             // e.g. default premium policy
-            for (int ndx = _possibleWords.Count - 1; ndx >= 1; ndx--)
+            for (var ndx = _possibleWords.Count - 1; ndx >= 1; ndx--)
             {
-                string possibleWord = _possibleWords[ndx];
+                var possibleWord = _possibleWords[ndx];
 
                 // Do not overtake functions if functions are explicity called with parenthesis "(" ")"
                 //if (_parser.Context.Functions.Contains(possibleWord))

@@ -20,10 +20,10 @@ namespace ComLib.Lang.Parsing
         /// <param name="totalNewLines">The total number of new lines</param>
         public ScanResult(bool success, int start, string text, int totalNewLines)
         {
-            this.Start = start;
-            this.Success = success;
-            this.Text = text;
-            this.Lines = totalNewLines;
+            Start = start;
+            Success = success;
+            Text = text;
+            Lines = totalNewLines;
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace ComLib.Lang.Parsing
         public string ExtractInclusive(int start, int end)
         {
             var length = end - start + 1;
-            var text = this.Text.Substring(start, length);
+            var text = Text.Substring(start, length);
             return text;
         }
     }
@@ -415,7 +415,7 @@ namespace ComLib.Lang.Parsing
         /// <param name="is2CharNewLine"></param>
         public virtual void IncrementLine(bool is2CharNewLine)
         {
-            int count = is2CharNewLine ? 2 : 1;
+            var count = is2CharNewLine ? 2 : 1;
             MoveChars(count);
             _pos.Line++;
             _pos.LineCharPosition = 1;
@@ -561,7 +561,7 @@ namespace ComLib.Lang.Parsing
         /// <returns></returns>
         public ScanResult ScanId(bool advanceFirst, bool setPosAfterToken)
         {
-            if (advanceFirst) this.ReadChar();
+            if (advanceFirst) ReadChar();
 
             var start = _pos.Pos;
             var first = true;
@@ -579,8 +579,8 @@ namespace ComLib.Lang.Parsing
                 first = false;
             }
             var text = _pos.ExtractInclusive(start, _pos.Pos - 1);
-            if (!setPosAfterToken) this.MoveChars(-1);
-            this.UpdateLineState(start);
+            if (!setPosAfterToken) MoveChars(-1);
+            UpdateLineState(start);
             var result = new ScanResult(true, start, text, 0);
             return result;
         }
@@ -593,7 +593,7 @@ namespace ComLib.Lang.Parsing
         /// <returns>Contents of token read.</returns>
         public ScanResult ScanNumber(bool advanceFirst, bool setPosAfterToken)
         {
-            if (advanceFirst) this.ReadChar();
+            if (advanceFirst) ReadChar();
             var start = _pos.Pos;
             if (_pos.CurrentChar == '+' || _pos.CurrentChar == '-')
                 _pos.Pos++;
@@ -623,8 +623,8 @@ namespace ComLib.Lang.Parsing
             }
 
             var text = _pos.ExtractInclusive(start, _pos.Pos - 1);
-            if (!setPosAfterToken) this.MoveChars(-1);
-            this.UpdateLineState(start);
+            if (!setPosAfterToken) MoveChars(-1);
+            UpdateLineState(start);
             var result = new ScanResult(true, start, text, 0);
             return result;
         }
@@ -644,7 +644,7 @@ namespace ComLib.Lang.Parsing
             var start = _pos.Pos;
             var initialLineNum = _pos.Line;
             var matched = false;
-            if (advanceFirst) this.ReadChar();
+            if (advanceFirst) ReadChar();
             while (_pos.Pos <= LAST_POSITION)
             {
                 var ch = _pos.Text[_pos.Pos];
@@ -658,13 +658,13 @@ namespace ComLib.Lang.Parsing
                 // Case 2: New line
                 else if (ch == '\r' || ch == '\n')
                 {
-                    var is2CharNewLine = this.ScanNewLine(ch);
+                    var is2CharNewLine = ScanNewLine(ch);
                     text += is2CharNewLine ? "\r\n" : "\n";
                 }
                 // Case 3: Escape \
                 else if (ch == _escapeChar)
                 {
-                    var result = this.ScanEscape(quoteChar, true);
+                    var result = ScanEscape(quoteChar, true);
                     text += result.Text;
                 }
                 else
@@ -675,7 +675,7 @@ namespace ComLib.Lang.Parsing
                 }
             }
 
-            if (setPosAfterToken) this.MoveChars(1);
+            if (setPosAfterToken) MoveChars(1);
             var totalNewLines = _pos.Line - initialLineNum;
             return new ScanResult(matched, start, text, totalNewLines);
         }
@@ -688,7 +688,7 @@ namespace ComLib.Lang.Parsing
         /// <returns>String read.</returns>
         public ScanResult ScanUri(bool advanceFirst, bool setPosAfterToken)
         {
-            var ch = advanceFirst ? this.ReadChar() : _pos.CurrentChar;
+            var ch = advanceFirst ? ReadChar() : _pos.CurrentChar;
             var start = _pos.Pos;
             if (ch == SPACE || ch == TAB)
                 return new ScanResult(true, start, string.Empty, 0);
@@ -705,8 +705,8 @@ namespace ComLib.Lang.Parsing
                 _pos.Pos++;
             }
             var text = _pos.ExtractInclusive(start, _pos.Pos - 1);
-            if (!setPosAfterToken) this.MoveChars(-1);
-            this.UpdateLineState(start);
+            if (!setPosAfterToken) MoveChars(-1);
+            UpdateLineState(start);
             return new ScanResult(true, start, text, 0);
         }
 
@@ -718,7 +718,7 @@ namespace ComLib.Lang.Parsing
         /// <returns>String read.</returns>
         public ScanResult ScanToNewLine(bool advanceFirst, bool setPosAfterToken)
         {
-            if (advanceFirst) this.ReadChar();
+            if (advanceFirst) ReadChar();
 
             var start = _pos.Pos;
             var is2CharNewLine = false;
@@ -727,7 +727,7 @@ namespace ComLib.Lang.Parsing
                 var ch = _pos.Text[_pos.Pos];
                 if (ch == '\r')
                 {
-                    var n1 = this.PeekChar();
+                    var n1 = PeekChar();
                     is2CharNewLine = n1 == '\n';
                     break;
                 }
@@ -738,8 +738,8 @@ namespace ComLib.Lang.Parsing
                 _pos.Pos++;
             }
             var text = _pos.ExtractInclusive(start, _pos.Pos - 1);
-            if (!setPosAfterToken) this.MoveChars(-1);
-            this.UpdateLineState(start);
+            if (!setPosAfterToken) MoveChars(-1);
+            UpdateLineState(start);
             return new ScanResult(true, start, text, 0);
         }
 
@@ -757,8 +757,8 @@ namespace ComLib.Lang.Parsing
             var word = _pos.ExtractInclusive(actualStartPos, endPos);
 
             // Update the position and
-            this.ResetPos(endPos, false);
-            if (setPosAfterToken) this.ReadChar();
+            ResetPos(endPos, false);
+            if (setPosAfterToken) ReadChar();
             return new ScanResult(true, actualStartPos, word, 0);
         }
 
@@ -772,9 +772,9 @@ namespace ComLib.Lang.Parsing
         /// <returns></returns>
         public ScanResult ScanWordUntilChars(bool advanceFirst, bool setPosAfterToken, char extra1, char extra2)
         {
-            if (advanceFirst) this.ReadChar();
+            if (advanceFirst) ReadChar();
             var start = _pos.Pos;
-            int initialNewLines = _pos.Line;
+            var initialNewLines = _pos.Line;
             var first = true;
             while (_pos.Pos <= LAST_POSITION)
             {
@@ -792,8 +792,8 @@ namespace ComLib.Lang.Parsing
                 first = false;
             }
             var text = _pos.ExtractInclusive(start, _pos.Pos - 1);
-            if (!setPosAfterToken) this.MoveChars(-1);
-            this.UpdateLineState(start);
+            if (!setPosAfterToken) MoveChars(-1);
+            UpdateLineState(start);
             return new ScanResult(true, start, text, 0);
         }
 
@@ -807,17 +807,17 @@ namespace ComLib.Lang.Parsing
         /// <returns>String read.</returns>
         public ScanResult ScanUntilChars(bool advanceFirst, char first, char second, bool includeChars, bool setPosAfterToken)
         {
-            if (advanceFirst) this.ReadChar();
+            if (advanceFirst) ReadChar();
             var start = _pos.Pos;
             var lineStartPos = _pos.Pos;
-            int initialNewLines = _pos.Line;
+            var initialNewLines = _pos.Line;
             while (_pos.Pos <= LAST_POSITION - 1)
             {
                 var ch = _pos.Text[_pos.Pos];
                 // Case 1: Matching
                 if (ch == first)
                 {
-                    var n1 = this.PeekChar();
+                    var n1 = PeekChar();
                     if (n1 == second)
                     {
                         _pos.Pos += 2;
@@ -828,7 +828,7 @@ namespace ComLib.Lang.Parsing
                 // Case 2: New line
                 else if (ch == '\r' || ch == '\n')
                 {
-                    this.ScanNewLine(ch);
+                    ScanNewLine(ch);
                     lineStartPos = _pos.Pos;
                 }
                 else
@@ -838,8 +838,8 @@ namespace ComLib.Lang.Parsing
             }
             var endPos = includeChars ? _pos.Pos - 1 : _pos.Pos - 3;
             var text = _pos.ExtractInclusive(start, endPos);
-            if (!setPosAfterToken) this.MoveChars(-1);
-            this.UpdateLineState(lineStartPos);
+            if (!setPosAfterToken) MoveChars(-1);
+            UpdateLineState(lineStartPos);
             var totalNewLines = _pos.Line - initialNewLines;
             return new ScanResult(true, start, text, totalNewLines);
         }
@@ -853,7 +853,7 @@ namespace ComLib.Lang.Parsing
         /// <returns>Contents of token read.</returns>
         public ScanResult ScanChars(IDictionary<char, bool> validChars, bool advanceFirst, bool setPosAfterToken)
         {
-            if (advanceFirst) this.ReadChar();
+            if (advanceFirst) ReadChar();
             var start = _pos.Pos;
 
             while (_pos.Pos <= LAST_POSITION)
@@ -866,8 +866,8 @@ namespace ComLib.Lang.Parsing
                 _pos.Pos++;
             }
             var text = _pos.ExtractInclusive(start, _pos.Pos - 1);
-            if (!setPosAfterToken) this.MoveChars(-1);
-            this.UpdateLineState(start);
+            if (!setPosAfterToken) MoveChars(-1);
+            UpdateLineState(start);
             return new ScanResult(true, start, text, 0);
         }
 
@@ -880,7 +880,7 @@ namespace ComLib.Lang.Parsing
         {
             var start = _pos.Pos;
             var text = "";
-            var next = this.PeekChar();
+            var next = PeekChar();
             if (next == quoteChar) text += quoteChar;
             else if (next == '\\') text = "\\";
             else if (next == 'r') text = "\r";
@@ -902,20 +902,20 @@ namespace ComLib.Lang.Parsing
             var is2CharNewLine = false;
             if (ch == '\r')
             {
-                var n1 = this.PeekChar();
+                var n1 = PeekChar();
                 is2CharNewLine = n1 == '\n';
-                this.IncrementLine(is2CharNewLine);
+                IncrementLine(is2CharNewLine);
             }
             else if (ch == '\n')
             {
-                this.IncrementLine(false);
+                IncrementLine(false);
             }
             return is2CharNewLine;
         }
 
         public ScanResult SkipUntilPrefixedWord(bool advanceFirst, char prefix, string word)
         {
-            if (advanceFirst) this.ReadChar();
+            if (advanceFirst) ReadChar();
             var start = _pos.Pos;
             var checkWord = false;
             var lastWord = string.Empty;
@@ -933,22 +933,26 @@ namespace ComLib.Lang.Parsing
                 {
                     // Case 1: letter
                     if (char.IsLetter(ch))
-                        buffer += ch;
+					{
+						buffer += ch;
+					}
 
-                    // Case 2: not a letter after prefix ( so turn off checking word )
-                    else if (string.IsNullOrEmpty(buffer))
-                        checkWord = false;
+					// Case 2: not a letter after prefix ( so turn off checking word )
+					else if (string.IsNullOrEmpty(buffer))
+					{
+						checkWord = false;
+					}
 
-                    // Case 3: buffer has letters but current char is not a letter so end.
-                    else
+					// Case 3: buffer has letters but current char is not a letter so end.
+					else
                     {
                         checkWord = false;
                         lastWord = buffer;
                         buffer = string.Empty;
                         if (ch == '\r')
                         {
-                            var nextchar = this.PeekChar();
-                            this.IncrementLine(nextchar == '\n');
+                            var nextchar = PeekChar();
+                            IncrementLine(nextchar == '\n');
                         }
                         if (lastWord == word)
                         {
@@ -959,8 +963,8 @@ namespace ComLib.Lang.Parsing
                 }
                 else if (ch == '\r')
                 {
-                    var nextchar = this.PeekChar();
-                    this.IncrementLine(nextchar == '\n');
+                    var nextchar = PeekChar();
+                    IncrementLine(nextchar == '\n');
                 }
                 else
                 {
@@ -995,9 +999,11 @@ namespace ComLib.Lang.Parsing
             if (c == '*' || c == '/' || c == '+' || c == '-' || c == '%' ||
                 c == '<' || c == '>' || c == '!' || c == '=' ||
                 c == '&' || c == '|')
-                return true;
+			{
+				return true;
+			}
 
-            return false;
+			return false;
         }
 
         /// <summary>
@@ -1043,7 +1049,7 @@ namespace ComLib.Lang.Parsing
         private static IDictionary<T, T> ToDictionary<T>(IList<T> items)
         {
             IDictionary<T, T> dict = new Dictionary<T, T>();
-            foreach (T item in items)
+            foreach (var item in items)
             {
                 dict[item] = item;
             }

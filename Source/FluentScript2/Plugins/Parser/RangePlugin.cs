@@ -27,7 +27,7 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public RangePlugin()
         {
-            this.StartTokens = new string[] { "$NumberToken" };
+            StartTokens = new string[] { "$NumberToken" };
         }
 
         /// <summary>
@@ -94,9 +94,9 @@ namespace ComLib.Lang.Plugins
         /// <param name="val"></param>
         public LRange(int min, int max)
         {
-            this.Min = min;
-            this.Max = max;
-            this.Type = new LRangeType();
+            Min = min;
+            Max = max;
+            Type = new LRangeType();
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace ComLib.Lang.Plugins
         /// <returns></returns>
         public override object Clone()
         {
-            return new LRange(this.Min, this.Max);
+            return new LRange(Min, Max);
         }
     }
 
@@ -135,9 +135,9 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public LRangeType()
         {
-            this.Name = "range";
-            this.FullName = "sys.range";
-            this.TypeVal = 40;
+            Name = "range";
+            FullName = "sys.range";
+            TypeVal = 40;
         }
     }
 }

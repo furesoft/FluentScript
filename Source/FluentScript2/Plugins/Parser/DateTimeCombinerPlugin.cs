@@ -66,7 +66,7 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public DateTimeCombinerPlugin()
         {
-            this._tokens = new string[] { "$DateToken" };
+            _tokens = new string[] { "$DateToken" };
         }
 
         /// <summary>

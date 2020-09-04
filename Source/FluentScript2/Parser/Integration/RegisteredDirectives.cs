@@ -18,8 +18,8 @@ namespace ComLib.Lang.Parsing
         /// </summary>
         public RegisteredDirectives()
         {
-            this._directives = new Dictionary<string, bool>();
-            this._directiveStack = new List<string>();
+            _directives = new Dictionary<string, bool>();
+            _directiveStack = new List<string>();
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace ComLib.Lang.Parsing
         /// <param name="directive">The directive to register</param>
         public void Register(string directive)
         {
-            this._directives[directive] = true;
+            _directives[directive] = true;
         }
 
         public void RegisterDelimited(string directivesDelimited)
@@ -41,7 +41,7 @@ namespace ComLib.Lang.Parsing
             {
                 foreach (var dir in dirs)
                 {
-                    this.Register(dir);
+                    Register(dir);
                 }
             }
         }
@@ -53,7 +53,7 @@ namespace ComLib.Lang.Parsing
         /// <returns></returns>
         public bool Contains(string directive)
         {
-            return this._directives.ContainsKey(directive);
+            return _directives.ContainsKey(directive);
         }
 
         /// <summary>

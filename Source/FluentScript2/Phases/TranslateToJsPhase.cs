@@ -14,7 +14,7 @@ namespace ComLib.Lang.Phases
         /// </summary>
         public TranslateToJsPhase()
         {
-            this.Name = "ast-translation-to-javascript";
+            Name = "ast-translation-to-javascript";
         }
 
         /// <summary>

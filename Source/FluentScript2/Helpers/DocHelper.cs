@@ -132,20 +132,32 @@ namespace ComLib.Lang.Helpers
             // Remove the @arg: from the argText
             var arg = new ArgAttribute();
             // NOTE: Do a simple split on "," for the 1st version of fluentscript.
-            string[] fields = argText.Split(',');
-            int totalFields = fields.Length;
+            var fields = argText.Split(',');
+            var totalFields = fields.Length;
             foreach (var field in fields)
             {
                 var tokens = field.Split(':');
 
                 // Name
-                string name = tokens[0].Trim().ToLower();
-                string value = tokens[1].Trim();
-                if (name == "name") arg.Name = value;
-                else if (name == "desc") arg.Desc = value;
-                else if (name == "alias") arg.Alias = value;
-                else if (name == "type") arg.Type = value;
-                else if (name == "examples")
+                var name = tokens[0].Trim().ToLower();
+                var value = tokens[1].Trim();
+                if (name == "name")
+				{
+					arg.Name = value;
+				}
+				else if (name == "desc")
+				{
+					arg.Desc = value;
+				}
+				else if (name == "alias")
+				{
+					arg.Alias = value;
+				}
+				else if (name == "type")
+				{
+					arg.Type = value;
+				}
+				else if (name == "examples")
                 {
                     ParseExamples(arg, value);
                 }
@@ -162,8 +174,8 @@ namespace ComLib.Lang.Helpers
         {
             var arg = new ArgAttribute();
             // NOTE: Do a simple split on "," for the 1st version of fluentscript.
-            string[] fields = argText.Split(',');
-            int totalFields = fields.Length;
+            var fields = argText.Split(',');
+            var totalFields = fields.Length;
 
             // Get the name.
             if (totalFields >= 1) arg.Name = fields[0].Trim();
@@ -200,9 +212,9 @@ namespace ComLib.Lang.Helpers
                 return example;
 
             // NOTE: Do a simple split on "," for the 1st version of fluentscript.
-            int ndxFirstComma = exText.IndexOf(",");
-            int ndxFirstQuote = exText.IndexOf("'");
-            int ndxLastQuote = exText.LastIndexOf("'");
+            var ndxFirstComma = exText.IndexOf(",");
+            var ndxFirstQuote = exText.IndexOf("'");
+            var ndxLastQuote = exText.LastIndexOf("'");
             example.Desc = exText.Substring(9, ndxFirstComma - 9).Trim();
             example.Code = exText.Substring(ndxFirstQuote + 1, (ndxLastQuote - ndxFirstQuote) - 1).Trim();
             return example;
@@ -211,10 +223,12 @@ namespace ComLib.Lang.Helpers
         private static void ParseExamples(ArgAttribute arg, string example)
         {
             if (!example.Contains("|"))
-                arg.Examples.Add(example);
-            else
+			{
+				arg.Examples.Add(example);
+			}
+			else
             {
-                string[] examples = example.Split('|');
+                var examples = example.Split('|');
                 foreach (var ex in examples)
                     arg.Examples.Add(ex.Trim());
             }

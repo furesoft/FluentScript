@@ -46,7 +46,7 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public DatePlugin()
         {
-            this.StartTokens = new string[]
+            StartTokens = new string[]
             {
                 "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec",
                 "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",

@@ -42,9 +42,9 @@ namespace ComLib.Lang.Plugins
             Scope = scope;
 
             if (!string.IsNullOrEmpty(scope))
-                this._text = "env." + scope + "." + name;
+                _text = "env." + scope + "." + name;
             else
-                this._text = "env." + name;
+                _text = "env." + name;
         }
 
         /// <summary>
@@ -121,8 +121,8 @@ namespace ComLib.Lang.Plugins
             // env.sys.<ident>
             // env.user.<ident>
             var takeoverToken = _lexer.LastTokenData;
-            int line = _lexer.State.Line;
-            int pos = _lexer.State.LineCharPosition;
+            var line = _lexer.State.Line;
+            var pos = _lexer.State.LineCharPosition;
 
             // First "."
             _lexer.Scanner.ReadChar();
@@ -130,9 +130,9 @@ namespace ComLib.Lang.Plugins
             // Read the next part.
             // Case 1: variable env.path
             // Case 2: sys or user env.user or env.sys
-            Token part = _lexer.ReadWord();
-            string varName = part.Text;
-            string scope = string.Empty;
+            var part = _lexer.ReadWord();
+            var varName = part.Text;
+            var scope = string.Empty;
 
             if (string.Compare(part.Text, "sys", StringComparison.InvariantCultureIgnoreCase) == 0
                 || string.Compare(part.Text, "user", StringComparison.InvariantCultureIgnoreCase) == 0)
@@ -147,8 +147,8 @@ namespace ComLib.Lang.Plugins
                 part = _lexer.ReadWord();
                 varName = part.Text;
             }
-            string finalText = varName;
-            EnvToken envToken = new EnvToken(scope, varName);
+            var finalText = varName;
+            var envToken = new EnvToken(scope, varName);
             var t = new TokenData() { Token = envToken, Line = line, LineCharPos = pos };
             _lexer.ParsedTokens.Add(t);
             return new Token[] { envToken };
@@ -166,8 +166,8 @@ namespace ComLib.Lang.Plugins
         /// <returns></returns>
         public EnvPlugin()
         {
-            this.IsAutoMatched = true;
-            this.StartTokens = new string[] { "$EnvToken" };
+            IsAutoMatched = true;
+            StartTokens = new string[] { "$EnvToken" };
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace ComLib.Lang.Plugins
         /// <returns></returns>
         public override Expr Parse()
         {
-            EnvToken token = _tokenIt.NextToken.Token as EnvToken;
+            var token = _tokenIt.NextToken.Token as EnvToken;
             var expr = new EnvExpr(token.Scope, token.VarName);
             _tokenIt.Advance();
             return expr;
@@ -217,7 +217,7 @@ namespace ComLib.Lang.Plugins
                 val = System.Environment.GetEnvironmentVariable(_varName);
                 return new LString(val);
             }
-            EnvironmentVariableTarget target = (_scope == "sys")
+            var target = (_scope == "sys")
                                                 ? EnvironmentVariableTarget.Machine
                                                 : EnvironmentVariableTarget.User;
             val = System.Environment.GetEnvironmentVariable(_varName, target);

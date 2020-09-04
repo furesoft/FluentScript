@@ -17,8 +17,8 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public LambdaPlugin()
         {
-            this.Precedence = 1;
-            this.ConfigureAsSystemStatement(true, false, "function");
+            Precedence = 1;
+            ConfigureAsSystemStatement(true, false, "function");
         }
 
         /// <summary>
@@ -85,14 +85,14 @@ namespace ComLib.Lang.Plugins
             funcSymbol.FuncExpr = stmt;
 
             // 2. Push the current scope.
-            stmt.SymScope = this.Ctx.Symbols.Current;
-            this.Ctx.Symbols.Push(new SymbolsFunction(string.Empty), true);
+            stmt.SymScope = Ctx.Symbols.Current;
+            Ctx.Symbols.Push(new SymbolsFunction(string.Empty), true);
 
             // 3. Parse the function block
             _parser.ParseBlock(stmt);
 
             // 4. Pop the symbols scope.
-            this.Ctx.Symbols.Pop();
+            Ctx.Symbols.Pop();
         }
 
         /// <summary>

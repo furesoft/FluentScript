@@ -141,8 +141,8 @@ namespace ComLib.Lang.Types
         /// <returns></returns>
         public T GetByStringMemberAs<T>(LObject target, string name)
         {
-            object result = GetByStringMember(target, name);
-            T returnVal = (T)result;
+            var result = GetByStringMember(target, name);
+            var returnVal = (T)result;
             return returnVal;
         }
 

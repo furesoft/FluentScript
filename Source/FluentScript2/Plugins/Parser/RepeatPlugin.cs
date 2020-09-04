@@ -68,11 +68,11 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public RepeatPlugin()
         {
-            this.StartTokens = new string[] { "repeat" };
-            this.IsStatement = true;
-            this.IsAutoMatched = true;
-            this.IsContextFree = false;
-            this.Precedence = 50;
+            StartTokens = new string[] { "repeat" };
+            IsStatement = true;
+            IsAutoMatched = true;
+            IsContextFree = false;
+            Precedence = 50;
 
             _terminatorForTo = new Dictionary<Token, bool>();
             _terminatorForTo[TokenBuilder.ToIdentifier("to")] = true;
@@ -137,7 +137,7 @@ namespace ComLib.Lang.Plugins
             Expr startVal = null;
             Expr endVal = null;
             Expr incVal = null;
-            Operator op = Operator.LessThanEqual;
+            var op = Operator.LessThanEqual;
 
             // Case 1: repeat to 10
             if (_tokenIt.NextToken.Token.Text == "to")

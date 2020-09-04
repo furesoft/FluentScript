@@ -19,14 +19,14 @@ namespace ComLib.Lang.Parsing.MetaPlugins
         /// <param name="vals"></param>
         public TokenMatch Init(string varname, int tokenIndex, bool required, string name, string type, int min, int max, string[] vals)
         {
-            this.VarName = varname;
-            this.TokenIndex = tokenIndex;
-            this.IsRequired = required;
-            this.Name = name;
-            this.TokenType = type;
-            this.Min = min;
-            this.Max = max;
-            this.Values = vals;
+            VarName = varname;
+            TokenIndex = tokenIndex;
+            IsRequired = required;
+            Name = name;
+            TokenType = type;
+            Min = min;
+            Max = max;
+            Values = vals;
             return this;
         }
 
@@ -85,22 +85,22 @@ namespace ComLib.Lang.Parsing.MetaPlugins
 
         public bool IsMatchingType(Token token)
         {
-            if (string.IsNullOrEmpty(this.TokenType))
+            if (string.IsNullOrEmpty(TokenType))
                 return false;
-            if (this.TokenType == "@number" && token.Kind == TokenKind.LiteralNumber)
+            if (TokenType == "@number" && token.Kind == TokenKind.LiteralNumber)
                 return true;
-            if (this.TokenType == "@time" && token.Kind == TokenKind.LiteralTime)
+            if (TokenType == "@time" && token.Kind == TokenKind.LiteralTime)
                 return true;
-            if (this.TokenType == "@word" && token.Kind == TokenKind.Ident)
+            if (TokenType == "@word" && token.Kind == TokenKind.Ident)
                 return true;
             return false;
         }
 
         public bool IsMatchingValue(Token token)
         {
-            if (this.Values == null || this.Values.Length == 0)
+            if (Values == null || Values.Length == 0)
                 return true;
-            return this.Values.Contains(token.Text);
+            return Values.Contains(token.Text);
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
         /// <returns></returns>
         public virtual int TotalRequired()
         {
-            if (this.IsRequired && this.TokenType != "@exprTerminators")
+            if (IsRequired && TokenType != "@exprTerminators")
                 return 1;
             return 0;
         }

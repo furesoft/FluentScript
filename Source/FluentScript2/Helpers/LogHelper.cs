@@ -25,7 +25,7 @@ namespace ComLib.Lang.Helpers
         {
             if (!settings.EnablePrinting) return string.Empty;
 
-            string message = BuildMessage(exp.ParamList);
+            var message = BuildMessage(exp.ParamList);
             if (printline) Console.WriteLine(message);
             else Console.Write(message);
             return message;
@@ -54,9 +54,9 @@ namespace ComLib.Lang.Helpers
         /// <returns></returns>
         public static string BuildMessage(List<object> paramList)
         {
-            string val = string.Empty;
-            bool hasFormat = false;
-            string format = string.Empty;
+            var val = string.Empty;
+            var hasFormat = false;
+            var format = string.Empty;
             if (paramList != null && paramList.Count > 0)
             {
                 // Check for 2 arguments which reflects formatting the printing.

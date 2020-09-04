@@ -218,7 +218,7 @@ namespace ComLib.Lang.Helpers
                 return;
 
             // Convert types from c# types fluentscript compatible types.
-            for (int ndx = 0; ndx < args.Count; ndx++)
+            for (var ndx = 0; ndx < args.Count; ndx++)
             {
                 var val = args[ndx];
 
@@ -237,7 +237,7 @@ namespace ComLib.Lang.Helpers
 
             // Convert types from c# types fluentscript compatible types.
             var convertedItems = new object[args.Length];
-            for (int ndx = 0; ndx < args.Length; ndx++)
+            for (var ndx = 0; ndx < args.Length; ndx++)
             {
                 var val = args[ndx];
                 if (val is LObject)
@@ -302,7 +302,7 @@ namespace ComLib.Lang.Helpers
             if (parameters.Length == 0) return hostLangArgs.ToArray();
 
             // REQUIREMENT: Number of values must match # of parameters in method.
-            for (int ndx = 0; ndx < parameters.Length; ndx++)
+            for (var ndx = 0; ndx < parameters.Length; ndx++)
             {
                 var param = parameters[ndx];
                 var sourceArg = args[ndx] as LObject;
@@ -380,7 +380,7 @@ namespace ComLib.Lang.Helpers
         {
             if (obj == null) throw new ArgumentNullException("obj");
 
-            Type type = obj.GetType();
+            var type = obj.GetType();
             if (type == typeof(int)) return true;
             if (type == typeof(long)) return true;
             if (type == typeof(double)) return true;
@@ -398,8 +398,8 @@ namespace ComLib.Lang.Helpers
         public static int[] ConvertToInts(object[] parameters)
         {
             // Convert all parameters to int
-            int[] args = new int[parameters.Length];
-            for (int ndx = 0; ndx < parameters.Length; ndx++)
+            var args = new int[parameters.Length];
+            for (var ndx = 0; ndx < parameters.Length; ndx++)
             {
                 args[ndx] = Convert.ToInt32(parameters[ndx]);
             }
@@ -488,7 +488,7 @@ namespace ComLib.Lang.Helpers
             LangTypeHelper.ValidateUnits(u1, u2);
 
             // Now convert the values to their base value.
-            double totalBase = u1.BaseValue + u2.BaseValue;
+            var totalBase = u1.BaseValue + u2.BaseValue;
             var unit = new LUnit(totalBase);
             unit.BaseValue = totalBase;
             unit.Group = u1.Group;

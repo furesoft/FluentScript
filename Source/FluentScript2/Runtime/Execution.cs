@@ -238,10 +238,19 @@ namespace ComLib.Lang.Runtime
             var dayName = expr.Name.ToLower();
 
             // 1. Determine date/day
-            if (dayName == "today") date = DateTime.Today;
-            else if (dayName == "yesterday") date = DateTime.Today.AddDays(-1);
-            else if (dayName == "tomorrow") date = DateTime.Today.AddDays(1);
-            else if (dayName == "monday") { isDayOfWeek = true; dayOfweek = DayOfWeek.Monday; }
+            if (dayName == "today")
+			{
+				date = DateTime.Today;
+			}
+			else if (dayName == "yesterday")
+			{
+				date = DateTime.Today.AddDays(-1);
+			}
+			else if (dayName == "tomorrow")
+			{
+				date = DateTime.Today.AddDays(1);
+			}
+			else if (dayName == "monday") { isDayOfWeek = true; dayOfweek = DayOfWeek.Monday; }
             else if (dayName == "tuesday") { isDayOfWeek = true; dayOfweek = DayOfWeek.Tuesday; }
             else if (dayName == "wednesday") { isDayOfWeek = true; dayOfweek = DayOfWeek.Wednesday; }
             else if (dayName == "thursday") { isDayOfWeek = true; dayOfweek = DayOfWeek.Thursday; }
@@ -286,9 +295,9 @@ namespace ComLib.Lang.Runtime
             var num = 0.0;
 
             // Case 1: daysAhead days away
-            if (this.Ctx.Symbols.Contains(name))
+            if (Ctx.Symbols.Contains(name))
             {
-                var variable = this.Ctx.Memory.Get<object>(name) as LObject;
+                var variable = Ctx.Memory.Get<object>(name) as LObject;
                 if (variable.Type != LTypes.Number)
                 {
                     throw new LangException("TypeError", "Days away must of type of number", expr.Ref.ScriptName, expr.Ref.Line, expr.Ref.CharPos);
@@ -303,7 +312,7 @@ namespace ComLib.Lang.Runtime
             }
 
             // Now convert to relative "days away".
-            TimeSpan duration = TimeSpan.MinValue;
+            var duration = TimeSpan.MinValue;
             var mode = expr.Mode.ToLower();
             if (mode == "days")
             {
@@ -339,7 +348,7 @@ namespace ComLib.Lang.Runtime
         {
             // Case 1: If is true
             var result = expr.Condition.Evaluate(this) as LObject;
-            bool execIf = EvalHelper.IsTrue(result);
+            var execIf = EvalHelper.IsTrue(result);
             object returnVal = LObjects.Null;
             if (execIf)
             {
@@ -388,7 +397,7 @@ namespace ComLib.Lang.Runtime
             {
                 // Set the next value of "x" in for(x in y).
                 var current = enumerator.Current is LObject ? enumerator.Current : LangTypeHelper.ConvertToLangClass(enumerator.Current);
-                this.Ctx.Memory.SetValue(expr.VarName, current);
+                Ctx.Memory.SetValue(expr.VarName, current);
 
                 if (expr.Statements != null && expr.Statements.Count > 0)
                 {
@@ -396,7 +405,7 @@ namespace ComLib.Lang.Runtime
                     {
                         stmt.Evaluate(this);
 
-                        this.Ctx.Limits.CheckLoop(expr);
+                        Ctx.Limits.CheckLoop(expr);
 
                         // If Break statment executed.
                         if (expr.DoBreakLoop)
@@ -406,13 +415,18 @@ namespace ComLib.Lang.Runtime
                         }
                         // Continue statement.
                         else if (expr.DoContinueLoop)
-                            break;
-                    }
+						{
+							break;
+						}
+					}
                 }
-                else break;
+                else
+				{
+					break;
+				}
 
-                // Break loop here.
-                if (expr.DoContinueRunning == false)
+				// Break loop here.
+				if (expr.DoContinueRunning == false)
                     break;
 
                 // Increment.
@@ -472,8 +486,8 @@ namespace ComLib.Lang.Runtime
             var parent = expr.FindParent<FunctionExpr>();
             if (parent == null) throw new LangException("syntax error", "unable to return, parent not found", string.Empty, 0);
 
-            object result = expr.Exp == null ? LObjects.Null : expr.Exp.Evaluate(this);
-            bool hasReturnVal = expr.Exp != null;
+            var result = expr.Exp == null ? LObjects.Null : expr.Exp.Evaluate(this);
+            var hasReturnVal = expr.Exp != null;
             parent.HasReturnValue = hasReturnVal;
             parent.ReturnValue = result;
             parent.ContinueRunning = false;
@@ -505,9 +519,9 @@ namespace ComLib.Lang.Runtime
             var catchScopePopped = false;
             try
             {
-                this.Ctx.Memory.Push();
+                Ctx.Memory.Push();
                 LangHelper.Evaluate(expr.Statements, expr, this);
-                this.Ctx.Memory.Pop();
+                Ctx.Memory.Pop();
                 tryScopePopped = true;
             }
             // Force the langlimit excpetion to propegate
@@ -522,28 +536,28 @@ namespace ComLib.Lang.Runtime
             }
             catch (Exception ex)
             {
-                this.Ctx.Limits.CheckExceptions(expr);
+                Ctx.Limits.CheckExceptions(expr);
 
                 // Pop the try scope.
-                if (!tryScopePopped) this.Ctx.Memory.Pop();
+                if (!tryScopePopped) Ctx.Memory.Pop();
 
                 // Push the scope in the catch block
-                this.Ctx.Memory.Push();
+                Ctx.Memory.Push();
                 var lException = LangTypeHelper.ConvertToLangClass(LError.FromException(ex));
-                this.Ctx.Memory.SetValue(expr.ErrorName, lException);
+                Ctx.Memory.SetValue(expr.ErrorName, lException);
 
                 // Run statements in catch block.
                 if (expr.Catch != null && expr.Catch.Statements.Count > 0)
                     LangHelper.Evaluate(expr.Catch.Statements, expr.Catch, this);
 
                 // Pop the catch scope.
-                this.Ctx.Memory.Pop();
+                Ctx.Memory.Pop();
                 catchScopePopped = true;
             }
             finally
             {
                 // Pop the catch scope in case there was an error.
-                if (!catchScopePopped) this.Ctx.Memory.Remove(expr.ErrorName);
+                if (!catchScopePopped) Ctx.Memory.Remove(expr.ErrorName);
             }
             return LObjects.Null;
         }
@@ -567,7 +581,7 @@ namespace ComLib.Lang.Runtime
                     {
                         stmt.Evaluate(this);
 
-                        this.Ctx.Limits.CheckLoop(expr);
+                        Ctx.Limits.CheckLoop(expr);
 
                         // If Break statment executed.
                         if (expr.DoBreakLoop)
@@ -577,13 +591,18 @@ namespace ComLib.Lang.Runtime
                         }
                         // Continue statement.
                         else if (expr.DoContinueLoop)
-                            break;
-                    }
+						{
+							break;
+						}
+					}
                 }
-                else break;
+                else
+				{
+					break;
+				}
 
-                // Break loop here.
-                if (expr.DoContinueRunning == false)
+				// Break loop here.
+				if (expr.DoContinueRunning == false)
                     break;
 
                 result = expr.Condition.Evaluate(this) as LObject;
@@ -613,7 +632,7 @@ namespace ComLib.Lang.Runtime
                     {
                         stmt.Evaluate(this);
 
-                        this.Ctx.Limits.CheckLoop(expr);
+                        Ctx.Limits.CheckLoop(expr);
 
                         // If Break statment executed.
                         if (expr.DoBreakLoop)
@@ -623,13 +642,18 @@ namespace ComLib.Lang.Runtime
                         }
                         // Continue statement.
                         else if (expr.DoContinueLoop)
-                            break;
-                    }
+						{
+							break;
+						}
+					}
                 }
-                else break;
+                else
+				{
+					break;
+				}
 
-                // Break loop here.
-                if (expr.DoContinueRunning == false)
+				// Break loop here.
+				if (expr.DoContinueRunning == false)
                     break;
 
                 expr.Increment.Evaluate(this);
@@ -686,7 +710,7 @@ namespace ComLib.Lang.Runtime
 
                 foreach (var exp in arrayExprs)
                 {
-                    object result = exp == null ? null : exp.Evaluate(this);
+                    var result = exp == null ? null : exp.Evaluate(this);
                     items.Add(result);
                 }
                 var array = new LArray(items);
@@ -765,7 +789,7 @@ namespace ComLib.Lang.Runtime
                 var strright = ((LString)right).Value;
 
                 // Check string limit.
-                this.Ctx.Limits.CheckStringLength(node, strleft, strright);
+                Ctx.Limits.CheckStringLength(node, strleft, strright);
                 result = new LString(strleft + strright);
             }
 
@@ -801,7 +825,7 @@ namespace ComLib.Lang.Runtime
             //else if (left.Type == LTypes.Unit && right.Type == LTypes.Unit)
             else if (left.Type.TypeVal == TypeConstants.Unit && right.Type.TypeVal == TypeConstants.Unit)
             {
-                result = EvalHelper.CalcUnits(node, (LUnit)((LClass)left).Value, (LUnit)((LClass)right).Value, op, this.Ctx.Units);
+                result = EvalHelper.CalcUnits(node, (LUnit)((LClass)left).Value, (LUnit)((LClass)right).Value, op, Ctx.Units);
             }
             else
             {
@@ -880,7 +904,7 @@ namespace ComLib.Lang.Runtime
             {
                 var anyOf = ((AnyOfExpr)expr.Right);
                 anyOf.CompareExpr = expr.Left;
-                return this.VisitAnyOf(anyOf);
+                return VisitAnyOf(anyOf);
             }
 
             var left = (LObject)expr.Left.Evaluate(this);
@@ -946,9 +970,9 @@ namespace ComLib.Lang.Runtime
         {
             // Case 1: memory variable has highest precendence
             var name = expr.Name;
-            if (this.Ctx.Memory.Contains(name))
+            if (Ctx.Memory.Contains(name))
             {
-                var val = this.Ctx.Memory.Get<object>(name);
+                var val = Ctx.Memory.Get<object>(name);
                 return val;
             }
             // Case 2: check function now.
@@ -972,7 +996,7 @@ namespace ComLib.Lang.Runtime
             foreach (var pair in mapExprs)
             {
                 var expression = pair.Item2;
-                object result = expression == null ? null : expression.Evaluate(this);
+                var result = expression == null ? null : expression.Evaluate(this);
                 dictionary[pair.Item1] = result;
             }
             var map = new LMap(dictionary);
@@ -985,7 +1009,7 @@ namespace ComLib.Lang.Runtime
         /// <returns></returns>
         public object VisitMemberAccess(MemberAccessExpr expr)
         {
-            var memberAccess = MemberHelper.GetMemberAccess(expr, this.Ctx, expr.VarExp, expr.MemberName, this);
+            var memberAccess = MemberHelper.GetMemberAccess(expr, Ctx, expr.VarExp, expr.MemberName, this);
 
             if (expr.IsAssignment)
                 return memberAccess;
@@ -998,12 +1022,12 @@ namespace ComLib.Lang.Runtime
             // 2. It's done here instead because there is no function/method call on a property.
             if (memberAccess.IsPropertyAccessOnBuiltInType())
             {
-                var result = FunctionHelper.CallMemberOnBasicType(this.Ctx, expr, memberAccess, null, null, this);
+                var result = FunctionHelper.CallMemberOnBasicType(Ctx, expr, memberAccess, null, null, this);
                 return result;
             }
             if (memberAccess.IsPropertyAccessOnClass() || memberAccess.IsFieldAccessOnClass())
             {
-                var result = FunctionHelper.CallMemberOnClass(this.Ctx, expr, memberAccess, null, null, this);
+                var result = FunctionHelper.CallMemberOnClass(Ctx, expr, memberAccess, null, null, this);
                 return result;
             }
             if (memberAccess.IsModuleAccess())
@@ -1044,7 +1068,7 @@ namespace ComLib.Lang.Runtime
             {
                 // TODO: Move this check to Semacts later
                 var langType = LTypesLookup.GetLType(expr.TypeName);
-                var methods = this.Ctx.Methods.Get(langType);
+                var methods = Ctx.Methods.Get(langType);
                 var canCreate = methods.CanCreateFromArgs(constructorArgs);
                 if (!canCreate)
                     throw ExceptionHelper.BuildRunTimeException(expr, "Can not create " + expr.TypeName + " from parameters");
@@ -1055,7 +1079,7 @@ namespace ComLib.Lang.Runtime
             }
             // CASE 2: Custom types e.g. custom classes.
             var hostLangArgs = LangTypeHelper.ConvertToArrayOfHostLangValues(constructorArgs);
-            var instance = this.Ctx.Types.Create(expr.TypeName, hostLangArgs);
+            var instance = Ctx.Types.Create(expr.TypeName, hostLangArgs);
             var obj = LangTypeHelper.ConvertToLangClass(instance);
             return obj;
         }
@@ -1103,7 +1127,7 @@ namespace ComLib.Lang.Runtime
             if (expr.Expressions == null || expr.Expressions.Count == 0)
                 return string.Empty;
 
-            string total = "";
+            var total = "";
             foreach (var exp in expr.Expressions)
             {
                 if (exp != null)
@@ -1161,7 +1185,7 @@ namespace ComLib.Lang.Runtime
             // CASE 1: Exp is variable -> internal/external script. "getuser()".
             if (expr.NameExp.IsNodeType(NodeTypes.SysVariable))
             {
-                return FunctionHelper.CallFunction(this.Ctx, expr, null, true, this);
+                return FunctionHelper.CallFunction(Ctx, expr, null, true, this);
             }
 
             // At this point, is a method call on an object.
@@ -1174,13 +1198,13 @@ namespace ComLib.Lang.Runtime
             var maccess = member as MemberAccess;
             if (!IsMemberCall(maccess)) return result;
 
-            this.Ctx.State.Stack.Push(callStackName, expr);
+            Ctx.State.Stack.Push(callStackName, expr);
             // CASE 2: Module.Function
             if (maccess.Mode == MemberMode.FunctionScript && maccess.Expr != null)
             {
                 var fexpr = maccess.Expr as FunctionExpr;
                 var resolveParams = !expr.RetainEvaluatedParams;
-                result = FunctionHelper.CallFunctionInScript(this.Ctx, this, fexpr.Meta.Name, fexpr, expr.ParamListExpressions, expr.ParamList, resolveParams);
+                result = FunctionHelper.CallFunctionInScript(Ctx, this, fexpr.Meta.Name, fexpr, expr.ParamListExpressions, expr.ParamList, resolveParams);
             }
             // CASE 3: object "." method call from script is a external/internal function e.g log.error -> external c# callback.
             else if (maccess.IsInternalExternalFunctionCall())
@@ -1190,15 +1214,15 @@ namespace ComLib.Lang.Runtime
             // CASE 4: Method call / Property on Language types
             else if (maccess.Type != null)
             {
-                result = FunctionHelper.CallMemberOnBasicType(this.Ctx, expr, maccess, expr.ParamListExpressions, expr.ParamList, this);
+                result = FunctionHelper.CallMemberOnBasicType(Ctx, expr, maccess, expr.ParamListExpressions, expr.ParamList, this);
             }
             // CASE 5: Member call via "." : either static or instance method call. e.g. Person.Create() or instance1.FullName() e.g.
             else if (maccess.Mode == MemberMode.CustObjMethodStatic || maccess.Mode == MemberMode.CustObjMethodInstance)
             {
-                result = FunctionHelper.CallMemberOnClass(this.Ctx, expr, maccess, expr.ParamListExpressions, expr.ParamList, this);
+                result = FunctionHelper.CallMemberOnClass(Ctx, expr, maccess, expr.ParamListExpressions, expr.ParamList, this);
             }
             // Pop the function name off the call stack.
-            this.Ctx.State.Stack.Pop();
+            Ctx.State.Stack.Pop();
             return result;
         }
 
@@ -1236,12 +1260,12 @@ namespace ComLib.Lang.Runtime
 
         public void VisitBlockEnter(Expr expr)
         {
-            this.Ctx.Memory.Push();
+            Ctx.Memory.Push();
         }
 
         public void VisitBlockExit(Expr expr)
         {
-            this.Ctx.Memory.Pop();
+            Ctx.Memory.Pop();
         }
 
         #endregion Expressions
@@ -1266,8 +1290,11 @@ namespace ComLib.Lang.Runtime
                 || (maccess.Mode == MemberMode.MethodMember || maccess.Mode == MemberMode.PropertyMember && maccess.Type != null)
                 || maccess.Mode == MemberMode.CustObjMethodInstance || maccess.Mode == MemberMode.CustObjMethodStatic
               )
-                return true;
-            return false;
+			{
+				return true;
+			}
+
+			return false;
         }
 
         private void InitializeFunctionCall(FunctionExpr expr)
@@ -1298,11 +1325,13 @@ namespace ComLib.Lang.Runtime
             // 2. Check if there is an parameter named "arguments"
             var hasParameterNamedArguments = false;
             if (expr.Meta.Arguments != null && expr.Meta.Arguments.Count > 0)
-                if (expr.Meta.ArgumentsLookup.ContainsKey("arguments"))
+			{
+				if (expr.Meta.ArgumentsLookup.ContainsKey("arguments"))
                     hasParameterNamedArguments = true;
+			}
 
-            // 3. Get the symbolscope of the inside of the function and see if any statements.
-            ISymbols symscope = null;
+			// 3. Get the symbolscope of the inside of the function and see if any statements.
+			ISymbols symscope = null;
             var hasStatements = expr.Statements != null && expr.Statements.Count > 0;
             if (hasStatements)
                 symscope = expr.Statements[0].SymScope;
@@ -1321,7 +1350,7 @@ namespace ComLib.Lang.Runtime
                 }
 
                 // 5. Now, set the memory value of the parameter.
-                this.Ctx.Memory.SetValue(arg.Name, val);
+                Ctx.Memory.SetValue(arg.Name, val);
 
                 // 6. Finally, update the symbol type
                 if (hasStatements)

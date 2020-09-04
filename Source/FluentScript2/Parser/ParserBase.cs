@@ -176,7 +176,7 @@ namespace ComLib.Lang.Parsing
 
             // Store the error.
             var ex = _tokenIt.BuildSyntaxUnexpectedTokenException();
-            this._parseErrors.Add(ex);
+            _parseErrors.Add(ex);
 
             // Now advance to next token to continue parsing.
             _tokenIt.Advance();
@@ -187,8 +187,8 @@ namespace ComLib.Lang.Parsing
         /// </summary>
         public void AddError(TokenData token, string error)
         {
-            var ex = new LangException("Parse", error, this._scriptPath, token.Line, token.LineCharPos);
-            this._parseErrors.Add(ex);
+            var ex = new LangException("Parse", error, _scriptPath, token.Line, token.LineCharPos);
+            _parseErrors.Add(ex);
         }
 
         #endregion Public methods
@@ -290,7 +290,7 @@ namespace ComLib.Lang.Parsing
             // Case 2:
             else if (text.Contains("@scriptmeta-end") || text.Contains(" @scriptmeta-end"))
             {
-                this.ClearCommentHandling();
+                ClearCommentHandling();
             }
             if (_hasSummaryComments)
                 _comments.Add(token);
@@ -346,7 +346,7 @@ namespace ComLib.Lang.Parsing
                 }
             }
 
-            this.ClearCommentHandling();
+            ClearCommentHandling();
         }
 
         private void ClearCommentHandling()

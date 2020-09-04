@@ -24,10 +24,15 @@ namespace ComLib.Lang.Helpers
                 return false;
 
             foreach (var paramExpr in paramListExpressions)
-                if (paramExpr.IsNodeType(NodeTypes.SysNamedParameter))
-                    if (((NamedParameterExpr)paramExpr).Name == paramName)
+			{
+				if (paramExpr.IsNodeType(NodeTypes.SysNamedParameter))
+				{
+					if (((NamedParameterExpr)paramExpr).Name == paramName)
                         return true;
-            return false;
+				}
+			}
+
+			return false;
         }
 
         /// <summary>
@@ -41,7 +46,7 @@ namespace ComLib.Lang.Helpers
             paramList.Clear();
             foreach (var exp in paramListExpressions)
             {
-                object val = exp.Evaluate(visitor);
+                var val = exp.Evaluate(visitor);
                 paramList.Add(val);
             }
         }
@@ -64,8 +69,10 @@ namespace ComLib.Lang.Helpers
                     paramList.Add(converted);
                 }
                 else
-                    paramList.Add(val);
-            }
+				{
+					paramList.Add(val);
+				}
+			}
         }
 
         /// <summary>
@@ -84,7 +91,7 @@ namespace ComLib.Lang.Helpers
                 return;
 
             // 1. Determine if named params exist.
-            bool hasNamedParams = ParamHelper.HasNamedParameters(paramListExpressions);
+            var hasNamedParams = ParamHelper.HasNamedParameters(paramListExpressions);
 
             // 2. If no named parameters, simply eval parameters and return.
             if (!hasNamedParams)
@@ -98,13 +105,13 @@ namespace ComLib.Lang.Helpers
             paramList.Clear();
 
             // 2. Set all args to null. [null, null, null, null, null]
-            for (int ndx = 0; ndx < totalParams; ndx++)
+            for (var ndx = 0; ndx < totalParams; ndx++)
                 paramList.Add(LObjects.Null);
 
             // 3. Now go through each argument and replace the nulls with actual argument values.
             // Each null should be replaced at the correct index.
             // [true, 20.68, new Date(2012, 8, 10), null, 'fluentscript']
-            for (int ndx = 0; ndx < paramListExpressions.Count; ndx++)
+            for (var ndx = 0; ndx < paramListExpressions.Count; ndx++)
             {
                 var exp = paramListExpressions[ndx];
 
@@ -112,19 +119,19 @@ namespace ComLib.Lang.Helpers
                 if (exp.IsNodeType(NodeTypes.SysNamedParameter))
                 {
                     var namedParam = exp as NamedParameterExpr;
-                    object val = namedParam.Visit(visitor);
+                    var val = namedParam.Visit(visitor);
                     var contains = containsLookup(namedParam);
                     if (!contains)
                         throw ExceptionHelper.BuildRunTimeException(namedParam, "Named parameter : " + namedParam.Name + " does not exist");
 
-                    int argIndex = indexLookup(namedParam);
+                    var argIndex = indexLookup(namedParam);
                     paramList[argIndex] = val;
                 }
                 else
                 {
                     // 5. Expect the position of non-named args should be valid.
                     // TODO: Semantic analysis is required here once Lint check feature is added.
-                    object val = exp.Visit(visitor);
+                    var val = exp.Visit(visitor);
                     paramList[ndx] = val;
                 }
             }
@@ -139,7 +146,7 @@ namespace ComLib.Lang.Helpers
         /// <param name="visitor">The visitor that will evaulate the expressions.</param>
         public static void ResolveParametersForScriptFunction(FunctionMetaData meta, List<Expr> paramListExpressions, List<object> paramList, IAstVisitor visitor)
         {
-            int totalParams = meta.Arguments == null ? 0 : meta.Arguments.Count;
+            var totalParams = meta.Arguments == null ? 0 : meta.Arguments.Count;
             ResolveParameters(totalParams, paramListExpressions, paramList,
                 namedParam => meta.ArgumentsLookup[namedParam.Name].Index,
                 namedParam => meta.ArgumentsLookup.ContainsKey(namedParam.Name), visitor);

@@ -56,7 +56,7 @@ namespace ComLib.Lang.Parsing
         /// <param name="creator"></param>
         public void Register(Type type, Func<object> creator)
         {
-            bool isBasicType = false;
+            var isBasicType = false;
             if (type == typeof(DateTime))
             {
                 isBasicType = true;
@@ -104,7 +104,7 @@ namespace ComLib.Lang.Parsing
         public object Create(string nameOrFullName, object[] args = null)
         {
             var registeredType = _types[nameOrFullName];
-            object customType = args == null
+            var customType = args == null
                               ? Activator.CreateInstance(registeredType.DataType)
                               : Activator.CreateInstance(registeredType.DataType, args);
             return customType;

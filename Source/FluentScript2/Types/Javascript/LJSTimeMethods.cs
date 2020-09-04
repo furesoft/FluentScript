@@ -78,7 +78,7 @@ namespace ComLib.Lang.Types
         public override void OnRegistered()
         {
             // Associated the javascript Date type name "Date" to LDate type name : "sys.datetime".
-            LTypesLookup.RegisterAlias(this.DataType, "Time", "Time");
+            LTypesLookup.RegisterAlias(DataType, "Time", "Time");
         }
 
         /// <summary>

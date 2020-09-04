@@ -7,106 +7,106 @@ using System.Transactions;
 
 namespace Terminal
 {
-    public class RollBackStatement : Expr
-    {
-        public RollBackStatement()
-        {
-            this.Nodetype = "rollback";
-        }
+	public class RollBackStatement : Expr
+	{
+		public RollBackStatement()
+		{
+			Nodetype = "rollback";
+		}
 
-        public override object Evaluate(IAstVisitor visitor)
-        {
-            this.Ctx.Memory.SetValue("completed", new LBool(false), true);
+		public override object Evaluate(IAstVisitor visitor)
+		{
+			Ctx.Memory.SetValue("completed", new LBool(false), true);
 
-            return null;
-        }
-    }
+			return null;
+		}
+	}
 
-    public class TransactionStatement : BlockExpr
-    {
-        public override object Evaluate(IAstVisitor visitor)
-        {
-            var scope = new TransactionScope();
-            try
-            {
-                var result = this.ExecuteBlock(visitor);
+	public class TransactionStatement : BlockExpr
+	{
+		public override object Evaluate(IAstVisitor visitor)
+		{
+			var scope = new TransactionScope();
+			try
+			{
+				var result = ExecuteBlock(visitor);
 
-                return result;
-            }
-            finally
-            {
-                scope.Dispose();
-                System.Console.WriteLine("Transaction commited");
-            }
-        }
-    }
+				return result;
+			}
+			finally
+			{
+				scope.Dispose();
+				System.Console.WriteLine("Transaction commited");
+			}
+		}
+	}
 
-    public class RollBackPlugin : ExprPlugin
-    {
-        public RollBackPlugin()
-        {
-            this.ConfigureAsSystemStatement(false, true, "rollback");
-        }
+	public class RollBackPlugin : ExprPlugin
+	{
+		public RollBackPlugin()
+		{
+			ConfigureAsSystemStatement(false, true, "rollback");
+		}
 
-        public override string Grammer => "rollback";
+		public override string Grammer => "rollback";
 
-        public override Expr Parse()
-        {
-            var stmt = new RollBackStatement();
-            // transaction {  }
-            //_tokenIt.Expect(Transaction);
-            var id = _tokenIt.ExpectIdText("rollback");
+		public override Expr Parse()
+		{
+			var stmt = new RollBackStatement();
+			// transaction {  }
+			//_tokenIt.Expect(Transaction);
+			var id = _tokenIt.ExpectIdText("rollback");
 
-            return stmt;
-        }
-    }
+			return stmt;
+		}
+	}
 
-    public class TransactionPlugin : ExprBlockPlugin
-    {
-        /// <summary>
-        /// Intialize.
-        /// </summary>
-        public TransactionPlugin()
-        {
-            this.ConfigureAsSystemStatement(true, true, "transaction");
-        }
+	public class TransactionPlugin : ExprBlockPlugin
+	{
+		/// <summary>
+		/// Intialize.
+		/// </summary>
+		public TransactionPlugin()
+		{
+			ConfigureAsSystemStatement(true, true, "transaction");
+		}
 
-        /// <summary>
-        /// The grammer for the function declaration
-        /// </summary>
-        public override string Grammer
-        {
-            get { return "transaction <statementblock>"; }
-        }
+		/// <summary>
+		/// The grammer for the function declaration
+		/// </summary>
+		public override string Grammer
+		{
+			get { return "transaction <statementblock>"; }
+		}
 
-        /// <summary>
-        /// Examples
-        /// </summary>
-        public override string[] Examples
-        {
-            get
-            {
-                return new string[]
-                {
-                    "transaction { // do some work }",
-                };
-            }
-        }
+		/// <summary>
+		/// Examples
+		/// </summary>
+		public override string[] Examples
+		{
+			get
+			{
+				return new string[]
+				{
+					"transaction { // do some work }",
+				};
+			}
+		}
 
-        public static readonly Token Transaction = TokenBuilder.ToIdentifier("transaction");
+		public static readonly Token Transaction = TokenBuilder.ToIdentifier("transaction");
 
-        /// <summary>
-        /// Parses either the for or for x in statements.
-        /// </summary>
-        /// <returns></returns>
-        public override Expr Parse()
-        {
-            var stmt = new TransactionStatement();
-            // transaction {  }
-            //_tokenIt.Expect(Transaction);
-            var id = _tokenIt.ExpectIdText("transaction");
-            ParseBlock(stmt);
-            return stmt;
-        }
-    }
+		/// <summary>
+		/// Parses either the for or for x in statements.
+		/// </summary>
+		/// <returns></returns>
+		public override Expr Parse()
+		{
+			var stmt = new TransactionStatement();
+			// transaction {  }
+			//_tokenIt.Expect(Transaction);
+			var id = _tokenIt.ExpectIdText("transaction");
+			ParseBlock(stmt);
+			return stmt;
+		}
+	}
 }

@@ -103,11 +103,11 @@ namespace ComLib.Lang.Core
         /// <param name="meta"></param>
         public SymbolFunction(FunctionMetaData meta)
         {
-            this.Name = meta.Name;
-            this.Meta = meta;
-            this.Category = SymbolCategory.Func;
-            this.DataType = new LFunctionType();
-            this.DataType.Name = meta.Name;
+            Name = meta.Name;
+            Meta = meta;
+            Category = SymbolCategory.Func;
+            DataType = new LFunctionType();
+            DataType.Name = meta.Name;
         }
 
         /// <summary>
@@ -286,7 +286,7 @@ namespace ComLib.Lang.Core
         /// <returns></returns>
         public virtual bool Contains(string name)
         {
-            return this.Symbols.ContainsKey(name);
+            return Symbols.ContainsKey(name);
         }
 
         /// <summary>
@@ -297,7 +297,7 @@ namespace ComLib.Lang.Core
         /// <returns></returns>
         public virtual bool IsCategory(string name, string categoryName)
         {
-            var sym = this.GetSymbol(name);
+            var sym = GetSymbol(name);
             if (sym == null) return false;
             return sym.Category == categoryName;
         }
@@ -309,7 +309,7 @@ namespace ComLib.Lang.Core
         /// <returns></returns>
         public virtual bool IsFunction(string name)
         {
-            var sym = this.GetSymbol(name);
+            var sym = GetSymbol(name);
             if (sym == null) return false;
             return sym.Category == SymbolCategory.Func;
         }
@@ -321,7 +321,7 @@ namespace ComLib.Lang.Core
         /// <returns></returns>
         public virtual Symbol GetSymbol(string name)
         {
-            if (this.Symbols.ContainsKey(name))
+            if (Symbols.ContainsKey(name))
                 return Symbols[name];
 
             return null;
@@ -334,7 +334,7 @@ namespace ComLib.Lang.Core
         /// <returns></returns>
         public virtual T GetSymbol<T>(string name) where T : class
         {
-            object sym = this.GetSymbol(name);
+            object sym = GetSymbol(name);
             if (sym == null)
                 return default(T);
 
@@ -347,7 +347,7 @@ namespace ComLib.Lang.Core
         /// <param name="symbol"></param>
         public virtual void Define(Symbol symbol)
         {
-            this.Symbols[symbol.Name] = symbol;
+            Symbols[symbol.Name] = symbol;
         }
 
         /// <summary>
@@ -356,7 +356,7 @@ namespace ComLib.Lang.Core
         /// <param name="name">Name of the varaible</param>
         public virtual void DefineVariable(string name)
         {
-            this.DefineVariable(name, LTypes.Object);
+            DefineVariable(name, LTypes.Object);
         }
 
         /// <summary>
@@ -367,7 +367,7 @@ namespace ComLib.Lang.Core
         public virtual void DefineVariable(string name, LType type)
         {
             var symbol = new Symbol() { Name = name, Category = SymbolCategory.Var, DataTypeName = type.Name, DataType = type };
-            this.Define(symbol);
+            Define(symbol);
         }
 
         /// <summary>
@@ -381,7 +381,7 @@ namespace ComLib.Lang.Core
                 throw new ArgumentException("Constant value not supplied for : " + name);
 
             var symbol = new SymbolConstant() { Name = name, Category = SymbolCategory.Const, DataType = LTypes.Object, Value = value };
-            this.Define(symbol);
+            Define(symbol);
         }
 
         /// <summary>
@@ -391,8 +391,8 @@ namespace ComLib.Lang.Core
         /// <param name="existing">The symbol to map the alias to</param>
         public virtual void DefineAlias(string alias, string existing)
         {
-            var symbol = this.GetSymbol(existing);
-            this.Symbols[alias] = symbol;
+            var symbol = GetSymbol(existing);
+            Symbols[alias] = symbol;
         }
 
         /// <summary>
@@ -404,7 +404,7 @@ namespace ComLib.Lang.Core
         {
             var symbol = new SymbolFunction(func);
             symbol.FuncExpr = functionExpr;
-            this.Define(symbol);
+            Define(symbol);
         }
     }
 
@@ -455,7 +455,7 @@ namespace ComLib.Lang.Core
         /// <returns></returns>
         public override Symbol GetSymbol(string name)
         {
-            Symbol symbol = base.GetSymbol(name);
+            var symbol = base.GetSymbol(name);
             if (symbol == null && _parent != null)
                 symbol = _parent.GetSymbol(name);
 
@@ -483,7 +483,7 @@ namespace ComLib.Lang.Core
         /// <param name="parentScope">The parent scope</param>
         public SymbolsFunction(string name, ISymbols parentScope) : base(name)
         {
-            this.ParentScope = parentScope;
+            ParentScope = parentScope;
         }
     }
 

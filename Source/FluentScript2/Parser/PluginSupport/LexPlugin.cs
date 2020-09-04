@@ -35,7 +35,7 @@ namespace ComLib.Lang.Parsing
         /// </summary>
         public LexPlugin()
         {
-            this.Id = "ComLib." + this.GetType().Name.Replace("Plugin", string.Empty);
+            Id = "ComLib." + GetType().Name.Replace("Plugin", string.Empty);
         }
 
         /// <summary>

@@ -13,10 +13,10 @@ namespace ComLib.Lang.Types
         /// <param name="v"></param>
         public LVersion(Version v)
         {
-            this.Major = v.Major;
-            this.Minor = v.Minor;
-            this.Build = v.Build;
-            this.Revision = v.Revision;
+            Major = v.Major;
+            Minor = v.Minor;
+            Build = v.Build;
+            Revision = v.Revision;
         }
 
         /// <summary>
@@ -47,11 +47,11 @@ namespace ComLib.Lang.Types
         {
             get
             {
-                var text = this.Major + "." + this.Minor + "." + this.Build;
-                if (this.Revision < 0)
+                var text = Major + "." + Minor + "." + Build;
+                if (Revision < 0)
                     return text;
 
-                return text + "." + this.Revision.ToString();
+                return text + "." + Revision.ToString();
             }
         }
 
@@ -61,7 +61,7 @@ namespace ComLib.Lang.Types
         /// <returns></returns>
         public override string ToString()
         {
-            return this.Text;
+            return Text;
         }
     }
 }

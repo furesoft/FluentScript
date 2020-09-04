@@ -36,8 +36,8 @@ namespace ComLib.Lang.Helpers
                 throw new ArgumentException("Incorrect number of inputs for creating time");
 
             // Convert object into ints
-            int[] timeArgs = LangTypeHelper.ConvertToInts(args);
-            int len = args.Length;
+            var timeArgs = LangTypeHelper.ConvertToInts(args);
+            var len = args.Length;
 
             // 1. 0 args = new TimeSpan()
             if (len == 0) return new TimeSpan();
@@ -84,10 +84,14 @@ namespace ComLib.Lang.Helpers
 
             var isAm = false;
             if (string.IsNullOrEmpty(ampm) || ampm == "am" || ampm == "a.m" || ampm == "a.m.")
-                isAm = true;
-            else if (ampm == "pm" || ampm == "p.m" || ampm == "p.m.")
-                isAm = false;
-            else
+			{
+				isAm = true;
+			}
+			else if (ampm == "pm" || ampm == "p.m" || ampm == "p.m.")
+			{
+				isAm = false;
+			}
+			else
             {
                 return new Tuple<TimeSpan, bool, string>(TimeSpan.MinValue, false, "unknown am/pm statement");
             }
@@ -173,7 +177,7 @@ namespace ComLib.Lang.Helpers
 
             // Convert all parameters to int
             var args = new int[parameters.Length];
-            for (int ndx = 0; ndx < parameters.Length; ndx++)
+            for (var ndx = 0; ndx < parameters.Length; ndx++)
             {
                 args[ndx] = Convert.ToInt32(parameters[ndx]);
             }

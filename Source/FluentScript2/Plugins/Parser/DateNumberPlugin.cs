@@ -55,7 +55,7 @@ namespace ComLib.Lang.Plugins
             if (pos > _lexer.LAST_POSITION)
                 return false;
 
-            char n = _lexer.State.Text[pos];
+            var n = _lexer.State.Text[pos];
 
             // Check that the next char is date part separator as in 3/10/2012 or 3-10-2012
             if (n != '-' && n != '/' && n != '\\')
@@ -73,9 +73,11 @@ namespace ComLib.Lang.Plugins
                     next += '/';
                 }
                 else
-                    break;
+				{
+					break;
+				}
 
-                pos++;
+				pos++;
             }
 
             // No need to try parse the text if next lenght is < 5

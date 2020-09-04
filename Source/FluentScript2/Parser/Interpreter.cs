@@ -98,7 +98,7 @@ namespace ComLib.Lang
         /// </summary>
         public void RegisterAllPlugins()
         {
-            this.Context.Plugins.RegisterAll();
+            Context.Plugins.RegisterAll();
         }
 
         /// <summary>
@@ -106,9 +106,9 @@ namespace ComLib.Lang
         /// </summary>
         public void RegisterAllPluginsForDevice()
         {
-            this.Context.Plugins.RegisterAllSystem();
+            Context.Plugins.RegisterAllSystem();
 
-            this.Context.Plugins.RegisterAllCustomForDevice();
+            Context.Plugins.RegisterAllCustomForDevice();
         }
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace ComLib.Lang
         /// <param name="script"></param>
         public void Parse(string script)
         {
-            this.Execute(script, true, true, new ParsePhase(_parser), new ShutdownPhase());
+            Execute(script, true, true, new ParsePhase(_parser), new ShutdownPhase());
         }
 
         /// <summary>
@@ -156,7 +156,7 @@ namespace ComLib.Lang
         /// <param name="script"></param>
         public void Lint(string script)
         {
-            this.Execute(script, true, true, new ParsePhase(_parser), new LintPhase(true), new ShutdownPhase());
+            Execute(script, true, true, new ParsePhase(_parser), new LintPhase(true), new ShutdownPhase());
         }
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace ComLib.Lang
         /// <param name="script">Script text</param>
         public void Execute(string script)
         {
-            this.Execute(script, true, true, new ParsePhase(_parser), new ExecutionPhase(true), new ShutdownPhase());
+            Execute(script, true, true, new ParsePhase(_parser), new ExecutionPhase(true), new ShutdownPhase());
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace ComLib.Lang
         /// </summary>
         public void Execute()
         {
-            this.Execute(string.Empty, false, false, new ExecutionPhase(true));
+            Execute(string.Empty, false, false, new ExecutionPhase(true));
         }
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace ComLib.Lang
         /// <param name="target">The target language to translate the code to.</param>
         public void Translate(string script, string target)
         {
-            this.Execute(script, true, true, new ParsePhase(_parser), new TranslateToJsPhase(), new ShutdownPhase());
+            Execute(script, true, true, new ParsePhase(_parser), new TranslateToJsPhase(), new ShutdownPhase());
         }
 
         /// <summary>
@@ -202,7 +202,7 @@ namespace ComLib.Lang
         /// <param name="script"></param>
         public void Append(string script)
         {
-            this.Execute(script, false, true, new ParsePhase(_parser));
+            Execute(script, false, true, new ParsePhase(_parser));
         }
 
         /// <summary>
@@ -211,7 +211,7 @@ namespace ComLib.Lang
         /// <param name="script"></param>
         public void AppendExecute(string script)
         {
-            this.Execute(script, false, true, new ParsePhase(_parser), new ExecutionPhase(false));
+            Execute(script, false, true, new ParsePhase(_parser), new ExecutionPhase(false));
         }
 
         /// <summary>
@@ -221,7 +221,7 @@ namespace ComLib.Lang
         public void AppendExecuteFile(string scriptPath)
         {
             var script = ReadFile(scriptPath);
-            this.Execute(script, false, true, new ParsePhase(_parser), new ExecutionPhase(false));
+            Execute(script, false, true, new ParsePhase(_parser), new ExecutionPhase(false));
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace ComLib.Lang
         /// <param name="clearExistingCode">Whether or not to clear existing parsed code and start fresh.</param>
         public void Execute(string script, bool clearExistingCode, bool resetScript, params IPhase[] phases)
         {
-            this.InitPlugins();
+            InitPlugins();
             if (_parser != null)
             {
                 var execution = new Execution();
@@ -253,7 +253,7 @@ namespace ComLib.Lang
             }
             var phasesList = phases.ToList();
             var result = phaseExecutor.Execute(script, _phaseCtx, _context, phasesList);
-            this._runResult = result.Result;
+            _runResult = result.Result;
         }
 
         /// <summary>
@@ -277,8 +277,8 @@ namespace ComLib.Lang
                         langValueText = Convert.ToString(arg.DefaultValue);
 
                     var langValue = LangTypeHelper.ConvertToLangValue(langType, langValueText);
-                    this.Context.Memory.SetValue(arg.Name, langValue, false);
-                    this.Context.Symbols.DefineVariable(arg.Name, langType);
+                    Context.Memory.SetValue(arg.Name, langValue, false);
+                    Context.Symbols.DefineVariable(arg.Name, langType);
                 }
                 catch (Exception)
                 {
@@ -301,7 +301,7 @@ namespace ComLib.Lang
         /// <param name="args"></param>
         public object Call(string functionName, bool convertApplicableTypes, params object[] args)
         {
-            return FunctionHelper.CallFunctionViaCSharp(this._context, functionName, convertApplicableTypes, args);
+            return FunctionHelper.CallFunctionViaCSharp(_context, functionName, convertApplicableTypes, args);
         }
 
         /// <summary>
@@ -416,9 +416,9 @@ namespace ComLib.Lang
 
         private void Execute(Action action, Func<string> exceptionMessageFetcher = null)
         {
-            DateTime start = DateTime.Now;
-            bool success = true;
-            string message = string.Empty;
+            var start = DateTime.Now;
+            var success = true;
+            var message = string.Empty;
             Exception scriptError = null;
             try
             {
@@ -433,13 +433,16 @@ namespace ComLib.Lang
                     const string langerror = "{0} : {1} at line : {2}, position: {3}";
                     message = string.Format(langerror, lex.Error.ErrorType, lex.Message, lex.Error.Line, lex.Error.Column);
                 }
-                else message = ex.Message;
+                else
+				{
+					message = ex.Message;
+				}
 
-                scriptError = ex;
+				scriptError = ex;
                 if (exceptionMessageFetcher != null)
                     message += exceptionMessageFetcher();
             }
-            DateTime end = DateTime.Now;
+            var end = DateTime.Now;
             _runResult = new RunResult(start, end, success, message);
             _runResult.Ex = scriptError;
         }

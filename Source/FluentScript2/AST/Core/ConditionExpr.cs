@@ -18,12 +18,12 @@ namespace ComLib.Lang.AST
         /// <param name="right">Right expression</param>
         public ConditionExpr(Expr left, Operator op, Expr right)
         {
-            this.Nodetype = NodeTypes.SysCondition;
-            this.Left = left;
-            this.Right = right;
-            this.AddChild(left);
-            this.AddChild(right);
-            this.Op = op;
+            Nodetype = NodeTypes.SysCondition;
+            Left = left;
+            Right = right;
+            AddChild(left);
+            AddChild(right);
+            Op = op;
         }
 
         /// <summary>

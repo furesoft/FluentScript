@@ -25,7 +25,7 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public BreakPlugin()
         {
-            this.ConfigureAsSystemStatement(false, true, "break");
+            ConfigureAsSystemStatement(false, true, "break");
         }
 
         /// <summary>

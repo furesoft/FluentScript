@@ -51,7 +51,7 @@ namespace ComLib.Lang.Plugins
             _endTokens[Tokens.Comma] = true;
             _endTokens[Tokens.NewLine] = true;
             _endTokens[Tokens.RightBracket] = true;
-            this.StartTokens = new string[] { "[" };
+            StartTokens = new string[] { "[" };
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace ComLib.Lang.Plugins
             while (!Token.IsNewLine(token) && !_tokenIt.IsEnded)
             {
                 // Expect column name.
-                string columnName = _tokenIt.ExpectId(false);
+                var columnName = _tokenIt.ExpectId(false);
                 columnNames.Add(columnName);
 
                 _tokenIt.Advance(1, false);
@@ -137,9 +137,11 @@ namespace ComLib.Lang.Plugins
                     _tokenIt.Advance(1, false);
                 }
                 else if (_tokenIt.NextToken.Token != Tokens.NewLine)
-                    throw _tokenIt.BuildSyntaxExpectedException("| or new line");
+				{
+					throw _tokenIt.BuildSyntaxExpectedException("| or new line");
+				}
 
-                token = _tokenIt.NextToken.Token;
+				token = _tokenIt.NextToken.Token;
             }
             if (_tokenIt.IsEnded)
                 throw _tokenIt.BuildEndOfScriptException();
@@ -150,7 +152,7 @@ namespace ComLib.Lang.Plugins
             var records = new List<List<Tuple<string, Expr>>>();
             var record = new List<Tuple<string, Expr>>();
 
-            int colIndex = 0;
+            var colIndex = 0;
             Token firstColumnDataDelimiter = null;
             // Build up all the records.
             while (token != Tokens.RightBracket && !_tokenIt.IsEnded)
@@ -158,7 +160,7 @@ namespace ComLib.Lang.Plugins
                 // 1. Get the column value: 'C#'
                 var exp = _parser.ParseExpression(_endTokens, true, passNewLine: false);
 
-                string colName = columnNames[colIndex];
+                var colName = columnNames[colIndex];
                 record.Add(new Tuple<string, Expr>(colName, exp));
 
                 // 2. Is the next one a | or new line ?
@@ -198,7 +200,7 @@ namespace ComLib.Lang.Plugins
             _tokenIt.Expect(Tokens.RightBracket);
 
             // Now finally build array of maps.
-            List<Expr> array = new List<Expr>();
+            var array = new List<Expr>();
             foreach (var rec in records)
             {
                 var item = Exprs.Map(rec, startToken);

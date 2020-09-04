@@ -83,7 +83,7 @@ namespace ComLib.Lang.Types
         /// <returns></returns>
         public FunctionMetaData AddMethod(string name, string implementationMethod, Type returnType, string description)
         {
-            return this.AddMethodInfo(MemberTypes.Method, name, implementationMethod, returnType, description, true);
+            return AddMethodInfo(MemberTypes.Method, name, implementationMethod, returnType, description, true);
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace ComLib.Lang.Types
         /// <returns></returns>
         public FunctionMetaData AddMethodRaw(string name, string implementationMethod, Type returnType, string description)
         {
-            return this.AddMethodInfo(MemberTypes.Method, name, implementationMethod, returnType, description, false);
+            return AddMethodInfo(MemberTypes.Method, name, implementationMethod, returnType, description, false);
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace ComLib.Lang.Types
         /// <param name="description">A description of the property</param>
         public void AddProperty(bool allowGet, bool allowSet, string name, string implementationMethod, Type returnType, string description)
         {
-            this.AddMethodInfo(MemberTypes.Property, name, implementationMethod, returnType, description, true);
+            AddMethodInfo(MemberTypes.Property, name, implementationMethod, returnType, description, true);
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace ComLib.Lang.Types
         /// <param name="examples">Examples of arg</param>
         public void AddArg(string funcName, string name, string type, bool required, string alias, object defaultVal, string examples, string desc)
         {
-            this._methodMap[funcName].FuncDef.AddArg(name, type, required, alias, defaultVal, examples, desc);
+            _methodMap[funcName].FuncDef.AddArg(name, type, required, alias, defaultVal, examples, desc);
         }
 
         /// <summary>
@@ -203,10 +203,10 @@ namespace ComLib.Lang.Types
 
             // total required =
             var funcDef = mappedMethod.FuncDef;
-            int total = funcDef.GetTotalRequiredArgs();
+            var total = funcDef.GetTotalRequiredArgs();
             var methodArgs = new[] { obj };
-            var method = this.GetType().GetMethod(mappedMethod.HostLanguageMethod);
-            object result = method.Invoke(this, methodArgs);
+            var method = GetType().GetMethod(mappedMethod.HostLanguageMethod);
+            var result = method.Invoke(this, methodArgs);
             return result;
         }
 
@@ -223,10 +223,10 @@ namespace ComLib.Lang.Types
 
             // total required =
             var funcDef = mappedMethod.FuncDef;
-            int total = funcDef.GetTotalRequiredArgs();
+            var total = funcDef.GetTotalRequiredArgs();
             var methodArgs = new[] { obj, val };
-            var method = this.GetType().GetMethod(mappedMethod.HostLanguageMethod);
-            object result = method.Invoke(this, methodArgs);
+            var method = GetType().GetMethod(mappedMethod.HostLanguageMethod);
+            var result = method.Invoke(this, methodArgs);
         }
 
         /// <summary>
@@ -239,7 +239,7 @@ namespace ComLib.Lang.Types
         public virtual ComLib.Lang.Core.BoolMsgObj ValidateCall(LObject obj, string methodName, object[] parameters)
         {
             // 1. Valid method/member name?
-            if (!this._methodMap.ContainsKey(methodName))
+            if (!_methodMap.ContainsKey(methodName))
                 return new BoolMsgObj(obj, false, "The method name : " + methodName + " does not exist for this type");
 
             // 2. Valid method parameters?
@@ -318,7 +318,7 @@ namespace ComLib.Lang.Types
 
             // total required =
             var funcDef = mappedMethod.FuncDef;
-            int total = funcDef.GetTotalRequiredArgs();
+            var total = funcDef.GetTotalRequiredArgs();
             var methodArgs = new List<object>();
             var hasParams = parameters != null && parameters.Length > 0;
 
@@ -389,8 +389,8 @@ namespace ComLib.Lang.Types
             }
 
             var methodParams = methodArgs.ToArray();
-            var method = this.GetType().GetMethod(mappedMethod.HostLanguageMethod);
-            object result = method.Invoke(this, methodParams);
+            var method = GetType().GetMethod(mappedMethod.HostLanguageMethod);
+            var result = method.Invoke(this, methodParams);
             return result;
         }
 
@@ -431,7 +431,7 @@ namespace ComLib.Lang.Types
         /// <returns></returns>
         private object ConvertToProperType(ArgAttribute arg, object param)
         {
-            object val = param;
+            var val = param;
             if (param is LObject)
             {
                 var lobj = (LObject)param;

@@ -31,10 +31,10 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public FailPlugin()
         {
-            this.StartTokens = new string[] { "fail" };
-            this.IsStatement = true;
-            this.IsAutoMatched = true;
-            this.IsEndOfStatementRequired = true;
+            StartTokens = new string[] { "fail" };
+            IsStatement = true;
+            IsAutoMatched = true;
+            IsEndOfStatementRequired = true;
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace ComLib.Lang.Plugins
                      ? ""
                      : ((LObject)message).GetValue().ToString();
 
-            throw new LangFailException(text, this.Ref.ScriptName, this.Ref.Line);
+            throw new LangFailException(text, Ref.ScriptName, Ref.Line);
         }
     }
 }

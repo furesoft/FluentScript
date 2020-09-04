@@ -28,7 +28,7 @@ namespace ComLib.Lang.Runtime.Switches
             var tokens = i.ToTokens(_filepath, true);
             using (var writer = new StreamWriter(_outpath))
             {
-                foreach (TokenData tokendata in tokens)
+                foreach (var tokendata in tokens)
                 {
                     // Option 1: Do not display newlines in the token list
                     if (_excludeNewLines && tokendata.Token == Tokens.NewLine)
@@ -42,15 +42,17 @@ namespace ComLib.Lang.Runtime.Switches
                             _paddings = new Dictionary<int, string>();
 
                         var text = tokendata.Line.ToString() + " - " + tokendata.LineCharPos.ToString();
-                        var lineinfo = this.Pad(text, 8);
+                        var lineinfo = Pad(text, 8);
                         var tokenText = tokendata.Token.Text;
                         if (tokendata.Token.Kind == TokenKind.LiteralString)
                             tokenText = "'" + tokenText + "'";
                         writer.WriteLine("{0} : {1}", lineinfo, tokenText);
                     }
                     else
-                        writer.WriteLine(tokendata.ToString());
-                }
+					{
+						writer.WriteLine(tokendata.ToString());
+					}
+				}
                 writer.Flush();
             }
             return null;

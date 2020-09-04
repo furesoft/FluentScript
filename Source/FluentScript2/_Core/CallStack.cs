@@ -51,7 +51,7 @@ namespace ComLib.Lang.Parsing
         /// </summary>
         public void Pop()
         {
-            int count = _stack.Count;
+            var count = _stack.Count;
             if (count == 0) return;
             _stack.RemoveAt(_lastIndex);
             count--;

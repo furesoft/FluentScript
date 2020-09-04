@@ -25,8 +25,8 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public NewPlugin()
         {
-            this.ConfigureAsSystemExpression(false, false, "new");
-            this.Precedence = 100;
+            ConfigureAsSystemExpression(false, false, "new");
+            Precedence = 100;
         }
 
         /// <summary>

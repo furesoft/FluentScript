@@ -10,7 +10,7 @@ namespace ComLib.Lang.Runtime.Switches
         /// </summary>
         public Switch()
         {
-            this.OutputResult = true;
+            OutputResult = true;
         }
 
         /// <summary>
@@ -33,10 +33,10 @@ namespace ComLib.Lang.Runtime.Switches
         /// </summary>
         public object Execute(Interpreter i)
         {
-            this.DoExecute(i);
+            DoExecute(i);
             var runResult = i.Result;
 
-            if (this.OutputResult)
+            if (OutputResult)
             {
                 WriteScriptStatus(runResult.Success, runResult.Message);
             }
@@ -60,7 +60,7 @@ namespace ComLib.Lang.Runtime.Switches
         public static void WriteScriptStatus(bool success, string message)
         {
             var color = success ? ConsoleColor.Green : ConsoleColor.Red;
-            string text = success ? "SUCCESS" : "FAILURE(S)";
+            var text = success ? "SUCCESS" : "FAILURE(S)";
             Console.WriteLine();
             WriteText(color, text);
             if (!success)

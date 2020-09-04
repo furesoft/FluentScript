@@ -53,11 +53,11 @@
         /// <returns></returns>
         public override string ToString()
         {
-            string tokenType = Token.GetType().Name.Replace("Token", "");
-            string text = Token.Text;
+            var tokenType = Token.GetType().Name.Replace("Token", "");
+            var text = Token.Text;
             if (Token.Kind == TokenKind.LiteralString)
                 text = "'" + text + "'";
-            string info = string.Format("Index: {0}, Line: {1}, CharPos: {2}, Pos: {3}, Type: {4}, Text: {5}", Index, Line, LineCharPos, Pos, tokenType, text);
+            var info = string.Format("Index: {0}, Line: {1}, CharPos: {2}, Pos: {3}, Type: {4}, Text: {5}", Index, Line, LineCharPos, Pos, tokenType, text);
             return info;
         }
     }

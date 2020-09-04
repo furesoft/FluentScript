@@ -102,7 +102,7 @@ namespace ComLib.Lang.Plugins
                 var results = PreprocessHelper.Process(line.Text);
 
                 // 2. Keep track of last directive.
-                this.Ctx.Directives.StartDirectiveCode(results.Keys[0]);
+                Ctx.Directives.StartDirectiveCode(results.Keys[0]);
 
                 // 3. If valid directive condition don't do anything.
                 //    Allow the lexer to parse all the code as tokens inside the directive.
@@ -117,7 +117,7 @@ namespace ComLib.Lang.Plugins
             }
 
             // 3b: "endif"
-            this.Ctx.Directives.EndDirectiveCode();
+            Ctx.Directives.EndDirectiveCode();
             return resultTokens;
         }
     }

@@ -65,10 +65,10 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public FuncWildCardPlugin()
         {
-            this.Precedence = 10;
-            this.IsStatement = true;
-            this.StartTokens = new string[] { "$IdToken" };
-            this.IsContextFree = false;
+            Precedence = 10;
+            IsStatement = true;
+            StartTokens = new string[] { "$IdToken" };
+            IsContextFree = false;
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace ComLib.Lang.Plugins
 
             _tokenIt.Advance(_result.TokenCount);
 
-            string remainderOfFuncName = string.Empty;
+            var remainderOfFuncName = string.Empty;
             var parts = new List<Expr>();
             TokenData firstPart = null;
 
@@ -148,7 +148,7 @@ namespace ComLib.Lang.Plugins
             // 1. Capture all the remaining parts of the wild card.
             while (_tokenIt.NextToken.Token.Kind == TokenKind.Ident)
             {
-                string part = _tokenIt.NextToken.Token.Text;
+                var part = _tokenIt.NextToken.Token.Text;
 
                 // a. Store the token of the first wildcard part
                 if (firstPart == null)

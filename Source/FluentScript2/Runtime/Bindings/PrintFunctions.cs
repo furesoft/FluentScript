@@ -12,10 +12,10 @@ namespace ComLib.Lang.Runtime.Bindings
     {
         public PrintFunctions()
         {
-            this.ExportedFunctions = new List<string>();
-            this.Namespace = "";
-            this.ExportedFunctions.Add("print");
-            this.ExportedFunctions.Add("println");
+            ExportedFunctions = new List<string>();
+            Namespace = "";
+            ExportedFunctions.Add("print");
+            ExportedFunctions.Add("println");
         }
 
         /// <summary>
@@ -24,11 +24,11 @@ namespace ComLib.Lang.Runtime.Bindings
         /// <param name="exp"></param>
         public void Print(FunctionCallExpr exp)
         {
-            var settings = this.Ctx.Settings;
+            var settings = Ctx.Settings;
             if (!settings.EnablePrinting)
                 return;
 
-            string message = BuildMessage(exp.ParamList);
+            var message = BuildMessage(exp.ParamList);
             if (settings.EnablePrinting)
                 Console.Write(message);
         }
@@ -39,11 +39,11 @@ namespace ComLib.Lang.Runtime.Bindings
         /// <param name="exp"></param>
         public void PrintLn(FunctionCallExpr exp)
         {
-            var settings = this.Ctx.Settings;
+            var settings = Ctx.Settings;
             if (!settings.EnablePrinting)
                 return;
 
-            string message = BuildMessage(exp.ParamList);
+            var message = BuildMessage(exp.ParamList);
             if (settings.EnablePrinting)
                 Console.WriteLine(message);
         }
@@ -54,7 +54,7 @@ namespace ComLib.Lang.Runtime.Bindings
         /// <param name="exp"></param>
         public void Log(FunctionCallExpr exp)
         {
-            var settings = this.Ctx.Settings;
+            var settings = Ctx.Settings;
             if (!settings.EnablePrinting)
                 return;
 

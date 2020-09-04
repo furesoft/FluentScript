@@ -56,9 +56,9 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public LinqPlugin()
         {
-            this.StartTokens = new string[] { "$IdToken", "select", "from", "where" };
-            this.Precedence = 1;
-            this.IsContextFree = false;
+            StartTokens = new string[] { "$IdToken", "select", "from", "where" };
+            Precedence = 1;
+            IsContextFree = false;
         }
 
         /// <summary>
@@ -182,7 +182,7 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public LinqExpr()
         {
-            this.Nodetype = "FSExtLinq";
+            Nodetype = "FSExtLinq";
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace ComLib.Lang.Plugins
         /// <param name="sorts">The sorting to apply after filtering.</param>
         public LinqExpr(string varName, Expr source, Expr filter, List<Expr> sorts)
         {
-            this.Nodetype = "FSExtLinq";
+            Nodetype = "FSExtLinq";
             _varName = varName;
             _sorts = sorts;
             _source = source;
@@ -235,10 +235,10 @@ namespace ComLib.Lang.Plugins
             var items = sourceObj.GetValue() as List<object>;
             var results = new List<object>();
 
-            for (int ndx = 0; ndx < items.Count; ndx++)
+            for (var ndx = 0; ndx < items.Count; ndx++)
             {
                 var val = items[ndx];
-                this.Ctx.Memory.SetValue(_varName, val);
+                Ctx.Memory.SetValue(_varName, val);
                 var isMatch = _filter.EvaluateAs<bool>(visitor);
                 if (isMatch)
                 {

@@ -19,8 +19,8 @@ namespace ComLib.Lang.AST
         /// <param name="memberName">Name of member, this could be a property or a method name.</param>
         public MemberExpr(Expr variableExp, string memberName)
         {
-            this.VariableExp = variableExp;
-            this.MemberName = memberName;
+            VariableExp = variableExp;
+            MemberName = memberName;
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace ComLib.Lang.AST
         /// <returns></returns>
         public override string ToQualifiedName()
         {
-            string name = VariableExp.ToQualifiedName() + "." + MemberName;
+            var name = VariableExp.ToQualifiedName() + "." + MemberName;
             return name;
         }
 
@@ -54,7 +54,7 @@ namespace ComLib.Lang.AST
         /// <returns></returns>
         protected bool IsExternalFunctionCall(string variableName)
         {
-            string funcName = variableName + "." + MemberName;
+            var funcName = variableName + "." + MemberName;
             if (Ctx.ExternalFunctions.Contains(funcName))
                 return true;
             return false;
@@ -67,10 +67,10 @@ namespace ComLib.Lang.AST
         /// <returns></returns>
         protected bool IsMemberInstanceAccess(object obj)
         {
-            Type type = obj.GetType();
+            var type = obj.GetType();
 
             // 1. Get the member name.
-            MemberInfo[] members = type.GetMember(MemberName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+            var members = type.GetMember(MemberName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
             if (members == null || members.Length == 0)
                 return false;
             return true;
@@ -83,7 +83,7 @@ namespace ComLib.Lang.AST
         /// <returns></returns>
         protected bool IsMemberStaticAccessObj(object obj)
         {
-            Type type = obj.GetType();
+            var type = obj.GetType();
             return IsMemberStaticAccess(type);
         }
 
@@ -95,7 +95,7 @@ namespace ComLib.Lang.AST
         protected bool IsMemberStaticAccess(Type type)
         {
             // 1. Get the member name.
-            MemberInfo[] members = type.GetMember(MemberName, BindingFlags.Public | BindingFlags.Static | BindingFlags.IgnoreCase);
+            var members = type.GetMember(MemberName, BindingFlags.Public | BindingFlags.Static | BindingFlags.IgnoreCase);
             if (members == null || members.Length == 0)
                 return false;
             return true;
@@ -109,7 +109,7 @@ namespace ComLib.Lang.AST
         protected BoolMsgObj IsMemberStaticAccess(string variableName)
         {
             Type type = null;
-            bool isStatic = false;
+            var isStatic = false;
             string actualName = null;
             // 2. Static method : "Person.Create" -> static method call on custom object?
             if (Ctx.Types.Contains(variableName))
@@ -122,8 +122,8 @@ namespace ComLib.Lang.AST
             {
                 // 3. Static method but with lowercase classname
                 // Only do this check for "user" -> "User" class / static method.
-                char first = Char.ToUpper(variableName[0]);
-                string name = first + variableName.Substring(1);
+                var first = Char.ToUpper(variableName[0]);
+                var name = first + variableName.Substring(1);
                 if (Ctx.Types.Contains(name))
                 {
                     type = Ctx.Types.Get(name);
@@ -169,9 +169,9 @@ namespace ComLib.Lang.AST
 
             // 3. Get the first member.
             result = members[0];
-            string memberNameCaseIgnorant = result.Name;
-            MemberMode mode = isStatic ? MemberMode.CustObjMethodStatic : MemberMode.CustObjMethodInstance;
-            MemberAccess member = new MemberAccess(mode);
+            var memberNameCaseIgnorant = result.Name;
+            var mode = isStatic ? MemberMode.CustObjMethodStatic : MemberMode.CustObjMethodInstance;
+            var member = new MemberAccess(mode);
             member.DataType = type;
             member.Instance = obj;
             member.MemberName = MemberName;
@@ -185,7 +185,7 @@ namespace ComLib.Lang.AST
             // Method
             else if (result.MemberType == MemberTypes.Method)
             {
-                string name = (VariableExp.IsNodeType(NodeTypes.SysVariable)) ? ((VariableExpr)VariableExp).Name : null;
+                var name = (VariableExp.IsNodeType(NodeTypes.SysVariable)) ? ((VariableExpr)VariableExp).Name : null;
                 member.Name = name;
                 member.Method = type.GetMethod(memberNameCaseIgnorant);
             }

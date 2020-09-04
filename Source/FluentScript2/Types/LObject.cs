@@ -41,10 +41,10 @@ namespace ComLib.Lang.Types
         /// </summary>
         public LObjectType()
         {
-            this.Name = "object";
-            this.FullName = "sys.object";
-            this.TypeVal = TypeConstants.Any;
-            this.IsSystemType = true;
+            Name = "object";
+            FullName = "sys.object";
+            TypeVal = TypeConstants.Any;
+            IsSystemType = true;
         }
 
         ///// <summary>

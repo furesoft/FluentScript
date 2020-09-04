@@ -37,10 +37,10 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public AliasPlugin()
         {
-            this.StartTokens = new string[] { "alias" };
-            this.IsStatement = true;
-            this.IsEndOfStatementRequired = true;
-            this.IsAutoMatched = true;
+            StartTokens = new string[] { "alias" };
+            IsStatement = true;
+            IsEndOfStatementRequired = true;
+            IsAutoMatched = true;
         }
 
         /// <summary>

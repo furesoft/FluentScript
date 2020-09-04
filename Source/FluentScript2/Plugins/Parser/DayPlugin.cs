@@ -57,7 +57,7 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public DayPlugin()
         {
-            this.StartTokens = new string[]
+            StartTokens = new string[]
             {
                 "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday",
                 "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",
@@ -101,7 +101,7 @@ namespace ComLib.Lang.Plugins
         public override bool CanHandle(Token token)
         {
             if (token.Kind != TokenKind.Ident) return false;
-            string name = token.Text.ToLower();
+            var name = token.Text.ToLower();
             if (_days.ContainsKey(name)) return true;
             if (_dayAliases.ContainsKey(name)) return true;
 

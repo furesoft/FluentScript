@@ -31,7 +31,7 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public PercentPlugin()
         {
-            this.StartTokens = new string[] { "$Suffix" };
+            StartTokens = new string[] { "$Suffix" };
         }
 
         /// <summary>

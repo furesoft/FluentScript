@@ -18,7 +18,7 @@ namespace ComLib.Lang.Phases
         public ExecutionPhase(bool execAllNodes)
         {
             _execAllNodes = execAllNodes;
-            this.Name = "ast-execution";
+            Name = "ast-execution";
         }
 
         /// <summary>
@@ -39,8 +39,8 @@ namespace ComLib.Lang.Phases
             var runResult = LangHelper.Execute(() =>
             {
                 var execution = new Execution();
-                execution.Ctx = this.Ctx;
-                EvalHelper.Ctx = this.Ctx;
+                execution.Ctx = Ctx;
+                EvalHelper.Ctx = Ctx;
                 execution.VisitExprs(statements);
             });
 

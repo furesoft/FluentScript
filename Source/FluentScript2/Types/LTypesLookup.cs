@@ -189,8 +189,10 @@ namespace ComLib.Lang.Types
         {
             Dictionary<int, int> conversionMap = null;
             if (_basicConversions.ContainsKey(type.TypeVal))
-                conversionMap = _basicConversions[type.TypeVal];
-            else
+			{
+				conversionMap = _basicConversions[type.TypeVal];
+			}
+			else
             {
                 conversionMap = new Dictionary<int, int>();
                 _basicConversions[type.TypeVal] = conversionMap;

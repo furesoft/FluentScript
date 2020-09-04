@@ -43,11 +43,11 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public ConstCapsPlugin()
         {
-            this.StartTokens = new string[] { "$IdToken" };
-            this.IsSystemLevel = true;
-            this.IsStatement = true;
-            this.IsEndOfStatementRequired = true;
-            this.Precedence = 1;
+            StartTokens = new string[] { "$IdToken" };
+            IsSystemLevel = true;
+            IsStatement = true;
+            IsEndOfStatementRequired = true;
+            Precedence = 1;
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace ComLib.Lang.Plugins
 
         private bool IsConstMatch(Token token, int peekLevel)
         {
-            string toUpper = token.Text.ToUpper();
+            var toUpper = token.Text.ToUpper();
             if (string.Compare(token.Text, toUpper, StringComparison.CurrentCulture) != 0)
                 return false;
 
@@ -211,8 +211,8 @@ namespace ComLib.Lang.Plugins
         {
             foreach (var pair in Assignments)
             {
-                object val = pair.Value.Evaluate(visitor);
-                this.Ctx.Memory.SetValue(pair.Key, val);
+                var val = pair.Value.Evaluate(visitor);
+                Ctx.Memory.SetValue(pair.Key, val);
             }
             return LObjects.Null;
         }

@@ -25,7 +25,7 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public ReturnPlugin()
         {
-            this.ConfigureAsSystemExpression(false, true, "return");
+            ConfigureAsSystemExpression(false, true, "return");
         }
 
         /// <summary>

@@ -22,7 +22,7 @@ namespace ComLib.Lang.Core
         /// <returns></returns>
         public T Get<T>(string name)
         {
-            Variable variable = this[name] as Variable;
+            var variable = this[name] as Variable;
             // Convert to correct type if basic type.
             if (typeof(T) == typeof(object))
             {
@@ -46,9 +46,9 @@ namespace ComLib.Lang.Core
             var lval = (LObject)val;
 
             Variable variable = null;
-            bool add = false;
-            int addVal = 0;
-            if (!this.ContainsKey(name))
+            var add = false;
+            var addVal = 0;
+            if (!ContainsKey(name))
             {
                 variable = new Variable() { Name = name, Value = val };
                 add = true;
@@ -65,7 +65,7 @@ namespace ComLib.Lang.Core
             this[name] = variable;
 
             // Case 1: Adding new string value.
-            bool isString = (lval.Type == LTypes.String);
+            var isString = (lval.Type == LTypes.String);
             if (add && isString)
             {
                 _totalStringLength += ((LString)lval).Value.Length;
@@ -114,7 +114,7 @@ namespace ComLib.Lang.Core
         /// <returns></returns>
         public bool Contains(string name)
         {
-            int stackIndex = Find(name);
+            var stackIndex = Find(name);
             return stackIndex > -1;
         }
 
@@ -149,7 +149,7 @@ namespace ComLib.Lang.Core
         /// <returns></returns>
         public T Get<T>(string name)
         {
-            int stackIndex = Find(name);
+            var stackIndex = Find(name);
             // Not found?
             if (stackIndex == -1) throw new KeyNotFoundException("variable : " + name + " was not found");
 
@@ -164,7 +164,7 @@ namespace ComLib.Lang.Core
         /// <returns></returns>
         public T GetAs<T>(string name) where T : class
         {
-            int stackIndex = Find(name);
+            var stackIndex = Find(name);
             // Not found?
             if (stackIndex == -1) throw new KeyNotFoundException("variable : " + name + " was not found");
 
@@ -182,7 +182,7 @@ namespace ComLib.Lang.Core
         /// in an outer scope. In this case, we should not search for the variable name.</param>
         public void SetValue(string name, object val, bool declare = false)
         {
-            int stackIndex = _currentStackIndex;
+            var stackIndex = _currentStackIndex;
 
             if (!declare)
             {
@@ -190,9 +190,9 @@ namespace ComLib.Lang.Core
                 if (stackIndex == -1)
                     stackIndex = _currentStackIndex;
             }
-            int oldTotalStringLength = _stack[stackIndex].TotalStringSize;
+            var oldTotalStringLength = _stack[stackIndex].TotalStringSize;
             _stack[stackIndex].SetValue(name, val, declare);
-            int newTotalStringLength = _stack[stackIndex].TotalStringSize;
+            var newTotalStringLength = _stack[stackIndex].TotalStringSize;
 
             // LIMITS: Increment total vars and string length;
             _total += 1;
@@ -206,7 +206,7 @@ namespace ComLib.Lang.Core
         /// <returns></returns>
         public int Find(string name)
         {
-            int stackIndex = -1;
+            var stackIndex = -1;
             for (var ndx = _stack.Count - 1; ndx >= 0; ndx--)
             {
                 if (_stack[ndx].ContainsKey(name))
@@ -254,10 +254,10 @@ namespace ComLib.Lang.Core
             if (!_stack[_currentStackIndex].ContainsKey(name))
                 return;
 
-            int oldTotalStringLength = _stack[_currentStackIndex].TotalStringSize;
-            object val = _stack[_currentStackIndex][name];
+            var oldTotalStringLength = _stack[_currentStackIndex].TotalStringSize;
+            var val = _stack[_currentStackIndex][name];
             _stack[_currentStackIndex].Remove(name);
-            int newTotalStringLength = _stack[_currentStackIndex].TotalStringSize;
+            var newTotalStringLength = _stack[_currentStackIndex].TotalStringSize;
 
             // LIMITS: Decrement total vars and string length;
             _total -= 1;

@@ -68,7 +68,7 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public MachineInfoPlugin()
         {
-            this.StartTokens = new string[] { "mac", "@" };
+            StartTokens = new string[] { "mac", "@" };
         }
 
         /// <summary>

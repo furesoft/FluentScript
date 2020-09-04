@@ -54,10 +54,10 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public RunPlugin()
         {
-            this.IsStatement = true;
-            this.IsAutoMatched = true;
-            this.StartTokens = new string[] { "run", "Run" };
-            this.IsEndOfStatementRequired = true;
+            IsStatement = true;
+            IsAutoMatched = true;
+            StartTokens = new string[] { "run", "Run" };
+            IsEndOfStatementRequired = true;
         }
 
         /// <summary>

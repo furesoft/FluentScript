@@ -75,7 +75,7 @@ namespace ComLib.Lang.Helpers
         /// <returns></returns>
         public static Token ToComment(bool isMultiline, string text)
         {
-            int val = isMultiline ? TokenTypes.CommentMLine : TokenTypes.CommentSLine;
+            var val = isMultiline ? TokenTypes.CommentMLine : TokenTypes.CommentSLine;
             return new Token(TokenKind.Comment, val, text, text);
         }
 

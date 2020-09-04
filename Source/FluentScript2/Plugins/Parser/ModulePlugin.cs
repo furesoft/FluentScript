@@ -36,9 +36,9 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public ModulePlugin()
         {
-            this.IsAutoMatched = true;
-            this.StartTokens = new string[] { "mod" };
-            this.IsStatement = true;
+            IsAutoMatched = true;
+            StartTokens = new string[] { "mod" };
+            IsStatement = true;
         }
 
         /// <summary>
@@ -83,17 +83,17 @@ namespace ComLib.Lang.Plugins
             symbol.DataType.Name = name;
             symbol.DataType.FullName = name;
             symbol.Scope = new SymbolsNested(name);
-            symbol.ParentScope = this.Ctx.Symbols.Current;
+            symbol.ParentScope = Ctx.Symbols.Current;
 
             // 2. Add the module symbol to the current scope
-            this.Ctx.Symbols.Define(symbol);
+            Ctx.Symbols.Define(symbol);
 
             // 3. Now push the scope on top of the current scope. ( since modules can be nested )
-            this.Ctx.Symbols.Push(symbol.Scope, true);
+            Ctx.Symbols.Push(symbol.Scope, true);
 
             var block = new BlockExpr();
             _parser.ParseBlock(block);
-            this.Ctx.Symbols.Pop();
+            Ctx.Symbols.Pop();
             return block;
         }
     }

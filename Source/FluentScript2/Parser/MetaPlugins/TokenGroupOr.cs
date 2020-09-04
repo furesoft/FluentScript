@@ -8,9 +8,9 @@
 
         public TokenGroupOr(TokenMatch left, TokenMatch right)
         {
-            this.Left = left;
-            this.Right = right;
-            this.IsGroup = true;
+            Left = left;
+            Right = right;
+            IsGroup = true;
         }
 
         /// <summary>
@@ -19,13 +19,13 @@
         /// <returns></returns>
         public override int TotalRequired()
         {
-            if (!this.IsRequired)
+            if (!IsRequired)
                 return 0;
 
-            if (this.Left == null && this.Right == null)
+            if (Left == null && Right == null)
                 return 0;
 
-            var totalReq = this.Left.TotalRequired() + this.Right.TotalRequired();
+            var totalReq = Left.TotalRequired() + Right.TotalRequired();
             return totalReq;
         }
     }

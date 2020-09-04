@@ -217,7 +217,7 @@ namespace ComLib.Lang.Types
         public override void OnRegistered()
         {
             // Associated the javascript Date type name "Date" to LDate type name : "sys.datetime".
-            LTypesLookup.RegisterAlias(this.DataType, "Date", "Date");
+            LTypesLookup.RegisterAlias(DataType, "Date", "Date");
         }
 
         /// <summary>
@@ -262,7 +262,7 @@ namespace ComLib.Lang.Types
 
             // Convert all parameters to int
             var args = new int[parameters.Length];
-            for (int ndx = 0; ndx < parameters.Length; ndx++)
+            for (var ndx = 0; ndx < parameters.Length; ndx++)
             {
                 var arg = parameters[ndx];
                 var num = arg is LNumber ? ((LNumber)arg).Value : arg;
@@ -443,7 +443,7 @@ namespace ComLib.Lang.Types
             int hour = -1, int minute = -1, int second = -1, int millisecond = -1)
         {
             var target = date.Value;
-            DateTime dt = kind == DateTimeKind.Utc ? target.ToUniversalTime() : target;
+            var dt = kind == DateTimeKind.Utc ? target.ToUniversalTime() : target;
             year = year == -1 ? dt.Year : year;
             month = month == -1 ? dt.Month : month;
             day = day == -1 ? dt.Day : day;

@@ -31,7 +31,7 @@ namespace ComLib.Lang.Helpers
         /// <returns></returns>
         public T Get<T>(int ndx)
         {
-            object val = _args[ndx];
+            var val = _args[ndx];
             val = Convert.ChangeType(val, typeof(T), null);
             return (T)val;
         }
@@ -48,7 +48,7 @@ namespace ComLib.Lang.Helpers
             if (ndx < 0 || ndx >= _args.Length)
                 return defaultVal;
 
-            object val = _args[ndx];
+            var val = _args[ndx];
             val = Convert.ChangeType(val, typeof(T), null);
             return (T)val;
         }

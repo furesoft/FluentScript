@@ -51,7 +51,7 @@ namespace ComLib.Lang.AST
         public virtual object Evaluate(IAstVisitor visitor)
         {
             object result = null;
-            if (this.Ctx != null && this.Ctx.Callbacks.HasAny)
+            if (Ctx != null && Ctx.Callbacks.HasAny)
             {
                 Ctx.Callbacks.Notify("expression-on-before-execute", this, this);
                 result = DoEvaluate(visitor);
@@ -69,7 +69,7 @@ namespace ComLib.Lang.AST
         /// <returns></returns>
         public virtual T EvaluateAs<T>(IAstVisitor visitor)
         {
-            object result = Evaluate(visitor);
+            var result = Evaluate(visitor);
 
             // Evalulate<bool>() converting null to true.
             if (result == LObjects.Null && typeof(T) == typeof(bool))
@@ -87,7 +87,7 @@ namespace ComLib.Lang.AST
 
         public virtual object Visit(IAstVisitor visitor)
         {
-            return this.DoVisit(visitor);
+            return DoVisit(visitor);
         }
 
         public virtual object DoVisit(IAstVisitor visitor)
@@ -104,8 +104,8 @@ namespace ComLib.Lang.AST
         /// <returns></returns>
         public virtual string AsString(string tab = "", bool incrementTab = false, bool includeNewLine = true)
         {
-            var stmtType = this.GetType().Name.Replace("Expr", "");
-            string info = string.Format("{0}, {1}, {2} ", stmtType, Ref.Line, Ref.CharPos);
+            var stmtType = GetType().Name.Replace("Expr", "");
+            var info = string.Format("{0}, {1}, {2} ", stmtType, Ref.Line, Ref.CharPos);
 
             if (incrementTab)
                 tab = tab + "\t";
@@ -122,7 +122,7 @@ namespace ComLib.Lang.AST
         /// <returns></returns>
         public LangException BuildRunTimeException(string message)
         {
-            return new LangException("Runtime Error", message, this.Ref.ScriptName, this.Ref.Line, this.Ref.CharPos);
+            return new LangException("Runtime Error", message, Ref.ScriptName, Ref.Line, Ref.CharPos);
         }
     }
 }

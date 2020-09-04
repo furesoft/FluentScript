@@ -60,8 +60,8 @@ namespace ComLib.Lang.Plugins
         {
             // print no quotes needed!
             var takeoverToken = _lexer.LastTokenData;
-            int line = _lexer.State.Line;
-            int pos = _lexer.State.LineCharPosition;
+            var line = _lexer.State.Line;
+            var pos = _lexer.State.LineCharPosition;
 
             // What is the next word?
             var marker = _lexer.ReadWord();
@@ -73,7 +73,7 @@ namespace ComLib.Lang.Plugins
             line = _lexer.State.Line;
             pos = _lexer.State.LineCharPosition;
 
-            char c = _lexer.State.CurrentChar;
+            var c = _lexer.State.CurrentChar;
             if (c == '\'' || c == '"')
                 token = _lexer.ReadInterpolatedString(c, false, false, true);
             else
@@ -115,8 +115,8 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public MarkerPlugin()
         {
-            this.StartTokens = new string[] { "@" };
-            this.IsStatement = true;
+            StartTokens = new string[] { "@" };
+            IsStatement = true;
         }
 
         /// <summary>

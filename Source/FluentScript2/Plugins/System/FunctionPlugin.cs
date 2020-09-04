@@ -20,8 +20,8 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public FunctionDeclarePlugin()
         {
-            this.Precedence = 2;
-            this.ConfigureAsSystemStatement(true, false, "function");
+            Precedence = 2;
+            ConfigureAsSystemStatement(true, false, "function");
         }
 
         /// <summary>
@@ -129,24 +129,28 @@ namespace ComLib.Lang.Plugins
             var funcSymbol = new SymbolFunction(fs.Meta);
             funcSymbol.FuncExpr = stmt;
 
-            this.Ctx.Symbols.Define(funcSymbol);
+            Ctx.Symbols.Define(funcSymbol);
 
             // 2. Define the aliases.
             if (fs.Meta.Aliases != null && fs.Meta.Aliases.Count > 0)
-                foreach (var alias in fs.Meta.Aliases)
-                    this.Ctx.Symbols.DefineAlias(alias, fs.Meta.Name);
+			{
+				foreach (var alias in fs.Meta.Aliases)
+                    Ctx.Symbols.DefineAlias(alias, fs.Meta.Name);
+			}
 
-            // 3. Push the current scope.
-            stmt.SymScope = this.Ctx.Symbols.Current;
-            this.Ctx.Symbols.Push(new SymbolsFunction(fs.Meta.Name), true);
+			// 3. Push the current scope.
+			stmt.SymScope = Ctx.Symbols.Current;
+            Ctx.Symbols.Push(new SymbolsFunction(fs.Meta.Name), true);
 
             // 4. Register the parameter names in the symbol scope.
             if (fs.Meta.Arguments != null && fs.Meta.Arguments.Count > 0)
-                foreach (var arg in fs.Meta.Arguments)
-                    this.Ctx.Symbols.DefineVariable(arg.Name, LTypes.Object);
+			{
+				foreach (var arg in fs.Meta.Arguments)
+                    Ctx.Symbols.DefineVariable(arg.Name, LTypes.Object);
+			}
 
-            _parser.ParseBlock(stmt);
-            this.Ctx.Symbols.Pop();
+			_parser.ParseBlock(stmt);
+            Ctx.Symbols.Pop();
         }
 
         /// <summary>
@@ -158,14 +162,14 @@ namespace ComLib.Lang.Plugins
             var function = (node as FunctionDeclareExpr).Function;
 
             // 1. Register the function as a symbol
-            this.Ctx.Symbols.DefineFunction(function.Meta, function);
+            Ctx.Symbols.DefineFunction(function.Meta, function);
 
             // 2. Now register the aliases
             if (function.Meta.Aliases != null && function.Meta.Aliases.Count > 0)
             {
-                foreach (string alias in function.Meta.Aliases)
+                foreach (var alias in function.Meta.Aliases)
                 {
-                    this.Ctx.Symbols.DefineAlias(alias, function.Meta.Name);
+                    Ctx.Symbols.DefineAlias(alias, function.Meta.Name);
                 }
             }
         }

@@ -28,7 +28,7 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public MoneyPlugin()
         {
-            this.StartTokens = new string[] { "$", "€" };
+            StartTokens = new string[] { "$", "€" };
         }
 
         /// <summary>

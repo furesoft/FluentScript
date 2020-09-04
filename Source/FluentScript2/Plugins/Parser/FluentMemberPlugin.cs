@@ -125,10 +125,10 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public FluentMemberPlugin(bool enableMethodPartMatching)
         {
-            this.Precedence = 200;
-            this.IsStatement = true;
-            this.StartTokens = _tokens;
-            this.IsAssignmentSupported = true;
+            Precedence = 200;
+            IsStatement = true;
+            StartTokens = _tokens;
+            IsAssignmentSupported = true;
         }
 
         /// <summary>
@@ -242,7 +242,7 @@ namespace ComLib.Lang.Plugins
 
             // 1. Go through all the matches in group. e.g. "class"
             // Note: This is at most 4 possible groups ( class, instance, property, method )
-            for (int ndx = 0; ndx < group.Count; ndx++)
+            for (var ndx = 0; ndx < group.Count; ndx++)
             {
                 var match = group[ndx];
                 Token klass = null, instance = null, method = null, prop = null;
@@ -250,8 +250,8 @@ namespace ComLib.Lang.Plugins
 
                 // 2. Go through all the matches in each group
                 // Note: There are at most 4 matches.
-                int lastTokenPeek = 0;
-                for (int ndxT = 0; ndxT < match.Count; ndxT++)
+                var lastTokenPeek = 0;
+                for (var ndxT = 0; ndxT < match.Count; ndxT++)
                 {
                     part = match[ndxT];
                     if (part == FluentPart.Class) klass = token;
@@ -382,11 +382,13 @@ namespace ComLib.Lang.Plugins
             {
                 // Case 1: Check if class name e..g "File" exists in the registered types.
                 if (_ctx.Types.Contains(klass.Text))
-                    type = _ctx.Types.Get(klass.Text);
+				{
+					type = _ctx.Types.Get(klass.Text);
+				}
 
-                // Case 2: Class name is "File" but used as "file" in script, in a case insensitive way.
-                // This is ok, as long as there is NOT another instance variable with the same name.
-                else if (!_ctx.Symbols.Contains(klass.Text))
+				// Case 2: Class name is "File" but used as "file" in script, in a case insensitive way.
+				// This is ok, as long as there is NOT another instance variable with the same name.
+				else if (!_ctx.Symbols.Contains(klass.Text))
                 {
                     var name = Char.ToUpper(klass.Text[0]) + klass.Text.Substring(1);
                     if (_ctx.Types.Contains(name))
@@ -499,7 +501,7 @@ namespace ComLib.Lang.Plugins
         /// <returns></returns>
         public bool IsMember(Type type, string memberName, bool isStatic, MemberTypes memberType)
         {
-            BindingFlags staticOrInstance = isStatic ? BindingFlags.Static : BindingFlags.Instance;
+            var staticOrInstance = isStatic ? BindingFlags.Static : BindingFlags.Instance;
             var members = type.GetMember(memberName, BindingFlags.Public | staticOrInstance | BindingFlags.IgnoreCase);
             if (members == null || members.Length == 0)
                 return false;

@@ -47,7 +47,7 @@ namespace ComLib.Lang.Helpers
         /// <param name="count"></param>
         public void WriteLines(int count)
         {
-            for (int ndx = 0; ndx < count; ndx++)
+            for (var ndx = 0; ndx < count; ndx++)
             {
                 Console.WriteLine();
             }

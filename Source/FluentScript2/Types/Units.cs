@@ -220,11 +220,11 @@ namespace ComLib.Lang.Types
 
             // 1. Convert from source to base
             // e.g. 5 feet to 60 inches.
-            double sourceBaseUnits = value * sourceUnits.ConversionValue;
+            var sourceBaseUnits = value * sourceUnits.ConversionValue;
 
             // 2. Convert from base to destination
             // e.g. 60 inches to yards
-            double destinationUnits = ConvertToRelativeValue(sourceBaseUnits, destinationName, destUnits);
+            var destinationUnits = ConvertToRelativeValue(sourceBaseUnits, destinationName, destUnits);
             return destinationUnits;
         }
 
@@ -245,7 +245,7 @@ namespace ComLib.Lang.Types
 
             // 2. Convert from base to destination
             // e.g. 60 inches to yards
-            double destinationUnits = sourceBaseUnits;
+            var destinationUnits = sourceBaseUnits;
 
             // "feet" to "yards"
             // feet 12 > 36
@@ -277,7 +277,7 @@ namespace ComLib.Lang.Types
 
             // 1. Convert from source to base
             // e.g. 5 feet to 60 inches.
-            double sourceBaseUnits = value * sourceUnits.ConversionValue;
+            var sourceBaseUnits = value * sourceUnits.ConversionValue;
             var unit = new LUnit(value);
             unit.Group = group;
             unit.SubGroup = unitsName;
@@ -302,7 +302,7 @@ namespace ComLib.Lang.Types
 
             // 1. Convert from source to base
             // e.g. 5 feet to 60 inches.
-            double sourceBaseUnits = value * sourceUnits.ConversionValue;
+            var sourceBaseUnits = value * sourceUnits.ConversionValue;
             return sourceBaseUnits;
         }
 
@@ -318,13 +318,13 @@ namespace ComLib.Lang.Types
         {
             // e.g. 3 feet + 2 yards
             // 1. Get 3 feet in base units ( inches )
-            double sourceInBaseUnits = ConvertToBaseUnits(valueSource, source);
+            var sourceInBaseUnits = ConvertToBaseUnits(valueSource, source);
 
             // 2. Get 2 yards in base unites ( inches )
-            double destinationInBaseUnits = ConvertToBaseUnits(valueDest, dest);
+            var destinationInBaseUnits = ConvertToBaseUnits(valueDest, dest);
 
             // 3. Get total base units.
-            double totalBaseUnits = sourceInBaseUnits + destinationInBaseUnits;
+            var totalBaseUnits = sourceInBaseUnits + destinationInBaseUnits;
 
             // 4. Get the base name "inches" for source feet.
             // e.g. go from feet -> length -> inches. where "length" is the group.
@@ -332,13 +332,13 @@ namespace ComLib.Lang.Types
 
             // 5. Now get the baseunit name "inches" for "length"
             var baseUnitName = _groups[group].BaseName;
-            double result = Convert(totalBaseUnits, baseUnitName, source);
+            var result = Convert(totalBaseUnits, baseUnitName, source);
             return result;
         }
 
         private UnitSubGroup GetUnitsFor(string group, string unitName)
         {
-            string key = group + "_" + unitName;
+            var key = group + "_" + unitName;
             if (!_subGroups.ContainsKey(key))
                 return null;
 

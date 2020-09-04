@@ -25,7 +25,7 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public WhilePlugin()
         {
-            this.ConfigureAsSystemStatement(true, false, "while");
+            ConfigureAsSystemStatement(true, false, "while");
         }
 
         /// <summary>

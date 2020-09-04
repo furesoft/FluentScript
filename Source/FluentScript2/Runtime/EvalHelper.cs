@@ -259,11 +259,13 @@ namespace ComLib.Lang.Runtime
             // Date and time ?
             else if ((left.Type == LTypes.Date && right.Type == LTypes.Time)
                     || (left.Type == LTypes.Time && right.Type == LTypes.Date))
-                result = EvalHelper.CompareDayDifference(node, left, right, op);
+			{
+				result = EvalHelper.CompareDayDifference(node, left, right, op);
+			}
 
-            // Units
-            //else if (left.Type == LTypes.Unit || right.Type == LTypes.Unit)
-            else if (left.Type.Name == "LUnit" || right.Type.Name == "LUnit")
+			// Units
+			//else if (left.Type == LTypes.Unit || right.Type == LTypes.Unit)
+			else if (left.Type.Name == "LUnit" || right.Type.Name == "LUnit")
                 result = EvalHelper.CompareUnits(node, (LUnit)((LClass)left).Value, (LUnit)((LClass)right).Value, op);
 
             return result;
@@ -315,7 +317,7 @@ namespace ComLib.Lang.Runtime
                 return new LBool(result);
             }
 
-            int compareResult = string.Compare(left, right, StringComparison.InvariantCultureIgnoreCase);
+            var compareResult = string.Compare(left, right, StringComparison.InvariantCultureIgnoreCase);
             if (op == Operator.LessThan) result = compareResult == -1;
             else if (op == Operator.LessThanEqual) result = compareResult != 1;
             else if (op == Operator.MoreThan) result = compareResult == 1;
@@ -357,7 +359,7 @@ namespace ComLib.Lang.Runtime
         {
             var today = DateTime.Today;
             var targetDate = DateTime.Today;
-            TimeSpan expectedDiff = TimeSpan.MinValue;
+            var expectedDiff = TimeSpan.MinValue;
             if (lhSide.Type == LTypes.Date)
             {
                 targetDate = ((LDate)lhSide).Value;

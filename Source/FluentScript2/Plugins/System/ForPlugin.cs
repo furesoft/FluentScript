@@ -25,7 +25,7 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public ForLoopPlugin()
         {
-            this.ConfigureAsSystemStatement(true, false, "for");
+            ConfigureAsSystemStatement(true, false, "for");
         }
 
         /// <summary>

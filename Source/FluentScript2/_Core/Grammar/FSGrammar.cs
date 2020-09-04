@@ -39,18 +39,18 @@ namespace ComLib.Lang.Core.Grammar
     {
         public TokenSpec(int val, string kind, string text, string varname)
         {
-            this.Value = val;
-            this.Kind = kind;
-            this.Text = text;
-            this.VarName = varname;
+            Value = val;
+            Kind = kind;
+            Text = text;
+            VarName = varname;
             if (kind.StartsWith("Literal"))
             {
                 var tokens = text.Split(':');
-                this.Text = tokens[0];
-                this.LiteralValue = tokens[1];
-                this.IsLiteral = true;
+                Text = tokens[0];
+                LiteralValue = tokens[1];
+                IsLiteral = true;
             }
-            this.GenerateObject = true;
+            GenerateObject = true;
         }
 
         public int Value { get; set; }
@@ -66,14 +66,14 @@ namespace ComLib.Lang.Core.Grammar
     {
         public TypeSpec()
         {
-            this.Props = new List<ExtendedProp>();
+            Props = new List<ExtendedProp>();
         }
 
         public TypeSpec(string className, int val, string name, string fullName, string varname, string hostDataType)
         {
-            this.Value = val;
-            this.VarName = varname;
-            this.Props = new List<ExtendedProp>();
+            Value = val;
+            VarName = varname;
+            Props = new List<ExtendedProp>();
         }
 
         public bool Generate { get; set; }
@@ -92,8 +92,8 @@ namespace ComLib.Lang.Core.Grammar
 
         public void InitExtraProps()
         {
-            this.TypeProps = ExtendedPropsHelper.Parse(this.ExtraTypeProps);
-            this.Props = ExtendedPropsHelper.Parse(this.ExtraProps);
+            TypeProps = ExtendedPropsHelper.Parse(ExtraTypeProps);
+            Props = ExtendedPropsHelper.Parse(ExtraProps);
         }
     }
 
@@ -111,28 +111,28 @@ namespace ComLib.Lang.Core.Grammar
             bool isBlock, bool hasLhsRhs, bool createNewSymScope, bool hasOperator,
             string qualifiedName, string extraProps)
         {
-            this.ClassName = className;
-            this.Extends = extends;
-            this.Implements = implements;
-            this.Name = name;
-            this.Token = token;
-            this.CreatePlugin = createPlugin;
-            this.IsStatement = isStatement;
-            this.HasTerminator = hasTerminator;
-            this.IsBlock = isBlock;
-            this.HasLhsRhs = hasLhsRhs;
-            this.Precedence = precedence;
-            this.CreateNewSymScope = createNewSymScope;
-            this.HasOperator = hasOperator;
-            this.ExtraProps = extraProps;
-            this.QualifiedName = qualifiedName;
-            this.PluginImplements = pluginImplements;
-            this.InitExtendedProps();
+            ClassName = className;
+            Extends = extends;
+            Implements = implements;
+            Name = name;
+            Token = token;
+            CreatePlugin = createPlugin;
+            IsStatement = isStatement;
+            HasTerminator = hasTerminator;
+            IsBlock = isBlock;
+            HasLhsRhs = hasLhsRhs;
+            Precedence = precedence;
+            CreateNewSymScope = createNewSymScope;
+            HasOperator = hasOperator;
+            ExtraProps = extraProps;
+            QualifiedName = qualifiedName;
+            PluginImplements = pluginImplements;
+            InitExtendedProps();
         }
 
         public void InitExtendedProps()
         {
-            this.Props = ExtendedPropsHelper.Parse(this.ExtraProps);
+            Props = ExtendedPropsHelper.Parse(ExtraProps);
         }
 
         public bool IsAutoMatched()
@@ -173,7 +173,7 @@ namespace ComLib.Lang.Core.Grammar
 
         public void Setup()
         {
-            this.TokenSpecs = new List<TokenSpec>()
+            TokenSpecs = new List<TokenSpec>()
             {
                 new TokenSpec( 100,  "Keyword",      "var"      ,    "Var"       ),
                 new TokenSpec( 101,  "Keyword",      "if"       ,    "If"        ),
@@ -252,7 +252,7 @@ namespace ComLib.Lang.Core.Grammar
                 new TokenSpec( 215,   "LiteralOther",  "na:\"na\""   ,  "LiteralOther"  ) { GenerateObject = false } ,
             };
 
-            this.ExprSpecs = new List<ExprSpec>()
+            ExprSpecs = new List<ExprSpec>()
             {
                 new ExprSpec(className : "ArrayExpr",           name: "Array",           extends: "IndexableExpr",          implements: "",                     token : ""          ,  createPlugin : false,  pluginImplements: "",                 precedence: 1,  isStatement: false,  hasTerminator: false,  isBlock: false,  hasLhsRhs: false,  createNewSymScope: false,  hasOperator: false,  qualifiedName: "return \"\";",                                                            extraProps: "List<Expr>:Exprs"),
                 new ExprSpec(className : "AnyOfExpr",           name: "AnyOf",           extends: "Expr",                   implements: "IParameterExpression", token : ""          ,  createPlugin : false,  pluginImplements: "",                 precedence: 1,  isStatement: false,  hasTerminator: false,  isBlock: false,  hasLhsRhs: false,  createNewSymScope: false,  hasOperator: false,  qualifiedName: "return \"\";",                                                            extraProps: "Expr:CompareExpr;List<Expr>:prop-ParamListExpressions;List<object>:prop-ParamList"),
@@ -294,7 +294,7 @@ namespace ComLib.Lang.Core.Grammar
                 new ExprSpec(className : "VariableExpr",        name: "Variable",        extends: "Expr",                   implements: "",                     token : "@ident"    ,  createPlugin : true ,  pluginImplements: "",                 precedence: 1,  isStatement: false,  hasTerminator: false,  isBlock: false,  hasLhsRhs: false,  createNewSymScope: false,  hasOperator: false,  qualifiedName: "return this.Name;",                                                       extraProps: "string:Name"),
             };
 
-            this.TypeSpecs = new List<TypeSpec>()
+            TypeSpecs = new List<TypeSpec>()
             {
                 new TypeSpec(){ ClassName = "Array",     Generate = true,  ConstValue = "Array",     Type= "",  Name = "array",       FullName = "sys.array",     HostDataType = "IList",                         Value = 1 ,   ExtraTypeProps = ""},
                 new TypeSpec(){ ClassName = "Bool",      Generate = true,  ConstValue = "Bool",      Type= "",  Name = "bool",        FullName = "sys.bool",      HostDataType = "bool",                          Value = 2 ,   ExtraTypeProps = ""},
@@ -312,7 +312,7 @@ namespace ComLib.Lang.Core.Grammar
                 new TypeSpec(){ ClassName = "Time",      Generate = true,  ConstValue = "Time",      Type= "",  Name = "time",        FullName = "sys.time",      HostDataType = "TimeSpan",                      Value = 13,   ExtraTypeProps = ""},
                 new TypeSpec(){ ClassName = "Unit",      Generate = true,  ConstValue = "Unit",      Type= "",  Name = "unit",        FullName = "sys.unit",      HostDataType = "double",                        Value = 14,   ExtraTypeProps = "", ExtraProps = "double:prop-BaseValue;string:prop-Group;string:prop-SubGroup"},
             };
-            foreach (var typespec in this.TypeSpecs)
+            foreach (var typespec in TypeSpecs)
             {
                 typespec.InitExtraProps();
             }

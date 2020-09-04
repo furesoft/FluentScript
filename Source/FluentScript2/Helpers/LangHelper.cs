@@ -24,7 +24,7 @@ namespace ComLib.Lang.Helpers
         public static IDictionary<T, T> ToDictionary<T>(IList<T> items)
         {
             var dict = new Dictionary<T, T>();
-            foreach (T item in items)
+            foreach (var item in items)
             {
                 dict[item] = item;
             }
@@ -40,7 +40,7 @@ namespace ComLib.Lang.Helpers
         public static IDictionary<T, T> ToDictionaryFiltered<T>(IList<T> items)
         {
             var dict = new Dictionary<T, T>();
-            foreach (T item in items)
+            foreach (var item in items)
             {
                 dict[item] = item;
             }
@@ -72,7 +72,7 @@ namespace ComLib.Lang.Helpers
         /// <returns></returns>
         public static Expr ProcessShuntingYardList(Context context, Parser parser, List<object> stack)
         {
-            int index = 0;
+            var index = 0;
             Expr finalExp = null;
 
             // Shunting yard algorithm handles POSTFIX operations.
@@ -93,9 +93,9 @@ namespace ComLib.Lang.Helpers
                 // right is 1 behind current position
                 var left = stack[index - 2] as Expr;
                 var right = stack[index - 1] as Expr;
-                TokenData tdata = stack[index] as TokenData;
-                Token top = tdata.Token;
-                Operator op = Operators.ToOp(top.Text);
+                var tdata = stack[index] as TokenData;
+                var top = tdata.Token;
+                var op = Operators.ToOp(top.Text);
                 Expr exp = null;
 
                 if (Operators.IsMath(op))
@@ -122,9 +122,9 @@ namespace ComLib.Lang.Helpers
         /// <param name="exceptionMessageFetcher"></param>
         public static RunResult Execute(Action action, Func<string> exceptionMessageFetcher = null)
         {
-            DateTime start = DateTime.Now;
-            bool success = true;
-            string message = string.Empty;
+            var start = DateTime.Now;
+            var success = true;
+            var message = string.Empty;
             Exception scriptError = null;
             try
             {
@@ -135,17 +135,20 @@ namespace ComLib.Lang.Helpers
                 success = false;
                 if (ex is LangException)
                 {
-                    LangException lex = ex as LangException;
+                    var lex = ex as LangException;
                     const string langerror = "{0} : {1} at line : {2}, position: {3}";
                     message = string.Format(langerror, lex.Error.ErrorType, lex.Message, lex.Error.Line, lex.Error.Column);
                 }
-                else message = ex.Message;
+                else
+				{
+					message = ex.Message;
+				}
 
-                scriptError = ex;
+				scriptError = ex;
                 if (exceptionMessageFetcher != null)
                     message += exceptionMessageFetcher();
             }
-            DateTime end = DateTime.Now;
+            var end = DateTime.Now;
             var runResult = new RunResult(start, end, success, message);
             runResult.Ex = scriptError;
             return runResult;

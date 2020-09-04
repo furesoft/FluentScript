@@ -89,7 +89,7 @@ namespace ComLib.Lang.Types
         {
             var result = new StringBuilder();
             result.Append(target.Value);
-            foreach (object str in strings)
+            foreach (var str in strings)
                 result.Append(str);
             return result.ToString();
         }
@@ -157,7 +157,7 @@ namespace ComLib.Lang.Types
             if (to == -1) return target.Value.Substring(from);
 
             // Compute length for c# string method.
-            int length = (to - from) + 1;
+            var length = (to - from) + 1;
             return target.Value.Substring(from, length);
         }
 
@@ -181,7 +181,7 @@ namespace ComLib.Lang.Types
         /// <returns></returns>
         public int Search(LString target, string regExp)
         {
-            Match match = Regex.Match(target.Value, regExp);
+            var match = Regex.Match(target.Value, regExp);
             if (!match.Success) return -1;
 
             return match.Index;

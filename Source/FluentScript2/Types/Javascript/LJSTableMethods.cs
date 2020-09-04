@@ -127,7 +127,7 @@ namespace ComLib.Lang.Types
         /// <returns>The removed element</returns>
         public object Pop(LObject target)
         {
-            return this.RemoveLast(target);
+            return RemoveLast(target);
         }
 
         /// <summary>
@@ -190,17 +190,17 @@ namespace ComLib.Lang.Types
         public LObject Reverse(LObject target)
         {
             var list = target.GetValue() as IList;
-            int length = list.Count;
+            var length = list.Count;
             if (length == 0 || length == 1) return null;
 
             // 2 or more.
-            int highIndex = length - 1;
-            int stopIndex = length / 2;
+            var highIndex = length - 1;
+            var stopIndex = length / 2;
             if (length % 2 == 0)
                 stopIndex--;
-            for (int lowIndex = 0; lowIndex <= stopIndex; lowIndex++)
+            for (var lowIndex = 0; lowIndex <= stopIndex; lowIndex++)
             {
-                object tmp = list[lowIndex];
+                var tmp = list[lowIndex];
                 list[lowIndex] = list[highIndex];
                 list[highIndex] = tmp;
                 highIndex--;

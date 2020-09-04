@@ -7,7 +7,7 @@ namespace ComLib.Lang.AST
     {
         public BindingCallExpr()
         {
-            this.Nodetype = NodeTypes.SysFunctionCall;
+            Nodetype = NodeTypes.SysFunctionCall;
         }
 
         public string Name;
@@ -30,7 +30,7 @@ namespace ComLib.Lang.AST
 
         public override string ToQualifiedName()
         {
-            return this.FullName;
+            return FullName;
         }
     }
 }

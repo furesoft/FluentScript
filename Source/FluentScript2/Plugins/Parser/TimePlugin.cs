@@ -47,7 +47,7 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public TimeExprPlugin()
         {
-            this.StartTokens = new string[] { "$NumberToken", "Noon", "noon", "midnight", "Midnight" };
+            StartTokens = new string[] { "$NumberToken", "Noon", "noon", "midnight", "Midnight" };
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace ComLib.Lang.Plugins
                 return timeVal;
             }
 
-            string tokenText = tokenIt.NextToken.Token.Text.ToLower();
+            var tokenText = tokenIt.NextToken.Token.Text.ToLower();
             if (_aliases.ContainsKey(tokenText))
             {
                 tokenIt.Advance();
@@ -303,9 +303,11 @@ namespace ComLib.Lang.Plugins
             // So if next token is not ':' then it has to be "am" or "pm"
             if (nextTokenText != ComLib.Lang.Core.Tokens.Colon.Text
                 && nextTokenText != "am" && nextTokenText != "pm")
-                return false;
+			{
+				return false;
+			}
 
-            var text = Lexer.State.CurrentChar + _lexer.Scanner.PeekMaxChars(10);
+			var text = Lexer.State.CurrentChar + _lexer.Scanner.PeekMaxChars(10);
             // 1. Check for am/pm ( required )
             var isAm = true;
             var ndxAmOrPm = text.IndexOf("am", StringComparison.InvariantCultureIgnoreCase);

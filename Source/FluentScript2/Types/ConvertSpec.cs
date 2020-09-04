@@ -78,7 +78,7 @@ namespace ComLib.Lang.Types
         /// <returns></returns>
         public string LookupKey()
         {
-            return this.SourceType + "-" + this.DestType;
+            return SourceType + "-" + DestType;
         }
     }
 }

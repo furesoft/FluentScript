@@ -60,9 +60,9 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public RoundPlugin()
         {
-            this.IsStatement = false;
-            this.IsAutoMatched = true;
-            this.StartTokens = new string[] { "Round", "round" };
+            IsStatement = false;
+            IsAutoMatched = true;
+            StartTokens = new string[] { "Round", "round" };
         }
 
         /// <summary>
@@ -98,8 +98,8 @@ namespace ComLib.Lang.Plugins
         /// <returns></returns>
         public override Expr Parse()
         {
-            RoundMode mode = RoundMode.Round;
-            Token t = _tokenIt.Peek().Token;
+            var mode = RoundMode.Round;
+            var t = _tokenIt.Peek().Token;
             if (string.Compare(t.Text, "up", StringComparison.InvariantCultureIgnoreCase) == 0)
             {
                 mode = RoundMode.RoundUp;
@@ -154,11 +154,15 @@ namespace ComLib.Lang.Plugins
                 val = Convert.ToDouble(d);
             }
             else if (_mode == RoundPlugin.RoundMode.RoundDown)
-                val = Math.Floor(val);
-            else if (_mode == RoundPlugin.RoundMode.RoundUp)
-                val = Math.Ceiling(val);
+			{
+				val = Math.Floor(val);
+			}
+			else if (_mode == RoundPlugin.RoundMode.RoundUp)
+			{
+				val = Math.Ceiling(val);
+			}
 
-            return new LNumber(val);
+			return new LNumber(val);
         }
     }
 }

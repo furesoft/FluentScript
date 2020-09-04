@@ -22,7 +22,7 @@ namespace ComLib.Lang.Runtime.Switches
             var statements = i.ToStatements(_filepath, true);
             using (var writer = new StreamWriter(_outpath))
             {
-                foreach (Expr stmt in statements)
+                foreach (var stmt in statements)
                 {
                     writer.Write(stmt.AsString());
                 }

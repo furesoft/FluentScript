@@ -55,7 +55,7 @@ namespace ComLib.Lang.Plugins
         /// <returns></returns>
         public override Token[] Parse()
         {
-            bool includeNewLine = _lexer.LastTokenData.Token.Text == "println";
+            var includeNewLine = _lexer.LastTokenData.Token.Text == "println";
             var resultTokens = base.ParseLine(includeNewLine);
 
             // Add new line to end if using "println"

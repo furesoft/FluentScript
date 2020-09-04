@@ -27,7 +27,7 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public TryCatchPlugin()
         {
-            this.ConfigureAsSystemStatement(true, false, "try");
+            ConfigureAsSystemStatement(true, false, "try");
         }
 
         /// <summary>

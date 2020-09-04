@@ -323,7 +323,7 @@ namespace ComLib.Lang.Core
         /// <returns></returns>
         public static int Precedence(string token)
         {
-            int precedence = OpsPrecedence[token];
+            var precedence = OpsPrecedence[token];
             return precedence;
         }
     }

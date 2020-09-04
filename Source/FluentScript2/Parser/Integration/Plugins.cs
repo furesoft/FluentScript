@@ -133,7 +133,7 @@ namespace ComLib.Lang.Parsing
 
         public int Total()
         {
-            var total = this.TotalExpressions + this.TotalLexical + this.TotalStmts;
+            var total = TotalExpressions + TotalLexical + TotalStmts;
             return total;
         }
 
@@ -248,7 +248,7 @@ namespace ComLib.Lang.Parsing
         public void RegisterCustomByType(Type pluginType)
         {
             var name = pluginType.Name.Replace("Plugin", "");
-            ILangPlugin plugin = _extMap.ContainsKey(name)
+            var plugin = _extMap.ContainsKey(name)
                                  ? _extMap[name]
                                  : (ILangPlugin)CreatePluginInstance(pluginType);
             Register(plugin);
@@ -429,8 +429,8 @@ namespace ComLib.Lang.Parsing
             if (!_pluginSettings.ContainsKey(pluginId))
                 return default(T);
 
-            object o = _pluginSettings[pluginId];
-            T settings = default(T);
+            var o = _pluginSettings[pluginId];
+            var settings = default(T);
             if (o != null)
                 settings = o as T;
             return settings;
@@ -509,7 +509,7 @@ namespace ComLib.Lang.Parsing
         /// <returns></returns>
         public bool CanHandleTok(Token token, bool isCurrentToken)
         {
-            int tokenPos = isCurrentToken ? 0 : 1;
+            var tokenPos = isCurrentToken ? 0 : 1;
             var plugin = GetTok(token, tokenPos);
             _lastMatchedTok = plugin;
             if (plugin == null) return false;
@@ -670,7 +670,7 @@ namespace ComLib.Lang.Parsing
         private void RegisterExtensionsByNames(ICollection<string> pluginKeys, IDictionary<string, ILangPlugin> map)
         {
             var plugins = new ILangPlugin[pluginKeys.Count];
-            int ndx = 0;
+            var ndx = 0;
             foreach (var key in pluginKeys)
             {
                 if (!map.ContainsKey(key))
@@ -705,8 +705,8 @@ namespace ComLib.Lang.Parsing
             if (token == Tokens.EndToken) return null;
             if (map == null || map.Count == 0) return null;
 
-            string name = key == null ? token.Text : key;
-            bool isCurrentToken = tokenPos == 0;
+            var name = key == null ? token.Text : key;
+            var isCurrentToken = tokenPos == 0;
             List<ILangPlugin> plugins = null;
             if (name == null)
                 return null;
@@ -734,7 +734,7 @@ namespace ComLib.Lang.Parsing
                 ILangPlugin matchedPlugin = null;
                 foreach (var plugin in plugins)
                 {
-                    bool isTokenTypePlugin = plugin is ITokenPlugin;
+                    var isTokenTypePlugin = plugin is ITokenPlugin;
                     if (isTokenTypePlugin)
                     {
                         if (((ITokenPlugin)plugin).CanHandle(token, isCurrentToken))
@@ -772,9 +772,11 @@ namespace ComLib.Lang.Parsing
                 map[token] = list;
             }
             else
-                list = map[token];
+			{
+				list = map[token];
+			}
 
-            list.Add(plugin);
+			list.Add(plugin);
 
             if (sort)
             {
@@ -854,14 +856,17 @@ namespace ComLib.Lang.Parsing
 
             var examples = "";
             if (plugin.Examples != null)
-                for (var ndx = 0; ndx < plugin.Examples.Count(); ndx++)
+			{
+				for (var ndx = 0; ndx < plugin.Examples.Count(); ndx++)
                 {
                     if (ndx != 0)
                         examples += ", ";
 
                     examples += "'" + plugin.Examples[ndx] + "'";
                 }
-            replacements["starttokens"] = tokens;
+			}
+
+			replacements["starttokens"] = tokens;
             replacements["examples"] = examples;
 
             foreach (var pair in replacements)

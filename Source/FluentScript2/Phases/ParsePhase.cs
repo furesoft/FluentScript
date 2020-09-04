@@ -18,7 +18,7 @@ namespace ComLib.Lang.Phases
         public ParsePhase(Parser parser)
         {
             _parser = parser;
-            this.Name = "ast-parsing";
+            Name = "ast-parsing";
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace ComLib.Lang.Phases
 
             var runResult = LangHelper.Execute(() =>
            {
-               this.Ctx.Limits.CheckScriptLength(script);
+               Ctx.Limits.CheckScriptLength(script);
                _parser.Parse(script, memory);
 
                if (phaseCtx.Nodes == null)

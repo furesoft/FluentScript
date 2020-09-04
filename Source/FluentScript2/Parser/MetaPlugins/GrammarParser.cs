@@ -26,7 +26,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
             _operatorStack = new List<string>();
             END = _grammar.Length;
             _matches = new List<TokenMatch>();
-            this.DoParse();
+            DoParse();
             if (_groupCount > 0)
                 throw new ArgumentException("Grammar contains extra parenthesis : " + grammar);
             if (_orCount > 0)
@@ -82,7 +82,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
                 else if (c == '?')
                 {
                     _pos++;
-                    var last = this.Last();
+                    var last = Last();
                     if (_groupCount > 0 && last.IsGroup)
                     {
                         var group = ((TokenGroup)last);
@@ -94,7 +94,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
                 else if (c == '(')
                 {
                     _pos++;
-                    this.BeginGroup();
+                    BeginGroup();
                 }
                 else if (c == ')')
                 {
@@ -139,8 +139,10 @@ namespace ComLib.Lang.Parsing.MetaPlugins
                     AddMatch(match);
                 }
                 else
-                    _pos++;
-            }
+				{
+					_pos++;
+				}
+			}
         }
 
         private string LastOperator()
@@ -170,16 +172,16 @@ namespace ComLib.Lang.Parsing.MetaPlugins
         private void CloseGroup()
         {
             _groupCount--;
-            this.ProcessOperatorForGroup();
-            this.ProcessOperatorForOr();
+            ProcessOperatorForGroup();
+            ProcessOperatorForOr();
         }
 
         private void AddMatch(TokenMatch match)
         {
-            var matches = this.GetMatchCollection();
+            var matches = GetMatchCollection();
             if (matches != null)
                 matches.Add(match);
-            this.ProcessOperatorForOr();
+            ProcessOperatorForOr();
         }
 
         private List<TokenMatch> GetMatchCollection()
@@ -208,20 +210,20 @@ namespace ComLib.Lang.Parsing.MetaPlugins
 
         private void ProcessOperatorForGroup()
         {
-            if (this.LastOperator() == "(")
+            if (LastOperator() == "(")
             {
-                this.RemoveLastOperator();
+                RemoveLastOperator();
             }
         }
 
         private void ProcessOperatorForOr()
         {
-            if (this._orCount == 0 || this.LastOperator() != "|")
+            if (_orCount == 0 || LastOperator() != "|")
             {
                 return;
             }
 
-            var matches = this.GetMatchCollection();
+            var matches = GetMatchCollection();
             if (matches.Count >= 2)
             {
                 // 1. Get last 2
@@ -238,7 +240,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
                 matches.Add(groupOr);
 
                 _orCount--;
-                this.RemoveLastOperator();
+                RemoveLastOperator();
             }
         }
 
@@ -265,8 +267,8 @@ namespace ComLib.Lang.Parsing.MetaPlugins
                     match.Name = word;
 
                     // Expect ":" followed by tokenvalue
-                    this.Expect(':');
-                    this.ReadTokenValue(match);
+                    Expect(':');
+                    ReadTokenValue(match);
                     break;
                 }
                 // Case 2: Move past white space.
@@ -281,8 +283,10 @@ namespace ComLib.Lang.Parsing.MetaPlugins
                     break;
                 }
                 else
-                    break;
-            }
+				{
+					break;
+				}
+			}
             return match;
         }
 
@@ -398,7 +402,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
             var c = _grammar[_pos];
             if (c != expectChar)
             {
-                this.AddError("Expected : " + expectChar + ", but found : " + c + " at position : " + _pos);
+                AddError("Expected : " + expectChar + ", but found : " + c + " at position : " + _pos);
                 return;
             }
             _pos++;
@@ -406,7 +410,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
 
         private void AddError(string error)
         {
-            this._errors.Add(error);
+            _errors.Add(error);
         }
     }
 }

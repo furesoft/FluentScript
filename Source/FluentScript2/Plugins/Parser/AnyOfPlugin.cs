@@ -45,8 +45,8 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public AnyOfPlugin()
         {
-            this.IsAutoMatched = true;
-            this.StartTokens = new string[] { "any" };
+            IsAutoMatched = true;
+            StartTokens = new string[] { "any" };
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace ComLib.Lang.Plugins
             _tokenIt.Advance(2);
 
             var anyofExpr = new AnyOfExpr();
-            anyofExpr.Ctx = this.Ctx;
+            anyofExpr.Ctx = Ctx;
             anyofExpr.ParamListExpressions = new List<Expr>();
             anyofExpr.ParamList = new List<object>();
 

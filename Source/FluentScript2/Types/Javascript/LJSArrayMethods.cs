@@ -114,8 +114,8 @@ namespace ComLib.Lang.Types
             AddRange(copy, list);
             for (var ndx = 0; ndx < arrays.Length; ndx++)
             {
-                object item = arrays[ndx];
-                IList array = (IList)item;
+                var item = arrays[ndx];
+                var array = (IList)item;
                 AddRange(copy, array);
             }
             return new LArray(copy);
@@ -165,13 +165,13 @@ namespace ComLib.Lang.Types
                 buffer.Append(lobj.GetValue());
             if (total > 1)
             {
-                for (int ndx = 1; ndx < list.Count; ndx++)
+                for (var ndx = 1; ndx < list.Count; ndx++)
                 {
                     lobj = list[ndx] as LObject;
                     buffer.Append(separator + lobj.GetValue());
                 }
             }
-            string result = buffer.ToString();
+            var result = buffer.ToString();
             return result;
         }
 
@@ -208,7 +208,7 @@ namespace ComLib.Lang.Types
         {
             var list = target.GetValue() as IList;
             var index = list.Count - 1;
-            object toRemove = list[index];
+            var toRemove = list[index];
             list.RemoveAt(index);
             return toRemove;
         }
@@ -228,7 +228,7 @@ namespace ComLib.Lang.Types
             if (list == null)
                 return 0;
 
-            foreach (object elem in elements)
+            foreach (var elem in elements)
             {
                 if (list.GetType().IsGenericType)
                 {
@@ -261,17 +261,17 @@ namespace ComLib.Lang.Types
         public LObject Reverse(LObject target)
         {
             var list = target.GetValue() as IList;
-            int length = list.Count;
+            var length = list.Count;
             if (length == 0 || length == 1) return null;
 
             // 2 or more.
-            int highIndex = length - 1;
-            int stopIndex = length / 2;
+            var highIndex = length - 1;
+            var stopIndex = length / 2;
             if (length % 2 == 0)
                 stopIndex--;
-            for (int lowIndex = 0; lowIndex <= stopIndex; lowIndex++)
+            for (var lowIndex = 0; lowIndex <= stopIndex; lowIndex++)
             {
-                object tmp = list[lowIndex];
+                var tmp = list[lowIndex];
                 list[lowIndex] = list[highIndex];
                 list[highIndex] = tmp;
                 highIndex--;
@@ -288,7 +288,7 @@ namespace ComLib.Lang.Types
         {
             var list = target.GetValue() as IList;
             if (list.Count == 0) return null;
-            object item = list[0];
+            var item = list[0];
             list.RemoveAt(0);
             return item;
         }
@@ -326,7 +326,7 @@ namespace ComLib.Lang.Types
             if (howmany > 0)
             {
                 removed = new List<object>();
-                for (int ndxRemove = index; ndxRemove < (index + howmany); ndxRemove++)
+                for (var ndxRemove = index; ndxRemove < (index + howmany); ndxRemove++)
                 {
                     removed.Add(list[ndxRemove]);
                 }
@@ -337,7 +337,7 @@ namespace ComLib.Lang.Types
                 var lastIndex = index;
                 for (var ndx = 0; ndx < elements.Length; ndx++)
                 {
-                    object objToAdd = elements[ndx];
+                    var objToAdd = elements[ndx];
                     list.Insert(lastIndex, objToAdd);
                     lastIndex++;
                 }
@@ -358,7 +358,7 @@ namespace ComLib.Lang.Types
             if (elements == null || elements.Length == 0) return list.Count;
             for (var ndx = 0; ndx < elements.Length; ndx++)
             {
-                object val = elements[ndx];
+                var val = elements[ndx];
                 list.Insert(0, val);
             }
             return list.Count;

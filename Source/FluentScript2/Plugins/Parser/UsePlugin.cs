@@ -79,7 +79,7 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public UsePlugin()
         {
-            this.StartTokens = new string[] { "use" };
+            StartTokens = new string[] { "use" };
         }
 
         /// <summary>

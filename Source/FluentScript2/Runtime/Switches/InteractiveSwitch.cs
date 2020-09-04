@@ -40,10 +40,12 @@ namespace ComLib.Lang.Runtime.Switches
                 if (string.Compare(script, "exit", StringComparison.InvariantCultureIgnoreCase) == 0
                     || string.Compare(script, "Exit", StringComparison.InvariantCultureIgnoreCase) == 0
                     || string.Compare(script, "EXIT", StringComparison.InvariantCultureIgnoreCase) == 0)
-                    break;
+				{
+					break;
+				}
 
-                // 5. Only process if not empty
-                if (!string.IsNullOrEmpty(script))
+				// 5. Only process if not empty
+				if (!string.IsNullOrEmpty(script))
                 {
                     i.AppendExecute(script);
 

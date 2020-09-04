@@ -7,7 +7,7 @@
         public DirectiveSwitch(string directives)
         {
             _directives = directives;
-            this.OutputResult = false;
+            OutputResult = false;
         }
 
         /// <summary>

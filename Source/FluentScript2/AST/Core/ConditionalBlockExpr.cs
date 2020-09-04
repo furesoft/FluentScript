@@ -18,8 +18,8 @@ namespace ComLib.Lang.AST
         /// <param name="statements"></param>
         public ConditionalBlockExpr(Expr condition, List<Expr> statements)
         {
-            this.Condition = condition;
-            this._statements = statements ?? new List<Expr>();
+            Condition = condition;
+            _statements = statements ?? new List<Expr>();
         }
 
         /// <summary>

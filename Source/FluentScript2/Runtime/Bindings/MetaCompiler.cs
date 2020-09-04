@@ -16,10 +16,10 @@ namespace ComLib.Lang.Runtime.Bindings
 
         public MetaCompiler()
         {
-            this.Namespace = "sys.compiler";
-            this.SupportsFunctions = true;
-            this.NamingConvention = "pascal";
-            this.ExportedFunctions = new List<string>()
+            Namespace = "sys.compiler";
+            SupportsFunctions = true;
+            NamingConvention = "pascal";
+            ExportedFunctions = new List<string>()
             {
                 "toConstantDate",
                 "toConstantTime",

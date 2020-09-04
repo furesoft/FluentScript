@@ -16,7 +16,7 @@ namespace ComLib.Lang.Phases
         public LintPhase(bool execAllNodes)
         {
             _execAllNodes = execAllNodes;
-            this.Name = "ast-semantic-check";
+            Name = "ast-semantic-check";
         }
 
         /// <summary>

@@ -19,9 +19,9 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public VarPlugin()
         {
-            this.ConfigureAsSystemStatement(false, true, "var,$IdToken");
-            this.IsAutoMatched = false;
-            this.Precedence = 1000;
+            ConfigureAsSystemStatement(false, true, "var,$IdToken");
+            IsAutoMatched = false;
+            Precedence = 1000;
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace ComLib.Lang.Plugins
         /// <returns></returns>
         public override Expr Parse()
         {
-            bool expectVar = _tokenIt.NextToken.Token == Tokens.Var;
+            var expectVar = _tokenIt.NextToken.Token == Tokens.Var;
             return ParseAssignment(expectVar, true, null);
         }
 
@@ -140,7 +140,7 @@ namespace ComLib.Lang.Plugins
         /// <param name="node">The node returned by this implementations Parse method</param>
         public override void OnParseComplete(AstNode node)
         {
-            this.ExpParser.OnParseAssignComplete(node as Expr);
+            ExpParser.OnParseAssignComplete(node as Expr);
         }
     }
 }

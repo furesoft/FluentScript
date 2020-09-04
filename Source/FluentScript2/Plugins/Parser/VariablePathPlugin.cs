@@ -56,8 +56,8 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public VariablePathPlugin()
         {
-            this.StartTokens = new string[] { "@", "$IdToken" };
-            this.IsStatement = true;
+            StartTokens = new string[] { "@", "$IdToken" };
+            IsStatement = true;
         }
 
         /// <summary>
@@ -163,9 +163,11 @@ namespace ComLib.Lang.Plugins
                 }
                 // Separator for function calls, arrays, dictionarys, endof statement
                 else
-                    break;
+				{
+					break;
+				}
 
-                _tokenIt.Advance();
+				_tokenIt.Advance();
 
                 // This store the starting token of the last string based path
                 if (resetLastPathToken)

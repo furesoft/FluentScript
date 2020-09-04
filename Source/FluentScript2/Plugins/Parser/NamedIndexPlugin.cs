@@ -36,8 +36,8 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public NamedIndexPlugin()
         {
-            this.IsAutoMatched = true;
-            this.StartTokens = new string[] { "$NumberToken" };
+            IsAutoMatched = true;
+            StartTokens = new string[] { "$NumberToken" };
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace ComLib.Lang.Plugins
 
             // Finally check if there is a plural symbol that exists.
             var id = n.Text;
-            if (this.Ctx.Symbols.Contains(id + "s"))
+            if (Ctx.Symbols.Contains(id + "s"))
                 return true;
             return false;
         }

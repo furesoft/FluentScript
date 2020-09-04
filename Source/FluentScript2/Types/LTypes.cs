@@ -19,20 +19,20 @@ namespace ComLib.Lang.Types
     {
         public LArray(IList val)
         {
-            this.Value = val;
-            this.Type = LTypes.Array;
+            Value = val;
+            Type = LTypes.Array;
         }
 
         public IList Value;
 
         public override object GetValue()
         {
-            return this.Value;
+            return Value;
         }
 
         public override object Clone()
         {
-            return new LArray(this.Value);
+            return new LArray(Value);
         }
 
         public override string ToString()
@@ -45,10 +45,10 @@ namespace ComLib.Lang.Types
     {
         public LArrayType()
         {
-            this.Name = "array";
-            this.FullName = "sys.array";
-            this.TypeVal = TypeConstants.Array;
-            this.IsSystemType = true;
+            Name = "array";
+            FullName = "sys.array";
+            TypeVal = TypeConstants.Array;
+            IsSystemType = true;
         }
     }
 
@@ -57,20 +57,20 @@ namespace ComLib.Lang.Types
     {
         public LBool(bool val)
         {
-            this.Value = val;
-            this.Type = LTypes.Bool;
+            Value = val;
+            Type = LTypes.Bool;
         }
 
         public bool Value;
 
         public override object GetValue()
         {
-            return this.Value;
+            return Value;
         }
 
         public override object Clone()
         {
-            return new LBool(this.Value);
+            return new LBool(Value);
         }
     }
 
@@ -78,10 +78,10 @@ namespace ComLib.Lang.Types
     {
         public LBoolType()
         {
-            this.Name = "bool";
-            this.FullName = "sys.bool";
-            this.TypeVal = TypeConstants.Bool;
-            this.IsSystemType = true;
+            Name = "bool";
+            FullName = "sys.bool";
+            TypeVal = TypeConstants.Bool;
+            IsSystemType = true;
         }
     }
 
@@ -90,20 +90,20 @@ namespace ComLib.Lang.Types
     {
         public LClass(object val)
         {
-            this.Value = val;
-            this.Type = LTypes.Class;
+            Value = val;
+            Type = LTypes.Class;
         }
 
         public object Value;
 
         public override object GetValue()
         {
-            return this.Value;
+            return Value;
         }
 
         public override object Clone()
         {
-            return new LClass(this.Value);
+            return new LClass(Value);
         }
     }
 
@@ -111,10 +111,10 @@ namespace ComLib.Lang.Types
     {
         public LClassType()
         {
-            this.Name = "class";
-            this.FullName = "ext.class";
-            this.TypeVal = TypeConstants.LClass;
-            this.IsSystemType = true;
+            Name = "class";
+            FullName = "ext.class";
+            TypeVal = TypeConstants.LClass;
+            IsSystemType = true;
         }
 
         public Type DataType;
@@ -125,20 +125,20 @@ namespace ComLib.Lang.Types
     {
         public LDate(DateTime val)
         {
-            this.Value = val;
-            this.Type = LTypes.Date;
+            Value = val;
+            Type = LTypes.Date;
         }
 
         public DateTime Value;
 
         public override object GetValue()
         {
-            return this.Value;
+            return Value;
         }
 
         public override object Clone()
         {
-            return new LDate(this.Value);
+            return new LDate(Value);
         }
     }
 
@@ -146,10 +146,10 @@ namespace ComLib.Lang.Types
     {
         public LDateType()
         {
-            this.Name = "datetime";
-            this.FullName = "sys.datetime";
-            this.TypeVal = TypeConstants.Date;
-            this.IsSystemType = true;
+            Name = "datetime";
+            FullName = "sys.datetime";
+            TypeVal = TypeConstants.Date;
+            IsSystemType = true;
         }
     }
 
@@ -158,20 +158,20 @@ namespace ComLib.Lang.Types
     {
         public LDayOfWeek(DayOfWeek val)
         {
-            this.Value = val;
-            this.Type = LTypes.DayOfWeek;
+            Value = val;
+            Type = LTypes.DayOfWeek;
         }
 
         public DayOfWeek Value;
 
         public override object GetValue()
         {
-            return this.Value;
+            return Value;
         }
 
         public override object Clone()
         {
-            return new LDayOfWeek(this.Value);
+            return new LDayOfWeek(Value);
         }
     }
 
@@ -179,10 +179,10 @@ namespace ComLib.Lang.Types
     {
         public LDayOfWeekType()
         {
-            this.Name = "dayofweek";
-            this.FullName = "sys.dayofweek";
-            this.TypeVal = TypeConstants.DayOfWeek;
-            this.IsSystemType = true;
+            Name = "dayofweek";
+            FullName = "sys.dayofweek";
+            TypeVal = TypeConstants.DayOfWeek;
+            IsSystemType = true;
         }
     }
 
@@ -191,20 +191,20 @@ namespace ComLib.Lang.Types
     {
         public LFunction(object val)
         {
-            this.Value = val;
-            this.Type = LTypes.Function;
+            Value = val;
+            Type = LTypes.Function;
         }
 
         public object Value;
 
         public override object GetValue()
         {
-            return this.Value;
+            return Value;
         }
 
         public override object Clone()
         {
-            return new LFunction(this.Value);
+            return new LFunction(Value);
         }
     }
 
@@ -212,10 +212,10 @@ namespace ComLib.Lang.Types
     {
         public LFunctionType()
         {
-            this.Name = "function";
-            this.FullName = "ext.function";
-            this.TypeVal = TypeConstants.Function;
-            this.IsSystemType = true;
+            Name = "function";
+            FullName = "ext.function";
+            TypeVal = TypeConstants.Function;
+            IsSystemType = true;
         }
 
         public LType Parent;
@@ -226,20 +226,20 @@ namespace ComLib.Lang.Types
     {
         public LMap(IDictionary<string, object> val)
         {
-            this.Value = val;
-            this.Type = LTypes.Map;
+            Value = val;
+            Type = LTypes.Map;
         }
 
         public IDictionary<string, object> Value;
 
         public override object GetValue()
         {
-            return this.Value;
+            return Value;
         }
 
         public override object Clone()
         {
-            return new LMap(this.Value);
+            return new LMap(Value);
         }
     }
 
@@ -247,10 +247,10 @@ namespace ComLib.Lang.Types
     {
         public LMapType()
         {
-            this.Name = "map";
-            this.FullName = "sys.map";
-            this.TypeVal = TypeConstants.Map;
-            this.IsSystemType = true;
+            Name = "map";
+            FullName = "sys.map";
+            TypeVal = TypeConstants.Map;
+            IsSystemType = true;
         }
     }
 
@@ -259,20 +259,20 @@ namespace ComLib.Lang.Types
     {
         public LModule(object val)
         {
-            this.Value = val;
-            this.Type = LTypes.Module;
+            Value = val;
+            Type = LTypes.Module;
         }
 
         public object Value;
 
         public override object GetValue()
         {
-            return this.Value;
+            return Value;
         }
 
         public override object Clone()
         {
-            return new LModule(this.Value);
+            return new LModule(Value);
         }
     }
 
@@ -280,10 +280,10 @@ namespace ComLib.Lang.Types
     {
         public LModuleType()
         {
-            this.Name = "module";
-            this.FullName = "ext.module";
-            this.TypeVal = TypeConstants.Module;
-            this.IsSystemType = true;
+            Name = "module";
+            FullName = "ext.module";
+            TypeVal = TypeConstants.Module;
+            IsSystemType = true;
         }
     }
 
@@ -292,20 +292,20 @@ namespace ComLib.Lang.Types
     {
         public LNull(object val)
         {
-            this.Value = val;
-            this.Type = LTypes.Null;
+            Value = val;
+            Type = LTypes.Null;
         }
 
         public object Value;
 
         public override object GetValue()
         {
-            return this.Value;
+            return Value;
         }
 
         public override object Clone()
         {
-            return new LNull(this.Value);
+            return new LNull(Value);
         }
     }
 
@@ -313,10 +313,10 @@ namespace ComLib.Lang.Types
     {
         public LNullType()
         {
-            this.Name = "null";
-            this.FullName = "sys.null";
-            this.TypeVal = TypeConstants.Null;
-            this.IsSystemType = true;
+            Name = "null";
+            FullName = "sys.null";
+            TypeVal = TypeConstants.Null;
+            IsSystemType = true;
         }
     }
 
@@ -325,20 +325,20 @@ namespace ComLib.Lang.Types
     {
         public LNumber(double val)
         {
-            this.Value = val;
-            this.Type = LTypes.Number;
+            Value = val;
+            Type = LTypes.Number;
         }
 
         public double Value;
 
         public override object GetValue()
         {
-            return this.Value;
+            return Value;
         }
 
         public override object Clone()
         {
-            return new LNumber(this.Value);
+            return new LNumber(Value);
         }
     }
 
@@ -346,10 +346,10 @@ namespace ComLib.Lang.Types
     {
         public LNumberType()
         {
-            this.Name = "number";
-            this.FullName = "sys.number";
-            this.TypeVal = TypeConstants.Number;
-            this.IsSystemType = true;
+            Name = "number";
+            FullName = "sys.number";
+            TypeVal = TypeConstants.Number;
+            IsSystemType = true;
         }
     }
 
@@ -358,20 +358,20 @@ namespace ComLib.Lang.Types
     {
         public LString(string val)
         {
-            this.Value = val;
-            this.Type = LTypes.String;
+            Value = val;
+            Type = LTypes.String;
         }
 
         public string Value;
 
         public override object GetValue()
         {
-            return this.Value;
+            return Value;
         }
 
         public override object Clone()
         {
-            return new LString(this.Value);
+            return new LString(Value);
         }
     }
 
@@ -379,10 +379,10 @@ namespace ComLib.Lang.Types
     {
         public LStringType()
         {
-            this.Name = "string";
-            this.FullName = "sys.string";
-            this.TypeVal = TypeConstants.String;
-            this.IsSystemType = true;
+            Name = "string";
+            FullName = "sys.string";
+            TypeVal = TypeConstants.String;
+            IsSystemType = true;
         }
     }
 
@@ -391,20 +391,20 @@ namespace ComLib.Lang.Types
     {
         public LTable(IList val)
         {
-            this.Value = val;
-            this.Type = LTypes.Table;
+            Value = val;
+            Type = LTypes.Table;
         }
 
         public IList Value;
 
         public override object GetValue()
         {
-            return this.Value;
+            return Value;
         }
 
         public override object Clone()
         {
-            return new LTable(this.Value);
+            return new LTable(Value);
         }
 
         public List<string> Fields;
@@ -414,10 +414,10 @@ namespace ComLib.Lang.Types
     {
         public LTableType()
         {
-            this.Name = "table";
-            this.FullName = "sys.table";
-            this.TypeVal = TypeConstants.Table;
-            this.IsSystemType = true;
+            Name = "table";
+            FullName = "sys.table";
+            TypeVal = TypeConstants.Table;
+            IsSystemType = true;
         }
     }
 
@@ -426,20 +426,20 @@ namespace ComLib.Lang.Types
     {
         public LTime(TimeSpan val)
         {
-            this.Value = val;
-            this.Type = LTypes.Time;
+            Value = val;
+            Type = LTypes.Time;
         }
 
         public TimeSpan Value;
 
         public override object GetValue()
         {
-            return this.Value;
+            return Value;
         }
 
         public override object Clone()
         {
-            return new LTime(this.Value);
+            return new LTime(Value);
         }
     }
 
@@ -447,10 +447,10 @@ namespace ComLib.Lang.Types
     {
         public LTimeType()
         {
-            this.Name = "time";
-            this.FullName = "sys.time";
-            this.TypeVal = TypeConstants.Time;
-            this.IsSystemType = true;
+            Name = "time";
+            FullName = "sys.time";
+            TypeVal = TypeConstants.Time;
+            IsSystemType = true;
         }
     }
 
@@ -459,20 +459,20 @@ namespace ComLib.Lang.Types
     {
         public LUnit(double val)
         {
-            this.Value = val;
-            this.Type = LTypes.Unit;
+            Value = val;
+            Type = LTypes.Unit;
         }
 
         public double Value;
 
         public override object GetValue()
         {
-            return this.Value;
+            return Value;
         }
 
         public override object Clone()
         {
-            return new LUnit(this.Value);
+            return new LUnit(Value);
         }
 
         public double BaseValue { get; set; }
@@ -486,10 +486,10 @@ namespace ComLib.Lang.Types
     {
         public LUnitType()
         {
-            this.Name = "unit";
-            this.FullName = "sys.unit";
-            this.TypeVal = TypeConstants.Unit;
-            this.IsSystemType = true;
+            Name = "unit";
+            FullName = "sys.unit";
+            TypeVal = TypeConstants.Unit;
+            IsSystemType = true;
         }
     }
 

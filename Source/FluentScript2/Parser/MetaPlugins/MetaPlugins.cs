@@ -160,7 +160,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
 
         public bool ContainsTok(Token token, int tokenPos)
         {
-            return this.CanHandleTok(token, tokenPos == 0);
+            return CanHandleTok(token, tokenPos == 0);
         }
 
         /// <summary>
@@ -227,7 +227,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
             {
                 if (_pluginExprs.ContainsKey(_typeIdentSymbolToken))
                 {
-                    if (this.Symbols.Contains(token.Text))
+                    if (Symbols.Contains(token.Text))
                     {
                         plugins = _pluginExprs[_typeIdentSymbolToken];
                     }
@@ -257,7 +257,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
             List<CompilerPlugin> plugins = null;
 
             // Case 1: Can not overtake identifiers that are actually variables(symbols) in current scope.
-            if (token.Kind == TokenKind.Ident && this.Symbols != null && this.Symbols.Contains(token.Text))
+            if (token.Kind == TokenKind.Ident && Symbols != null && Symbols.Contains(token.Text))
                 return false;
 
             // Case 2: Ident - specific word
@@ -280,11 +280,11 @@ namespace ComLib.Lang.Parsing.MetaPlugins
                 if (string.IsNullOrEmpty(plugin.GrammarMatch))
                 {
                     var tokenPlugin = plugin.Handler as TokenReplacePlugin;
-                    tokenPlugin.TokenIt = this.TokenIt;
+                    tokenPlugin.TokenIt = TokenIt;
                     if (tokenPlugin.CanHandle(token, isCurrent))
                     {
                         _matchTokenResult = new MatchResult(true, plugin, null);
-                        this.LastMatchedTokenPlugin = tokenPlugin;
+                        LastMatchedTokenPlugin = tokenPlugin;
                         break;
                     }
                 }
@@ -331,13 +331,13 @@ namespace ComLib.Lang.Parsing.MetaPlugins
             var rexpr = ((LClass)result).Value as Expr;
 
             // Advance the tokens.
-            this.TokenIt.Advance(_matchResult.TokenCount);
+            TokenIt.Advance(_matchResult.TokenCount);
 
             // 3. Was the last just for grammar matching ? now continue with expression parsing?
             if (_matchResult.Plugin.MatchesForParse != null)
             {
                 var plugin = _matchResult.Plugin;
-                rexpr = this.ParseExpressionGrammar(rexpr, plugin, plugin.MatchesForParse, 0);
+                rexpr = ParseExpressionGrammar(rexpr, plugin, plugin.MatchesForParse, 0);
             }
             return rexpr;
         }
@@ -360,7 +360,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
                 var expr = plugin.BuildExpr as FunctionExpr;
                 var result = FunctionHelper.CallFunctionViaCSharpUsingLambda(ctx, expr, true, _matchTokenResult.Args);
                 var token = ((LClass)result).Value as Token;
-                this.TokenIt.Advance(_matchTokenResult.TokenCount - 1);
+                TokenIt.Advance(_matchTokenResult.TokenCount - 1);
                 return token;
             }
             var tokenReplacer = plugin.Handler as TokenReplacePlugin;
@@ -373,21 +373,21 @@ namespace ComLib.Lang.Parsing.MetaPlugins
         /// <returns></returns>
         public MatchResult IsMatch()
         {
-            var token = this.TokenIt.NextToken;
+            var token = TokenIt.NextToken;
 
             // 1. no start token?
-            if (!this._pluginExprs.ContainsKey(token.Token.Text))
-                return this.EmtpyMatch;
+            if (!_pluginExprs.ContainsKey(token.Token.Text))
+                return EmtpyMatch;
 
             // 2. Get matching plugin.
-            var plugins = this._pluginExprs[token.Token.Text];
+            var plugins = _pluginExprs[token.Token.Text];
             return IsMatch(plugins);
         }
 
         public MatchResult IsMatch(List<CompilerPlugin> plugins)
         {
             // 3. Check for matching plugin.
-            var result = this.EmtpyMatch;
+            var result = EmtpyMatch;
             foreach (var plugin in plugins)
             {
                 // 4. auto match plugin?
@@ -425,7 +425,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
         private MatchResult CheckExpressionMatches(CompilerPlugin plugin, List<TokenMatch> matches, Dictionary<string, object> args, int peekCount, int matchCount)
         {
             var isMatch = true;
-            var token = peekCount == 0 ? this.TokenIt.NextToken : this.TokenIt.Peek(peekCount);
+            var token = peekCount == 0 ? TokenIt.NextToken : TokenIt.Peek(peekCount);
             var totalMatched = matchCount;
 
             foreach (var match in matches)
@@ -497,7 +497,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
                 // Check 2c: "identSymbol" must exist
                 else if (match.TokenType == "@identsymbol")
                 {
-                    var symbolExists = this.Symbols.Contains(token.Token.Text);
+                    var symbolExists = Symbols.Contains(token.Token.Text);
                     continueCheck = symbolExists;
                     if (!continueCheck)
                     {
@@ -510,7 +510,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
                 else if (match.TokenType == "@singularsymbol")
                 {
                     var plural = token.Token.Text + "s";
-                    var symbolExists = this.Symbols.Contains(plural);
+                    var symbolExists = Symbols.Contains(plural);
                     continueCheck = symbolExists;
                     if (!continueCheck)
                     {
@@ -529,7 +529,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
 
                     while (totalParams <= maxParams)
                     {
-                        var token2 = this.TokenIt.Peek(peekCount, false);
+                        var token2 = TokenIt.Peek(peekCount, false);
                         if (token2.Token == Tokens.Comma)
                         {
                             peekCount++;
@@ -667,7 +667,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
                     }
                     // Matched: increment.
                     peekCount++;
-                    token = this.TokenIt.Peek(peekCount, false);
+                    token = TokenIt.Peek(peekCount, false);
                 }
             }
             var res = new MatchResult(isMatch, null, args);
@@ -679,7 +679,7 @@ namespace ComLib.Lang.Parsing.MetaPlugins
         private Expr ParseExpressionGrammar(Expr buildexpr, CompilerPlugin plugin, List<TokenMatch> matches, int peekCount)
         {
             var isMatch = true;
-            var token = peekCount == 0 ? this.TokenIt.NextToken : this.TokenIt.Peek(peekCount);
+            var token = peekCount == 0 ? TokenIt.NextToken : TokenIt.Peek(peekCount);
 
             foreach (var match in matches)
             {
@@ -688,13 +688,13 @@ namespace ComLib.Lang.Parsing.MetaPlugins
                     if (match.Ref == "buildexpr")
                     {
                         var blockExp = buildexpr as IBlockExpr;
-                        this.Parser.ParseBlock(blockExp);
+                        Parser.ParseBlock(blockExp);
                     }
                 }
 
                 // Matched: increment.
                 peekCount++;
-                token = this.TokenIt.Peek(peekCount, false);
+                token = TokenIt.Peek(peekCount, false);
             }
             return buildexpr;
         }
@@ -705,12 +705,12 @@ namespace ComLib.Lang.Parsing.MetaPlugins
 
             public virtual TokenData Curr()
             {
-                return this._tokenIt.NextToken;
+                return _tokenIt.NextToken;
             }
 
             public virtual TokenData Peek(int count)
             {
-                return this._tokenIt.Peek(count);
+                return _tokenIt.Peek(count);
             }
         }
 
@@ -720,12 +720,12 @@ namespace ComLib.Lang.Parsing.MetaPlugins
 
             public virtual TokenData Curr()
             {
-                return this._lexer.NextToken();
+                return _lexer.NextToken();
             }
 
             public virtual TokenData Peek(int count)
             {
-                return this._lexer.PeekToken();
+                return _lexer.PeekToken();
             }
         }
     }
@@ -740,9 +740,9 @@ namespace ComLib.Lang.Parsing.MetaPlugins
 
         public MatchResult(bool success, CompilerPlugin plugin, IDictionary<string, object> args)
         {
-            this.Args = args;
-            this.Plugin = plugin;
-            this.Success = success;
+            Args = args;
+            Plugin = plugin;
+            Success = success;
         }
     }
 }

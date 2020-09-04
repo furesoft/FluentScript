@@ -48,8 +48,8 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public AggregatePlugin()
         {
-            this.IsAutoMatched = true;
-            this.StartTokens = new string[]
+            IsAutoMatched = true;
+            StartTokens = new string[]
             {
                 "avg", "min", "max", "sum", "count", "number",
                 "Avg", "Min", "Max", "Sum", "Count", "Number"
@@ -103,7 +103,7 @@ namespace ComLib.Lang.Plugins
         public override Expr Parse()
         {
             // avg min max sum count
-            string aggregate = _tokenIt.NextToken.Token.Text.ToLower();
+            var aggregate = _tokenIt.NextToken.Token.Text.ToLower();
 
             var next = _tokenIt.Peek().Token;
             Expr exp = null;
@@ -142,10 +142,10 @@ namespace ComLib.Lang.Plugins
         /// <param name="source"></param>
         public AggregateExpr(string aggregateType, Expr source)
         {
-            this.Nodetype = "FSExtAggregate";
-            this.InitBoundary(true, ")");
-            this._aggregateType = aggregateType;
-            this._source = source;
+            Nodetype = "FSExtAggregate";
+            InitBoundary(true, ")");
+            _aggregateType = aggregateType;
+            _source = source;
         }
 
         /// <summary>

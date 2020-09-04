@@ -45,7 +45,7 @@ namespace ComLib.Lang.Parsing
         /// </summary>
         public ExprPluginBase()
         {
-            this._id = "ComLib." + this.GetType().Name.Replace("Plugin", string.Empty);
+            _id = "ComLib." + GetType().Name.Replace("Plugin", string.Empty);
         }
 
         /// <summary>
@@ -67,12 +67,12 @@ namespace ComLib.Lang.Parsing
         /// <param name="token"></param>
         public void ConfigureAsSystemStatement(bool isCodeBlockSupported, bool isTerminatorSupported, string token)
         {
-            this.InitTokens(token);
-            this.IsCodeBlockSupported = isCodeBlockSupported;
-            this.IsStatement = true;
-            this.IsSystemLevel = true;
-            this.IsEndOfStatementRequired = isTerminatorSupported;
-            this.IsAutoMatched = true;
+            InitTokens(token);
+            IsCodeBlockSupported = isCodeBlockSupported;
+            IsStatement = true;
+            IsSystemLevel = true;
+            IsEndOfStatementRequired = isTerminatorSupported;
+            IsAutoMatched = true;
         }
 
         /// <summary>
@@ -83,12 +83,12 @@ namespace ComLib.Lang.Parsing
         /// <param name="token"></param>
         public void ConfigureAsSystemExpression(bool isCodeBlockSupported, bool isTerminatorSupported, string token)
         {
-            this.InitTokens(token);
-            this.IsCodeBlockSupported = isCodeBlockSupported;
-            this.IsStatement = false;
-            this.IsSystemLevel = true;
-            this.IsEndOfStatementRequired = isTerminatorSupported;
-            this.IsAutoMatched = true;
+            InitTokens(token);
+            IsCodeBlockSupported = isCodeBlockSupported;
+            IsStatement = false;
+            IsSystemLevel = true;
+            IsEndOfStatementRequired = isTerminatorSupported;
+            IsAutoMatched = true;
         }
 
         /// <summary>
@@ -239,11 +239,11 @@ namespace ComLib.Lang.Parsing
         {
             if (!token.Contains(","))
             {
-                this.StartTokens = new string[] { token };
+                StartTokens = new string[] { token };
                 return;
             }
             var tokens = token.Split(',');
-            this.StartTokens = tokens;
+            StartTokens = tokens;
         }
     }
 }

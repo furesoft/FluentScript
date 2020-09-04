@@ -18,7 +18,7 @@ namespace ComLib.Lang.AST
     {
         public ArrayExpr()
         {
-            this.Nodetype = NodeTypes.SysArray;
+            Nodetype = NodeTypes.SysArray;
         }
 
         public List<Expr> Exprs;
@@ -44,7 +44,7 @@ namespace ComLib.Lang.AST
     {
         public AnyOfExpr()
         {
-            this.Nodetype = NodeTypes.SysAnyOf;
+            Nodetype = NodeTypes.SysAnyOf;
         }
 
         public Expr CompareExpr;
@@ -74,7 +74,7 @@ namespace ComLib.Lang.AST
     {
         public AssignExpr()
         {
-            this.Nodetype = NodeTypes.SysAssign;
+            Nodetype = NodeTypes.SysAssign;
         }
 
         public Expr VarExp;
@@ -104,7 +104,7 @@ namespace ComLib.Lang.AST
     {
         public AssignMultiExpr()
         {
-            this.Nodetype = NodeTypes.SysAssignMulti;
+            Nodetype = NodeTypes.SysAssignMulti;
         }
 
         public List<AssignExpr> Assignments;
@@ -130,7 +130,7 @@ namespace ComLib.Lang.AST
     {
         public BinaryExpr()
         {
-            this.Nodetype = NodeTypes.SysBinary;
+            Nodetype = NodeTypes.SysBinary;
         }
 
         public Expr Left;
@@ -160,7 +160,7 @@ namespace ComLib.Lang.AST
     {
         public CompareExpr()
         {
-            this.Nodetype = NodeTypes.SysCompare;
+            Nodetype = NodeTypes.SysCompare;
         }
 
         public Expr Left;
@@ -192,7 +192,7 @@ namespace ComLib.Lang.AST
 
         public ConstantExpr(object value)
         {
-            this.Nodetype = NodeTypes.SysConstant;
+            Nodetype = NodeTypes.SysConstant;
             Value = value;
         }
 
@@ -221,7 +221,7 @@ namespace ComLib.Lang.AST
     {
         public DayExpr()
         {
-            this.Nodetype = NodeTypes.SysDay;
+            Nodetype = NodeTypes.SysDay;
         }
 
         public string Name;
@@ -249,7 +249,7 @@ namespace ComLib.Lang.AST
     {
         public DurationExpr()
         {
-            this.Nodetype = NodeTypes.SysDuration;
+            Nodetype = NodeTypes.SysDuration;
         }
 
         public string Duration;
@@ -277,7 +277,7 @@ namespace ComLib.Lang.AST
     {
         public DateExpr()
         {
-            this.Nodetype = NodeTypes.SysDate;
+            Nodetype = NodeTypes.SysDate;
         }
 
         public int Month;
@@ -309,7 +309,7 @@ namespace ComLib.Lang.AST
     {
         public DateRelativeExpr()
         {
-            this.Nodetype = NodeTypes.SysDateRelative;
+            Nodetype = NodeTypes.SysDateRelative;
         }
 
         public int Month;
@@ -339,7 +339,7 @@ namespace ComLib.Lang.AST
     {
         public FunctionCallExpr()
         {
-            this.Nodetype = NodeTypes.SysFunctionCall;
+            Nodetype = NodeTypes.SysFunctionCall;
         }
 
         public Expr NameExp;
@@ -366,7 +366,7 @@ namespace ComLib.Lang.AST
 
         public override string ToQualifiedName()
         {
-            return this.NameExp != null ? this.NameExp.ToQualifiedName() : "";
+            return NameExp != null ? NameExp.ToQualifiedName() : "";
         }
     }
 
@@ -375,7 +375,7 @@ namespace ComLib.Lang.AST
     {
         public FunctionExpr()
         {
-            this.Nodetype = NodeTypes.SysFunction;
+            Nodetype = NodeTypes.SysFunction;
         }
 
         public FunctionMetaData Meta;
@@ -413,7 +413,7 @@ namespace ComLib.Lang.AST
     {
         public IndexExpr()
         {
-            this.Nodetype = NodeTypes.SysIndex;
+            Nodetype = NodeTypes.SysIndex;
         }
 
         public Expr IndexExp;
@@ -443,7 +443,7 @@ namespace ComLib.Lang.AST
     {
         public InterpolatedExpr()
         {
-            this.Nodetype = NodeTypes.SysInterpolated;
+            Nodetype = NodeTypes.SysInterpolated;
         }
 
         public List<Expr> Expressions;
@@ -469,7 +469,7 @@ namespace ComLib.Lang.AST
     {
         public ListCheckExpr()
         {
-            this.Nodetype = NodeTypes.SysListCheck;
+            Nodetype = NodeTypes.SysListCheck;
         }
 
         public Expr NameExp;
@@ -495,7 +495,7 @@ namespace ComLib.Lang.AST
     {
         public MapExpr()
         {
-            this.Nodetype = NodeTypes.SysMap;
+            Nodetype = NodeTypes.SysMap;
         }
 
         public List<Tuple<string, Expr>> Expressions;
@@ -521,7 +521,7 @@ namespace ComLib.Lang.AST
     {
         public MemberAccessExpr()
         {
-            this.Nodetype = NodeTypes.SysMemberAccess;
+            Nodetype = NodeTypes.SysMemberAccess;
         }
 
         public string MemberName;
@@ -542,7 +542,7 @@ namespace ComLib.Lang.AST
 
         public override string ToQualifiedName()
         {
-            return this.VarExp.ToQualifiedName() + "." + this.MemberName;
+            return VarExp.ToQualifiedName() + "." + MemberName;
         }
     }
 
@@ -551,7 +551,7 @@ namespace ComLib.Lang.AST
     {
         public NamedParameterExpr()
         {
-            this.Nodetype = NodeTypes.SysNamedParameter;
+            Nodetype = NodeTypes.SysNamedParameter;
         }
 
         public string Name;
@@ -572,7 +572,7 @@ namespace ComLib.Lang.AST
 
         public override string ToQualifiedName()
         {
-            return this.Name;
+            return Name;
         }
     }
 
@@ -581,7 +581,7 @@ namespace ComLib.Lang.AST
     {
         public NegateExpr()
         {
-            this.Nodetype = NodeTypes.SysNegate;
+            Nodetype = NodeTypes.SysNegate;
         }
 
         public Expr Expression;
@@ -607,7 +607,7 @@ namespace ComLib.Lang.AST
     {
         public NewExpr()
         {
-            this.Nodetype = NodeTypes.SysNew;
+            Nodetype = NodeTypes.SysNew;
         }
 
         public string TypeName;
@@ -637,7 +637,7 @@ namespace ComLib.Lang.AST
     {
         public ParameterExpr()
         {
-            this.Nodetype = NodeTypes.SysParameter;
+            Nodetype = NodeTypes.SysParameter;
         }
 
         public FunctionMetaData Meta;
@@ -667,7 +667,7 @@ namespace ComLib.Lang.AST
     {
         public RunExpr()
         {
-            this.Nodetype = NodeTypes.SysRun;
+            Nodetype = NodeTypes.SysRun;
         }
 
         public string FuncName;
@@ -699,7 +699,7 @@ namespace ComLib.Lang.AST
     {
         public TableExpr()
         {
-            this.Nodetype = NodeTypes.SysTable;
+            Nodetype = NodeTypes.SysTable;
         }
 
         public List<string> Fields;
@@ -725,7 +725,7 @@ namespace ComLib.Lang.AST
     {
         public UnaryExpr()
         {
-            this.Nodetype = NodeTypes.SysUnary;
+            Nodetype = NodeTypes.SysUnary;
         }
 
         public Operator Op;
@@ -755,7 +755,7 @@ namespace ComLib.Lang.AST
     {
         public VariableExpr()
         {
-            this.Nodetype = NodeTypes.SysVariable;
+            Nodetype = NodeTypes.SysVariable;
         }
 
         public string Name;
@@ -772,7 +772,7 @@ namespace ComLib.Lang.AST
 
         public override string ToQualifiedName()
         {
-            return this.Name;
+            return Name;
         }
     }
 }

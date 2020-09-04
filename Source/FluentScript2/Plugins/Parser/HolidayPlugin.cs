@@ -52,12 +52,12 @@ namespace ComLib.Lang.Plugins
             _holidays["christmas eve"] = () => Convert.ToDateTime("12/24/" + DateTime.Now.Year.ToString());
             _holidays["christmas"] = () => Convert.ToDateTime("12/25/" + DateTime.Now.Year.ToString());
             _holidays["new years eve"] = () => Convert.ToDateTime("12/31/" + DateTime.Now.Year.ToString());
-            this.StartTokens = new string[]
+            StartTokens = new string[]
             {
                 "New", "Valentines", "Independence", "Christmas",
                 "new", "valentines", "christmas", "independence"
             };
-            this.Precedence = 100;
+            Precedence = 100;
         }
 
         /// <summary>
@@ -67,8 +67,8 @@ namespace ComLib.Lang.Plugins
         /// <returns></returns>
         public override bool CanHandle(Token token)
         {
-            string name = token.Text.ToLower();
-            string name2 = _tokenIt.Peek().Token.Text.ToLower();
+            var name = token.Text.ToLower();
+            var name2 = _tokenIt.Peek().Token.Text.ToLower();
             if (_holidays.ContainsKey(name)) return true;
             if (_holidays.ContainsKey(name + " " + name2)) return true;
             return false;
@@ -86,15 +86,15 @@ namespace ComLib.Lang.Plugins
             var startToken = _tokenIt.NextToken;
             // Multi-word holiday.
             holidayName = _tokenIt.NextToken.Token.Text.ToLower();
-            int count = 0;
-            bool matched = false;
+            var count = 0;
+            var matched = false;
 
             // Can only peek() at most the maximum number of words in a holiday.
             while (count < _maxWordsInHoliday)
             {
                 var peek1More = _tokenIt.Peek(count + 1);
                 var holidayPlus1 = holidayName + " " + peek1More.Token.Text.ToLower();
-                bool isNextWordApplicable = _holidays.ContainsKey(holidayPlus1);
+                var isNextWordApplicable = _holidays.ContainsKey(holidayPlus1);
 
                 if (_holidays.ContainsKey(holidayName) && !isNextWordApplicable)
                 {
@@ -115,7 +115,7 @@ namespace ComLib.Lang.Plugins
             next = _tokenIt.Peek();
             if (next.Token.Type == TokenTypes.LiteralNumber)
             {
-                int year = Convert.ToInt32(next.Token.Text);
+                var year = Convert.ToInt32(next.Token.Text);
                 date = new DateTime(year, date.Month, date.Day, date.Hour, date.Minute, date.Second);
                 _tokenIt.Advance();
             }

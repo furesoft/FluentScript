@@ -9,8 +9,8 @@ namespace ComLib.Lang.Parsing.MetaPlugins
 
         public TokenGroup()
         {
-            this.Matches = new List<TokenMatch>();
-            this.IsGroup = true;
+            Matches = new List<TokenMatch>();
+            IsGroup = true;
         }
 
         /// <summary>
@@ -19,16 +19,16 @@ namespace ComLib.Lang.Parsing.MetaPlugins
         /// <returns></returns>
         public override int TotalRequired()
         {
-            if (!this.IsRequired)
+            if (!IsRequired)
                 return 0;
 
-            if (this.Matches == null || this.Matches.Count == 0)
+            if (Matches == null || Matches.Count == 0)
                 return 0;
 
             var totalReq = 0;
-            for (var ndx = 0; ndx < this.Matches.Count; ndx++)
+            for (var ndx = 0; ndx < Matches.Count; ndx++)
             {
-                var match = this.Matches[ndx];
+                var match = Matches[ndx];
                 totalReq += match.TotalRequired();
             }
             return totalReq;

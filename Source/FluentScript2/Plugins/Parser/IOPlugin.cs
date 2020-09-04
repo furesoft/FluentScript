@@ -211,18 +211,18 @@ namespace ComLib.Lang.Plugins
             if (!Directory.Exists(to))
                 Directory.CreateDirectory(to);
 
-            string[] files = Directory.GetFiles(path);
-            foreach (string file in files)
+            var files = Directory.GetFiles(path);
+            foreach (var file in files)
             {
-                string name = Path.GetFileName(file);
-                string dest = Path.Combine(to, name);
+                var name = Path.GetFileName(file);
+                var dest = Path.Combine(to, name);
                 System.IO.File.Copy(file, dest);
             }
-            string[] folders = Directory.GetDirectories(path);
-            foreach (string folder in folders)
+            var folders = Directory.GetDirectories(path);
+            foreach (var folder in folders)
             {
-                string name = Path.GetFileName(folder);
-                string dest = Path.Combine(to, name);
+                var name = Path.GetFileName(folder);
+                var dest = Path.Combine(to, name);
                 Copy(folder, dest, overwrite);
             }
         }
@@ -235,15 +235,15 @@ namespace ComLib.Lang.Plugins
         /// <param name="callback">The callback to call</param>
         public static void ForEachFile(string path, bool recurse, Action<string> callback)
         {
-            string[] files = Directory.GetFiles(path);
-            foreach (string file in files)
+            var files = Directory.GetFiles(path);
+            foreach (var file in files)
             {
                 callback(file);
             }
             if (recurse)
             {
-                string[] folders = Directory.GetDirectories(path);
-                foreach (string folder in folders)
+                var folders = Directory.GetDirectories(path);
+                foreach (var folder in folders)
                 {
                     ForEachFile(folder, recurse, callback);
                 }
@@ -258,8 +258,8 @@ namespace ComLib.Lang.Plugins
         /// <param name="callback">The callback to call</param>
         public static void ForEachDir(string path, bool recurse, Action<string> callback)
         {
-            string[] folders = Directory.GetDirectories(path);
-            foreach (string folder in folders)
+            var folders = Directory.GetDirectories(path);
+            foreach (var folder in folders)
             {
                 if (recurse)
                     ForEachFile(folder, recurse, callback);
@@ -295,13 +295,13 @@ namespace ComLib.Lang.Plugins
         /// <param name="path">The path to the directory to delete</param>
         public static void Delete(string path)
         {
-            string[] files = Directory.GetFiles(path);
-            foreach (string file in files)
+            var files = Directory.GetFiles(path);
+            foreach (var file in files)
             {
                 System.IO.File.Delete(file);
             }
-            string[] folders = Directory.GetDirectories(path);
-            foreach (string folder in folders)
+            var folders = Directory.GetDirectories(path);
+            foreach (var folder in folders)
             {
                 Delete(folder);
             }
@@ -370,16 +370,16 @@ namespace ComLib.Lang.Plugins
             var files = new List<object>();
             var hasExtFilter = exts != null && exts.Length > 0;
             var hasNameFilter = named != null && named.Length > 0;
-            IDictionary<string, string> extMap = hasExtFilter ? LangHelper.ToDictionary(exts) : null;
-            IDictionary<string, string> nameMap = hasNameFilter ? LangHelper.ToDictionary(named) : null;
+            var extMap = hasExtFilter ? LangHelper.ToDictionary(exts) : null;
+            var nameMap = hasNameFilter ? LangHelper.ToDictionary(named) : null;
 
             // Match the files.
             Dir.ForEachFile(path, recursive, (filepath) =>
             {
                 var ext = Path.GetExtension(filepath);
                 var name = Path.GetFileNameWithoutExtension(filepath);
-                bool matchesExtFilter = true;
-                bool matchesNameFilter = true;
+                var matchesExtFilter = true;
+                var matchesNameFilter = true;
                 if (hasExtFilter && !extMap.ContainsKey(ext))
                     matchesExtFilter = false;
                 if (hasNameFilter && !nameMap.ContainsKey(name))
@@ -432,13 +432,13 @@ namespace ComLib.Lang.Plugins
         {
             var files = new List<object>();
             var hasNameFilter = named != null && named.Length > 0;
-            IDictionary<string, string> nameMap = hasNameFilter ? LangHelper.ToDictionary(named) : null;
+            var nameMap = hasNameFilter ? LangHelper.ToDictionary(named) : null;
 
             // Match the files.
             Dir.ForEachDir(path, recursive, (filepath) =>
             {
                 var name = Path.GetFileNameWithoutExtension(filepath);
-                bool matchesNameFilter = true;
+                var matchesNameFilter = true;
                 if (hasNameFilter && !nameMap.ContainsKey(name))
                     matchesNameFilter = false;
 

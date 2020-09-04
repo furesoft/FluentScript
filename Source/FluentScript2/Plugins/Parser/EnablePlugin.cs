@@ -73,10 +73,10 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public EnablePlugin()
         {
-            this.IsStatement = true;
-            this.IsSystemLevel = true;
-            this.IsEndOfStatementRequired = true;
-            this.StartTokens = new string[] { "enable", "disable" };
+            IsStatement = true;
+            IsSystemLevel = true;
+            IsEndOfStatementRequired = true;
+            StartTokens = new string[] { "enable", "disable" };
         }
 
         /// <summary>
@@ -98,12 +98,12 @@ namespace ComLib.Lang.Plugins
         /// <returns></returns>
         public override Expr Parse()
         {
-            bool enable = false;
+            var enable = false;
             if (_tokenIt.NextToken.Token.Text == "enable")
                 enable = true;
 
             _tokenIt.Advance(1);
-            string component = _tokenIt.NextToken.Token.Text;
+            var component = _tokenIt.NextToken.Token.Text;
 
             if (component == "units")
             {

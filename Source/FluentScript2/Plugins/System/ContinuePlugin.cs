@@ -25,7 +25,7 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public ContinuePlugin()
         {
-            this.ConfigureAsSystemStatement(false, true, "continue");
+            ConfigureAsSystemStatement(false, true, "continue");
         }
 
         /// <summary>

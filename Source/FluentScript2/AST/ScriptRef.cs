@@ -13,9 +13,9 @@
         /// <param name="charPos"></param>
         public ScriptRef(string name, int line, int charPos)
         {
-            this.Line = line;
-            this.CharPos = charPos;
-            this.ScriptName = name;
+            Line = line;
+            CharPos = charPos;
+            ScriptName = name;
         }
 
         /// <summary>

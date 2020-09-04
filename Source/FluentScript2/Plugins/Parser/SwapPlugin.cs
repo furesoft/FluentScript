@@ -29,10 +29,10 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public SwapPlugin()
         {
-            this.IsStatement = true;
-            this.IsEndOfStatementRequired = true;
-            this.IsAutoMatched = true;
-            this.StartTokens = new string[] { "swap", "Swap" };
+            IsStatement = true;
+            IsEndOfStatementRequired = true;
+            IsAutoMatched = true;
+            StartTokens = new string[] { "swap", "Swap" };
         }
 
         /// <summary>
@@ -105,10 +105,10 @@ namespace ComLib.Lang.Plugins
             // var temp = a;
             // a = b;
             // b = temp;
-            var val1 = this.Ctx.Memory.Get<object>(_name1);
-            var val2 = this.Ctx.Memory.Get<object>(_name2);
-            this.Ctx.Memory.SetValue(_name1, val2);
-            this.Ctx.Memory.SetValue(_name2, val1);
+            var val1 = Ctx.Memory.Get<object>(_name1);
+            var val2 = Ctx.Memory.Get<object>(_name2);
+            Ctx.Memory.SetValue(_name1, val2);
+            Ctx.Memory.SetValue(_name2, val1);
             return val2;
         }
     }

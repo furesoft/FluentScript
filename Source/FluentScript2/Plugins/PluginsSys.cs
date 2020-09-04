@@ -15,19 +15,19 @@ namespace ComLib.Lang.Parsing
     {
         public NewPlugin()
         {
-            this.ConfigureAsSystemStatement(false, false, "new");
-            this.Precedence = 1;
+            ConfigureAsSystemStatement(false, false, "new");
+            Precedence = 1;
         }
 
         public override Expr Parse()
         {
-            return this.ExpParser.OnParseNew();
+            return ExpParser.OnParseNew();
         }
 
         public override void OnParseComplete(AstNode node)
         {
             var expr = node as Expr;
-            this.ExpParser.OnParseNewComplete(expr);
+            ExpParser.OnParseNewComplete(expr);
         }
     }
 
@@ -36,19 +36,19 @@ namespace ComLib.Lang.Parsing
     {
         public BreakPlugin()
         {
-            this.ConfigureAsSystemStatement(false, true, "break");
-            this.Precedence = 1;
+            ConfigureAsSystemStatement(false, true, "break");
+            Precedence = 1;
         }
 
         public override Expr Parse()
         {
-            return this.ExpParser.OnParseBreak();
+            return ExpParser.OnParseBreak();
         }
 
         public override void OnParseComplete(AstNode node)
         {
             var expr = node as Expr;
-            this.ExpParser.OnParseBreakComplete(expr);
+            ExpParser.OnParseBreakComplete(expr);
         }
     }
 
@@ -57,19 +57,19 @@ namespace ComLib.Lang.Parsing
     {
         public ContinuePlugin()
         {
-            this.ConfigureAsSystemStatement(false, true, "continue");
-            this.Precedence = 1;
+            ConfigureAsSystemStatement(false, true, "continue");
+            Precedence = 1;
         }
 
         public override Expr Parse()
         {
-            return this.ExpParser.OnParseContinue();
+            return ExpParser.OnParseContinue();
         }
 
         public override void OnParseComplete(AstNode node)
         {
             var expr = node as Expr;
-            this.ExpParser.OnParseContinueComplete(expr);
+            ExpParser.OnParseContinueComplete(expr);
         }
     }
 
@@ -78,19 +78,19 @@ namespace ComLib.Lang.Parsing
     {
         public ForEachPlugin()
         {
-            this.ConfigureAsSystemStatement(true, false, "for");
-            this.Precedence = 1;
+            ConfigureAsSystemStatement(true, false, "for");
+            Precedence = 1;
         }
 
         public override Expr Parse()
         {
-            return this.ExpParser.OnParseForEach();
+            return ExpParser.OnParseForEach();
         }
 
         public override void OnParseComplete(AstNode node)
         {
             var expr = node as Expr;
-            this.ExpParser.OnParseForEachComplete(expr);
+            ExpParser.OnParseForEachComplete(expr);
         }
     }
 
@@ -99,19 +99,19 @@ namespace ComLib.Lang.Parsing
     {
         public ForPlugin()
         {
-            this.ConfigureAsSystemStatement(true, false, "for");
-            this.Precedence = 2;
+            ConfigureAsSystemStatement(true, false, "for");
+            Precedence = 2;
         }
 
         public override Expr Parse()
         {
-            return this.ExpParser.OnParseFor();
+            return ExpParser.OnParseFor();
         }
 
         public override void OnParseComplete(AstNode node)
         {
             var expr = node as Expr;
-            this.ExpParser.OnParseForComplete(expr);
+            ExpParser.OnParseForComplete(expr);
         }
     }
 
@@ -120,19 +120,19 @@ namespace ComLib.Lang.Parsing
     {
         public FunctionDeclarePlugin()
         {
-            this.ConfigureAsSystemStatement(true, false, "function");
-            this.Precedence = 1;
+            ConfigureAsSystemStatement(true, false, "function");
+            Precedence = 1;
         }
 
         public override Expr Parse()
         {
-            return this.ExpParser.OnParseFunctionDeclare();
+            return ExpParser.OnParseFunctionDeclare();
         }
 
         public override void OnParseComplete(AstNode node)
         {
             var expr = node as Expr;
-            this.ExpParser.OnParseFunctionDeclareComplete(expr);
+            ExpParser.OnParseFunctionDeclareComplete(expr);
         }
     }
 
@@ -141,19 +141,19 @@ namespace ComLib.Lang.Parsing
     {
         public IfPlugin()
         {
-            this.ConfigureAsSystemStatement(true, false, "if");
-            this.Precedence = 1;
+            ConfigureAsSystemStatement(true, false, "if");
+            Precedence = 1;
         }
 
         public override Expr Parse()
         {
-            return this.ExpParser.OnParseIf();
+            return ExpParser.OnParseIf();
         }
 
         public override void OnParseComplete(AstNode node)
         {
             var expr = node as Expr;
-            this.ExpParser.OnParseIfComplete(expr);
+            ExpParser.OnParseIfComplete(expr);
         }
     }
 
@@ -162,19 +162,19 @@ namespace ComLib.Lang.Parsing
     {
         public LambdaPlugin()
         {
-            this.ConfigureAsSystemStatement(true, false, "function");
-            this.Precedence = 1;
+            ConfigureAsSystemStatement(true, false, "function");
+            Precedence = 1;
         }
 
         public override Expr Parse()
         {
-            return this.ExpParser.OnParseLambda();
+            return ExpParser.OnParseLambda();
         }
 
         public override void OnParseComplete(AstNode node)
         {
             var expr = node as Expr;
-            this.ExpParser.OnParseLambdaComplete(expr);
+            ExpParser.OnParseLambdaComplete(expr);
         }
     }
 
@@ -183,19 +183,19 @@ namespace ComLib.Lang.Parsing
     {
         public ReturnPlugin()
         {
-            this.ConfigureAsSystemStatement(false, true, "return");
-            this.Precedence = 1;
+            ConfigureAsSystemStatement(false, true, "return");
+            Precedence = 1;
         }
 
         public override Expr Parse()
         {
-            return this.ExpParser.OnParseReturn();
+            return ExpParser.OnParseReturn();
         }
 
         public override void OnParseComplete(AstNode node)
         {
             var expr = node as Expr;
-            this.ExpParser.OnParseReturnComplete(expr);
+            ExpParser.OnParseReturnComplete(expr);
         }
     }
 
@@ -204,19 +204,19 @@ namespace ComLib.Lang.Parsing
     {
         public ThrowPlugin()
         {
-            this.ConfigureAsSystemStatement(false, true, "throw");
-            this.Precedence = 1;
+            ConfigureAsSystemStatement(false, true, "throw");
+            Precedence = 1;
         }
 
         public override Expr Parse()
         {
-            return this.ExpParser.OnParseThrow();
+            return ExpParser.OnParseThrow();
         }
 
         public override void OnParseComplete(AstNode node)
         {
             var expr = node as Expr;
-            this.ExpParser.OnParseThrowComplete(expr);
+            ExpParser.OnParseThrowComplete(expr);
         }
     }
 
@@ -225,19 +225,19 @@ namespace ComLib.Lang.Parsing
     {
         public TryCatchPlugin()
         {
-            this.ConfigureAsSystemStatement(true, false, "try");
-            this.Precedence = 1;
+            ConfigureAsSystemStatement(true, false, "try");
+            Precedence = 1;
         }
 
         public override Expr Parse()
         {
-            return this.ExpParser.OnParseTryCatch();
+            return ExpParser.OnParseTryCatch();
         }
 
         public override void OnParseComplete(AstNode node)
         {
             var expr = node as Expr;
-            this.ExpParser.OnParseTryCatchComplete(expr);
+            ExpParser.OnParseTryCatchComplete(expr);
         }
     }
 
@@ -246,19 +246,19 @@ namespace ComLib.Lang.Parsing
     {
         public WhilePlugin()
         {
-            this.ConfigureAsSystemStatement(true, false, "while");
-            this.Precedence = 1;
+            ConfigureAsSystemStatement(true, false, "while");
+            Precedence = 1;
         }
 
         public override Expr Parse()
         {
-            return this.ExpParser.OnParseWhile();
+            return ExpParser.OnParseWhile();
         }
 
         public override void OnParseComplete(AstNode node)
         {
             var expr = node as Expr;
-            this.ExpParser.OnParseWhileComplete(expr);
+            ExpParser.OnParseWhileComplete(expr);
         }
     }
 }

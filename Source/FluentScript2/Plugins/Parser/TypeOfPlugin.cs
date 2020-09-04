@@ -40,9 +40,9 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public TypeOfPlugin()
         {
-            this.IsStatement = false;
-            this.IsAutoMatched = true;
-            this.StartTokens = new string[] { "typeof" };
+            IsStatement = false;
+            IsAutoMatched = true;
+            StartTokens = new string[] { "typeof" };
         }
 
         /// <summary>

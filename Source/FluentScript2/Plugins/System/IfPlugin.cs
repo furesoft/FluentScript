@@ -19,7 +19,7 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public IfPlugin()
         {
-            this.ConfigureAsSystemStatement(true, false, "if");
+            ConfigureAsSystemStatement(true, false, "if");
         }
 
         /// <summary>

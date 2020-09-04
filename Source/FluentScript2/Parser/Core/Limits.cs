@@ -224,9 +224,9 @@ namespace ComLib.Lang.Parsing
             if (limit != -1)
                 error = "Limit for : " + error + " reached at " + limit;
 
-            string script = "";
-            int lineNumber = 0;
-            int charPos = 0;
+            var script = "";
+            var lineNumber = 0;
+            var charPos = 0;
             if (node != null && node.Ref != null)
             {
                 script = node.Ref.ScriptName;
@@ -243,9 +243,9 @@ namespace ComLib.Lang.Parsing
             if (limit != -1)
                 error = "Limit for : " + error + " reached at " + limit;
 
-            string script = "";
-            int lineNumber = 0;
-            int charPos = 0;
+            var script = "";
+            var lineNumber = 0;
+            var charPos = 0;
             if (token != null)
             {
                 lineNumber = token.Line;

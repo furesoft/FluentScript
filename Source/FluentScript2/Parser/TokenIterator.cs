@@ -85,7 +85,7 @@ namespace ComLib.Lang.Parsing
             if (llK < 4)
                 throw new ArgumentException("Can not initialize token iterator with llk less than 4");
 
-            int batchSize = 2 * llK;
+            var batchSize = 2 * llK;
             // NOTES
             // 1. llk has a slightly different meaning in this lexer than the typical LL(k) terminlogy in language design.
             // 2. llk represents the batch size of the tokens to retrieve from the lexer
@@ -177,9 +177,9 @@ namespace ComLib.Lang.Parsing
             if (_isLLKEnabled && count > _LLK)
                 throw new ArgumentException("Can not peek past llk of : " + _LLK);
 
-            int ndx = CurrentIndex + 1;
+            var ndx = CurrentIndex + 1;
             TokenData next = null;
-            int advanced = 0;
+            var advanced = 0;
             if (ndx >= TokenList.Count)
                 throw new ArgumentException("Peeking past llk");
 
@@ -194,9 +194,11 @@ namespace ComLib.Lang.Parsing
                     && next.Token != Tokens.CommentMLine
                     && next.Token != Tokens.CommentSLine
                     && next.Token != Tokens.NewLine)
-                    advanced++;
+				{
+					advanced++;
+				}
 
-                if (advanced == count) break;
+				if (advanced == count) break;
                 ndx++;
             }
             return next;
@@ -209,7 +211,7 @@ namespace ComLib.Lang.Parsing
         /// </summary>
         public TokenData Advance(int count = 1, bool passNewLine = false)
         {
-            int advanced = 0;
+            var advanced = 0;
 
             while (true)
             {
@@ -245,8 +247,10 @@ namespace ComLib.Lang.Parsing
 
                 // Is New line important ?
                 if (!passNewLine && NextToken.Token == Tokens.NewLine)
-                    advanced++;
-                else if (NextToken.Token != Tokens.WhiteSpace
+				{
+					advanced++;
+				}
+				else if (NextToken.Token != Tokens.WhiteSpace
                        && NextToken.Token != Tokens.CommentMLine
                        && NextToken.Token != Tokens.NewLine
                    )
@@ -281,7 +285,7 @@ namespace ComLib.Lang.Parsing
             if (!(NextToken.Token is T)) throw BuildSyntaxExpectedException(typeof(T).Name.Replace("Token", ""));
             if (NextToken.Token == Tokens.EndToken) throw BuildEndOfScriptException();
 
-            T token = NextToken.Token as T;
+            var token = NextToken.Token as T;
             return token;
         }
 
@@ -381,7 +385,7 @@ namespace ComLib.Lang.Parsing
             if (NextToken.Token == Tokens.EndToken) throw BuildEndOfScriptException();
             if (!allowLiteralAsId && !(NextToken.Token.Kind == TokenKind.Ident)) throw BuildSyntaxExpectedException("identifier");
 
-            string id = NextToken.Token.Text;
+            var id = NextToken.Token.Text;
 
             if (advance)
                 Advance();
@@ -400,7 +404,7 @@ namespace ComLib.Lang.Parsing
             if (NextToken.Token == Tokens.EndToken) throw BuildEndOfScriptException();
             if (!(NextToken.Token.Kind == TokenKind.Ident)) throw BuildSyntaxExpectedException("identifier");
 
-            string id = NextToken.Token.Text;
+            var id = NextToken.Token.Text;
             if (id != text) throw BuildSyntaxExpectedException(text);
 
             if (advance)
@@ -419,7 +423,7 @@ namespace ComLib.Lang.Parsing
             if (NextToken.Token == Tokens.EndToken) throw BuildEndOfScriptException();
             if (!(NextToken.Token.IsLiteralAny())) throw BuildSyntaxExpectedException("number");
 
-            string val = NextToken.Token.Text;
+            var val = NextToken.Token.Text;
             double num = 0;
             if (!double.TryParse(val, out num)) throw BuildSyntaxExpectedException("number");
 
@@ -441,12 +445,12 @@ namespace ComLib.Lang.Parsing
             if (NextToken.Token == Tokens.EndToken) throw BuildEndOfScriptException();
             if (!(NextToken.Token.Type == TokenTypes.LiteralString)) throw BuildSyntaxExpectedException("string");
 
-            string tokenText = NextToken.Token.Text;
+            var tokenText = NextToken.Token.Text;
 
             // Compare expected text if supplied.
             if (!string.IsNullOrEmpty(expectedText))
             {
-                StringComparison c = matchCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture;
+                var c = matchCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture;
                 if (string.Compare(expectedText, tokenText, c) != 0)
                 {
                     throw BuildSyntaxExpectedException(expectedText);
@@ -468,7 +472,7 @@ namespace ComLib.Lang.Parsing
         /// </summary>
         public List<string> PeekConsequetiveIdsAppended(int maxTokenLookAhead)
         {
-            int total = 1;
+            var total = 1;
             var currentWord = NextToken.Token.Text;
             var ahead = Peek(1, false);
 
@@ -493,7 +497,7 @@ namespace ComLib.Lang.Parsing
         /// </summary>
         public List<Tuple<string, int>> PeekConsequetiveIdsAppendedWithTokenCounts(bool enableCamelCasingAsSeparateWords, int maxTokenLookAhead)
         {
-            int total = 1;
+            var total = 1;
             var currentWord = NextToken.Token.Text;
             var ahead = Peek(1, false);
 
@@ -511,7 +515,7 @@ namespace ComLib.Lang.Parsing
                 if (enableCamelCasingAsSeparateWords)
                 {
                     var tokenText = ahead.Token.Text;
-                    string upperWord = Char.ToUpper(tokenText[0]).ToString();
+                    var upperWord = Char.ToUpper(tokenText[0]).ToString();
                     if (tokenText.Length > 1)
                         upperWord += tokenText.Substring(1);
                     camelCasedWord += upperWord;
@@ -529,7 +533,7 @@ namespace ComLib.Lang.Parsing
         /// </summary>
         public List<Token> PeekConsequetiveIdTokens()
         {
-            int total = 1;
+            var total = 1;
             var currentWord = NextToken.Token;
             var ahead = Peek(1, false);
 
@@ -555,7 +559,7 @@ namespace ComLib.Lang.Parsing
         {
             var tokens = new List<TokenData>();
             tokens.Add(NextToken);
-            for (int c = 1; c < count; c++)
+            for (var c = 1; c < count; c++)
             {
                 var token = Peek(c);
                 tokens.Add(token);

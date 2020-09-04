@@ -139,9 +139,9 @@ namespace ComLib.Lang.Templating
             // Loop through all characthers in script.
             while (_pos < _scriptLength)
             {
-                char c = _script[_pos];
-                char n1 = _pos + 1 >= _scriptLength ? ' ' : _script[_pos + 1];
-                char n2 = _pos + 2 >= _scriptLength ? ' ' : _script[_pos + 2];
+                var c = _script[_pos];
+                var n1 = _pos + 1 >= _scriptLength ? ' ' : _script[_pos + 1];
+                var n2 = _pos + 2 >= _scriptLength ? ' ' : _script[_pos + 2];
 
                 // <html>
                 if (c == TEMPLATE_START && n1 != CODE_START)
@@ -183,18 +183,18 @@ namespace ComLib.Lang.Templating
         /// </summary>
         private void HandleHtml()
         {
-            string text = ReadHtml(false, 0);
+            var text = ReadHtml(false, 0);
 
             // prevent excessive newlines \r\n
             // such as
             //  <div>
             //      <% if (...) { %>
             //      <ul>
-            int lastCodeIndex = _buffer.Count - 1;
+            var lastCodeIndex = _buffer.Count - 1;
             if (lastCodeIndex >= 1)
             {
-                CodeBlock last = _buffer[lastCodeIndex];
-                CodeBlock secondToLast = _buffer[lastCodeIndex - 1];
+                var last = _buffer[lastCodeIndex];
+                var secondToLast = _buffer[lastCodeIndex - 1];
                 if (secondToLast.TextType == State.Html && last.TextType == State.CodeBlock)
                 {
                     if (text == "\\r\\n")
@@ -214,9 +214,11 @@ namespace ComLib.Lang.Templating
                 _lastText += " + " + text;
             }
             else
-                _lastText += text;
+			{
+				_lastText += text;
+			}
 
-            _lastState = State.Html;
+			_lastState = State.Html;
         }
 
         /// <summary>
@@ -227,7 +229,7 @@ namespace ComLib.Lang.Templating
             if (_lastState == State.Html || _lastState == State.Expression)
                 OuputBuffer();
 
-            string comment = ReadUntil(COMMENT_END, TEMPLATE_END, true, 3);
+            var comment = ReadUntil(COMMENT_END, TEMPLATE_END, true, 3);
             _buffer.Add(new CodeBlock(State.Comment, "/* " + comment + " */"));
             _lastState = State.Comment;
         }
@@ -240,7 +242,7 @@ namespace ComLib.Lang.Templating
             if (_lastState == State.Html || _lastState == State.Expression)
                 OuputBuffer();
 
-            string code = ReadCodeBlock(CODE_END, TEMPLATE_END, true, 2);
+            var code = ReadCodeBlock(CODE_END, TEMPLATE_END, true, 2);
             _buffer.Add(new CodeBlock(State.CodeBlock, code));
             _lastState = State.CodeBlock;
         }
@@ -250,15 +252,18 @@ namespace ComLib.Lang.Templating
         /// </summary>
         private void HandleCodeExpression()
         {
-            string code = ReadCodeBlock(EXP_END, TEMPLATE_END, true, 3);
+            var code = ReadCodeBlock(EXP_END, TEMPLATE_END, true, 3);
 
             if ((_lastState == State.Html || _lastState == State.Expression) && !string.IsNullOrEmpty(_lastText))
             {
                 _lastText += " + " + code;
             }
             else
-                _lastText += code;
-            _lastState = State.Expression;
+			{
+				_lastText += code;
+			}
+
+			_lastState = State.Expression;
         }
 
         /// <summary>
@@ -270,7 +275,7 @@ namespace ComLib.Lang.Templating
             // starting at @ so move 1 char forward
             if (advanceFirst) _pos += advanceCount;
 
-            string text = "";
+            var text = "";
 
             // Exclude including the beginning space.
             if (excludeBeginningSpace)
@@ -281,9 +286,9 @@ namespace ComLib.Lang.Templating
 
             while (_pos < _scriptLength)
             {
-                Char c = _script[_pos];
-                char n1 = _pos + 1 >= _scriptLength ? ' ' : _script[_pos + 1];
-                char n2 = _pos + 2 >= _scriptLength ? ' ' : _script[_pos + 2];
+                var c = _script[_pos];
+                var n1 = _pos + 1 >= _scriptLength ? ' ' : _script[_pos + 1];
+                var n2 = _pos + 2 >= _scriptLength ? ' ' : _script[_pos + 2];
 
                 if (c == '\r' && n1 == '\n')
                 {
@@ -321,7 +326,7 @@ namespace ComLib.Lang.Templating
             // starting at @ so move 1 char forward
             if (advanceFirst) _pos += advanceCount;
 
-            string text = "";
+            var text = "";
 
             // Exclude including the beginning space.
             if (excludeBeginningSpace)
@@ -332,9 +337,9 @@ namespace ComLib.Lang.Templating
 
             while (_pos < _scriptLength)
             {
-                Char c = _script[_pos];
-                char n1 = _pos + 1 >= _scriptLength ? ' ' : _script[_pos + 1];
-                char n2 = _pos + 2 >= _scriptLength ? ' ' : _script[_pos + 2];
+                var c = _script[_pos];
+                var n1 = _pos + 1 >= _scriptLength ? ' ' : _script[_pos + 1];
+                var n2 = _pos + 2 >= _scriptLength ? ' ' : _script[_pos + 2];
 
                 if (c == '\r' && n1 == '\n')
                 {
@@ -371,13 +376,13 @@ namespace ComLib.Lang.Templating
             // starting at @ so move 1 char forward
             if (advanceFirst) _pos += advanceCount;
 
-            string text = "";
+            var text = "";
             while (_pos < _scriptLength)
             {
-                Char c = _script[_pos];
-                char n1 = _pos + 1 >= _scriptLength ? ' ' : _script[_pos + 1];
-                char n2 = _pos + 2 >= _scriptLength ? ' ' : _script[_pos + 2];
-                char n3 = _pos + 3 >= _scriptLength ? ' ' : _script[_pos + 3];
+                var c = _script[_pos];
+                var n1 = _pos + 1 >= _scriptLength ? ' ' : _script[_pos + 1];
+                var n2 = _pos + 2 >= _scriptLength ? ' ' : _script[_pos + 2];
+                var n3 = _pos + 3 >= _scriptLength ? ' ' : _script[_pos + 3];
 
                 // new line
                 if (c == '\r' && n1 == '\n')
@@ -419,8 +424,8 @@ namespace ComLib.Lang.Templating
             _pos++;
             while (_pos < _scriptLength)
             {
-                Char c = _script[_pos];
-                Char n1 = _script[_pos + 1];
+                var c = _script[_pos];
+                var n1 = _script[_pos + 1];
 
                 // \\
                 if (c == '\\' && n1 == '\\')
@@ -461,7 +466,7 @@ namespace ComLib.Lang.Templating
             var text = "<!-- ";
             while (_pos < _scriptLength)
             {
-                Char c1 = _script[_pos];
+                var c1 = _script[_pos];
                 if (c1 == '"')
                 {
                     text += "\\\"";
@@ -529,10 +534,10 @@ namespace ComLib.Lang.Templating
             allText.Append("var " + BUFFER_NAME + " = \"\";" + Environment.NewLine);
             allText.Append(_buffer[0].Content + Environment.NewLine);
 
-            for (int ndx = 1; ndx < _buffer.Count; ndx++)
+            for (var ndx = 1; ndx < _buffer.Count; ndx++)
             {
-                CodeBlock blockC = _buffer[ndx];
-                string text = blockC.Content;
+                var blockC = _buffer[ndx];
+                var text = blockC.Content;
                 if (blockC.TextType == State.Html)
                     text = BUFFER_NAME + " += " + text + ";";
                 allText.Append(text + Environment.NewLine);

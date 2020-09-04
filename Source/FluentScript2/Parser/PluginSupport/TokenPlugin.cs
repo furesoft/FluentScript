@@ -40,7 +40,7 @@ namespace ComLib.Lang.Parsing
         /// </summary>
         public TokenPlugin()
         {
-            this.Id = "ComLib." + this.GetType().Name.Replace("Plugin", string.Empty);
+            Id = "ComLib." + GetType().Name.Replace("Plugin", string.Empty);
         }
 
         /// <summary>

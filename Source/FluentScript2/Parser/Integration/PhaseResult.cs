@@ -19,8 +19,8 @@ namespace ComLib.Lang.Parsing
         public PhaseResult(RunResult result)
             : base(result.StartTime, result.EndTime, result.Success, result.Message)
         {
-            this.Errors = result.Errors;
-            this.Result = result;
+            Errors = result.Errors;
+            Result = result;
         }
 
         /// <summary>

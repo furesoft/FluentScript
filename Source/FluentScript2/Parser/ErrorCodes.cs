@@ -14,9 +14,9 @@ namespace ComLib.Lang.Parsing
         /// <param name="msg"></param>
         public ErrorInfo(string errorType, bool supportsParams, string msg)
         {
-            this.ErrorType = errorType;
-            this.Message = msg;
-            this.SupportsParams = supportsParams;
+            ErrorType = errorType;
+            Message = msg;
+            SupportsParams = supportsParams;
         }
 
         public string Message;

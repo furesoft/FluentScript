@@ -25,7 +25,7 @@ namespace ComLib.Lang.Runtime
         /// <param name="valExp">The expression representing the value to set</param>
         public static void SetVariableValue(Context ctx, IAstVisitor visitor, AstNode node, bool isDeclaration, Expr varExp, Expr valExp)
         {
-            string varname = ((VariableExpr)varExp).Name;
+            var varname = ((VariableExpr)varExp).Name;
 
             // Case 1: var result;
             if (valExp == null)

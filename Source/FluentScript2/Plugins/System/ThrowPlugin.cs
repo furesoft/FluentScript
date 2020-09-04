@@ -25,7 +25,7 @@ namespace ComLib.Lang.Plugins
         /// </summary>
         public ThrowPlugin()
         {
-            this.ConfigureAsSystemStatement(false, true, "throw");
+            ConfigureAsSystemStatement(false, true, "throw");
         }
 
         /// <summary>

@@ -100,8 +100,8 @@ namespace ComLib.Lang.Core
         /// <returns></returns>
         public override string ToString()
         {
-            string template = "Success: {0} - Duration: {1} - Start: {2} - End: {3} - Error(s): {4} - Message: {5}";
-            string result = string.Format(template, Success, Duration.Milliseconds, StartTime.ToShortTimeString(), EndTime.ToShortTimeString(), TotalErrors, Message);
+            var template = "Success: {0} - Duration: {1} - Start: {2} - End: {3} - Error(s): {4} - Message: {5}";
+            var result = string.Format(template, Success, Duration.Milliseconds, StartTime.ToShortTimeString(), EndTime.ToShortTimeString(), TotalErrors, Message);
             return result;
         }
     }
