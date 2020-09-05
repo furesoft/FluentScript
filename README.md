@@ -1,4 +1,5 @@
 # FluentScript
+![.NET Core](https://github.com/furesoft/FluentScript/workflows/.NET%20Core/badge.svg)
 An embeddable scripting language similar to javascript, with additional language features to facilitate building Domain Specific Languages.
 
 Mirror of: https://archive.codeplex.com/?p=fluentscript
