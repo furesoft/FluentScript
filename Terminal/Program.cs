@@ -25,10 +25,9 @@ namespace Terminal
 			i.Context.Plugins.RegisterCustomByType(typeof(TransactionPlugin));
 			i.Context.Plugins.RegisterCustomByType(typeof(ActorPlugin));
 			i.Context.Plugins.RegisterCustomByType(typeof(OnPlugin));
-			//i.Context.RegisterSystemPlugins();
 
 			i.Context.ExternalFunctions.Register("_blast", Blast);
-			//ToDo: implement auto collector for Plugins
+
 			i.Execute("function blast(arg) {_blast(arg)}");
 
 			while (true)
