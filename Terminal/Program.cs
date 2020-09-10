@@ -1,4 +1,6 @@
 ﻿using ComLib.Lang;
+using ComLib.Lang.AST;
+using ComLib.Lang.Plugins;
 using System;
 
 namespace Terminal
@@ -14,13 +16,20 @@ namespace Terminal
 			i.Settings.EnableFunctionCallCallBacks = true;
 
 			i.Context.Plugins.Init();
-			i.Context.Plugins.RegisterAll();
+
+			i.Context.Plugins.RegisterAllCustom();
+			i.Context.Plugins.RegisterAllSystem();
+
+			i.Context.Plugins.Print();
+
 			i.Context.Plugins.RegisterCustomByType(typeof(TransactionPlugin));
 			i.Context.Plugins.RegisterCustomByType(typeof(ActorPlugin));
 			i.Context.Plugins.RegisterCustomByType(typeof(OnPlugin));
-			//i.Context.Plugins.RegisterCustomByType(typeof(RangePlugin));
+			//i.Context.RegisterSystemPlugins();
 
+			i.Context.ExternalFunctions.Register("_blast", Blast);
 			//ToDo: implement auto collector for Plugins
+			i.Execute("function blast(arg) {_blast(arg)}");
 
 			while (true)
 			{
@@ -32,6 +41,11 @@ namespace Terminal
 				if (!i.Result.Success)
 					Console.WriteLine(i.Result);
 			}
+		}
+
+		private static object Blast(string arg1, string arg2, FunctionCallExpr arg3)
+		{
+			return null;
 		}
 	}
 }
