@@ -819,10 +819,10 @@ namespace ComLib.Lang.Parsing
 					var langp = pair.Value as ILangPlugin;
 					grammerOnly += Environment.NewLine + langp.GetType().Name.Replace("Plugin", "") + " : " + langp.Grammer;
 				}
-				if (pair.Value is IExprPlugin)
+				if (pair.Value is IExprPlugin plugin)
 				{
 					var expr = pair.Value;
-					var meta = ExprMetaData((IExprPlugin)pair.Value, id);
+					var meta = ExprMetaData(plugin, id);
 					info += meta;
 					id++;
 				}

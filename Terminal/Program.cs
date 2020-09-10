@@ -1,6 +1,7 @@
 ﻿using ComLib.Lang;
 using ComLib.Lang.AST;
-using ComLib.Lang.Plugins;
+using ComLib.Lang.Core;
+using ComLib.Lang.Parsing;
 using System;
 
 namespace Terminal
